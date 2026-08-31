@@ -8,6 +8,7 @@
   <title>Routine</title>
 
   <style>
+
     * {
       box-sizing: border-box;
     }
@@ -33,7 +34,9 @@
       display: none !important;
     }
 
-    /* LOGIN */
+    /* =========================
+       LOGIN
+    ========================= */
 
     #loginScreen {
       min-height: 100vh;
@@ -71,7 +74,9 @@
       color: white;
     }
 
-    /* APP */
+    /* =========================
+       APP
+    ========================= */
 
     #app {
       display: none;
@@ -154,7 +159,9 @@
       border-radius: 10px;
     }
 
-    /* ROUTINES */
+    /* =========================
+       ROUTINES
+    ========================= */
 
     .routine-card {
       border: 1px solid #eee;
@@ -186,6 +193,7 @@
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
+      margin-top: 12px;
     }
 
     .empty {
@@ -194,7 +202,9 @@
       padding: 35px 10px;
     }
 
-    /* FORM */
+    /* =========================
+       FORM
+    ========================= */
 
     .form-group {
       margin-bottom: 20px;
@@ -238,7 +248,9 @@
       color: white;
     }
 
-    /* STEPS */
+    /* =========================
+       STEPS
+    ========================= */
 
     .step {
       border: 1px solid #eee;
@@ -281,7 +293,9 @@
       margin-top: 6px;
     }
 
-    /* ACTIVE */
+    /* =========================
+       ACTIVE ROUTINE
+    ========================= */
 
     #activeScreen {
       display: none;
@@ -328,6 +342,33 @@
       border-radius: 12px;
     }
 
+    /* =========================
+       DIRECT ROUTINE PAGE
+    ========================= */
+
+    #directRoutineScreen {
+      display: none;
+    }
+
+    .direct-routine-box {
+      max-width: 700px;
+      margin: auto;
+      background: white;
+      border-radius: 25px;
+      padding: 30px 25px;
+    }
+
+    .direct-routine-box h1 {
+      margin-top: 0;
+    }
+
+    .direct-step {
+      padding: 15px;
+      border: 1px solid #eee;
+      border-radius: 12px;
+      margin-bottom: 10px;
+    }
+
     @media (max-width: 600px) {
 
       .step-grid {
@@ -342,7 +383,13 @@
         font-size: 26px;
       }
 
+      .top-row {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
     }
+
   </style>
 </head>
 
@@ -544,6 +591,39 @@
           class="secondary">
 
           ביטול
+
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- DIRECT ROUTINE -->
+
+    <div id="directRoutineScreen">
+
+      <div class="direct-routine-box">
+
+        <h1 id="directRoutineName"></h1>
+
+        <div id="directRoutineSteps"></div>
+
+        <br>
+
+        <button
+          id="directStartBtn"
+          class="primary">
+
+          התחל Routine
+
+        </button>
+
+        <button
+          id="directBackBtn"
+          class="secondary">
+
+          חזרה לשגרות
 
         </button>
 
@@ -836,6 +916,8 @@ async function loadRoutines() {
 
     renderRoutines();
 
+    openRoutineFromLink();
+
   } catch (error) {
 
     console.error(error);
@@ -945,6 +1027,14 @@ function renderRoutines() {
 
 
           <button
+            class="secondary share">
+
+            🔗 העתק קישור
+
+          </button>
+
+
+          <button
             class="danger delete">
 
             מחק
@@ -973,6 +1063,14 @@ function renderRoutines() {
 
 
       card
+      .querySelector(".share")
+      .addEventListener(
+        "click",
+        () => copyRoutineLink(routine.id)
+      );
+
+
+      card
       .querySelector(".delete")
       .addEventListener(
         "click",
@@ -986,6 +1084,261 @@ function renderRoutines() {
   );
 
 }
+
+
+/* =========================
+   COPY ROUTINE LINK
+========================= */
+
+async function copyRoutineLink(routineId) {
+
+  const url =
+    window.location.origin +
+    window.location.pathname +
+    "?routine=" +
+    encodeURIComponent(
+      routineId
+    );
+
+
+  try {
+
+    await navigator.clipboard.writeText(
+      url
+    );
+
+
+    alert(
+      "הקישור הועתק!"
+    );
+
+  } catch (error) {
+
+    console.error(error);
+
+    prompt(
+      "העתק את הקישור:",
+      url
+    );
+
+  }
+
+}
+
+
+/* =========================
+   OPEN ROUTINE FROM LINK
+========================= */
+
+function openRoutineFromLink() {
+
+  const params =
+    new URLSearchParams(
+      window.location.search
+    );
+
+
+  const routineId =
+    params.get("routine");
+
+
+  if (!routineId) {
+
+    return;
+
+  }
+
+
+  const routine =
+    routines.find(
+      item =>
+        item.id === routineId
+    );
+
+
+  if (!routine) {
+
+    alert(
+      "ה-Routine לא נמצא בחשבון הזה."
+    );
+
+    return;
+
+  }
+
+
+  showDirectRoutine(routine);
+
+}
+
+
+/* =========================
+   SHOW DIRECT ROUTINE
+========================= */
+
+function showDirectRoutine(routine) {
+
+  document
+  .getElementById(
+    "routineListScreen"
+  )
+  .style.display =
+    "none";
+
+
+  document
+  .getElementById(
+    "editorScreen"
+  )
+  .classList.add(
+    "hidden"
+  );
+
+
+  document
+  .getElementById(
+    "activeScreen"
+  )
+  .style.display =
+    "none";
+
+
+  document
+  .getElementById(
+    "directRoutineScreen"
+  )
+  .style.display =
+    "block";
+
+
+  document
+  .getElementById(
+    "directRoutineName"
+  )
+  .textContent =
+    routine.name;
+
+
+  const stepsContainer =
+    document.getElementById(
+      "directRoutineSteps"
+    );
+
+
+  stepsContainer.innerHTML = "";
+
+
+  const todaySteps =
+    getTodaySteps(routine);
+
+
+  if (
+    todaySteps.length === 0
+  ) {
+
+    stepsContainer.innerHTML = `
+      <div class="empty">
+        אין Steps פעילים להיום.
+      </div>
+    `;
+
+  } else {
+
+    todaySteps
+    .sort(
+      (a, b) =>
+        Number(a.order || 0) -
+        Number(b.order || 0)
+    )
+    .forEach(
+      (step, index) => {
+
+        const div =
+          document.createElement(
+            "div"
+          );
+
+
+        div.className =
+          "direct-step";
+
+
+        div.innerHTML = `
+
+          <strong>
+            Step ${index + 1}
+          </strong>
+
+          <br>
+
+          ${escapeHtml(
+            step.name
+          )}
+
+        `;
+
+
+        stepsContainer.appendChild(
+          div
+        );
+
+      }
+    );
+
+  }
+
+
+  document
+  .getElementById(
+    "directStartBtn"
+  )
+  .onclick =
+    () => startRoutine(routine);
+
+}
+
+
+/* =========================
+   DIRECT BACK
+========================= */
+
+document
+.getElementById(
+  "directBackBtn"
+)
+.addEventListener(
+  "click",
+  () => {
+
+    const url =
+      window.location.origin +
+      window.location.pathname;
+
+
+    window.history.replaceState(
+      {},
+      "",
+      url
+    );
+
+
+    document
+    .getElementById(
+      "directRoutineScreen"
+    )
+    .style.display =
+      "none";
+
+
+    document
+    .getElementById(
+      "routineListScreen"
+    )
+    .style.display =
+      "block";
+
+  }
+);
 
 
 /* =========================
@@ -1010,7 +1363,16 @@ function openEditor(routine) {
   .getElementById(
     "routineListScreen"
   )
-  .style.display = "none";
+  .style.display =
+    "none";
+
+
+  document
+  .getElementById(
+    "directRoutineScreen"
+  )
+  .style.display =
+    "none";
 
 
   document
@@ -1118,7 +1480,8 @@ function addStep(step = null) {
     );
 
 
-  div.className = "step";
+  div.className =
+    "step";
 
 
   div.innerHTML = `
@@ -1229,7 +1592,7 @@ function addStep(step = null) {
     </div>
 
 
-    <!-- STEP START DATE -->
+    <!-- START DATE OF THIS STEP -->
 
     <div class="step-start-date">
 
@@ -1247,7 +1610,7 @@ function addStep(step = null) {
         }">
 
       <small>
-        התדירות של ה-Step מתחילה מתאריך זה.
+        התדירות של ה-Step מתחילה להיספר מתאריך זה.
       </small>
 
     </div>
@@ -1293,6 +1656,7 @@ function addStep(step = null) {
 
       custom.style.display =
         "block";
+
 
       div.querySelector(
         ".custom-value"
@@ -1497,7 +1861,9 @@ async function saveRoutine() {
 
 
     const numericFrequency =
-      Number(finalFrequency);
+      Number(
+        finalFrequency
+      );
 
 
     if (
@@ -1653,7 +2019,7 @@ function closeEditor() {
 
 
 /* =========================
-   DELETE
+   DELETE ROUTINE
 ========================= */
 
 async function deleteRoutine(id) {
@@ -1728,7 +2094,9 @@ function getTodaySteps(routine) {
 
 
   /*
-   * קודם בודקים את ימי ה-Routine.
+   * ימי ה-Routine עדיין
+   * קובעים באילו ימים
+   * אפשר להפעיל את ה-Routine.
    */
 
   const todayDay =
@@ -1749,15 +2117,15 @@ function getTodaySteps(routine) {
 
 
   /*
-   * עכשיו כל Step נבדק בנפרד.
+   * כל Step נבדק בנפרד.
    */
 
   return routine.steps.filter(
     step => {
 
       /*
-       * לכל Step חייב להיות
-       * תאריך התחלה משלו.
+       * לכל Step יש תאריך
+       * התחלה עצמאי.
        */
 
       if (!step.startDate) {
@@ -1782,8 +2150,8 @@ function getTodaySteps(routine) {
 
 
       /*
-       * כמה ימים עברו
-       * מאז התחלת ה-Step.
+       * מספר הימים שעברו
+       * מאז תאריך התחלת ה-Step.
        */
 
       const difference =
@@ -1797,8 +2165,7 @@ function getTodaySteps(routine) {
 
 
       /*
-       * אם תאריך ההתחלה
-       * עדיין בעתיד.
+       * ה-Step עדיין לא התחיל.
        */
 
       if (
@@ -1818,7 +2185,7 @@ function getTodaySteps(routine) {
 
       /*
        * התדירות מתחילה
-       * מתאריך ה-Step עצמו.
+       * מתאריך ה-Step.
        */
 
       return (
@@ -1856,10 +2223,6 @@ function startRoutine(routine) {
   }
 
 
-  /*
-   * מסדרים לפי סדר ה-Step.
-   */
-
   todaySteps.sort(
     (a, b) =>
       Number(a.order || 0) -
@@ -1882,6 +2245,14 @@ function startRoutine(routine) {
   document
   .getElementById(
     "routineListScreen"
+  )
+  .style.display =
+    "none";
+
+
+  document
+  .getElementById(
+    "directRoutineScreen"
   )
   .style.display =
     "none";
@@ -2063,6 +2434,14 @@ function exitRoutine() {
   document
   .getElementById(
     "activeScreen"
+  )
+  .style.display =
+    "none";
+
+
+  document
+  .getElementById(
+    "directRoutineScreen"
   )
   .style.display =
     "none";
