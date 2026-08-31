@@ -13,235 +13,1656 @@
 
     body {
       margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f5f7;
+      color: #111;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .container {
+      width: 92%;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 30px 0 60px;
+    }
+
+    /* LOGIN */
+
+    #loginScreen {
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-family: Arial, sans-serif;
-      background: #f5f5f7;
     }
 
     .login-box {
       width: 90%;
       max-width: 400px;
-      padding: 40px 30px;
       background: white;
-      border-radius: 20px;
+      padding: 40px 30px;
+      border-radius: 24px;
       text-align: center;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 10px 40px rgba(0,0,0,.08);
     }
 
-    h1 {
+    .login-box h1 {
       margin: 0 0 10px;
-      font-size: 32px;
+      font-size: 36px;
     }
 
-    p {
-      margin: 0 0 30px;
+    .login-box p {
       color: #666;
-      font-size: 16px;
+      margin-bottom: 30px;
     }
 
-    #loginBtn {
+    .google-btn {
       width: 100%;
       padding: 15px;
       border: 0;
-      border-radius: 12px;
+      border-radius: 14px;
       background: #111;
       color: white;
-      font-size: 16px;
-      cursor: pointer;
     }
 
-    #loginBtn:hover {
-      opacity: 0.9;
-    }
+    /* APP */
 
-    #userArea {
+    #app {
       display: none;
     }
 
-    #userName {
-      margin-bottom: 20px;
-      font-size: 18px;
+    header {
+      background: white;
+      border-radius: 20px;
+      padding: 20px;
+      margin-bottom: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
     }
 
-    #logoutBtn {
+    header h1 {
+      margin: 0;
+    }
+
+    #userInfo {
+      color: #666;
+      margin-top: 5px;
+      font-size: 14px;
+    }
+
+    .logout-btn {
+      padding: 10px 16px;
+      border: 1px solid #ddd;
+      background: white;
+      border-radius: 10px;
+    }
+
+    /* CARDS */
+
+    .card {
+      background: white;
+      border-radius: 20px;
+      padding: 22px;
+      margin-bottom: 20px;
+      box-shadow: 0 5px 20px rgba(0,0,0,.04);
+    }
+
+    .card h2 {
+      margin-top: 0;
+    }
+
+    .routine-card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      border: 1px solid #eee;
+      padding: 18px;
+      border-radius: 15px;
+      margin-bottom: 12px;
+    }
+
+    .routine-card h3 {
+      margin: 0 0 7px;
+    }
+
+    .routine-card small {
+      color: #777;
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .primary {
+      background: #111;
+      color: white;
+      border: 0;
+      padding: 12px 18px;
+      border-radius: 12px;
+    }
+
+    .secondary {
+      background: white;
+      border: 1px solid #ddd;
+      padding: 10px 15px;
+      border-radius: 10px;
+    }
+
+    .danger {
+      background: #fff;
+      color: #d00;
+      border: 1px solid #ddd;
+      padding: 10px 15px;
+      border-radius: 10px;
+    }
+
+    /* FORM */
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 7px;
+      font-weight: bold;
+    }
+
+    input,
+    select {
       width: 100%;
-      padding: 12px;
+      padding: 13px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      background: white;
+    }
+
+    .days {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .day {
+      position: relative;
+    }
+
+    .day input {
+      display: none;
+    }
+
+    .day span {
+      display: block;
+      padding: 10px 13px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .day input:checked + span {
+      background: #111;
+      color: white;
+    }
+
+    /* STEPS */
+
+    .step-editor {
+      border: 1px solid #eee;
+      border-radius: 15px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+
+    .step-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .step-number {
+      font-weight: bold;
+    }
+
+    .step-grid {
+      display: grid;
+      grid-template-columns: 1fr 160px;
+      gap: 12px;
+    }
+
+    /* ACTIVE */
+
+    #activeScreen {
+      display: none;
+      min-height: 100vh;
+      padding: 30px 15px;
+    }
+
+    .active-box {
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: center;
+      background: white;
+      border-radius: 25px;
+      padding: 35px 25px;
+      box-shadow: 0 10px 40px rgba(0,0,0,.08);
+    }
+
+    .active-box h1 {
+      margin-top: 0;
+    }
+
+    #activeStepName {
+      font-size: 32px;
+      margin: 30px 0 15px;
+    }
+
+    #timer {
+      font-size: 70px;
+      font-weight: bold;
+      margin: 20px 0 30px;
+    }
+
+    .done-btn {
+      width: 100%;
+      padding: 18px;
+      border: 0;
+      border-radius: 15px;
+      background: #111;
+      color: white;
+      font-size: 20px;
+    }
+
+    .back-btn {
+      margin-top: 12px;
+      width: 100%;
+      padding: 14px;
       border: 1px solid #ddd;
       border-radius: 12px;
       background: white;
-      font-size: 15px;
-      cursor: pointer;
+    }
+
+    .empty {
+      color: #777;
+      text-align: center;
+      padding: 30px;
+    }
+
+    @media (max-width: 600px) {
+
+      .container {
+        width: 94%;
+      }
+
+      header {
+        align-items: flex-start;
+      }
+
+      .routine-card {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .step-grid {
+        grid-template-columns: 1fr;
+      }
+
+      #timer {
+        font-size: 55px;
+      }
+
+      #activeStepName {
+        font-size: 26px;
+      }
     }
   </style>
 </head>
 
 <body>
 
+
+<!-- =========================
+     LOGIN SCREEN
+========================= -->
+
+<div id="loginScreen">
+
   <div class="login-box">
 
-    <!-- LOGIN -->
-    <div id="loginArea">
-      <h1>Routine</h1>
+    <h1>Routine</h1>
 
-      <p>
-        התחבר כדי להיכנס למערכת
-      </p>
+    <p>
+      התחבר כדי להיכנס למערכת שלך
+    </p>
 
-      <button id="loginBtn">
-        כניסה עם Google
+    <button class="google-btn" id="loginBtn">
+      כניסה עם Google
+    </button>
+
+  </div>
+
+</div>
+
+
+<!-- =========================
+     MAIN APP
+========================= -->
+
+<div id="app">
+
+  <div class="container">
+
+    <header>
+
+      <div>
+        <h1>Routine</h1>
+        <div id="userInfo"></div>
+      </div>
+
+      <button class="logout-btn" id="logoutBtn">
+        התנתק
       </button>
+
+    </header>
+
+
+    <!-- ROUTINES -->
+
+    <div id="routineListScreen">
+
+      <div class="card">
+
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:15px;">
+
+          <h2>השגרות שלי</h2>
+
+          <button class="primary" id="newRoutineBtn">
+            + Routine חדש
+          </button>
+
+        </div>
+
+        <div id="routineList"></div>
+
+      </div>
+
     </div>
 
 
-    <!-- USER -->
-    <div id="userArea">
+    <!-- ROUTINE EDITOR -->
 
-      <h1>Routine</h1>
+    <div id="editorScreen" style="display:none;">
 
-      <div id="userName"></div>
+      <div class="card">
 
-      <button id="logoutBtn">
-        התנתק
-      </button>
+        <h2 id="editorTitle">
+          יצירת Routine
+        </h2>
+
+
+        <div class="form-group">
+
+          <label>
+            שם ה־Routine
+          </label>
+
+          <input
+            id="routineName"
+            type="text"
+            placeholder="לדוגמה: בוקר"
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>
+            ימי פעילות
+          </label>
+
+          <div class="days">
+
+            <label class="day">
+              <input type="checkbox" value="0">
+              <span>א׳</span>
+            </label>
+
+            <label class="day">
+              <input type="checkbox" value="1">
+              <span>ב׳</span>
+            </label>
+
+            <label class="day">
+              <input type="checkbox" value="2">
+              <span>ג׳</span>
+            </label>
+
+            <label class="day">
+              <input type="checkbox" value="3">
+              <span>ד׳</span>
+            </label>
+
+            <label class="day">
+              <input type="checkbox" value="4">
+              <span>ה׳</span>
+            </label>
+
+            <label class="day">
+              <input type="checkbox" value="5">
+              <span>ו׳</span>
+            </label>
+
+            <label class="day">
+              <input type="checkbox" value="6">
+              <span>ש׳</span>
+            </label>
+
+          </div>
+
+        </div>
+
+
+        <h2>Steps</h2>
+
+        <div id="stepsContainer"></div>
+
+        <button class="secondary" id="addStepBtn">
+          + הוסף Step
+        </button>
+
+        <br><br>
+
+        <button class="primary" id="saveRoutineBtn">
+          שמור Routine
+        </button>
+
+        <button class="secondary" id="cancelEditorBtn">
+          ביטול
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- ACTIVE ROUTINE -->
+
+    <div id="activeScreen">
+
+      <div class="active-box">
+
+        <h1 id="activeRoutineName"></h1>
+
+        <div id="activeStepName">
+          Step
+        </div>
+
+        <div id="timer">
+          00:00
+        </div>
+
+        <button class="done-btn" id="doneStepBtn">
+          ✓ Done
+        </button>
+
+        <button class="back-btn" id="exitActiveBtn">
+          יציאה
+        </button>
+
+      </div>
 
     </div>
 
   </div>
 
+</div>
 
-  <script type="module">
 
-    import { initializeApp }
-      from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+<!-- =========================
+     FIREBASE
+========================= -->
 
-    import {
-      getAuth,
-      GoogleAuthProvider,
-      signInWithPopup,
-      signOut,
-      onAuthStateChanged
-    }
+<script type="module">
+
+  import { initializeApp }
+    from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
+  import {
+    getAuth,
+    GoogleAuthProvider,
+    signInWithPopup,
+    signOut,
+    onAuthStateChanged
+  }
     from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
+  import {
+    getFirestore,
+    collection,
+    addDoc,
+    getDocs,
+    doc,
+    updateDoc,
+    deleteDoc,
+    query,
+    orderBy
+  }
+    from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-    // =========================
-    // FIREBASE
-    // =========================
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyCGTJFidIrp_YAuKOg2CCEO-vjFCiakkHo",
-      authDomain: "site-c224f.firebaseapp.com",
-      projectId: "site-c224f",
-      storageBucket: "site-c224f.firebasestorage.app",
-      messagingSenderId: "709702843873",
-      appId: "1:709702843873:web:a326854107acb20e6ee6a0",
-      measurementId: "G-GC5LS15YEC"
+  // =========================
+  // FIREBASE CONFIG
+  // =========================
+
+  const firebaseConfig = {
+
+    apiKey: "AIzaSyCGTJFidIrp_YAuKOg2CCEO-vjFCiakkHo",
+
+    authDomain: "site-c224f.firebaseapp.com",
+
+    projectId: "site-c224f",
+
+    storageBucket: "site-c224f.firebasestorage.app",
+
+    messagingSenderId: "709702843873",
+
+    appId: "1:709702843873:web:a326854107acb20e6ee6a0",
+
+    measurementId: "G-GC5LS15YEC"
+
+  };
+
+
+  const app =
+    initializeApp(firebaseConfig);
+
+  const auth =
+    getAuth(app);
+
+  const db =
+    getFirestore(app);
+
+  const provider =
+    new GoogleAuthProvider();
+
+
+  // =========================
+  // GLOBAL VARIABLES
+  // =========================
+
+  let currentUser = null;
+
+  let routines = [];
+
+  let editingRoutineId = null;
+
+  let activeRoutine = null;
+
+  let activeStepIndex = 0;
+
+  let timerInterval = null;
+
+  let remainingSeconds = 0;
+
+
+  // =========================
+  // ELEMENTS
+  // =========================
+
+  const loginScreen =
+    document.getElementById("loginScreen");
+
+  const appScreen =
+    document.getElementById("app");
+
+  const loginBtn =
+    document.getElementById("loginBtn");
+
+  const logoutBtn =
+    document.getElementById("logoutBtn");
+
+  const userInfo =
+    document.getElementById("userInfo");
+
+  const routineList =
+    document.getElementById("routineList");
+
+  const routineListScreen =
+    document.getElementById("routineListScreen");
+
+  const editorScreen =
+    document.getElementById("editorScreen");
+
+  const activeScreen =
+    document.getElementById("activeScreen");
+
+  const routineName =
+    document.getElementById("routineName");
+
+  const stepsContainer =
+    document.getElementById("stepsContainer");
+
+  const editorTitle =
+    document.getElementById("editorTitle");
+
+
+  // =========================
+  // GOOGLE LOGIN
+  // =========================
+
+  loginBtn.addEventListener("click", async () => {
+
+    try {
+
+      await signInWithPopup(
+        auth,
+        provider
+      );
+
+    } catch (error) {
+
+      console.error(error);
+
+      alert(
+        "ההתחברות נכשלה:\n\n" +
+        error.message
+      );
+
+    }
+
+  });
+
+
+  // =========================
+  // LOGOUT
+  // =========================
+
+  logoutBtn.addEventListener("click", async () => {
+
+    await signOut(auth);
+
+  });
+
+
+  // =========================
+  // AUTH STATE
+  // =========================
+
+  onAuthStateChanged(
+    auth,
+    async (user) => {
+
+      if (user) {
+
+        currentUser = user;
+
+        loginScreen.style.display =
+          "none";
+
+        appScreen.style.display =
+          "block";
+
+        userInfo.textContent =
+          user.displayName ||
+          user.email;
+
+        await loadRoutines();
+
+      } else {
+
+        currentUser = null;
+
+        loginScreen.style.display =
+          "flex";
+
+        appScreen.style.display =
+          "none";
+
+      }
+
+    }
+  );
+
+
+  // =========================
+  // LOAD ROUTINES
+  // =========================
+
+  async function loadRoutines() {
+
+    routineList.innerHTML =
+      "טוען...";
+
+    try {
+
+      const routinesRef =
+        collection(
+          db,
+          "users",
+          currentUser.uid,
+          "routines"
+        );
+
+      const snapshot =
+        await getDocs(routinesRef);
+
+      routines = [];
+
+      snapshot.forEach((item) => {
+
+        routines.push({
+
+          id: item.id,
+
+          ...item.data()
+
+        });
+
+      });
+
+      renderRoutines();
+
+    } catch (error) {
+
+      console.error(error);
+
+      routineList.innerHTML =
+        "<div class='empty'>לא ניתן לטעון את השגרות.</div>";
+
+    }
+
+  }
+
+
+  // =========================
+  // RENDER ROUTINES
+  // =========================
+
+  function renderRoutines() {
+
+    routineList.innerHTML = "";
+
+    if (routines.length === 0) {
+
+      routineList.innerHTML = `
+        <div class="empty">
+          עדיין אין לך Routines.<br>
+          לחץ על "+ Routine חדש" כדי להתחיל.
+        </div>
+      `;
+
+      return;
+
+    }
+
+
+    routines.forEach((routine) => {
+
+      const div =
+        document.createElement("div");
+
+      div.className =
+        "routine-card";
+
+
+      const daysText =
+        routine.days && routine.days.length
+          ? "ימי פעילות: " +
+            routine.days.join(", ")
+          : "ללא ימים";
+
+
+      div.innerHTML = `
+
+        <div>
+
+          <h3>
+            ${escapeHtml(routine.name)}
+          </h3>
+
+          <small>
+            ${routine.steps?.length || 0} Steps
+            ·
+            ${daysText}
+          </small>
+
+        </div>
+
+
+        <div class="actions">
+
+          <button
+            class="primary start-btn"
+            data-id="${routine.id}">
+            התחל
+          </button>
+
+          <button
+            class="secondary edit-btn"
+            data-id="${routine.id}">
+            ערוך
+          </button>
+
+          <button
+            class="danger delete-btn"
+            data-id="${routine.id}">
+            מחק
+          </button>
+
+        </div>
+
+      `;
+
+
+      routineList.appendChild(div);
+
+    });
+
+
+    document
+      .querySelectorAll(".start-btn")
+      .forEach((button) => {
+
+        button.addEventListener(
+          "click",
+          () => {
+
+            const routine =
+              routines.find(
+                r => r.id === button.dataset.id
+              );
+
+            startRoutine(routine);
+
+          }
+        );
+
+      });
+
+
+    document
+      .querySelectorAll(".edit-btn")
+      .forEach((button) => {
+
+        button.addEventListener(
+          "click",
+          () => {
+
+            const routine =
+              routines.find(
+                r => r.id === button.dataset.id
+              );
+
+            openEditor(routine);
+
+          }
+        );
+
+      });
+
+
+    document
+      .querySelectorAll(".delete-btn")
+      .forEach((button) => {
+
+        button.addEventListener(
+          "click",
+          () => {
+
+            deleteRoutine(
+              button.dataset.id
+            );
+
+          }
+        );
+
+      });
+
+  }
+
+
+  // =========================
+  // NEW ROUTINE
+  // =========================
+
+  document
+    .getElementById("newRoutineBtn")
+    .addEventListener(
+      "click",
+      () => {
+
+        openEditor(null);
+
+      }
+    );
+
+
+  // =========================
+  // OPEN EDITOR
+  // =========================
+
+  function openEditor(routine) {
+
+    routineListScreen.style.display =
+      "none";
+
+    editorScreen.style.display =
+      "block";
+
+    editingRoutineId =
+      routine ? routine.id : null;
+
+
+    routineName.value =
+      routine ? routine.name : "";
+
+
+    document
+      .querySelectorAll(".days input")
+      .forEach((checkbox) => {
+
+        checkbox.checked =
+          routine
+            ? (routine.days || [])
+                .includes(
+                  Number(checkbox.value)
+                )
+            : false;
+
+      });
+
+
+    stepsContainer.innerHTML = "";
+
+
+    if (routine && routine.steps) {
+
+      routine.steps.forEach(
+        (step) => addStep(step)
+      );
+
+    }
+
+
+    editorTitle.textContent =
+      routine
+        ? "עריכת Routine"
+        : "יצירת Routine";
+
+  }
+
+
+  // =========================
+  // ADD STEP
+  // =========================
+
+  document
+    .getElementById("addStepBtn")
+    .addEventListener(
+      "click",
+      () => addStep()
+    );
+
+
+  function addStep(step = null) {
+
+    const div =
+      document.createElement("div");
+
+    div.className =
+      "step-editor";
+
+
+    const number =
+      stepsContainer.children.length + 1;
+
+
+    div.innerHTML = `
+
+      <div class="step-header">
+
+        <div class="step-number">
+          Step ${number}
+        </div>
+
+        <button
+          class="danger remove-step">
+          מחק
+        </button>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          שם ה-Step
+        </label>
+
+        <input
+          class="step-name"
+          type="text"
+          placeholder="לדוגמה: לשתות מים"
+          value="${step ? escapeAttr(step.name) : ""}"
+        >
+
+      </div>
+
+
+      <div class="step-grid">
+
+        <div class="form-group">
+
+          <label>
+            משך בשניות
+          </label>
+
+          <input
+            class="step-duration"
+            type="number"
+            min="1"
+            value="${step ? step.duration : 60}"
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>
+            תדירות
+          </label>
+
+          <select class="step-frequency">
+
+            <option value="daily"
+              ${step?.frequency === "daily" ? "selected" : ""}>
+              כל יום
+            </option>
+
+            <option value="every2"
+              ${step?.frequency === "every2" ? "selected" : ""}>
+              כל יומיים
+            </option>
+
+            <option value="every3"
+              ${step?.frequency === "every3" ? "selected" : ""}>
+              כל 3 ימים
+            </option>
+
+            <option value="every7"
+              ${step?.frequency === "every7" ? "selected" : ""}>
+              כל 7 ימים
+            </option>
+
+            <option value="custom"
+              ${step?.frequency === "custom" ? "selected" : ""}>
+              כל X ימים
+            </option>
+
+          </select>
+
+        </div>
+
+      </div>
+
+
+      <div
+        class="custom-frequency"
+        style="display:none;"
+      >
+
+        <label>
+          כל כמה ימים?
+        </label>
+
+        <input
+          class="custom-days"
+          type="number"
+          min="1"
+          value="${step?.customDays || 2}"
+        >
+
+      </div>
+
+    `;
+
+
+    stepsContainer.appendChild(div);
+
+
+    const frequency =
+      div.querySelector(
+        ".step-frequency"
+      );
+
+    const customFrequency =
+      div.querySelector(
+        ".custom-frequency"
+      );
+
+
+    function updateCustomFrequency() {
+
+      customFrequency.style.display =
+        frequency.value === "custom"
+          ? "block"
+          : "none";
+
+    }
+
+
+    frequency.addEventListener(
+      "change",
+      updateCustomFrequency
+    );
+
+
+    updateCustomFrequency();
+
+
+    div
+      .querySelector(".remove-step")
+      .addEventListener(
+        "click",
+        () => {
+
+          div.remove();
+
+          renumberSteps();
+
+        }
+      );
+
+  }
+
+
+  // =========================
+  // RENUMBER STEPS
+  // =========================
+
+  function renumberSteps() {
+
+    [...stepsContainer.children]
+      .forEach((step, index) => {
+
+        step
+          .querySelector(".step-number")
+          .textContent =
+          "Step " + (index + 1);
+
+      });
+
+  }
+
+
+  // =========================
+  // SAVE ROUTINE
+  // =========================
+
+  document
+    .getElementById("saveRoutineBtn")
+    .addEventListener(
+      "click",
+      saveRoutine
+    );
+
+
+  async function saveRoutine() {
+
+    const name =
+      routineName.value.trim();
+
+
+    if (!name) {
+
+      alert(
+        "צריך לתת שם ל-Routine."
+      );
+
+      return;
+
+    }
+
+
+    const selectedDays =
+      [...document.querySelectorAll(".days input:checked")]
+        .map(
+          checkbox =>
+            Number(checkbox.value)
+        );
+
+
+    const steps = [];
+
+
+    [...stepsContainer.children]
+      .forEach((div, index) => {
+
+        const stepName =
+          div
+            .querySelector(".step-name")
+            .value
+            .trim();
+
+
+        const duration =
+          Number(
+            div
+              .querySelector(".step-duration")
+              .value
+          );
+
+
+        const frequency =
+          div
+            .querySelector(".step-frequency")
+            .value;
+
+
+        const customDays =
+          Number(
+            div
+              .querySelector(".custom-days")
+              .value
+          );
+
+
+        if (stepName) {
+
+          steps.push({
+
+            name: stepName,
+
+            duration:
+              duration > 0
+                ? duration
+                : 60,
+
+            frequency,
+
+            customDays:
+              frequency === "custom"
+                ? customDays
+                : null,
+
+            order:
+              index
+
+          });
+
+        }
+
+      });
+
+
+    const data = {
+
+      name,
+
+      days: selectedDays,
+
+      steps,
+
+      updatedAt:
+        new Date().toISOString()
+
     };
 
 
-    const app = initializeApp(firebaseConfig);
+    try {
 
-    const auth = getAuth(app);
-
-    const provider = new GoogleAuthProvider();
-
-
-    // =========================
-    // ELEMENTS
-    // =========================
-
-    const loginBtn =
-      document.getElementById("loginBtn");
-
-    const logoutBtn =
-      document.getElementById("logoutBtn");
-
-    const loginArea =
-      document.getElementById("loginArea");
-
-    const userArea =
-      document.getElementById("userArea");
-
-    const userName =
-      document.getElementById("userName");
+      const routinesRef =
+        collection(
+          db,
+          "users",
+          currentUser.uid,
+          "routines"
+        );
 
 
-    // =========================
-    // GOOGLE LOGIN
-    // =========================
+      if (editingRoutineId) {
 
-    loginBtn.addEventListener("click", async () => {
+        await updateDoc(
 
-      try {
+          doc(
+            db,
+            "users",
+            currentUser.uid,
+            "routines",
+            editingRoutineId
+          ),
 
-        await signInWithPopup(auth, provider);
+          data
 
-      } catch (error) {
+        );
 
-        console.error(error);
+      } else {
 
-        alert(
-          "ההתחברות נכשלה.\n\n" +
-          error.message
+        await addDoc(
+          routinesRef,
+          data
         );
 
       }
 
-    });
+
+      alert(
+        "ה-Routine נשמר בהצלחה!"
+      );
 
 
-    // =========================
-    // LOGOUT
-    // =========================
+      await loadRoutines();
 
-    logoutBtn.addEventListener("click", async () => {
+      closeEditor();
 
-      try {
+    } catch (error) {
 
-        await signOut(auth);
+      console.error(error);
 
-      } catch (error) {
+      alert(
+        "לא ניתן לשמור את ה-Routine:\n\n" +
+        error.message
+      );
 
-        console.error(error);
+    }
+
+  }
+
+
+  // =========================
+  // CLOSE EDITOR
+  // =========================
+
+  document
+    .getElementById("cancelEditorBtn")
+    .addEventListener(
+      "click",
+      closeEditor
+    );
+
+
+  function closeEditor() {
+
+    editorScreen.style.display =
+      "none";
+
+    routineListScreen.style.display =
+      "block";
+
+    editingRoutineId =
+      null;
+
+  }
+
+
+  // =========================
+  // DELETE ROUTINE
+  // =========================
+
+  async function deleteRoutine(id) {
+
+    const confirmed =
+      confirm(
+        "למחוק את ה-Routine?"
+      );
+
+
+    if (!confirmed) return;
+
+
+    try {
+
+      await deleteDoc(
+
+        doc(
+          db,
+          "users",
+          currentUser.uid,
+          "routines",
+          id
+        )
+
+      );
+
+
+      await loadRoutines();
+
+    } catch (error) {
+
+      console.error(error);
+
+      alert(
+        "לא ניתן למחוק."
+      );
+
+    }
+
+  }
+
+
+  // =========================
+  // START ROUTINE
+  // =========================
+
+  function startRoutine(routine) {
+
+    if (
+      !routine.steps ||
+      routine.steps.length === 0
+    ) {
+
+      alert(
+        "ל-Routine הזה אין Steps."
+      );
+
+      return;
+
+    }
+
+
+    activeRoutine =
+      routine;
+
+    activeStepIndex = 0;
+
+
+    routineListScreen.style.display =
+      "none";
+
+    editorScreen.style.display =
+      "none";
+
+    activeScreen.style.display =
+      "block";
+
+
+    document
+      .getElementById("activeRoutineName")
+      .textContent =
+      routine.name;
+
+
+    showActiveStep();
+
+  }
+
+
+  // =========================
+  // SHOW ACTIVE STEP
+  // =========================
+
+  function showActiveStep() {
+
+    clearInterval(timerInterval);
+
+
+    if (
+      activeStepIndex >=
+      activeRoutine.steps.length
+    ) {
+
+      alert(
+        "Routine הושלם!"
+      );
+
+      exitActiveRoutine();
+
+      return;
+
+    }
+
+
+    const step =
+      activeRoutine.steps[
+        activeStepIndex
+      ];
+
+
+    document
+      .getElementById("activeStepName")
+      .textContent =
+      step.name;
+
+
+    remainingSeconds =
+      Number(step.duration);
+
+
+    updateTimer();
+
+
+    timerInterval =
+      setInterval(() => {
+
+        remainingSeconds--;
+
+        updateTimer();
+
+
+        if (
+          remainingSeconds <= 0
+        ) {
+
+          clearInterval(
+            timerInterval
+          );
+
+        }
+
+      }, 1000);
+
+  }
+
+
+  // =========================
+  // TIMER
+  // =========================
+
+  function updateTimer() {
+
+    const minutes =
+      Math.floor(
+        remainingSeconds / 60
+      );
+
+    const seconds =
+      remainingSeconds % 60;
+
+
+    document
+      .getElementById("timer")
+      .textContent =
+      String(minutes).padStart(2, "0") +
+      ":" +
+      String(seconds).padStart(2, "0");
+
+  }
+
+
+  // =========================
+  // DONE
+  // =========================
+
+  document
+    .getElementById("doneStepBtn")
+    .addEventListener(
+      "click",
+      () => {
+
+        activeStepIndex++;
+
+        showActiveStep();
 
       }
+    );
 
-    });
+
+  // =========================
+  // EXIT ACTIVE
+  // =========================
+
+  document
+    .getElementById("exitActiveBtn")
+    .addEventListener(
+      "click",
+      exitActiveRoutine
+    );
 
 
-    // =========================
-    // CHECK LOGIN
-    // =========================
+  function exitActiveRoutine() {
 
-    onAuthStateChanged(auth, (user) => {
+    clearInterval(timerInterval);
 
-      if (user) {
+    activeScreen.style.display =
+      "none";
 
-        // המשתמש מחובר
+    routineListScreen.style.display =
+      "block";
 
-        loginArea.style.display = "none";
+    activeRoutine =
+      null;
 
-        userArea.style.display = "block";
+  }
 
-        userName.textContent =
-          "שלום, " + (user.displayName || user.email);
 
-      } else {
+  // =========================
+  // SECURITY HELPERS
+  // =========================
 
-        // המשתמש לא מחובר
+  function escapeHtml(text) {
 
-        loginArea.style.display = "block";
+    return String(text)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
 
-        userArea.style.display = "none";
+  }
 
-      }
 
-    });
+  function escapeAttr(text) {
 
-  </script>
+    return escapeHtml(text);
+
+  }
+
+</script>
 
 </body>
 </html>
