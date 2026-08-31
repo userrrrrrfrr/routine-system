@@ -1,9 +1,9 @@
+```html
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>Routine</title>
 
   <style>
@@ -18,9 +18,7 @@
       color: #111;
     }
 
-    button,
-    input,
-    select {
+    button, input, select {
       font: inherit;
     }
 
@@ -28,11 +26,8 @@
       cursor: pointer;
     }
 
-    .container {
-      width: 92%;
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 30px 0 60px;
+    .hidden {
+      display: none !important;
     }
 
     /* LOGIN */
@@ -55,8 +50,8 @@
     }
 
     .login-box h1 {
-      margin: 0 0 10px;
       font-size: 36px;
+      margin: 0 0 10px;
     }
 
     .login-box p {
@@ -68,9 +63,10 @@
       width: 100%;
       padding: 15px;
       border: 0;
-      border-radius: 14px;
+      border-radius: 12px;
       background: #111;
       color: white;
+      font-size: 16px;
     }
 
     /* APP */
@@ -79,14 +75,21 @@
       display: none;
     }
 
+    .container {
+      width: 92%;
+      max-width: 900px;
+      margin: auto;
+      padding: 25px 0 60px;
+    }
+
     header {
       background: white;
-      border-radius: 20px;
       padding: 20px;
-      margin-bottom: 25px;
+      border-radius: 20px;
+      margin-bottom: 20px;
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
       gap: 15px;
     }
 
@@ -101,49 +104,28 @@
     }
 
     .logout-btn {
-      padding: 10px 16px;
+      padding: 10px 15px;
       border: 1px solid #ddd;
       background: white;
       border-radius: 10px;
     }
-
-    /* CARDS */
 
     .card {
       background: white;
       border-radius: 20px;
       padding: 22px;
       margin-bottom: 20px;
-      box-shadow: 0 5px 20px rgba(0,0,0,.04);
     }
 
-    .card h2 {
-      margin-top: 0;
-    }
-
-    .routine-card {
+    .top-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 15px;
-      border: 1px solid #eee;
-      padding: 18px;
-      border-radius: 15px;
-      margin-bottom: 12px;
     }
 
-    .routine-card h3 {
-      margin: 0 0 7px;
-    }
-
-    .routine-card small {
-      color: #777;
-    }
-
-    .actions {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
+    .top-row h2 {
+      margin: 0;
     }
 
     .primary {
@@ -151,7 +133,7 @@
       color: white;
       border: 0;
       padding: 12px 18px;
-      border-radius: 12px;
+      border-radius: 10px;
     }
 
     .secondary {
@@ -162,27 +144,57 @@
     }
 
     .danger {
-      background: #fff;
       color: #d00;
+      background: white;
       border: 1px solid #ddd;
       padding: 10px 15px;
       border-radius: 10px;
     }
 
-    /* FORM */
+    /* ROUTINES */
+
+    .routine-card {
+      border: 1px solid #eee;
+      border-radius: 15px;
+      padding: 18px;
+      margin-top: 12px;
+    }
+
+    .routine-card h3 {
+      margin: 0 0 7px;
+    }
+
+    .routine-info {
+      color: #777;
+      font-size: 14px;
+      margin-bottom: 15px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .empty {
+      text-align: center;
+      color: #777;
+      padding: 35px 10px;
+    }
+
+    /* EDITOR */
 
     .form-group {
-      margin-bottom: 18px;
+      margin-bottom: 20px;
     }
 
     .form-group label {
       display: block;
-      margin-bottom: 7px;
       font-weight: bold;
+      margin-bottom: 7px;
     }
 
-    input,
-    select {
+    input, select {
       width: 100%;
       padding: 13px;
       border: 1px solid #ddd;
@@ -196,17 +208,13 @@
       gap: 8px;
     }
 
-    .day {
-      position: relative;
-    }
-
     .day input {
       display: none;
     }
 
     .day span {
       display: block;
-      padding: 10px 13px;
+      padding: 10px 14px;
       border: 1px solid #ddd;
       border-radius: 10px;
       cursor: pointer;
@@ -217,30 +225,29 @@
       color: white;
     }
 
-    /* STEPS */
-
-    .step-editor {
+    .step {
       border: 1px solid #eee;
       border-radius: 15px;
-      padding: 16px;
+      padding: 15px;
       margin-bottom: 12px;
     }
 
-    .step-header {
+    .step-title {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 15px;
     }
 
-    .step-number {
-      font-weight: bold;
-    }
-
     .step-grid {
       display: grid;
-      grid-template-columns: 1fr 160px;
+      grid-template-columns: 1fr 180px;
       gap: 12px;
+    }
+
+    .custom-days {
+      display: none;
+      margin-top: 10px;
     }
 
     /* ACTIVE */
@@ -253,75 +260,54 @@
 
     .active-box {
       max-width: 600px;
-      margin: 0 auto;
-      text-align: center;
+      margin: auto;
       background: white;
       border-radius: 25px;
       padding: 35px 25px;
-      box-shadow: 0 10px 40px rgba(0,0,0,.08);
-    }
-
-    .active-box h1 {
-      margin-top: 0;
+      text-align: center;
     }
 
     #activeStepName {
       font-size: 32px;
-      margin: 30px 0 15px;
+      margin: 35px 0 20px;
     }
 
     #timer {
-      font-size: 70px;
+      font-size: 65px;
       font-weight: bold;
-      margin: 20px 0 30px;
+      margin-bottom: 30px;
     }
 
     .done-btn {
       width: 100%;
       padding: 18px;
-      border: 0;
-      border-radius: 15px;
       background: #111;
       color: white;
+      border: 0;
+      border-radius: 14px;
       font-size: 20px;
     }
 
     .back-btn {
-      margin-top: 12px;
       width: 100%;
       padding: 14px;
+      margin-top: 10px;
+      background: white;
       border: 1px solid #ddd;
       border-radius: 12px;
-      background: white;
-    }
-
-    .empty {
-      color: #777;
-      text-align: center;
-      padding: 30px;
     }
 
     @media (max-width: 600px) {
-
-      .container {
-        width: 94%;
+      .step-grid {
+        grid-template-columns: 1fr;
       }
 
       header {
         align-items: flex-start;
       }
 
-      .routine-card {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      .step-grid {
-        grid-template-columns: 1fr;
-      }
-
       #timer {
-        font-size: 55px;
+        font-size: 52px;
       }
 
       #activeStepName {
@@ -333,10 +319,7 @@
 
 <body>
 
-
-<!-- =========================
-     LOGIN SCREEN
-========================= -->
+<!-- LOGIN -->
 
 <div id="loginScreen">
 
@@ -344,11 +327,9 @@
 
     <h1>Routine</h1>
 
-    <p>
-      התחבר כדי להיכנס למערכת שלך
-    </p>
+    <p>התחבר כדי להיכנס למערכת שלך</p>
 
-    <button class="google-btn" id="loginBtn">
+    <button id="loginBtn" class="google-btn">
       כניסה עם Google
     </button>
 
@@ -357,9 +338,7 @@
 </div>
 
 
-<!-- =========================
-     MAIN APP
-========================= -->
+<!-- MAIN APP -->
 
 <div id="app">
 
@@ -372,24 +351,24 @@
         <div id="userInfo"></div>
       </div>
 
-      <button class="logout-btn" id="logoutBtn">
+      <button id="logoutBtn" class="logout-btn">
         התנתק
       </button>
 
     </header>
 
 
-    <!-- ROUTINES -->
+    <!-- ROUTINE LIST -->
 
     <div id="routineListScreen">
 
       <div class="card">
 
-        <div style="display:flex;justify-content:space-between;align-items:center;gap:15px;">
+        <div class="top-row">
 
           <h2>השגרות שלי</h2>
 
-          <button class="primary" id="newRoutineBtn">
+          <button id="newRoutineBtn" class="primary">
             + Routine חדש
           </button>
 
@@ -402,26 +381,22 @@
     </div>
 
 
-    <!-- ROUTINE EDITOR -->
+    <!-- EDITOR -->
 
-    <div id="editorScreen" style="display:none;">
+    <div id="editorScreen" class="hidden">
 
       <div class="card">
 
         <h2 id="editorTitle">
-          יצירת Routine
+          Routine חדש
         </h2>
-
 
         <div class="form-group">
 
-          <label>
-            שם ה־Routine
-          </label>
+          <label>שם ה-Routine</label>
 
           <input
             id="routineName"
-            type="text"
             placeholder="לדוגמה: בוקר"
           >
 
@@ -430,9 +405,7 @@
 
         <div class="form-group">
 
-          <label>
-            ימי פעילות
-          </label>
+          <label>באילו ימים ה-Routine פעיל?</label>
 
           <div class="days">
 
@@ -480,17 +453,17 @@
 
         <div id="stepsContainer"></div>
 
-        <button class="secondary" id="addStepBtn">
+        <button id="addStepBtn" class="secondary">
           + הוסף Step
         </button>
 
         <br><br>
 
-        <button class="primary" id="saveRoutineBtn">
-          שמור Routine
+        <button id="saveRoutineBtn" class="primary">
+          שמור
         </button>
 
-        <button class="secondary" id="cancelEditorBtn">
+        <button id="cancelEditorBtn" class="secondary">
           ביטול
         </button>
 
@@ -507,19 +480,15 @@
 
         <h1 id="activeRoutineName"></h1>
 
-        <div id="activeStepName">
-          Step
-        </div>
+        <div id="activeStepName"></div>
 
-        <div id="timer">
-          00:00
-        </div>
+        <div id="timer">00:00</div>
 
-        <button class="done-btn" id="doneStepBtn">
-          ✓ Done
+        <button id="doneStepBtn" class="done-btn">
+          ✓ בוצע
         </button>
 
-        <button class="back-btn" id="exitActiveBtn">
+        <button id="exitActiveBtn" class="back-btn">
           יציאה
         </button>
 
@@ -532,10 +501,6 @@
 </div>
 
 
-<!-- =========================
-     FIREBASE
-========================= -->
-
 <script type="module">
 
   import { initializeApp }
@@ -547,8 +512,7 @@
     signInWithPopup,
     signOut,
     onAuthStateChanged
-  }
-    from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+  } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
   import {
     getFirestore,
@@ -557,16 +521,11 @@
     getDocs,
     doc,
     updateDoc,
-    deleteDoc,
-    query,
-    orderBy
-  }
-    from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+    deleteDoc
+  } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 
-  // =========================
-  // FIREBASE CONFIG
-  // =========================
+  /* FIREBASE */
 
   const firebaseConfig = {
 
@@ -587,22 +546,16 @@
   };
 
 
-  const app =
-    initializeApp(firebaseConfig);
+  const app = initializeApp(firebaseConfig);
 
-  const auth =
-    getAuth(app);
+  const auth = getAuth(app);
 
-  const db =
-    getFirestore(app);
+  const db = getFirestore(app);
 
-  const provider =
-    new GoogleAuthProvider();
+  const provider = new GoogleAuthProvider();
 
 
-  // =========================
-  // GLOBAL VARIABLES
-  // =========================
+  /* VARIABLES */
 
   let currentUser = null;
 
@@ -619,27 +572,13 @@
   let remainingSeconds = 0;
 
 
-  // =========================
-  // ELEMENTS
-  // =========================
+  /* ELEMENTS */
 
   const loginScreen =
     document.getElementById("loginScreen");
 
   const appScreen =
     document.getElementById("app");
-
-  const loginBtn =
-    document.getElementById("loginBtn");
-
-  const logoutBtn =
-    document.getElementById("logoutBtn");
-
-  const userInfo =
-    document.getElementById("userInfo");
-
-  const routineList =
-    document.getElementById("routineList");
 
   const routineListScreen =
     document.getElementById("routineListScreen");
@@ -650,57 +589,46 @@
   const activeScreen =
     document.getElementById("activeScreen");
 
-  const routineName =
-    document.getElementById("routineName");
 
-  const stepsContainer =
-    document.getElementById("stepsContainer");
+  /* LOGIN */
 
-  const editorTitle =
-    document.getElementById("editorTitle");
+  document
+    .getElementById("loginBtn")
+    .addEventListener("click", async () => {
 
+      try {
 
-  // =========================
-  // GOOGLE LOGIN
-  // =========================
+        await signInWithPopup(
+          auth,
+          provider
+        );
 
-  loginBtn.addEventListener("click", async () => {
+      } catch (error) {
 
-    try {
+        console.error(error);
 
-      await signInWithPopup(
-        auth,
-        provider
-      );
+        alert(
+          "ההתחברות נכשלה:\n\n" +
+          error.message
+        );
 
-    } catch (error) {
+      }
 
-      console.error(error);
-
-      alert(
-        "ההתחברות נכשלה:\n\n" +
-        error.message
-      );
-
-    }
-
-  });
+    });
 
 
-  // =========================
-  // LOGOUT
-  // =========================
+  /* LOGOUT */
 
-  logoutBtn.addEventListener("click", async () => {
+  document
+    .getElementById("logoutBtn")
+    .addEventListener("click", async () => {
 
-    await signOut(auth);
+      await signOut(auth);
 
-  });
+    });
 
 
-  // =========================
-  // AUTH STATE
-  // =========================
+  /* AUTH */
 
   onAuthStateChanged(
     auth,
@@ -710,15 +638,12 @@
 
         currentUser = user;
 
-        loginScreen.style.display =
-          "none";
+        loginScreen.style.display = "none";
 
-        appScreen.style.display =
-          "block";
+        appScreen.style.display = "block";
 
-        userInfo.textContent =
-          user.displayName ||
-          user.email;
+        document.getElementById("userInfo").textContent =
+          user.displayName || user.email;
 
         await loadRoutines();
 
@@ -726,11 +651,9 @@
 
         currentUser = null;
 
-        loginScreen.style.display =
-          "flex";
+        loginScreen.style.display = "flex";
 
-        appScreen.style.display =
-          "none";
+        appScreen.style.display = "none";
 
       }
 
@@ -738,18 +661,18 @@
   );
 
 
-  // =========================
-  // LOAD ROUTINES
-  // =========================
+  /* LOAD ROUTINES */
 
   async function loadRoutines() {
 
-    routineList.innerHTML =
-      "טוען...";
+    const list =
+      document.getElementById("routineList");
+
+    list.innerHTML = "טוען...";
 
     try {
 
-      const routinesRef =
+      const ref =
         collection(
           db,
           "users",
@@ -758,11 +681,11 @@
         );
 
       const snapshot =
-        await getDocs(routinesRef);
+        await getDocs(ref);
 
       routines = [];
 
-      snapshot.forEach((item) => {
+      snapshot.forEach(item => {
 
         routines.push({
 
@@ -780,28 +703,33 @@
 
       console.error(error);
 
-      routineList.innerHTML =
-        "<div class='empty'>לא ניתן לטעון את השגרות.</div>";
+      list.innerHTML = `
+        <div class="empty">
+          לא ניתן לטעון את השגרות.<br><br>
+          ודא ש-Firestore מופעל ב-Firebase.
+        </div>
+      `;
 
     }
 
   }
 
 
-  // =========================
-  // RENDER ROUTINES
-  // =========================
+  /* RENDER */
 
   function renderRoutines() {
 
-    routineList.innerHTML = "";
+    const list =
+      document.getElementById("routineList");
+
+    list.innerHTML = "";
 
     if (routines.length === 0) {
 
-      routineList.innerHTML = `
+      list.innerHTML = `
         <div class="empty">
-          עדיין אין לך Routines.<br>
-          לחץ על "+ Routine חדש" כדי להתחיל.
+          עדיין אין לך שגרות.<br>
+          לחץ על "+ Routine חדש" כדי ליצור אחת.
         </div>
       `;
 
@@ -810,56 +738,40 @@
     }
 
 
-    routines.forEach((routine) => {
+    routines.forEach(routine => {
 
-      const div =
+      const card =
         document.createElement("div");
 
-      div.className =
-        "routine-card";
+      card.className = "routine-card";
+
+      const stepCount =
+        routine.steps
+          ? routine.steps.length
+          : 0;
 
 
-      const daysText =
-        routine.days && routine.days.length
-          ? "ימי פעילות: " +
-            routine.days.join(", ")
-          : "ללא ימים";
+      card.innerHTML = `
 
+        <h3>
+          ${escapeHtml(routine.name)}
+        </h3>
 
-      div.innerHTML = `
-
-        <div>
-
-          <h3>
-            ${escapeHtml(routine.name)}
-          </h3>
-
-          <small>
-            ${routine.steps?.length || 0} Steps
-            ·
-            ${daysText}
-          </small>
-
+        <div class="routine-info">
+          ${stepCount} Steps
         </div>
-
 
         <div class="actions">
 
-          <button
-            class="primary start-btn"
-            data-id="${routine.id}">
+          <button class="primary start">
             התחל
           </button>
 
-          <button
-            class="secondary edit-btn"
-            data-id="${routine.id}">
+          <button class="secondary edit">
             ערוך
           </button>
 
-          <button
-            class="danger delete-btn"
-            data-id="${routine.id}">
+          <button class="danger delete">
             מחק
           </button>
 
@@ -868,147 +780,98 @@
       `;
 
 
-      routineList.appendChild(div);
+      card
+        .querySelector(".start")
+        .addEventListener(
+          "click",
+          () => startRoutine(routine)
+        );
+
+
+      card
+        .querySelector(".edit")
+        .addEventListener(
+          "click",
+          () => openEditor(routine)
+        );
+
+
+      card
+        .querySelector(".delete")
+        .addEventListener(
+          "click",
+          () => deleteRoutine(routine.id)
+        );
+
+
+      list.appendChild(card);
 
     });
-
-
-    document
-      .querySelectorAll(".start-btn")
-      .forEach((button) => {
-
-        button.addEventListener(
-          "click",
-          () => {
-
-            const routine =
-              routines.find(
-                r => r.id === button.dataset.id
-              );
-
-            startRoutine(routine);
-
-          }
-        );
-
-      });
-
-
-    document
-      .querySelectorAll(".edit-btn")
-      .forEach((button) => {
-
-        button.addEventListener(
-          "click",
-          () => {
-
-            const routine =
-              routines.find(
-                r => r.id === button.dataset.id
-              );
-
-            openEditor(routine);
-
-          }
-        );
-
-      });
-
-
-    document
-      .querySelectorAll(".delete-btn")
-      .forEach((button) => {
-
-        button.addEventListener(
-          "click",
-          () => {
-
-            deleteRoutine(
-              button.dataset.id
-            );
-
-          }
-        );
-
-      });
 
   }
 
 
-  // =========================
-  // NEW ROUTINE
-  // =========================
+  /* NEW */
 
   document
     .getElementById("newRoutineBtn")
     .addEventListener(
       "click",
-      () => {
-
-        openEditor(null);
-
-      }
+      () => openEditor(null)
     );
 
 
-  // =========================
-  // OPEN EDITOR
-  // =========================
+  /* EDITOR */
 
   function openEditor(routine) {
 
-    routineListScreen.style.display =
-      "none";
+    routineListScreen.style.display = "none";
 
-    editorScreen.style.display =
-      "block";
+    editorScreen.classList.remove("hidden");
 
     editingRoutineId =
       routine ? routine.id : null;
 
 
-    routineName.value =
+    document.getElementById("editorTitle").textContent =
+      routine ? "עריכת Routine" : "Routine חדש";
+
+
+    document.getElementById("routineName").value =
       routine ? routine.name : "";
 
 
     document
       .querySelectorAll(".days input")
-      .forEach((checkbox) => {
+      .forEach(box => {
 
-        checkbox.checked =
+        box.checked =
           routine
-            ? (routine.days || [])
-                .includes(
-                  Number(checkbox.value)
-                )
+            ? (routine.days || []).includes(
+                Number(box.value)
+              )
             : false;
 
       });
 
 
-    stepsContainer.innerHTML = "";
+    document.getElementById("stepsContainer").innerHTML = "";
 
 
     if (routine && routine.steps) {
 
-      routine.steps.forEach(
-        (step) => addStep(step)
-      );
+      routine.steps.forEach(step => {
+
+        addStep(step);
+
+      });
 
     }
-
-
-    editorTitle.textContent =
-      routine
-        ? "עריכת Routine"
-        : "יצירת Routine";
 
   }
 
 
-  // =========================
-  // ADD STEP
-  // =========================
+  /* ADD STEP */
 
   document
     .getElementById("addStepBtn")
@@ -1020,27 +883,24 @@
 
   function addStep(step = null) {
 
+    const container =
+      document.getElementById("stepsContainer");
+
     const div =
       document.createElement("div");
 
-    div.className =
-      "step-editor";
-
-
-    const number =
-      stepsContainer.children.length + 1;
+    div.className = "step";
 
 
     div.innerHTML = `
 
-      <div class="step-header">
+      <div class="step-title">
 
-        <div class="step-number">
-          Step ${number}
-        </div>
+        <strong>
+          Step ${container.children.length + 1}
+        </strong>
 
-        <button
-          class="danger remove-step">
+        <button class="danger remove">
           מחק
         </button>
 
@@ -1049,15 +909,12 @@
 
       <div class="form-group">
 
-        <label>
-          שם ה-Step
-        </label>
+        <label>שם ה-Step</label>
 
         <input
           class="step-name"
-          type="text"
+          value="${step ? escapeHtml(step.name) : ""}"
           placeholder="לדוגמה: לשתות מים"
-          value="${step ? escapeAttr(step.name) : ""}"
         >
 
       </div>
@@ -1065,11 +922,9 @@
 
       <div class="step-grid">
 
-        <div class="form-group">
+        <div>
 
-          <label>
-            משך בשניות
-          </label>
+          <label>משך בשניות</label>
 
           <input
             class="step-duration"
@@ -1081,36 +936,29 @@
         </div>
 
 
-        <div class="form-group">
+        <div>
 
-          <label>
-            תדירות
-          </label>
+          <label>תדירות</label>
 
-          <select class="step-frequency">
+          <select class="frequency">
 
-            <option value="daily"
-              ${step?.frequency === "daily" ? "selected" : ""}>
+            <option value="daily">
               כל יום
             </option>
 
-            <option value="every2"
-              ${step?.frequency === "every2" ? "selected" : ""}>
+            <option value="2">
               כל יומיים
             </option>
 
-            <option value="every3"
-              ${step?.frequency === "every3" ? "selected" : ""}>
+            <option value="3">
               כל 3 ימים
             </option>
 
-            <option value="every7"
-              ${step?.frequency === "every7" ? "selected" : ""}>
+            <option value="7">
               כל 7 ימים
             </option>
 
-            <option value="custom"
-              ${step?.frequency === "custom" ? "selected" : ""}>
+            <option value="custom">
               כל X ימים
             </option>
 
@@ -1121,20 +969,15 @@
       </div>
 
 
-      <div
-        class="custom-frequency"
-        style="display:none;"
-      >
+      <div class="custom-days">
 
-        <label>
-          כל כמה ימים?
-        </label>
+        <label>כל כמה ימים?</label>
 
         <input
-          class="custom-days"
+          class="custom-value"
           type="number"
           min="1"
-          value="${step?.customDays || 2}"
+          value="2"
         >
 
       </div>
@@ -1142,41 +985,57 @@
     `;
 
 
-    stepsContainer.appendChild(div);
+    container.appendChild(div);
 
 
     const frequency =
-      div.querySelector(
-        ".step-frequency"
-      );
+      div.querySelector(".frequency");
 
-    const customFrequency =
-      div.querySelector(
-        ".custom-frequency"
-      );
+    const custom =
+      div.querySelector(".custom-days");
 
 
-    function updateCustomFrequency() {
+    if (step) {
 
-      customFrequency.style.display =
-        frequency.value === "custom"
-          ? "block"
-          : "none";
+      if (
+        step.frequency === "daily" ||
+        step.frequency === "2" ||
+        step.frequency === "3" ||
+        step.frequency === "7"
+      ) {
+
+        frequency.value =
+          step.frequency;
+
+      } else {
+
+        frequency.value = "custom";
+
+        custom.style.display = "block";
+
+        div.querySelector(".custom-value").value =
+          step.frequency || 2;
+
+      }
 
     }
 
 
     frequency.addEventListener(
       "change",
-      updateCustomFrequency
+      () => {
+
+        custom.style.display =
+          frequency.value === "custom"
+            ? "block"
+            : "none";
+
+      }
     );
 
 
-    updateCustomFrequency();
-
-
     div
-      .querySelector(".remove-step")
+      .querySelector(".remove")
       .addEventListener(
         "click",
         () => {
@@ -1191,18 +1050,15 @@
   }
 
 
-  // =========================
-  // RENUMBER STEPS
-  // =========================
+  /* RENUMBER */
 
   function renumberSteps() {
 
-    [...stepsContainer.children]
+    document
+      .querySelectorAll(".step")
       .forEach((step, index) => {
 
-        step
-          .querySelector(".step-number")
-          .textContent =
+        step.querySelector("strong").textContent =
           "Step " + (index + 1);
 
       });
@@ -1210,9 +1066,7 @@
   }
 
 
-  // =========================
-  // SAVE ROUTINE
-  // =========================
+  /* SAVE */
 
   document
     .getElementById("saveRoutineBtn")
@@ -1225,87 +1079,74 @@
   async function saveRoutine() {
 
     const name =
-      routineName.value.trim();
+      document
+        .getElementById("routineName")
+        .value
+        .trim();
 
 
     if (!name) {
 
-      alert(
-        "צריך לתת שם ל-Routine."
-      );
+      alert("כתוב שם ל-Routine.");
 
       return;
 
     }
 
 
-    const selectedDays =
+    const days =
       [...document.querySelectorAll(".days input:checked")]
-        .map(
-          checkbox =>
-            Number(checkbox.value)
-        );
+        .map(box => Number(box.value));
 
 
     const steps = [];
 
 
-    [...stepsContainer.children]
+    document
+      .querySelectorAll(".step")
       .forEach((div, index) => {
 
         const stepName =
-          div
-            .querySelector(".step-name")
+          div.querySelector(".step-name")
             .value
             .trim();
 
 
+        if (!stepName) return;
+
+
         const duration =
           Number(
-            div
-              .querySelector(".step-duration")
-              .value
+            div.querySelector(".step-duration").value
           );
 
 
         const frequency =
-          div
-            .querySelector(".step-frequency")
-            .value;
+          div.querySelector(".frequency").value;
 
 
-        const customDays =
-          Number(
-            div
-              .querySelector(".custom-days")
-              .value
-          );
+        let finalFrequency = frequency;
 
 
-        if (stepName) {
+        if (frequency === "custom") {
 
-          steps.push({
-
-            name: stepName,
-
-            duration:
-              duration > 0
-                ? duration
-                : 60,
-
-            frequency,
-
-            customDays:
-              frequency === "custom"
-                ? customDays
-                : null,
-
-            order:
-              index
-
-          });
+          finalFrequency =
+            div.querySelector(".custom-value").value;
 
         }
+
+
+        steps.push({
+
+          name: stepName,
+
+          duration: duration > 0 ? duration : 60,
+
+          frequency: finalFrequency,
+
+          order: index
+
+        });
 
       });
 
@@ -1314,19 +1155,18 @@
 
       name,
 
-      days: selectedDays,
+      days,
 
       steps,
 
-      updatedAt:
-        new Date().toISOString()
+      updatedAt: new Date().toISOString()
 
     };
 
 
     try {
 
-      const routinesRef =
+      const ref =
         collection(
           db,
           "users",
@@ -1353,29 +1193,21 @@
 
       } else {
 
-        await addDoc(
-          routinesRef,
-          data
-        );
+        await addDoc(ref, data);
 
       }
 
 
-      alert(
-        "ה-Routine נשמר בהצלחה!"
-      );
-
+      closeEditor();
 
       await loadRoutines();
-
-      closeEditor();
 
     } catch (error) {
 
       console.error(error);
 
       alert(
-        "לא ניתן לשמור את ה-Routine:\n\n" +
+        "השמירה נכשלה:\n\n" +
         error.message
       );
 
@@ -1384,9 +1216,7 @@
   }
 
 
-  // =========================
-  // CLOSE EDITOR
-  // =========================
+  /* CLOSE EDITOR */
 
   document
     .getElementById("cancelEditorBtn")
@@ -1398,31 +1228,22 @@
 
   function closeEditor() {
 
-    editorScreen.style.display =
-      "none";
+    editorScreen.classList.add("hidden");
 
-    routineListScreen.style.display =
-      "block";
+    routineListScreen.style.display = "block";
 
-    editingRoutineId =
-      null;
+    editingRoutineId = null;
 
   }
 
 
-  // =========================
-  // DELETE ROUTINE
-  // =========================
+  /* DELETE */
 
   async function deleteRoutine(id) {
 
-    const confirmed =
-      confirm(
-        "למחוק את ה-Routine?"
-      );
-
-
-    if (!confirmed) return;
+    if (!confirm("למחוק את ה-Routine?")) {
+      return;
+    }
 
 
     try {
@@ -1446,18 +1267,14 @@
 
       console.error(error);
 
-      alert(
-        "לא ניתן למחוק."
-      );
+      alert("המחיקה נכשלה.");
 
     }
 
   }
 
 
-  // =========================
-  // START ROUTINE
-  // =========================
+  /* START */
 
   function startRoutine(routine) {
 
@@ -1475,20 +1292,16 @@
     }
 
 
-    activeRoutine =
-      routine;
+    activeRoutine = routine;
 
     activeStepIndex = 0;
 
 
-    routineListScreen.style.display =
-      "none";
+    routineListScreen.style.display = "none";
 
-    editorScreen.style.display =
-      "none";
+    editorScreen.classList.add("hidden");
 
-    activeScreen.style.display =
-      "block";
+    activeScreen.style.display = "block";
 
 
     document
@@ -1497,16 +1310,14 @@
       routine.name;
 
 
-    showActiveStep();
+    showStep();
 
   }
 
 
-  // =========================
-  // SHOW ACTIVE STEP
-  // =========================
+  /* STEP */
 
-  function showActiveStep() {
+  function showStep() {
 
     clearInterval(timerInterval);
 
@@ -1516,11 +1327,9 @@
       activeRoutine.steps.length
     ) {
 
-      alert(
-        "Routine הושלם!"
-      );
+      alert("ה-Routine הושלם!");
 
-      exitActiveRoutine();
+      exitRoutine();
 
       return;
 
@@ -1528,9 +1337,7 @@
 
 
     const step =
-      activeRoutine.steps[
-        activeStepIndex
-      ];
+      activeRoutine.steps[activeStepIndex];
 
 
     document
@@ -1554,13 +1361,9 @@
         updateTimer();
 
 
-        if (
-          remainingSeconds <= 0
-        ) {
+        if (remainingSeconds <= 0) {
 
-          clearInterval(
-            timerInterval
-          );
+          clearInterval(timerInterval);
 
         }
 
@@ -1569,9 +1372,7 @@
   }
 
 
-  // =========================
-  // TIMER
-  // =========================
+  /* TIMER */
 
   function updateTimer() {
 
@@ -1594,9 +1395,7 @@
   }
 
 
-  // =========================
-  // DONE
-  // =========================
+  /* DONE */
 
   document
     .getElementById("doneStepBtn")
@@ -1606,43 +1405,36 @@
 
         activeStepIndex++;
 
-        showActiveStep();
+        showStep();
 
       }
     );
 
 
-  // =========================
-  // EXIT ACTIVE
-  // =========================
+  /* EXIT */
 
   document
     .getElementById("exitActiveBtn")
     .addEventListener(
       "click",
-      exitActiveRoutine
+      exitRoutine
     );
 
 
-  function exitActiveRoutine() {
+  function exitRoutine() {
 
     clearInterval(timerInterval);
 
-    activeScreen.style.display =
-      "none";
+    activeScreen.style.display = "none";
 
-    routineListScreen.style.display =
-      "block";
+    routineListScreen.style.display = "block";
 
-    activeRoutine =
-      null;
+    activeRoutine = null;
 
   }
 
 
-  // =========================
-  // SECURITY HELPERS
-  // =========================
+  /* HELPERS */
 
   function escapeHtml(text) {
 
@@ -1655,14 +1447,8 @@
 
   }
 
-
-  function escapeAttr(text) {
-
-    return escapeHtml(text);
-
-  }
-
 </script>
 
 </body>
 </html>
+```
