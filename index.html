@@ -154,8 +154,9 @@
     }
     .image-preview img {
       width: 100%;
-      max-height: 250px;
-      object-fit: cover;
+      max-height: 320px;
+      object-fit: contain;
+      background: #f5f5f7;
       border-radius: 15px;
       border: 1px solid #eee;
       display: block;
@@ -170,23 +171,26 @@
     }
     .routine-image {
       width: 100%;
-      max-height: 220px;
-      object-fit: cover;
+      max-height: 260px;
+      object-fit: contain;
+      background: #f5f5f7;
       border-radius: 15px;
       margin-bottom: 15px;
       display: block;
     }
     .direct-routine-image {
       width: 100%;
-      max-height: 300px;
-      object-fit: cover;
+      max-height: 340px;
+      object-fit: contain;
+      background: #f5f5f7;
       border-radius: 18px;
       margin-bottom: 20px;
     }
     .active-step-image {
       width: 100%;
-      max-height: 320px;
-      object-fit: cover;
+      max-height: 420px;
+      object-fit: contain;
+      background: #f5f5f7;
       border-radius: 18px;
       margin: 20px 0;
       display: block;
@@ -319,8 +323,11 @@
       text-align: center;
     }
     #activeStepName {
-      font-size: 32px;
-      margin: 35px 0 20px;
+      font-size: 42px;
+      font-weight: bold;
+      color: #d00;
+      margin: 30px 0 20px;
+      line-height: 1.3;
     }
     #timer {
       font-size: 65px;
@@ -366,12 +373,25 @@
       border-radius: 12px;
       margin-bottom: 10px;
     }
+    .direct-step strong {
+      color: #d00;
+      font-size: 18px;
+    }
+    .direct-step-name {
+      color: #d00;
+      font-size: 22px;
+      font-weight: bold;
+      display: block;
+      margin-top: 4px;
+    }
     .direct-step-image {
       width: 100%;
-      max-height: 180px;
-      object-fit: cover;
+      max-height: 280px;
+      object-fit: contain;
+      background: #f5f5f7;
       border-radius: 12px;
-      margin-top: 10px;
+      margin-top: 12px;
+      display: block;
     }
     /* =========================
        MOBILE
@@ -384,7 +404,7 @@
         font-size: 52px;
       }
       #activeStepName {
-        font-size: 26px;
+        font-size: 32px;
       }
       .top-row {
         align-items: flex-start;
@@ -577,7 +597,6 @@ import {
   updateDoc,
   deleteDoc
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-
 /* =========================
    FIREBASE CONFIG
 ========================= */
@@ -590,12 +609,10 @@ const firebaseConfig = {
   appId: "1:709702843873:web:a326854107acb20e6ee6a0",
   measurementId: "G-GC5LS15YEC"
 };
-
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
-
 /* =========================
    VARIABLES
 ========================= */
@@ -609,7 +626,6 @@ let timerInterval = null;
 let remainingSeconds = 0;
 let currentRoutineImage = "";
 let stepImages = new Map();
-
 /* =========================
    AUTH
 ========================= */
@@ -621,11 +637,9 @@ document.getElementById("loginBtn").addEventListener("click", async () => {
     alert("ההתחברות נכשלה:\n\n" + error.message);
   }
 });
-
 document.getElementById("logoutBtn").addEventListener("click", async () => {
   await signOut(auth);
 });
-
 /* =========================
    AUTH STATE
 ========================= */
@@ -642,7 +656,6 @@ onAuthStateChanged(auth, async (user) => {
     document.getElementById("app").style.display = "none";
   }
 });
-
 /* =========================
    LOAD ROUTINES
 ========================= */
@@ -671,7 +684,6 @@ async function loadRoutines() {
     `;
   }
 }
-
 /* =========================
    RENDER ROUTINES
 ========================= */
@@ -720,7 +732,6 @@ function renderRoutines() {
     list.appendChild(card);
   });
 }
-
 /* =========================
    IMAGE COMPRESSION - דחיסה חזקה מאוד
 ========================= */
@@ -730,7 +741,7 @@ function compressImage(file) {
     reader.onload = event => {
       const img = new Image();
       img.onload = () => {
-        const maxWidth = 600; // דחיסה חזקה
+        const maxWidth = 600;
         let width = img.width;
         let height = img.height;
         if (width > maxWidth) {
@@ -742,7 +753,6 @@ function compressImage(file) {
         canvas.height = height;
         const ctx = canvas.getContext("2d");
         ctx.drawImage(img, 0, 0, width, height);
-        // איכות נמוכה מאוד כדי לחסוך מקום
         const result = canvas.toDataURL("image/jpeg", 0.4);
         resolve(result);
       };
@@ -753,7 +763,6 @@ function compressImage(file) {
     reader.readAsDataURL(file);
   });
 }
-
 /* =========================
    ROUTINE IMAGE INPUT
 ========================= */
@@ -768,7 +777,6 @@ document.getElementById("routineImageInput").addEventListener("change", async ev
     alert("לא ניתן לקרוא את התמונה.");
   }
 });
-
 /* =========================
    ROUTINE IMAGE PREVIEW
 ========================= */
@@ -790,7 +798,6 @@ function showRoutineImagePreview() {
   preview.appendChild(img);
   preview.appendChild(remove);
 }
-
 /* =========================
    COPY ROUTINE LINK
 ========================= */
@@ -803,7 +810,6 @@ async function copyRoutineLink(routineId) {
     prompt("העתק את הקישור:", url);
   }
 }
-
 /* =========================
    OPEN ROUTINE FROM LINK
 ========================= */
@@ -818,7 +824,6 @@ function openRoutineFromLink() {
   }
   showDirectRoutine(routine);
 }
-
 /* =========================
    SHOW DIRECT ROUTINE
 ========================= */
@@ -859,7 +864,7 @@ function showDirectRoutine(routine) {
         }
         div.innerHTML = `
           <strong>Step ${index + 1}</strong><br>
-          ${escapeHtml(step.name)}
+          <span class="direct-step-name">${escapeHtml(step.name)}</span>
           ${imageHtml}
         `;
         stepsContainer.appendChild(div);
@@ -867,7 +872,6 @@ function showDirectRoutine(routine) {
   }
   document.getElementById("directStartBtn").onclick = () => startRoutine(routine);
 }
-
 /* =========================
    DIRECT BACK
 ========================= */
@@ -877,12 +881,10 @@ document.getElementById("directBackBtn").addEventListener("click", () => {
   document.getElementById("directRoutineScreen").style.display = "none";
   document.getElementById("routineListScreen").style.display = "block";
 });
-
 /* =========================
    NEW ROUTINE
 ========================= */
 document.getElementById("newRoutineBtn").addEventListener("click", () => openEditor(null));
-
 /* =========================
    OPEN EDITOR
 ========================= */
@@ -906,12 +908,10 @@ function openEditor(routine) {
     routine.steps.forEach(step => addStep(step));
   }
 }
-
 /* =========================
    ADD STEP
 ========================= */
 document.getElementById("addStepBtn").addEventListener("click", () => addStep());
-
 function addStep(step = null) {
   const container = document.getElementById("stepsContainer");
   const stepId = crypto.randomUUID();
@@ -1000,7 +1000,6 @@ function addStep(step = null) {
     renumberSteps();
   });
 }
-
 /* =========================
    STEP IMAGE PREVIEW
 ========================= */
@@ -1024,7 +1023,6 @@ function showStepImagePreview(div) {
   preview.appendChild(img);
   preview.appendChild(remove);
 }
-
 /* =========================
    RENUMBER STEPS
 ========================= */
@@ -1033,12 +1031,10 @@ function renumberSteps() {
     step.querySelector("strong").textContent = "Step " + (index + 1);
   });
 }
-
 /* =========================
    SAVE ROUTINE
 ========================= */
 document.getElementById("saveRoutineBtn").addEventListener("click", saveRoutine);
-
 async function saveRoutine() {
   const name = document.getElementById("routineName").value.trim();
   if (!name) {
@@ -1088,18 +1084,14 @@ async function saveRoutine() {
     steps,
     updatedAt: new Date().toISOString()
   };
-
-  // בדיקת גודל - כדי למנוע כשלון
   const estimatedSize = JSON.stringify(data).length;
   if (estimatedSize > 900000) {
     alert("התמונות גדולות מדי (קרוב למגבלת 1MB).\n\nמחק חלק מהתמונות או בחר תמונות קטנות יותר.");
     return;
   }
-
   const saveBtn = document.getElementById("saveRoutineBtn");
   saveBtn.disabled = true;
   saveBtn.textContent = "שומר...";
-
   try {
     const ref = collection(db, "users", currentUser.uid, "routines");
     if (editingRoutineId) {
@@ -1118,12 +1110,10 @@ async function saveRoutine() {
     saveBtn.textContent = "שמור";
   }
 }
-
 /* =========================
    CLOSE EDITOR
 ========================= */
 document.getElementById("cancelEditorBtn").addEventListener("click", closeEditor);
-
 function closeEditor() {
   document.getElementById("editorScreen").classList.add("hidden");
   document.getElementById("routineListScreen").style.display = "block";
@@ -1131,7 +1121,6 @@ function closeEditor() {
   currentRoutineImage = "";
   stepImages = new Map();
 }
-
 /* =========================
    DELETE ROUTINE
 ========================= */
@@ -1145,7 +1134,6 @@ async function deleteRoutine(id) {
     alert("המחיקה נכשלה.");
   }
 }
-
 /* =========================
    TODAY STEPS
 ========================= */
@@ -1167,7 +1155,6 @@ function getTodaySteps(routine) {
     return difference % frequency === 0;
   });
 }
-
 /* =========================
    START ROUTINE
 ========================= */
@@ -1187,7 +1174,6 @@ function startRoutine(routine) {
   document.getElementById("activeRoutineName").textContent = routine.name;
   showStep();
 }
-
 /* =========================
    SHOW STEP
 ========================= */
@@ -1218,7 +1204,6 @@ function showStep() {
     }
   }, 1000);
 }
-
 /* =========================
    TIMER
 ========================= */
@@ -1228,7 +1213,6 @@ function updateTimer() {
   document.getElementById("timer").textContent =
     String(minutes).padStart(2, "0") + ":" + String(seconds).padStart(2, "0");
 }
-
 /* =========================
    DONE
 ========================= */
@@ -1236,12 +1220,10 @@ document.getElementById("doneStepBtn").addEventListener("click", () => {
   activeStepIndex++;
   showStep();
 });
-
 /* =========================
    EXIT
 ========================= */
 document.getElementById("exitActiveBtn").addEventListener("click", exitRoutine);
-
 function exitRoutine() {
   clearInterval(timerInterval);
   document.getElementById("activeScreen").style.display = "none";
@@ -1250,7 +1232,6 @@ function exitRoutine() {
   activeRoutine = null;
   activeSteps = [];
 }
-
 /* =========================
    DATE FUNCTIONS
 ========================= */
@@ -1261,12 +1242,10 @@ function getTodayDate() {
   const day = String(date.getDate()).padStart(2, "0");
   return year + "-" + month + "-" + day;
 }
-
 function parseDate(value) {
   const parts = value.split("-");
   return new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
 }
-
 /* =========================
    SECURITY
 ========================= */
@@ -1278,7 +1257,6 @@ function escapeHtml(text) {
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
 }
-
 function escapeAttr(text) {
   return escapeHtml(text);
 }
