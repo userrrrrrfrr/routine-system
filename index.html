@@ -185,11 +185,15 @@
     }
     .active-step-image {
       width: 100%;
-      max-height: 320px;
-      object-fit: cover;
+      max-height: 420px;
+      object-fit: contain;
       border-radius: 18px;
-      margin: 20px 0;
+      margin: 15px 0;
       display: block;
+      background: #f8f8f8;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
     }
     /* =========================
        ROUTINES
@@ -315,26 +319,36 @@
       margin: auto;
       background: white;
       border-radius: 25px;
-      padding: 35px 25px;
+      padding: 25px 20px 35px;
       text-align: center;
+      position: relative;
+    }
+    #activeRoutineName {
+      margin: 0 0 8px;
+      font-size: 18px;
+      font-weight: 600;
+      color: #555;
+      text-align: left;
+      direction: ltr;
+      width: 100%;
     }
     #activeStepName {
-      font-size: 32px;
-      margin: 35px 0 20px;
+      font-size: 36px;
+      font-weight: bold;
+      color: #d00;
+      margin: 12px 0 18px;
+      line-height: 1.25;
     }
     #timer {
       font-size: 65px;
       font-weight: bold;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
     }
-    .done-btn {
-      width: 100%;
-      padding: 18px;
-      background: #111;
-      color: white;
-      border: 0;
-      border-radius: 14px;
-      font-size: 20px;
+    .long-press-hint {
+      font-size: 14px;
+      color: #888;
+      margin-top: 8px;
+      margin-bottom: 18px;
     }
     .back-btn {
       width: 100%;
@@ -343,6 +357,12 @@
       background: white;
       border: 1px solid #ddd;
       border-radius: 12px;
+    }
+    /* אפקט לחיצה ארוכה */
+    .active-step-image.pressing {
+      transform: scale(0.97);
+      opacity: 0.85;
+      transition: transform 0.15s, opacity 0.15s;
     }
     /* =========================
        DIRECT ROUTINE
@@ -384,7 +404,13 @@
         font-size: 52px;
       }
       #activeStepName {
-        font-size: 26px;
+        font-size: 30px;
+      }
+      #activeRoutineName {
+        font-size: 16px;
+      }
+      .active-step-image {
+        max-height: 340px;
       }
       .top-row {
         align-items: flex-start;
@@ -544,9 +570,9 @@
         <div id="timer">
           00:00
         </div>
-        <button id="doneStepBtn" class="done-btn">
-          ✓ בוצע
-        </button>
+        <div class="long-press-hint">
+          לחץ לחיצה ארוכה על התמונה כדי לסמן בוצע
+        </div>
         <button id="exitActiveBtn" class="back-btn">
           יציאה
         </button>
@@ -606,6 +632,9 @@ let timerInterval = null;
 let remainingSeconds = 0;
 let currentRoutineImage = "";
 let stepImages = new Map();
+/* Long press */
+let longPressTimer = null;
+const LONG_PRESS_MS = 700;
 /* =========================
    AUTH
 ========================= */
@@ -713,7 +742,7 @@ function renderRoutines() {
   });
 }
 /* =========================
-   IMAGE COMPRESSION - דחיסה חזקה מאוד
+   IMAGE COMPRESSION
 ========================= */
 function compressImage(file) {
   return new Promise((resolve, reject) => {
@@ -721,7 +750,7 @@ function compressImage(file) {
     reader.onload = event => {
       const img = new Image();
       img.onload = () => {
-        const maxWidth = 600; // דחיסה חזקה
+        const maxWidth = 600;
         let width = img.width;
         let height = img.height;
         if (width > maxWidth) {
@@ -733,7 +762,6 @@ function compressImage(file) {
         canvas.height = height;
         const ctx = canvas.getContext("2d");
         ctx.drawImage(img, 0, 0, width, height);
-        // איכות נמוכה מאוד כדי לחסוך מקום
         const result = canvas.toDataURL("image/jpeg", 0.4);
         resolve(result);
       };
@@ -1065,7 +1093,6 @@ async function saveRoutine() {
     steps,
     updatedAt: new Date().toISOString()
   };
-  // בדיקת גודל - כדי למנוע כשלון
   const estimatedSize = JSON.stringify(data).length;
   if (estimatedSize > 900000) {
     alert("התמונות גדולות מדי (קרוב למגבלת 1MB).\n\nמחק חלק מהתמונות או בחר תמונות קטנות יותר.");
@@ -1161,6 +1188,7 @@ function startRoutine(routine) {
 ========================= */
 function showStep() {
   clearInterval(timerInterval);
+  clearLongPress();
   if (activeStepIndex >= activeSteps.length) {
     alert("ה-Routine הושלם!");
     exitRoutine();
@@ -1196,18 +1224,47 @@ function updateTimer() {
     String(minutes).padStart(2, "0") + ":" + String(seconds).padStart(2, "0");
 }
 /* =========================
-   DONE
+   LONG PRESS → DONE
 ========================= */
-document.getElementById("doneStepBtn").addEventListener("click", () => {
-  activeStepIndex++;
-  showStep();
-});
+function clearLongPress() {
+  if (longPressTimer) {
+    clearTimeout(longPressTimer);
+    longPressTimer = null;
+  }
+  const img = document.getElementById("activeStepImage");
+  if (img) img.classList.remove("pressing");
+}
+function startLongPress() {
+  clearLongPress();
+  const img = document.getElementById("activeStepImage");
+  if (img) img.classList.add("pressing");
+  longPressTimer = setTimeout(() => {
+    longPressTimer = null;
+    if (img) img.classList.remove("pressing");
+    // סימון בוצע
+    activeStepIndex++;
+    showStep();
+  }, LONG_PRESS_MS);
+}
+const activeImg = document.getElementById("activeStepImage");
+// Touch
+activeImg.addEventListener("touchstart", (e) => {
+  e.preventDefault();
+  startLongPress();
+}, { passive: false });
+activeImg.addEventListener("touchend", clearLongPress);
+activeImg.addEventListener("touchcancel", clearLongPress);
+// Mouse (למחשב)
+activeImg.addEventListener("mousedown", startLongPress);
+activeImg.addEventListener("mouseup", clearLongPress);
+activeImg.addEventListener("mouseleave", clearLongPress);
 /* =========================
    EXIT
 ========================= */
 document.getElementById("exitActiveBtn").addEventListener("click", exitRoutine);
 function exitRoutine() {
   clearInterval(timerInterval);
+  clearLongPress();
   document.getElementById("activeScreen").style.display = "none";
   document.getElementById("directRoutineScreen").style.display = "none";
   document.getElementById("routineListScreen").style.display = "block";
