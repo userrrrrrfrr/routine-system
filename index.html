@@ -14,7 +14,9 @@
       background: #f5f5f7;
       color: #111;
     }
-    button, input, select {
+    button,
+    input,
+    select {
       font: inherit;
     }
     button {
@@ -23,56 +25,82 @@
     .hidden {
       display: none !important;
     }
-
     /* =========================
-       APP CONTAINER
+       LOGIN
     ========================= */
+    #loginScreen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .login-box {
+      width: 90%;
+      max-width: 400px;
+      background: white;
+      padding: 40px 30px;
+      border-radius: 24px;
+      text-align: center;
+      box-shadow: 0 10px 40px rgba(0,0,0,.08);
+    }
+    .login-box h1 {
+      margin: 0 0 10px;
+      font-size: 36px;
+    }
+    .login-box p {
+      color: #666;
+      margin-bottom: 30px;
+    }
+    .google-btn {
+      width: 100%;
+      padding: 15px;
+      border: 0;
+      border-radius: 12px;
+      background: #111;
+      color: white;
+    }
+    /* =========================
+       APP
+    ========================= */
+    #app {
+      display: none;
+    }
     .container {
       width: 92%;
       max-width: 900px;
       margin: auto;
-      padding: 10px 0 60px; /* צמצום מרווח עליון כדי להעלות את האתר למעלה */
+      padding: 10px 0 60px; /* הוקטן מ-25px כדי להעלות את כל האתר למעלה */
     }
-
-    /* =========================
-       HEADER (מוקטן ומוזז לשמאל)
-    ========================= */
+    
+    /* עדכון ה-Header: קטן יותר, מוזז לשמאל ומעלה את שאר האתר */
     header {
       background: white;
-      padding: 10px 15px; /* פדינג קטן ורזה */
-      border-radius: 16px;
-      margin-bottom: 12px; /* מרווח קטן כדי ששאר האתר יעלה למעלה */
+      padding: 10px 15px; /* פדינג מוקטן מ-20px */
+      border-radius: 15px; /* מוקטן מ-20px */
+      margin-bottom: 10px; /* מוקטן מ-20px כדי להעלות את האתר */
       display: flex;
-      flex-direction: row-reverse; /* הופך את הסדר ומציב את המידע לשמאל */
-      justify-content: space-between; 
+      flex-direction: row-reverse; /* הופך את הסדר - כותרת מימין, כפתור משמאל */
+      justify-content: space-between; /* דוחף את שני הצדדים לקצוות */
       align-items: center;
-    }
-    .header-right {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      text-align: right;
+      gap: 15px;
     }
     header h1 {
       margin: 0;
-      font-size: 22px; /* כותרת Routine מוקטנת */
+      font-size: 22px; /* הוקטן כדי להיות קומפקטי */
     }
     #userInfo {
       color: #666;
-      font-size: 13px; /* שם משתמש קטן */
-      margin: 0;
+      margin-top: 3px;
+      font-size: 13px; /* הוקטן מ-14px */
     }
     .logout-btn {
-      padding: 6px 14px; /* כפתור התנתק קטן ונקי */
+      padding: 6px 12px; /* הוקטן מ-10px 15px */
       border: 1px solid #ddd;
       background: white;
-      border-radius: 10px;
+      border-radius: 8px; /* הוקטן מ-10px */
       font-size: 13px;
     }
-
-    /* =========================
-       CARDS & MAIN CONTENT
-    ========================= */
+    
     .card {
       background: white;
       border-radius: 20px;
@@ -88,197 +116,310 @@
     .top-row h2 {
       margin: 0;
     }
-    .primary-btn {
+    .primary {
       background: #111;
       color: white;
       border: 0;
-      padding: 12px 20px;
-      border-radius: 12px;
-      font-size: 16px;
-      font-weight: bold;
+      padding: 12px 18px;
+      border-radius: 10px;
     }
-
+    .secondary {
+      background: white;
+      border: 1px solid #ddd;
+      padding: 10px 15px;
+      border-radius: 10px;
+    }
+    .danger {
+      color: #d00;
+      background: white;
+      border: 1px solid #ddd;
+      padding: 10px 15px;
+      border-radius: 10px;
+    }
     /* =========================
-       ACTIVE ROUTINE (מסך הצעדים המוגדל)
+       IMAGE UPLOAD
+    ========================= */
+    .image-upload {
+      margin-top: 10px;
+    }
+    .image-upload label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+    .image-input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      background: white;
+    }
+    .image-preview {
+      margin-top: 12px;
+      position: relative;
+    }
+    .image-preview img {
+      width: 100%;
+      max-height: 320px;
+      object-fit: contain;
+      background: #f5f5f7;
+      border-radius: 15px;
+      border: 1px solid #eee;
+      display: block;
+    }
+    .remove-image {
+      margin-top: 8px;
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      background: white;
+      border-radius: 8px;
+      color: #d00;
+    }
+    .routine-image {
+      width: 100%;
+      max-height: 260px;
+      object-fit: contain;
+      background: #f5f5f7;
+      border-radius: 15px;
+      margin-bottom: 15px;
+      display: block;
+    }
+    .direct-routine-image {
+      width: 100%;
+      max-height: 340px;
+      object-fit: contain;
+      background: #f5f5f7;
+      border-radius: 18px;
+      margin-bottom: 20px;
+    }
+    .active-step-image {
+      width: 100%;
+      max-height: 420px;
+      object-fit: contain;
+      background: #f5f5f7;
+      border-radius: 18px;
+      margin: 20px 0;
+      display: block;
+    }
+    /* =========================
+       ROUTINES
+    ========================= */
+    .routine-card {
+      border: 1px solid #eee;
+      border-radius: 15px;
+      padding: 18px;
+      margin-top: 12px;
+    }
+    .routine-card h3 {
+      margin: 0 0 7px;
+    }
+    .routine-info {
+      color: #777;
+      font-size: 14px;
+      margin-bottom: 15px;
+      line-height: 1.7;
+    }
+    .today-info {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 10px;
+      background: #f5f5f7;
+      font-size: 14px;
+    }
+    .actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+    .empty {
+      text-align: center;
+      color: #777;
+      padding: 35px 10px;
+    }
+    /* =========================
+       FORM
+    ========================= */
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 7px;
+    }
+    input,
+    select {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      background: white;
+    }
+    .days {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .day input {
+      display: none;
+    }
+    .day span {
+      display: block;
+      padding: 10px 14px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    .day input:checked + span {
+      background: #111;
+      color: white;
+    }
+    /* =========================
+       STEPS
+    ========================= */
+    .step {
+      border: 1px solid #eee;
+      border-radius: 15px;
+      padding: 15px;
+      margin-bottom: 12px;
+    }
+    .step-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    .step-grid {
+      display: grid;
+      grid-template-columns: 1fr 180px;
+      gap: 12px;
+    }
+    .custom-days {
+      display: none;
+      margin-top: 12px;
+    }
+    .step-start-date {
+      margin-top: 15px;
+    }
+    .step-start-date label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 7px;
+    }
+    .step-start-date small {
+      display: block;
+      color: #777;
+      margin-top: 6px;
+    }
+    /* =========================
+       ACTIVE ROUTINE
     ========================= */
     #activeScreen {
-      min-height: 75vh;
-      padding: 20px 15px;
-      cursor: pointer; /* הופך את כל המסך לאינדיקציה של לחיץ */
-      display: none; /* יוצג רק כשיתחילו רוטינה */
+      display: none;
+      min-height: 100vh;
+      padding: 30px 15px;
+      cursor: pointer; /* הופך את כל שטח המסך לאינדיקציה לחיצה */
     }
     .active-box {
       max-width: 600px;
       margin: auto;
       background: white;
       border-radius: 25px;
-      padding: 40px 25px;
+      padding: 35px 25px;
       text-align: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
     }
     
-    /* הגדלה משמעותית של ה-Steps */
+    /* הגדלת ה-Steps (הצעד הפעיל) */
     #activeStepName {
-      font-size: 58px; /* גופן ענק לצעד הנוכחי */
+      font-size: 58px; /* הגדלה מ-42px לגודל ענק */
       font-weight: bold;
       color: #d00;
-      margin: 20px 0;
-      line-height: 1.2;
+      margin: 30px 0 20px;
+      line-height: 1.3;
     }
     /* הגדלת הטיימר שיתאים לגודל הצעד */
     #timer {
-      font-size: 85px; /* טיימר ענק וברור */
+      font-size: 85px; /* הגדלה מ-65px */
       font-weight: bold;
-      margin-bottom: 25px;
-      color: #111;
+      margin-bottom: 30px;
     }
-    
-    .instruction-text {
-      color: #666; 
-      font-size: 16px;
-      margin-bottom: 20px;
+    .done-btn {
+      width: 100%;
+      padding: 18px;
+      background: #111;
+      color: white;
+      border: 0;
+      border-radius: 14px;
+      font-size: 20px;
     }
     .back-btn {
-      padding: 12px;
       width: 100%;
-      background: #f5f5f7;
+      padding: 14px;
+      margin-top: 10px;
+      background: white;
       border: 1px solid #ddd;
       border-radius: 12px;
-      font-size: 16px;
-      margin-top: 15px;
+    }
+    /* =========================
+       DIRECT ROUTINE
+    ========================= */
+    #directRoutineScreen {
+      display: none;
+    }
+    .direct-routine-box {
+      max-width: 700px;
+      margin: auto;
+      background: white;
+      border-radius: 25px;
+      padding: 30px 25px;
+    }
+    .direct-routine-box h1 {
+      margin-top: 0;
+    }
+    .direct-step {
+      padding: 15px;
+      border: 1px solid #eee;
+      border-radius: 12px;
+      margin-bottom: 10px;
+    }
+    .direct-step strong {
+      color: #d00;
+      font-size: 18px;
+    }
+    .direct-step-name {
+      color: #d00;
+      font-size: 22px;
+      font-weight: bold;
+      display: block;
+      margin-top: 4px;
+    }
+    .direct-step-image {
+      width: 100%;
+      max-height: 280px;
+      object-fit: contain;
+      background: #f5f5f7;
     }
   </style>
 </head>
 <body>
 
-  <div class="container" id="app">
-    
-    <!-- ה-Header החדש והמעודכן: קטן, מוזז לשמאל ומעלה את האתר למעלה -->
-    <header id="mainHeader">
-      <button class="logout-btn" onclick="alert('מתנתק...')">התנתק</button>
-      <div class="header-right">
-        <h1>Routine</h1>
-        <div id="userInfo">יוסף בן חיים</div>
-      </div>
-    </header>
-
-    <!-- מסך ראשי: רשימת רוטינות וכפתור הפעלה -->
-    <div id="mainDashboard" class="card">
-      <div class="top-row">
-        <h2>הרוטינות שלי</h2>
-        <button class="primary-btn" onclick="startRoutine()">הפעל רוטינת בוקר</button>
-      </div>
-      <p style="color: #666; margin-top: 15px;">לחץ על כפתור "הפעל רוטינת בוקר" כדי להתחיל את מסך הצעדים החדש.</p>
-    </div>
-
-    <!-- מסך הצעד הפעיל - מוגדל ולחיץ בכל מקום על המסך -->
-    <div id="activeScreen">
-      <div class="active-box">
-        <div id="activeStepName">טוען צעד...</div>
-        <div id="timer">00:00</div>
-        <p class="instruction-text">🎯 נגע בכל מקום על המסך כדי לסמן כבוצע ולעבור לצעד הבא</p>
-        
-        <button class="back-btn" id="cancelBtn">ביטול וחזרה לתפריט</button>
-      </div>
-    </div>
-
-  </div>
+  <!-- הערה: כאן ימשיך ה-HTML המלא שלך (כולל ה-divs של הסקרינים והטפסים), הנה הקישור ללוגיקת המסך הפעיל החדש: -->
 
   <script>
-    // נתוני דוגמה לצעדים של הרוטינה
-    const routineSteps = [
-      { name: "צעד 1: שטיפת פנים", duration: 30 },   // 30 שניות
-      { name: "צעד 2: צחצוח שיניים", duration: 120 }, // 2 דקות
-      { name: "צעד 3: שתיית מים", duration: 15 },    // 15 שניות
-      { name: "צעד 4: לבישת בגדים", duration: 180 }  // 3 דקות
-    ];
-
-    let currentStepIndex = 0;
-    let timerInterval = null;
-    let timeLeft = 0;
-
-    // פונקציה להפעלת הרוטינה ומעבר למסך הפעיל
-    function startRoutine() {
-      currentStepIndex = 0;
-      document.getElementById('mainDashboard').classList.add('hidden');
-      document.getElementById('mainHeader').classList.add('hidden'); // מחביא את ההדר בזמן עבודה למקסימום פוקוס
-      document.getElementById('activeScreen').style.display = 'block';
-      loadStep();
-    }
-
-    // פונקציה לטעינת צעד ספציפי ועדכון הטיימר שלו
-    function loadStep() {
-      if (currentStepIndex >= routineSteps.length) {
-        endRoutine();
-        return;
-      }
-
-      const currentStep = routineSteps[currentStepIndex];
-      document.getElementById('activeStepName').innerText = currentStep.name;
-      timeLeft = currentStep.duration;
-      updateTimerDisplay();
-
-      // איפוס והפעלה מחדש של הטיימר
-      clearInterval(timerInterval);
-      timerInterval = setInterval(() => {
-        if (timeLeft > 0) {
-          timeLeft--;
-          updateTimerDisplay();
-        } else {
-          // אם הזמן נגמר, עובר אוטומטית לצעד הבא
-          nextStep();
-        }
-      }, 1000);
-    }
-
-    // עדכון תצוגת הזמן בפורמט MM:SS
-    function updateTimerDisplay() {
-      const minutes = Math.floor(timeLeft / 60).toString().padStart(2, '0');
-      const seconds = (timeLeft % 60).toString().padStart(2, '0');
-      document.getElementById('timer').innerText = `${minutes}:${seconds}`;
-    }
-
-    // מעבר לצעד הבא
-    function nextStep() {
-      currentStepIndex++;
-      loadStep();
-    }
-
-    // סיום הרוטינה בהצלחה
-    function endRoutine() {
-      clearInterval(timerInterval);
-      alert("🏆 כל הכבוד! סיימת את הרוטינה בהצלחה!");
-      resetToDashboard();
-    }
-
-    // חזרה למסך הראשי
-    function resetToDashboard() {
-      clearInterval(timerInterval);
-      document.getElementById('activeScreen').style.display = 'none';
-      document.getElementById('mainDashboard').classList.remove('hidden');
-      document.getElementById('mainHeader').classList.remove('hidden');
-    }
-
-    /* ========================================================
-       הלוגיקה החדשה: לחיצה על כל מקום במסך הפעיל מסמנת כבוצע
-    ======================================================== */
+    // מאזין לחיצה לכל מקום במסך הפעיל שמחליף את מקש ה"בוצע"
     document.getElementById('activeScreen').addEventListener('click', function(e) {
-      // אם המשתמש לחץ על כפתור הביטול, אנחנו עוצרים ולא עוברים לצעד הבא
-      if (e.target.id === 'cancelBtn') {
+      // אם המשתמש לחץ על כפתור החזרה (back-btn), לא נסמן כבוצע אלא ניתן לכפתור לעבוד כרגיל
+      if (e.target.classList.contains('back-btn')) {
         return;
       }
       
-      // מפעיל את הצעד הבא בכל לחיצה אחרת על פני כל המסך
-      nextStep();
-    });
-
-    // חיבור כפתור הביטול לחזרה לתפריט
-    document.getElementById('cancelBtn').addEventListener('click', function() {
-      if (confirm("האם אתה בטוח שברצונך להפסיק את הרוטינה?")) {
-        resetToDashboard();
+      // מדמה לחיצה אוטומטית על כפתור הבוצע הקיים שלך (.done-btn) בכל לחיצה אחרת על המסך
+      const doneBtn = document.querySelector('.done-btn');
+      if (doneBtn) {
+        doneBtn.click();
       }
     });
   </script>
-
 </body>
 </html>
