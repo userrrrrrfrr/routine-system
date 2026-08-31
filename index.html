@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Routine</title>
 
   <style>
@@ -18,7 +19,9 @@
       color: #111;
     }
 
-    button, input, select {
+    button,
+    input,
+    select {
       font: inherit;
     }
 
@@ -50,8 +53,8 @@
     }
 
     .login-box h1 {
-      font-size: 36px;
       margin: 0 0 10px;
+      font-size: 36px;
     }
 
     .login-box p {
@@ -66,7 +69,6 @@
       border-radius: 12px;
       background: #111;
       color: white;
-      font-size: 16px;
     }
 
     /* APP */
@@ -87,6 +89,7 @@
       padding: 20px;
       border-radius: 20px;
       margin-bottom: 20px;
+
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -168,6 +171,15 @@
       color: #777;
       font-size: 14px;
       margin-bottom: 15px;
+      line-height: 1.7;
+    }
+
+    .today-info {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 10px;
+      background: #f5f5f7;
+      font-size: 14px;
     }
 
     .actions {
@@ -182,7 +194,7 @@
       padding: 35px 10px;
     }
 
-    /* EDITOR */
+    /* FORM */
 
     .form-group {
       margin-bottom: 20px;
@@ -194,7 +206,8 @@
       margin-bottom: 7px;
     }
 
-    input, select {
+    input,
+    select {
       width: 100%;
       padding: 13px;
       border: 1px solid #ddd;
@@ -225,6 +238,8 @@
       color: white;
     }
 
+    /* STEPS */
+
     .step {
       border: 1px solid #eee;
       border-radius: 15px;
@@ -247,7 +262,7 @@
 
     .custom-days {
       display: none;
-      margin-top: 10px;
+      margin-top: 12px;
     }
 
     /* ACTIVE */
@@ -298,12 +313,9 @@
     }
 
     @media (max-width: 600px) {
+
       .step-grid {
         grid-template-columns: 1fr;
-      }
-
-      header {
-        align-items: flex-start;
       }
 
       #timer {
@@ -313,13 +325,17 @@
       #activeStepName {
         font-size: 26px;
       }
+
     }
   </style>
 </head>
 
 <body>
 
-<!-- LOGIN -->
+
+<!-- =========================
+     LOGIN
+========================= -->
 
 <div id="loginScreen">
 
@@ -327,10 +343,16 @@
 
     <h1>Routine</h1>
 
-    <p>התחבר כדי להיכנס למערכת שלך</p>
+    <p>
+      התחבר כדי להיכנס למערכת שלך
+    </p>
 
-    <button id="loginBtn" class="google-btn">
+    <button
+      id="loginBtn"
+      class="google-btn">
+
       כניסה עם Google
+
     </button>
 
   </div>
@@ -338,7 +360,9 @@
 </div>
 
 
-<!-- MAIN APP -->
+<!-- =========================
+     APP
+========================= -->
 
 <div id="app">
 
@@ -347,12 +371,19 @@
     <header>
 
       <div>
+
         <h1>Routine</h1>
+
         <div id="userInfo"></div>
+
       </div>
 
-      <button id="logoutBtn" class="logout-btn">
+      <button
+        id="logoutBtn"
+        class="logout-btn">
+
         התנתק
+
       </button>
 
     </header>
@@ -366,10 +397,16 @@
 
         <div class="top-row">
 
-          <h2>השגרות שלי</h2>
+          <h2>
+            השגרות שלי
+          </h2>
 
-          <button id="newRoutineBtn" class="primary">
+          <button
+            id="newRoutineBtn"
+            class="primary">
+
             + Routine חדש
+
           </button>
 
         </div>
@@ -383,7 +420,9 @@
 
     <!-- EDITOR -->
 
-    <div id="editorScreen" class="hidden">
+    <div
+      id="editorScreen"
+      class="hidden">
 
       <div class="card">
 
@@ -391,21 +430,49 @@
           Routine חדש
         </h2>
 
+
+        <!-- NAME -->
+
         <div class="form-group">
 
-          <label>שם ה-Routine</label>
+          <label>
+            שם ה-Routine
+          </label>
 
           <input
             id="routineName"
-            placeholder="לדוגמה: בוקר"
-          >
+            type="text"
+            placeholder="לדוגמה: בוקר">
 
         </div>
 
 
+        <!-- START DATE -->
+
         <div class="form-group">
 
-          <label>באילו ימים ה-Routine פעיל?</label>
+          <label>
+            תאריך התחלה
+          </label>
+
+          <input
+            id="startDate"
+            type="date">
+
+          <small style="color:#777;">
+            התדירות של ה-Steps תתחיל להיספר מהתאריך הזה.
+          </small>
+
+        </div>
+
+
+        <!-- DAYS -->
+
+        <div class="form-group">
+
+          <label>
+            באילו ימים ה-Routine פעיל?
+          </label>
 
           <div class="days">
 
@@ -449,22 +516,38 @@
         </div>
 
 
-        <h2>Steps</h2>
+        <!-- STEPS -->
+
+        <h2>
+          Steps
+        </h2>
 
         <div id="stepsContainer"></div>
 
-        <button id="addStepBtn" class="secondary">
+        <button
+          id="addStepBtn"
+          class="secondary">
+
           + הוסף Step
+
         </button>
 
         <br><br>
 
-        <button id="saveRoutineBtn" class="primary">
+        <button
+          id="saveRoutineBtn"
+          class="primary">
+
           שמור
+
         </button>
 
-        <button id="cancelEditorBtn" class="secondary">
+        <button
+          id="cancelEditorBtn"
+          class="secondary">
+
           ביטול
+
         </button>
 
       </div>
@@ -482,14 +565,24 @@
 
         <div id="activeStepName"></div>
 
-        <div id="timer">00:00</div>
+        <div id="timer">
+          00:00
+        </div>
 
-        <button id="doneStepBtn" class="done-btn">
+        <button
+          id="doneStepBtn"
+          class="done-btn">
+
           ✓ בוצע
+
         </button>
 
-        <button id="exitActiveBtn" class="back-btn">
+        <button
+          id="exitActiveBtn"
+          class="back-btn">
+
           יציאה
+
         </button>
 
       </div>
@@ -503,189 +596,234 @@
 
 <script type="module">
 
-  import { initializeApp }
-    from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 
-  import {
-    getAuth,
-    GoogleAuthProvider,
-    signInWithPopup,
-    signOut,
-    onAuthStateChanged
-  } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+/* =========================
+   FIREBASE IMPORTS
+========================= */
 
-  import {
-    getFirestore,
-    collection,
-    addDoc,
-    getDocs,
-    doc,
-    updateDoc,
-    deleteDoc
-  } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+import {
+  initializeApp
+}
+from
+"https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 
 
-  /* FIREBASE */
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut,
+  onAuthStateChanged
+}
+from
+"https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
-  const firebaseConfig = {
 
-    apiKey: "AIzaSyCGTJFidIrp_YAuKOg2CCEO-vjFCiakkHo",
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs,
+  doc,
+  updateDoc,
+  deleteDoc
+}
+from
+"https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-    authDomain: "site-c224f.firebaseapp.com",
 
-    projectId: "site-c224f",
+/* =========================
+   FIREBASE CONFIG
+========================= */
 
-    storageBucket: "site-c224f.firebasestorage.app",
+const firebaseConfig = {
 
-    messagingSenderId: "709702843873",
+  apiKey:
+  "AIzaSyCGTJFidIrp_YAuKOg2CCEO-vjFCiakkHo",
 
-    appId: "1:709702843873:web:a326854107acb20e6ee6a0",
+  authDomain:
+  "site-c224f.firebaseapp.com",
 
-    measurementId: "G-GC5LS15YEC"
+  projectId:
+  "site-c224f",
 
-  };
+  storageBucket:
+  "site-c224f.firebasestorage.app",
 
+  messagingSenderId:
+  "709702843873",
 
-  const app = initializeApp(firebaseConfig);
+  appId:
+  "1:709702843873:web:a326854107acb20e6ee6a0",
 
-  const auth = getAuth(app);
+  measurementId:
+  "G-GC5LS15YEC"
 
-  const db = getFirestore(app);
+};
 
-  const provider = new GoogleAuthProvider();
 
+const app =
+initializeApp(firebaseConfig);
 
-  /* VARIABLES */
 
-  let currentUser = null;
+const auth =
+getAuth(app);
 
-  let routines = [];
 
-  let editingRoutineId = null;
+const db =
+getFirestore(app);
 
-  let activeRoutine = null;
 
-  let activeStepIndex = 0;
+const provider =
+new GoogleAuthProvider();
 
-  let timerInterval = null;
 
-  let remainingSeconds = 0;
+/* =========================
+   VARIABLES
+========================= */
 
+let currentUser = null;
 
-  /* ELEMENTS */
+let routines = [];
 
-  const loginScreen =
-    document.getElementById("loginScreen");
+let editingRoutineId = null;
 
-  const appScreen =
-    document.getElementById("app");
+let activeRoutine = null;
 
-  const routineListScreen =
-    document.getElementById("routineListScreen");
+let activeSteps = [];
 
-  const editorScreen =
-    document.getElementById("editorScreen");
+let activeStepIndex = 0;
 
-  const activeScreen =
-    document.getElementById("activeScreen");
+let timerInterval = null;
 
+let remainingSeconds = 0;
 
-  /* LOGIN */
 
-  document
-    .getElementById("loginBtn")
-    .addEventListener("click", async () => {
+/* =========================
+   AUTH
+========================= */
 
-      try {
-
-        await signInWithPopup(
-          auth,
-          provider
-        );
-
-      } catch (error) {
-
-        console.error(error);
-
-        alert(
-          "ההתחברות נכשלה:\n\n" +
-          error.message
-        );
-
-      }
-
-    });
-
-
-  /* LOGOUT */
-
-  document
-    .getElementById("logoutBtn")
-    .addEventListener("click", async () => {
-
-      await signOut(auth);
-
-    });
-
-
-  /* AUTH */
-
-  onAuthStateChanged(
-    auth,
-    async (user) => {
-
-      if (user) {
-
-        currentUser = user;
-
-        loginScreen.style.display = "none";
-
-        appScreen.style.display = "block";
-
-        document.getElementById("userInfo").textContent =
-          user.displayName || user.email;
-
-        await loadRoutines();
-
-      } else {
-
-        currentUser = null;
-
-        loginScreen.style.display = "flex";
-
-        appScreen.style.display = "none";
-
-      }
-
-    }
-  );
-
-
-  /* LOAD ROUTINES */
-
-  async function loadRoutines() {
-
-    const list =
-      document.getElementById("routineList");
-
-    list.innerHTML = "טוען...";
+document
+.getElementById("loginBtn")
+.addEventListener(
+  "click",
+  async () => {
 
     try {
 
-      const ref =
-        collection(
-          db,
-          "users",
-          currentUser.uid,
-          "routines"
-        );
+      await signInWithPopup(
+        auth,
+        provider
+      );
 
-      const snapshot =
-        await getDocs(ref);
+    } catch (error) {
 
-      routines = [];
+      console.error(error);
 
-      snapshot.forEach(item => {
+      alert(
+        "ההתחברות נכשלה:\n\n" +
+        error.message
+      );
+
+    }
+
+  }
+);
+
+
+document
+.getElementById("logoutBtn")
+.addEventListener(
+  "click",
+  async () => {
+
+    await signOut(auth);
+
+  }
+);
+
+
+/* =========================
+   AUTH STATE
+========================= */
+
+onAuthStateChanged(
+  auth,
+  async (user) => {
+
+    if (user) {
+
+      currentUser = user;
+
+      document
+      .getElementById("loginScreen")
+      .style.display = "none";
+
+      document
+      .getElementById("app")
+      .style.display = "block";
+
+      document
+      .getElementById("userInfo")
+      .textContent =
+        user.displayName ||
+        user.email;
+
+      await loadRoutines();
+
+    } else {
+
+      currentUser = null;
+
+      document
+      .getElementById("loginScreen")
+      .style.display = "flex";
+
+      document
+      .getElementById("app")
+      .style.display = "none";
+
+    }
+
+  }
+);
+
+
+/* =========================
+   LOAD ROUTINES
+========================= */
+
+async function loadRoutines() {
+
+  const list =
+    document.getElementById(
+      "routineList"
+    );
+
+  list.innerHTML =
+    "טוען...";
+
+
+  try {
+
+    const ref =
+      collection(
+        db,
+        "users",
+        currentUser.uid,
+        "routines"
+      );
+
+
+    const snapshot =
+      await getDocs(ref);
+
+
+    routines = [];
+
+
+    snapshot.forEach(
+      item => {
 
         routines.push({
 
@@ -695,84 +833,138 @@
 
         });
 
-      });
+      }
+    );
 
-      renderRoutines();
 
-    } catch (error) {
+    renderRoutines();
 
-      console.error(error);
+  } catch (error) {
 
-      list.innerHTML = `
-        <div class="empty">
-          לא ניתן לטעון את השגרות.<br><br>
-          ודא ש-Firestore מופעל ב-Firebase.
-        </div>
-      `;
+    console.error(error);
 
-    }
+    list.innerHTML = `
+      <div class="empty">
+        לא ניתן לטעון את השגרות.<br><br>
+        בדוק ש-Firestore מופעל וש-Rules מוגדרים.
+      </div>
+    `;
+
+  }
+
+}
+
+
+/* =========================
+   RENDER ROUTINES
+========================= */
+
+function renderRoutines() {
+
+  const list =
+    document.getElementById(
+      "routineList"
+    );
+
+
+  list.innerHTML = "";
+
+
+  if (routines.length === 0) {
+
+    list.innerHTML = `
+      <div class="empty">
+        עדיין אין לך שגרות.<br>
+        לחץ על "+ Routine חדש".
+      </div>
+    `;
+
+    return;
 
   }
 
 
-  /* RENDER */
-
-  function renderRoutines() {
-
-    const list =
-      document.getElementById("routineList");
-
-    list.innerHTML = "";
-
-    if (routines.length === 0) {
-
-      list.innerHTML = `
-        <div class="empty">
-          עדיין אין לך שגרות.<br>
-          לחץ על "+ Routine חדש" כדי ליצור אחת.
-        </div>
-      `;
-
-      return;
-
-    }
-
-
-    routines.forEach(routine => {
+  routines.forEach(
+    routine => {
 
       const card =
-        document.createElement("div");
+        document.createElement(
+          "div"
+        );
 
-      card.className = "routine-card";
 
-      const stepCount =
-        routine.steps
-          ? routine.steps.length
-          : 0;
+      card.className =
+        "routine-card";
+
+
+      const todaySteps =
+        getTodaySteps(routine);
+
+
+      const startText =
+        routine.startDate
+          ? formatDate(
+              routine.startDate
+            )
+          : "לא הוגדר";
 
 
       card.innerHTML = `
 
         <h3>
-          ${escapeHtml(routine.name)}
+          ${escapeHtml(
+            routine.name
+          )}
         </h3>
 
+
         <div class="routine-info">
-          ${stepCount} Steps
+
+          תאריך התחלה:
+          ${startText}
+
+          <br>
+
+          ${routine.steps?.length || 0}
+          Steps
+
         </div>
+
+
+        <div class="today-info">
+
+          להיום:
+          <strong>
+            ${todaySteps.length}
+          </strong>
+          Steps
+
+        </div>
+
 
         <div class="actions">
 
-          <button class="primary start">
+          <button
+            class="primary start">
+
             התחל
+
           </button>
 
-          <button class="secondary edit">
+
+          <button
+            class="secondary edit">
+
             ערוך
+
           </button>
 
-          <button class="danger delete">
+
+          <button
+            class="danger delete">
+
             מחק
+
           </button>
 
         </div>
@@ -781,671 +973,1144 @@
 
 
       card
-        .querySelector(".start")
-        .addEventListener(
-          "click",
-          () => startRoutine(routine)
-        );
+      .querySelector(".start")
+      .addEventListener(
+        "click",
+        () => startRoutine(routine)
+      );
 
 
       card
-        .querySelector(".edit")
-        .addEventListener(
-          "click",
-          () => openEditor(routine)
-        );
+      .querySelector(".edit")
+      .addEventListener(
+        "click",
+        () => openEditor(routine)
+      );
 
 
       card
-        .querySelector(".delete")
-        .addEventListener(
-          "click",
-          () => deleteRoutine(routine.id)
-        );
+      .querySelector(".delete")
+      .addEventListener(
+        "click",
+        () => deleteRoutine(routine.id)
+      );
 
 
       list.appendChild(card);
 
-    });
+    }
+  );
 
-  }
+}
 
 
-  /* NEW */
+/* =========================
+   NEW ROUTINE
+========================= */
+
+document
+.getElementById("newRoutineBtn")
+.addEventListener(
+  "click",
+  () => openEditor(null)
+);
+
+
+/* =========================
+   OPEN EDITOR
+========================= */
+
+function openEditor(routine) {
 
   document
-    .getElementById("newRoutineBtn")
-    .addEventListener(
-      "click",
-      () => openEditor(null)
-    );
+  .getElementById(
+    "routineListScreen"
+  )
+  .style.display = "none";
 
 
-  /* EDITOR */
-
-  function openEditor(routine) {
-
-    routineListScreen.style.display = "none";
-
-    editorScreen.classList.remove("hidden");
-
-    editingRoutineId =
-      routine ? routine.id : null;
+  document
+  .getElementById(
+    "editorScreen"
+  )
+  .classList.remove(
+    "hidden"
+  );
 
 
-    document.getElementById("editorTitle").textContent =
-      routine ? "עריכת Routine" : "Routine חדש";
+  editingRoutineId =
+    routine
+      ? routine.id
+      : null;
 
 
-    document.getElementById("routineName").value =
-      routine ? routine.name : "";
+  document
+  .getElementById(
+    "editorTitle"
+  )
+  .textContent =
+    routine
+      ? "עריכת Routine"
+      : "Routine חדש";
 
 
-    document
-      .querySelectorAll(".days input")
-      .forEach(box => {
+  document
+  .getElementById(
+    "routineName"
+  )
+  .value =
+    routine
+      ? routine.name
+      : "";
 
-        box.checked =
-          routine
-            ? (routine.days || []).includes(
-                Number(box.value)
+
+  document
+  .getElementById(
+    "startDate"
+  )
+  .value =
+    routine
+      ? routine.startDate || ""
+      : getTodayDate();
+
+
+  document
+  .querySelectorAll(
+    ".days input"
+  )
+  .forEach(
+    checkbox => {
+
+      checkbox.checked =
+        routine
+          ? (routine.days || [])
+              .includes(
+                Number(
+                  checkbox.value
+                )
               )
-            : false;
-
-      });
-
-
-    document.getElementById("stepsContainer").innerHTML = "";
-
-
-    if (routine && routine.steps) {
-
-      routine.steps.forEach(step => {
-
-        addStep(step);
-
-      });
+          : false;
 
     }
+  );
 
-  }
 
-
-  /* ADD STEP */
-
-  document
-    .getElementById("addStepBtn")
-    .addEventListener(
-      "click",
-      () => addStep()
+  const container =
+    document.getElementById(
+      "stepsContainer"
     );
 
 
-  function addStep(step = null) {
-
-    const container =
-      document.getElementById("stepsContainer");
-
-    const div =
-      document.createElement("div");
-
-    div.className = "step";
+  container.innerHTML = "";
 
 
-    div.innerHTML = `
+  if (
+    routine &&
+    routine.steps
+  ) {
 
-      <div class="step-title">
+    routine.steps.forEach(
+      step => addStep(step)
+    );
 
-        <strong>
-          Step ${container.children.length + 1}
-        </strong>
+  }
 
-        <button class="danger remove">
-          מחק
-        </button>
-
-      </div>
+}
 
 
-      <div class="form-group">
+/* =========================
+   ADD STEP
+========================= */
 
-        <label>שם ה-Step</label>
+document
+.getElementById("addStepBtn")
+.addEventListener(
+  "click",
+  () => addStep()
+);
+
+
+function addStep(step = null) {
+
+  const container =
+    document.getElementById(
+      "stepsContainer"
+    );
+
+
+  const div =
+    document.createElement(
+      "div"
+    );
+
+
+  div.className = "step";
+
+
+  div.innerHTML = `
+
+    <div class="step-title">
+
+      <strong>
+        Step ${container.children.length + 1}
+      </strong>
+
+      <button
+        class="danger remove">
+
+        מחק
+
+      </button>
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label>
+        שם ה-Step
+      </label>
+
+      <input
+        class="step-name"
+        type="text"
+        placeholder="לדוגמה: לשתות מים"
+        value="${
+          step
+            ? escapeAttr(step.name)
+            : ""
+        }">
+
+    </div>
+
+
+    <div class="step-grid">
+
+      <div>
+
+        <label>
+          משך בשניות
+        </label>
 
         <input
-          class="step-name"
-          value="${step ? escapeHtml(step.name) : ""}"
-          placeholder="לדוגמה: לשתות מים"
-        >
-
-      </div>
-
-
-      <div class="step-grid">
-
-        <div>
-
-          <label>משך בשניות</label>
-
-          <input
-            class="step-duration"
-            type="number"
-            min="1"
-            value="${step ? step.duration : 60}"
-          >
-
-        </div>
-
-
-        <div>
-
-          <label>תדירות</label>
-
-          <select class="frequency">
-
-            <option value="daily">
-              כל יום
-            </option>
-
-            <option value="2">
-              כל יומיים
-            </option>
-
-            <option value="3">
-              כל 3 ימים
-            </option>
-
-            <option value="7">
-              כל 7 ימים
-            </option>
-
-            <option value="custom">
-              כל X ימים
-            </option>
-
-          </select>
-
-        </div>
-
-      </div>
-
-
-      <div class="custom-days">
-
-        <label>כל כמה ימים?</label>
-
-        <input
-          class="custom-value"
+          class="step-duration"
           type="number"
           min="1"
-          value="2"
-        >
+          value="${
+            step
+              ? step.duration
+              : 60
+          }">
 
       </div>
 
-    `;
+
+      <div>
+
+        <label>
+          תדירות
+        </label>
+
+        <select class="frequency">
+
+          <option value="1">
+            כל יום
+          </option>
+
+          <option value="2">
+            כל יומיים
+          </option>
+
+          <option value="3">
+            כל 3 ימים
+          </option>
+
+          <option value="7">
+            כל 7 ימים
+          </option>
+
+          <option value="custom">
+            כל X ימים
+          </option>
+
+        </select>
+
+      </div>
+
+    </div>
 
 
-    container.appendChild(div);
+    <div class="custom-days">
+
+      <label>
+        כל כמה ימים?
+      </label>
+
+      <input
+        class="custom-value"
+        type="number"
+        min="1"
+        value="2">
+
+    </div>
+
+  `;
 
 
-    const frequency =
-      div.querySelector(".frequency");
-
-    const custom =
-      div.querySelector(".custom-days");
+  container.appendChild(div);
 
 
-    if (step) {
+  const frequency =
+    div.querySelector(
+      ".frequency"
+    );
 
-      if (
-        step.frequency === "daily" ||
-        step.frequency === "2" ||
-        step.frequency === "3" ||
-        step.frequency === "7"
-      ) {
 
-        frequency.value =
-          step.frequency;
+  const custom =
+    div.querySelector(
+      ".custom-days"
+    );
 
-      } else {
 
-        frequency.value = "custom";
+  if (step) {
 
-        custom.style.display = "block";
+    const saved =
+      String(
+        step.frequency || "1"
+      );
 
-        div.querySelector(".custom-value").value =
-          step.frequency || 2;
 
-      }
+    if (
+      ["1", "2", "3", "7"]
+      .includes(saved)
+    ) {
+
+      frequency.value =
+        saved;
+
+    } else {
+
+      frequency.value =
+        "custom";
+
+      custom.style.display =
+        "block";
+
+      div.querySelector(
+        ".custom-value"
+      ).value =
+        saved;
 
     }
 
-
-    frequency.addEventListener(
-      "change",
-      () => {
-
-        custom.style.display =
-          frequency.value === "custom"
-            ? "block"
-            : "none";
-
-      }
-    );
-
-
-    div
-      .querySelector(".remove")
-      .addEventListener(
-        "click",
-        () => {
-
-          div.remove();
-
-          renumberSteps();
-
-        }
-      );
-
   }
 
 
-  /* RENUMBER */
+  frequency.addEventListener(
+    "change",
+    () => {
 
-  function renumberSteps() {
+      custom.style.display =
+        frequency.value === "custom"
+          ? "block"
+          : "none";
 
-    document
-      .querySelectorAll(".step")
-      .forEach((step, index) => {
-
-        step.querySelector("strong").textContent =
-          "Step " + (index + 1);
-
-      });
-
-  }
+    }
+  );
 
 
-  /* SAVE */
+  div
+  .querySelector(".remove")
+  .addEventListener(
+    "click",
+    () => {
+
+      div.remove();
+
+      renumberSteps();
+
+    }
+  );
+
+}
+
+
+/* =========================
+   RENUMBER
+========================= */
+
+function renumberSteps() {
 
   document
-    .getElementById("saveRoutineBtn")
-    .addEventListener(
-      "click",
-      saveRoutine
+  .querySelectorAll(".step")
+  .forEach(
+    (step, index) => {
+
+      step
+      .querySelector("strong")
+      .textContent =
+        "Step " + (index + 1);
+
+    }
+  );
+
+}
+
+
+/* =========================
+   SAVE
+========================= */
+
+document
+.getElementById(
+  "saveRoutineBtn"
+)
+.addEventListener(
+  "click",
+  saveRoutine
+);
+
+
+async function saveRoutine() {
+
+  const name =
+    document
+    .getElementById(
+      "routineName"
+    )
+    .value
+    .trim();
+
+
+  const startDate =
+    document
+    .getElementById(
+      "startDate"
+    )
+    .value;
+
+
+  if (!name) {
+
+    alert(
+      "כתוב שם ל-Routine."
     );
 
+    return;
 
-  async function saveRoutine() {
+  }
 
-    const name =
-      document
-        .getElementById("routineName")
+
+  if (!startDate) {
+
+    alert(
+      "בחר תאריך התחלה."
+    );
+
+    return;
+
+  }
+
+
+  const days =
+    [...document
+      .querySelectorAll(
+        ".days input:checked"
+      )]
+      .map(
+        box =>
+          Number(box.value)
+      );
+
+
+  const steps = [];
+
+
+  document
+  .querySelectorAll(".step")
+  .forEach(
+    (div, index) => {
+
+      const stepName =
+        div
+        .querySelector(
+          ".step-name"
+        )
         .value
         .trim();
 
 
-    if (!name) {
-
-      alert("כתוב שם ל-Routine.");
-
-      return;
-
-    }
+      if (!stepName) {
+        return;
+      }
 
 
-    const days =
-      [...document.querySelectorAll(".days input:checked")]
-        .map(box => Number(box.value));
-
-
-    const steps = [];
-
-
-    document
-      .querySelectorAll(".step")
-      .forEach((div, index) => {
-
-        const stepName =
-          div.querySelector(".step-name")
-            .value
-            .trim();
-
-
-        if (!stepName) return;
-
-
-        const duration =
-          Number(
-            div.querySelector(".step-duration").value
-          );
-
-
-        const frequency =
-          div.querySelector(".frequency").value;
-
-
-        let finalFrequency = frequency;
-
-
-        if (frequency === "custom") {
-
-          finalFrequency =
-            div.querySelector(".custom-value").value;
-
-        }
-
-
-        steps.push({
-
-          name: stepName,
-
-          duration: duration > 0 ? duration : 60,
-
-          frequency: finalFrequency,
-
-          order: index
-
-        });
-
-      });
-
-
-    const data = {
-
-      name,
-
-      days,
-
-      steps,
-
-      updatedAt: new Date().toISOString()
-
-    };
-
-
-    try {
-
-      const ref =
-        collection(
-          db,
-          "users",
-          currentUser.uid,
-          "routines"
+      const duration =
+        Number(
+          div
+          .querySelector(
+            ".step-duration"
+          )
+          .value
         );
 
 
-      if (editingRoutineId) {
+      const frequency =
+        div
+        .querySelector(
+          ".frequency"
+        )
+        .value;
 
-        await updateDoc(
 
-          doc(
-            db,
-            "users",
-            currentUser.uid,
-            "routines",
-            editingRoutineId
-          ),
+      let finalFrequency =
+        frequency;
 
-          data
 
-        );
+      if (
+        frequency === "custom"
+      ) {
 
-      } else {
-
-        await addDoc(ref, data);
+        finalFrequency =
+          div
+          .querySelector(
+            ".custom-value"
+          )
+          .value;
 
       }
 
 
-      closeEditor();
+      steps.push({
 
-      await loadRoutines();
+        name: stepName,
 
-    } catch (error) {
+        duration:
+          duration > 0
+            ? duration
+            : 60,
 
-      console.error(error);
+        frequency:
+          Number(
+            finalFrequency
+          ),
 
-      alert(
-        "השמירה נכשלה:\n\n" +
-        error.message
+        order:
+          index
+
+      });
+
+    }
+  );
+
+
+  const data = {
+
+    name,
+
+    startDate,
+
+    days,
+
+    steps,
+
+    updatedAt:
+      new Date().toISOString()
+
+  };
+
+
+  try {
+
+    const ref =
+      collection(
+        db,
+        "users",
+        currentUser.uid,
+        "routines"
       );
 
-    }
 
-  }
+    if (editingRoutineId) {
 
-
-  /* CLOSE EDITOR */
-
-  document
-    .getElementById("cancelEditorBtn")
-    .addEventListener(
-      "click",
-      closeEditor
-    );
-
-
-  function closeEditor() {
-
-    editorScreen.classList.add("hidden");
-
-    routineListScreen.style.display = "block";
-
-    editingRoutineId = null;
-
-  }
-
-
-  /* DELETE */
-
-  async function deleteRoutine(id) {
-
-    if (!confirm("למחוק את ה-Routine?")) {
-      return;
-    }
-
-
-    try {
-
-      await deleteDoc(
+      await updateDoc(
 
         doc(
           db,
           "users",
           currentUser.uid,
           "routines",
-          id
-        )
+          editingRoutineId
+        ),
+
+        data
 
       );
 
+    } else {
 
-      await loadRoutines();
-
-    } catch (error) {
-
-      console.error(error);
-
-      alert("המחיקה נכשלה.");
+      await addDoc(
+        ref,
+        data
+      );
 
     }
+
+
+    closeEditor();
+
+    await loadRoutines();
+
+
+    alert(
+      "ה-Routine נשמר!"
+    );
+
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert(
+      "השמירה נכשלה:\n\n" +
+      error.message
+    );
+
+  }
+
+}
+
+
+/* =========================
+   CLOSE EDITOR
+========================= */
+
+document
+.getElementById(
+  "cancelEditorBtn"
+)
+.addEventListener(
+  "click",
+  closeEditor
+);
+
+
+function closeEditor() {
+
+  document
+  .getElementById(
+    "editorScreen"
+  )
+  .classList.add(
+    "hidden"
+  );
+
+
+  document
+  .getElementById(
+    "routineListScreen"
+  )
+  .style.display =
+    "block";
+
+
+  editingRoutineId =
+    null;
+
+}
+
+
+/* =========================
+   DELETE
+========================= */
+
+async function deleteRoutine(id) {
+
+  if (
+    !confirm(
+      "למחוק את ה-Routine?"
+    )
+  ) {
+
+    return;
 
   }
 
 
-  /* START */
+  try {
 
-  function startRoutine(routine) {
+    await deleteDoc(
 
-    if (
-      !routine.steps ||
-      routine.steps.length === 0
-    ) {
+      doc(
+        db,
+        "users",
+        currentUser.uid,
+        "routines",
+        id
+      )
 
-      alert(
-        "ל-Routine הזה אין Steps."
-      );
-
-      return;
-
-    }
+    );
 
 
-    activeRoutine = routine;
+    await loadRoutines();
 
-    activeStepIndex = 0;
+  } catch (error) {
 
+    console.error(error);
 
-    routineListScreen.style.display = "none";
+    alert(
+      "המחיקה נכשלה."
+    );
 
-    editorScreen.classList.add("hidden");
+  }
 
-    activeScreen.style.display = "block";
-
-
-    document
-      .getElementById("activeRoutineName")
-      .textContent =
-      routine.name;
+}
 
 
-    showStep();
+/* =========================
+   TODAY STEPS
+========================= */
+
+function getTodaySteps(routine) {
+
+  if (
+    !routine.startDate ||
+    !routine.steps
+  ) {
+
+    return [];
 
   }
 
 
-  /* STEP */
-
-  function showStep() {
-
-    clearInterval(timerInterval);
+  const today =
+    new Date();
 
 
-    if (
-      activeStepIndex >=
-      activeRoutine.steps.length
-    ) {
+  const start =
+    parseDate(
+      routine.startDate
+    );
 
-      alert("ה-Routine הושלם!");
 
-      exitRoutine();
+  today.setHours(
+    0, 0, 0, 0
+  );
 
-      return;
+
+  start.setHours(
+    0, 0, 0, 0
+  );
+
+
+  const difference =
+    Math.floor(
+      (
+        today.getTime() -
+        start.getTime()
+      ) /
+      86400000
+    );
+
+
+  // לפני תאריך ההתחלה
+
+  if (
+    difference < 0
+  ) {
+
+    return [];
+
+  }
+
+
+  // אם ה-Routine מוגבל לימים מסוימים
+
+  const todayDay =
+    today.getDay();
+
+
+  if (
+    routine.days &&
+    routine.days.length > 0 &&
+    !routine.days.includes(
+      todayDay
+    )
+  ) {
+
+    return [];
+
+  }
+
+
+  return routine.steps.filter(
+    step => {
+
+      const frequency =
+        Number(
+          step.frequency || 1
+        );
+
+
+      return (
+        difference %
+        frequency
+        === 0
+      );
 
     }
+  );
+
+}
 
 
-    const step =
-      activeRoutine.steps[activeStepIndex];
+/* =========================
+   START ROUTINE
+========================= */
+
+function startRoutine(routine) {
+
+  const todaySteps =
+    getTodaySteps(routine);
 
 
-    document
-      .getElementById("activeStepName")
-      .textContent =
-      step.name;
+  if (
+    todaySteps.length === 0
+  ) {
+
+    alert(
+      "אין Steps של ה-Routine הזה להיום."
+    );
+
+    return;
+
+  }
 
 
-    remainingSeconds =
-      Number(step.duration);
+  activeRoutine =
+    routine;
 
 
-    updateTimer();
+  activeSteps =
+    todaySteps;
 
 
-    timerInterval =
-      setInterval(() => {
+  activeStepIndex =
+    0;
+
+
+  document
+  .getElementById(
+    "routineListScreen"
+  )
+  .style.display =
+    "none";
+
+
+  document
+  .getElementById(
+    "activeScreen"
+  )
+  .style.display =
+    "block";
+
+
+  document
+  .getElementById(
+    "activeRoutineName"
+  )
+  .textContent =
+    routine.name;
+
+
+  showStep();
+
+}
+
+
+/* =========================
+   SHOW STEP
+========================= */
+
+function showStep() {
+
+  clearInterval(
+    timerInterval
+  );
+
+
+  if (
+    activeStepIndex >=
+    activeSteps.length
+  ) {
+
+    alert(
+      "ה-Routine הושלם!"
+    );
+
+
+    exitRoutine();
+
+    return;
+
+  }
+
+
+  const step =
+    activeSteps[
+      activeStepIndex
+    ];
+
+
+  document
+  .getElementById(
+    "activeStepName"
+  )
+  .textContent =
+    step.name;
+
+
+  remainingSeconds =
+    Number(
+      step.duration
+    );
+
+
+  updateTimer();
+
+
+  timerInterval =
+    setInterval(
+      () => {
 
         remainingSeconds--;
 
         updateTimer();
 
 
-        if (remainingSeconds <= 0) {
+        if (
+          remainingSeconds <= 0
+        ) {
 
-          clearInterval(timerInterval);
+          clearInterval(
+            timerInterval
+          );
 
         }
 
-      }, 1000);
+      },
+      1000
+    );
 
-  }
-
-
-  /* TIMER */
-
-  function updateTimer() {
-
-    const minutes =
-      Math.floor(
-        remainingSeconds / 60
-      );
-
-    const seconds =
-      remainingSeconds % 60;
+}
 
 
-    document
-      .getElementById("timer")
-      .textContent =
-      String(minutes).padStart(2, "0") +
-      ":" +
-      String(seconds).padStart(2, "0");
+/* =========================
+   TIMER
+========================= */
 
-  }
+function updateTimer() {
 
-
-  /* DONE */
-
-  document
-    .getElementById("doneStepBtn")
-    .addEventListener(
-      "click",
-      () => {
-
-        activeStepIndex++;
-
-        showStep();
-
-      }
+  const minutes =
+    Math.floor(
+      remainingSeconds /
+      60
     );
 
 
-  /* EXIT */
+  const seconds =
+    remainingSeconds %
+    60;
+
 
   document
-    .getElementById("exitActiveBtn")
-    .addEventListener(
-      "click",
-      exitRoutine
+  .getElementById(
+    "timer"
+  )
+  .textContent =
+    String(minutes)
+      .padStart(2, "0")
+    +
+    ":"
+    +
+    String(seconds)
+      .padStart(2, "0");
+
+}
+
+
+/* =========================
+   DONE
+========================= */
+
+document
+.getElementById(
+  "doneStepBtn"
+)
+.addEventListener(
+  "click",
+  () => {
+
+    activeStepIndex++;
+
+    showStep();
+
+  }
+);
+
+
+/* =========================
+   EXIT
+========================= */
+
+document
+.getElementById(
+  "exitActiveBtn"
+)
+.addEventListener(
+  "click",
+  exitRoutine
+);
+
+
+function exitRoutine() {
+
+  clearInterval(
+    timerInterval
+  );
+
+
+  document
+  .getElementById(
+    "activeScreen"
+  )
+  .style.display =
+    "none";
+
+
+  document
+  .getElementById(
+    "routineListScreen"
+  )
+  .style.display =
+    "block";
+
+
+  activeRoutine =
+    null;
+
+  activeSteps = [];
+
+}
+
+
+/* =========================
+   DATE FUNCTIONS
+========================= */
+
+function getTodayDate() {
+
+  const date =
+    new Date();
+
+
+  const year =
+    date.getFullYear();
+
+
+  const month =
+    String(
+      date.getMonth() + 1
+    )
+    .padStart(2, "0");
+
+
+  const day =
+    String(
+      date.getDate()
+    )
+    .padStart(2, "0");
+
+
+  return (
+    year +
+    "-" +
+    month +
+    "-" +
+    day
+  );
+
+}
+
+
+function parseDate(value) {
+
+  const parts =
+    value.split("-");
+
+
+  return new Date(
+    Number(parts[0]),
+    Number(parts[1]) - 1,
+    Number(parts[2])
+  );
+
+}
+
+
+function formatDate(value) {
+
+  const parts =
+    value.split("-");
+
+
+  return (
+    parts[2] +
+    "/" +
+    parts[1] +
+    "/" +
+    parts[0]
+  );
+
+}
+
+
+/* =========================
+   SECURITY
+========================= */
+
+function escapeHtml(text) {
+
+  return String(text)
+    .replaceAll(
+      "&",
+      "&amp;"
+    )
+    .replaceAll(
+      "<",
+      "&lt;"
+    )
+    .replaceAll(
+      ">",
+      "&gt;"
+    )
+    .replaceAll(
+      '"',
+      "&quot;"
+    )
+    .replaceAll(
+      "'",
+      "&#039;"
     );
 
-
-  function exitRoutine() {
-
-    clearInterval(timerInterval);
-
-    activeScreen.style.display = "none";
-
-    routineListScreen.style.display = "block";
-
-    activeRoutine = null;
-
-  }
+}
 
 
-  /* HELPERS */
+function escapeAttr(text) {
 
-  function escapeHtml(text) {
+  return escapeHtml(text);
 
-    return String(text)
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;")
-      .replaceAll('"', "&quot;")
-      .replaceAll("'", "&#039;");
-
-  }
+}
 
 </script>
 
