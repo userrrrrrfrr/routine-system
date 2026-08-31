@@ -1,5 +1,5 @@
-```html
 <!DOCTYPE html>
+
 <html lang="he" dir="rtl">
 <head>
   <meta charset="UTF-8">
@@ -86,6 +86,7 @@
       max-width: 1100px;
       margin: auto;
       padding: 24px 20px 60px;
+      position: relative;
     }
 
     /* =========================
@@ -104,6 +105,12 @@
       align-items: flex-start;
       gap: 13px;
       box-shadow: 0 8px 30px rgba(0,0,0,.04);
+
+      /* תמיד בפינה השמאלית העליונה */
+      position: absolute;
+      top: 24px;
+      left: 20px;
+      z-index: 20;
     }
 
     header h1 {
@@ -129,6 +136,14 @@
       background: white;
       border-radius: 11px;
       font-size: 15px;
+    }
+
+    /* =========================
+       ROUTINE LIST
+    ========================= */
+
+    #routineListScreen {
+      padding-top: 155px;
     }
 
     /* =========================
@@ -373,83 +388,45 @@
     }
 
     /* =========================
+       EDITOR
+    ========================= */
+
+    #editorScreen {
+      padding-top: 155px;
+    }
+
+    /* =========================
        ACTIVE ROUTINE
+       ה-STEP למעלה בצד ימין
     ========================= */
 
     #activeScreen {
       display: none;
       width: 100%;
       min-height: auto;
-      padding: 0 0 40px;
+      padding: 0;
     }
 
     .active-box {
-      width: 100%;
+      width: calc(100% - 180px);
       max-width: 800px;
-      margin: 0 auto;
+      margin: 0 0 0 auto;
       background: white;
       border-radius: 32px;
-      padding: 12px 25px 30px;
+      padding: 18px 25px 30px;
       text-align: center;
       box-shadow: 0 10px 35px rgba(0,0,0,0.06);
     }
 
-    /* =========================
-       TOP ACTIVE BAR
-       Routine + Step באותו גובה
-    ========================= */
-
-    .active-top {
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 15px;
-      margin-bottom: 10px;
-      min-height: 45px;
-    }
+    /* שם ה-Routine נמצא למעלה בתוך חלונית ה-Step */
 
     #activeRoutineName {
-      margin: 0;
+      margin: 0 0 8px;
       font-size: 20px;
       font-weight: 600;
       color: #222;
-      text-align: left;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 35%;
-    }
-
-    .active-step-info {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      gap: 12px;
-      flex: 1;
-      min-width: 0;
-    }
-
-    #activeStepName {
-      font-size: 32px;
-      font-weight: 800;
-      color: #d00;
-      margin: 0;
-      padding: 0;
-      line-height: 1;
-      letter-spacing: -0.5px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    #timer {
-      font-size: 32px;
-      font-weight: 700;
-      margin: 0;
-      color: #111;
-      line-height: 1;
-      white-space: nowrap;
+      text-align: right;
+      width: 100%;
     }
 
     /* =========================
@@ -461,22 +438,48 @@
       height: 500px;
       object-fit: contain;
       border-radius: 20px;
-      margin: 0 auto 15px;
+      margin: 0 auto;
       display: block;
       background: #fafafa;
       user-select: none;
       -webkit-user-select: none;
       touch-action: manipulation;
-      transition: transform 0.15s, opacity 0.15s;
+      transition: transform 0.12s, opacity 0.12s;
     }
 
-    .active-step-image.pressing {
+    .active-step-image:active {
       transform: scale(0.97);
       opacity: 0.85;
     }
 
     /* =========================
-       LONG PRESS
+       STEP NAME
+    ========================= */
+
+    #activeStepName {
+      font-size: 48px;
+      font-weight: 800;
+      color: #d00;
+      margin: 0;
+      padding: 0;
+      line-height: 1.05;
+      letter-spacing: -0.7px;
+    }
+
+    /* =========================
+       TIMER
+    ========================= */
+
+    #timer {
+      font-size: 68px;
+      font-weight: 700;
+      margin: 7px 0 17px;
+      color: #111;
+      line-height: 1;
+    }
+
+    /* =========================
+       CLICK HINT
     ========================= */
 
     .long-press-hint {
@@ -505,6 +508,7 @@
 
     #directRoutineScreen {
       display: none;
+      padding-top: 155px;
     }
 
     .direct-routine-box {
@@ -548,6 +552,8 @@
         width: 145px;
         padding: 14px 16px;
         border-radius: 18px;
+        top: 15px;
+        left: 12px;
       }
 
       header h1 {
@@ -558,45 +564,46 @@
         font-size: 13px;
       }
 
+      #routineListScreen,
+      #editorScreen,
+      #directRoutineScreen {
+        padding-top: 140px;
+      }
+
       #activeScreen {
-        padding: 0 0 25px;
+        padding: 0;
       }
 
       .active-box {
-        max-width: 100%;
+        width: calc(100% - 158px);
+        max-width: none;
         border-radius: 28px;
-        padding: 10px 15px 22px;
-      }
-
-      .active-top {
-        min-height: 42px;
-        gap: 8px;
-        margin-bottom: 8px;
+        padding: 15px 12px 20px;
+        margin: 0 0 0 auto;
       }
 
       #activeRoutineName {
         font-size: 16px;
-        max-width: 28%;
-      }
-
-      .active-step-info {
-        gap: 8px;
-      }
-
-      #activeStepName {
-        font-size: 27px;
-        max-width: 55%;
-      }
-
-      #timer {
-        font-size: 27px;
+        margin-bottom: 7px;
       }
 
       .active-step-image {
         height: 430px;
         max-height: 430px;
         border-radius: 18px;
-        margin: 0 0 12px;
+        margin: 0;
+      }
+
+      #activeStepName {
+        font-size: 40px;
+        margin: 0;
+        line-height: 1;
+      }
+
+      #timer {
+        font-size: 58px;
+        margin-top: 6px;
+        margin-bottom: 15px;
       }
 
       .long-press-hint {
@@ -621,34 +628,30 @@
     @media (max-width: 390px) {
 
       .active-box {
-        padding: 8px 12px 20px;
-      }
-
-      .active-top {
-        gap: 5px;
-      }
-
-      #activeRoutineName {
-        font-size: 14px;
-        max-width: 25%;
-      }
-
-      #activeStepName {
-        font-size: 23px;
-        max-width: 55%;
-      }
-
-      #timer {
-        font-size: 24px;
+        width: calc(100% - 150px);
+        padding: 13px 10px 18px;
       }
 
       .active-step-image {
         height: 350px;
         max-height: 350px;
       }
+
+      #activeStepName {
+        font-size: 34px;
+      }
+
+      #timer {
+        font-size: 52px;
+      }
+
+      #activeRoutineName {
+        font-size: 15px;
+      }
     }
 
   </style>
+
 </head>
 
 <body>
@@ -661,20 +664,21 @@
 
   <div class="login-box">
 
-    <h1>Routine</h1>
+```
+<h1>Routine</h1>
 
-    <p>
-      התחבר כדי להיכנס למערכת שלך
-    </p>
+<p>
+  התחבר כדי להיכנס למערכת שלך
+</p>
 
-    <button id="loginBtn" class="google-btn">
-      כניסה עם Google
-    </button>
+<button id="loginBtn" class="google-btn">
+  כניסה עם Google
+</button>
+```
 
   </div>
 
 </div>
-
 
 <!-- =========================
      APP
@@ -684,267 +688,253 @@
 
   <div class="container">
 
-    <!-- HEADER -->
+```
+<!-- HEADER - שמאל למעלה -->
 
-    <header>
+<header>
 
-      <div>
+  <div>
 
-        <h1>Routine</h1>
+    <h1>Routine</h1>
 
-        <div id="userInfo"></div>
+    <div id="userInfo"></div>
 
-      </div>
+  </div>
 
-      <button id="logoutBtn" class="logout-btn">
-        התנתק
+  <button id="logoutBtn" class="logout-btn">
+    התנתק
+  </button>
+
+</header>
+
+
+<!-- =========================
+     ROUTINE LIST
+========================= -->
+
+<div id="routineListScreen">
+
+  <div class="card">
+
+    <div class="top-row">
+
+      <h2>
+        השגרות שלי
+      </h2>
+
+      <button id="newRoutineBtn" class="primary">
+        + Routine חדש
       </button>
 
-    </header>
-
-
-    <!-- =========================
-         ROUTINE LIST
-    ========================= -->
-
-    <div id="routineListScreen">
-
-      <div class="card">
-
-        <div class="top-row">
-
-          <h2>
-            השגרות שלי
-          </h2>
-
-          <button id="newRoutineBtn" class="primary">
-            + Routine חדש
-          </button>
-
-        </div>
-
-        <div id="routineList"></div>
-
-      </div>
-
     </div>
 
-
-    <!-- =========================
-         EDITOR
-    ========================= -->
-
-    <div id="editorScreen" class="hidden">
-
-      <div class="card">
-
-        <h2 id="editorTitle">
-          Routine חדש
-        </h2>
-
-        <div class="form-group">
-
-          <label>
-            שם ה-Routine
-          </label>
-
-          <input
-            id="routineName"
-            type="text"
-            placeholder="לדוגמה: בוקר"
-          >
-
-        </div>
-
-        <div class="form-group image-upload">
-
-          <label>
-            תמונה ל-Routine
-          </label>
-
-          <input
-            id="routineImageInput"
-            class="image-input"
-            type="file"
-            accept="image/*"
-          >
-
-          <div
-            id="routineImagePreview"
-            class="image-preview">
-          </div>
-
-        </div>
-
-        <div class="form-group">
-
-          <label>
-            באילו ימים ה-Routine פעיל?
-          </label>
-
-          <div class="days">
-
-            <label class="day">
-              <input type="checkbox" value="0">
-              <span>א׳</span>
-            </label>
-
-            <label class="day">
-              <input type="checkbox" value="1">
-              <span>ב׳</span>
-            </label>
-
-            <label class="day">
-              <input type="checkbox" value="2">
-              <span>ג׳</span>
-            </label>
-
-            <label class="day">
-              <input type="checkbox" value="3">
-              <span>ד׳</span>
-            </label>
-
-            <label class="day">
-              <input type="checkbox" value="4">
-              <span>ה׳</span>
-            </label>
-
-            <label class="day">
-              <input type="checkbox" value="5">
-              <span>ו׳</span>
-            </label>
-
-            <label class="day">
-              <input type="checkbox" value="6">
-              <span>ש׳</span>
-            </label>
-
-          </div>
-
-        </div>
-
-        <h2>
-          Steps
-        </h2>
-
-        <div id="stepsContainer"></div>
-
-        <button
-          id="addStepBtn"
-          class="secondary">
-          + הוסף Step
-        </button>
-
-        <br>
-        <br>
-
-        <button
-          id="saveRoutineBtn"
-          class="primary">
-          שמור
-        </button>
-
-        <button
-          id="cancelEditorBtn"
-          class="secondary">
-          ביטול
-        </button>
-
-      </div>
-
-    </div>
-
-
-    <!-- =========================
-         DIRECT ROUTINE
-    ========================= -->
-
-    <div id="directRoutineScreen">
-
-      <div class="direct-routine-box">
-
-        <img
-          id="directRoutineImage"
-          class="direct-routine-image hidden"
-        >
-
-        <h1 id="directRoutineName"></h1>
-
-        <div id="directRoutineSteps"></div>
-
-        <br>
-
-        <button
-          id="directStartBtn"
-          class="primary">
-          התחל Routine
-        </button>
-
-        <button
-          id="directBackBtn"
-          class="secondary">
-          חזרה לשגרות
-        </button>
-
-      </div>
-
-    </div>
-
-
-    <!-- =========================
-         ACTIVE ROUTINE
-    ========================= -->
-
-    <div id="activeScreen">
-
-      <div class="active-box">
-
-        <!-- Routine + Step + Timer באותו גובה -->
-
-        <div class="active-top">
-
-          <h1 id="activeRoutineName"></h1>
-
-          <div class="active-step-info">
-
-            <div id="activeStepName"></div>
-
-            <div id="timer">
-              00:00
-            </div>
-
-          </div>
-
-        </div>
-
-
-        <!-- STEP IMAGE -->
-
-        <img
-          id="activeStepImage"
-          class="active-step-image hidden"
-        >
-
-
-        <div class="long-press-hint">
-          לחץ לחיצה ארוכה על התמונה כדי לסמן בוצע
-        </div>
-
-
-        <button
-          id="exitActiveBtn"
-          class="back-btn">
-          יציאה
-        </button>
-
-      </div>
-
-    </div>
+    <div id="routineList"></div>
 
   </div>
 
 </div>
 
+
+<!-- =========================
+     EDITOR
+========================= -->
+
+<div id="editorScreen" class="hidden">
+
+  <div class="card">
+
+    <h2 id="editorTitle">
+      Routine חדש
+    </h2>
+
+    <div class="form-group">
+
+      <label>
+        שם ה-Routine
+      </label>
+
+      <input
+        id="routineName"
+        type="text"
+        placeholder="לדוגמה: בוקר"
+      >
+
+    </div>
+
+    <div class="form-group image-upload">
+
+      <label>
+        תמונה ל-Routine
+      </label>
+
+      <input
+        id="routineImageInput"
+        class="image-input"
+        type="file"
+        accept="image/*"
+      >
+
+      <div
+        id="routineImagePreview"
+        class="image-preview">
+      </div>
+
+    </div>
+
+    <div class="form-group">
+
+      <label>
+        באילו ימים ה-Routine פעיל?
+      </label>
+
+      <div class="days">
+
+        <label class="day">
+          <input type="checkbox" value="0">
+          <span>א׳</span>
+        </label>
+
+        <label class="day">
+          <input type="checkbox" value="1">
+          <span>ב׳</span>
+        </label>
+
+        <label class="day">
+          <input type="checkbox" value="2">
+          <span>ג׳</span>
+        </label>
+
+        <label class="day">
+          <input type="checkbox" value="3">
+          <span>ד׳</span>
+        </label>
+
+        <label class="day">
+          <input type="checkbox" value="4">
+          <span>ה׳</span>
+        </label>
+
+        <label class="day">
+          <input type="checkbox" value="5">
+          <span>ו׳</span>
+        </label>
+
+        <label class="day">
+          <input type="checkbox" value="6">
+          <span>ש׳</span>
+        </label>
+
+      </div>
+
+    </div>
+
+    <h2>
+      Steps
+    </h2>
+
+    <div id="stepsContainer"></div>
+
+    <button
+      id="addStepBtn"
+      class="secondary">
+      + הוסף Step
+    </button>
+
+    <br>
+    <br>
+
+    <button
+      id="saveRoutineBtn"
+      class="primary">
+      שמור
+    </button>
+
+    <button
+      id="cancelEditorBtn"
+      class="secondary">
+      ביטול
+    </button>
+
+  </div>
+
+</div>
+
+
+<!-- =========================
+     DIRECT ROUTINE
+========================= -->
+
+<div id="directRoutineScreen">
+
+  <div class="direct-routine-box">
+
+    <img
+      id="directRoutineImage"
+      class="direct-routine-image hidden"
+    >
+
+    <h1 id="directRoutineName"></h1>
+
+    <div id="directRoutineSteps"></div>
+
+    <br>
+
+    <button
+      id="directStartBtn"
+      class="primary">
+      התחל Routine
+    </button>
+
+    <button
+      id="directBackBtn"
+      class="secondary">
+      חזרה לשגרות
+    </button>
+
+  </div>
+
+</div>
+
+
+<!-- =========================
+     ACTIVE ROUTINE
+========================= -->
+
+<div id="activeScreen">
+
+  <div class="active-box">
+
+    <h1 id="activeRoutineName"></h1>
+
+    <img
+      id="activeStepImage"
+      class="active-step-image hidden"
+    >
+
+    <div id="activeStepName"></div>
+
+    <div id="timer">
+      00:00
+    </div>
+
+    <div class="long-press-hint">
+      נגיעה בתמונה מסמנת את ה-Step כבוצע
+    </div>
+
+    <button
+      id="exitActiveBtn"
+      class="back-btn">
+      יציאה
+    </button>
+
+  </div>
+
+</div>
+```
+
+  </div>
+
+</div>
 
 <script type="module">
 
@@ -1026,15 +1016,6 @@ let remainingSeconds = 0;
 let currentRoutineImage = "";
 
 let stepImages = new Map();
-
-
-/* =========================
-   LONG PRESS
-========================= */
-
-let longPressTimer = null;
-
-const LONG_PRESS_MS = 700;
 
 
 /* =========================
@@ -3186,9 +3167,6 @@ function showStep() {
   );
 
 
-  clearLongPress();
-
-
   if (
     activeStepIndex >=
     activeSteps.length
@@ -3328,93 +3306,8 @@ function updateTimer() {
 
 
 /* =========================
-   LONG PRESS → DONE
+   ONE TAP → DONE
 ========================= */
-
-function clearLongPress() {
-
-  if (
-    longPressTimer
-  ) {
-
-    clearTimeout(
-      longPressTimer
-    );
-
-    longPressTimer =
-      null;
-
-  }
-
-
-  const img =
-    document.getElementById(
-      "activeStepImage"
-    );
-
-
-  if (img) {
-
-    img.classList
-      .remove(
-        "pressing"
-      );
-
-  }
-
-}
-
-
-function startLongPress() {
-
-  clearLongPress();
-
-
-  const img =
-    document.getElementById(
-      "activeStepImage"
-    );
-
-
-  if (img) {
-
-    img.classList
-      .add(
-        "pressing"
-      );
-
-  }
-
-
-  longPressTimer =
-    setTimeout(
-      () => {
-
-        longPressTimer =
-          null;
-
-
-        if (img) {
-
-          img.classList
-            .remove(
-              "pressing"
-            );
-
-        }
-
-
-        activeStepIndex++;
-
-
-        showStep();
-
-      },
-      LONG_PRESS_MS
-    );
-
-}
-
 
 const activeImg =
   document.getElementById(
@@ -3423,47 +3316,28 @@ const activeImg =
 
 
 activeImg.addEventListener(
-  "touchstart",
-  e => {
+  "click",
+  () => {
 
-    e.preventDefault();
+    if (
+      activeStepIndex >=
+      activeSteps.length
+    ) {
+      return;
+    }
 
-    startLongPress();
 
-  },
-  {
-    passive: false
+    clearInterval(
+      timerInterval
+    );
+
+
+    activeStepIndex++;
+
+
+    showStep();
+
   }
-);
-
-
-activeImg.addEventListener(
-  "touchend",
-  clearLongPress
-);
-
-
-activeImg.addEventListener(
-  "touchcancel",
-  clearLongPress
-);
-
-
-activeImg.addEventListener(
-  "mousedown",
-  startLongPress
-);
-
-
-activeImg.addEventListener(
-  "mouseup",
-  clearLongPress
-);
-
-
-activeImg.addEventListener(
-  "mouseleave",
-  clearLongPress
 );
 
 
@@ -3486,9 +3360,6 @@ function exitRoutine() {
   clearInterval(
     timerInterval
   );
-
-
-  clearLongPress();
 
 
   document
@@ -3647,4 +3518,3 @@ function escapeAttr(
 
 </body>
 </html>
-```
