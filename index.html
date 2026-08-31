@@ -33,8 +33,6 @@
       display: none !important;
     }
 
-    /* LOGIN */
-
     #loginScreen {
       min-height: 100vh;
       display: flex;
@@ -71,8 +69,6 @@
       color: white;
     }
 
-    /* APP */
-
     #app {
       display: none;
     }
@@ -89,7 +85,6 @@
       padding: 20px;
       border-radius: 20px;
       margin-bottom: 20px;
-
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -154,8 +149,6 @@
       border-radius: 10px;
     }
 
-    /* ROUTINES */
-
     .routine-card {
       border: 1px solid #eee;
       border-radius: 15px;
@@ -193,8 +186,6 @@
       color: #777;
       padding: 35px 10px;
     }
-
-    /* FORM */
 
     .form-group {
       margin-bottom: 20px;
@@ -238,8 +229,6 @@
       color: white;
     }
 
-    /* STEPS */
-
     .step {
       border: 1px solid #eee;
       border-radius: 15px;
@@ -265,7 +254,9 @@
       margin-top: 12px;
     }
 
-    /* ACTIVE */
+    .step-start-date {
+      margin-top: 15px;
+    }
 
     #activeScreen {
       display: none;
@@ -325,17 +316,11 @@
       #activeStepName {
         font-size: 26px;
       }
-
     }
   </style>
 </head>
 
 <body>
-
-
-<!-- =========================
-     LOGIN
-========================= -->
 
 <div id="loginScreen">
 
@@ -347,22 +332,14 @@
       התחבר כדי להיכנס למערכת שלך
     </p>
 
-    <button
-      id="loginBtn"
-      class="google-btn">
-
+    <button id="loginBtn" class="google-btn">
       כניסה עם Google
-
     </button>
 
   </div>
 
 </div>
 
-
-<!-- =========================
-     APP
-========================= -->
 
 <div id="app">
 
@@ -378,18 +355,12 @@
 
       </div>
 
-      <button
-        id="logoutBtn"
-        class="logout-btn">
-
+      <button id="logoutBtn" class="logout-btn">
         התנתק
-
       </button>
 
     </header>
 
-
-    <!-- ROUTINE LIST -->
 
     <div id="routineListScreen">
 
@@ -401,12 +372,8 @@
             השגרות שלי
           </h2>
 
-          <button
-            id="newRoutineBtn"
-            class="primary">
-
+          <button id="newRoutineBtn" class="primary">
             + Routine חדש
-
           </button>
 
         </div>
@@ -418,11 +385,7 @@
     </div>
 
 
-    <!-- EDITOR -->
-
-    <div
-      id="editorScreen"
-      class="hidden">
+    <div id="editorScreen" class="hidden">
 
       <div class="card">
 
@@ -430,8 +393,6 @@
           Routine חדש
         </h2>
 
-
-        <!-- NAME -->
 
         <div class="form-group">
 
@@ -446,27 +407,6 @@
 
         </div>
 
-
-        <!-- START DATE -->
-
-        <div class="form-group">
-
-          <label>
-            תאריך התחלה
-          </label>
-
-          <input
-            id="startDate"
-            type="date">
-
-          <small style="color:#777;">
-            התדירות של ה-Steps תתחיל להיספר מהתאריך הזה.
-          </small>
-
-        </div>
-
-
-        <!-- DAYS -->
 
         <div class="form-group">
 
@@ -516,46 +456,30 @@
         </div>
 
 
-        <!-- STEPS -->
-
         <h2>
           Steps
         </h2>
 
         <div id="stepsContainer"></div>
 
-        <button
-          id="addStepBtn"
-          class="secondary">
-
+        <button id="addStepBtn" class="secondary">
           + הוסף Step
-
         </button>
 
         <br><br>
 
-        <button
-          id="saveRoutineBtn"
-          class="primary">
-
+        <button id="saveRoutineBtn" class="primary">
           שמור
-
         </button>
 
-        <button
-          id="cancelEditorBtn"
-          class="secondary">
-
+        <button id="cancelEditorBtn" class="secondary">
           ביטול
-
         </button>
 
       </div>
 
     </div>
 
-
-    <!-- ACTIVE ROUTINE -->
 
     <div id="activeScreen">
 
@@ -569,20 +493,12 @@
           00:00
         </div>
 
-        <button
-          id="doneStepBtn"
-          class="done-btn">
-
+        <button id="doneStepBtn" class="done-btn">
           ✓ בוצע
-
         </button>
 
-        <button
-          id="exitActiveBtn"
-          class="back-btn">
-
+        <button id="exitActiveBtn" class="back-btn">
           יציאה
-
         </button>
 
       </div>
@@ -595,11 +511,6 @@
 
 
 <script type="module">
-
-
-/* =========================
-   FIREBASE IMPORTS
-========================= */
 
 import {
   initializeApp
@@ -631,10 +542,6 @@ import {
 from
 "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-
-/* =========================
-   FIREBASE CONFIG
-========================= */
 
 const firebaseConfig = {
 
@@ -677,10 +584,6 @@ getFirestore(app);
 const provider =
 new GoogleAuthProvider();
 
-
-/* =========================
-   VARIABLES
-========================= */
 
 let currentUser = null;
 
@@ -901,14 +804,6 @@ function renderRoutines() {
         getTodaySteps(routine);
 
 
-      const startText =
-        routine.startDate
-          ? formatDate(
-              routine.startDate
-            )
-          : "לא הוגדר";
-
-
       card.innerHTML = `
 
         <h3>
@@ -919,11 +814,6 @@ function renderRoutines() {
 
 
         <div class="routine-info">
-
-          תאריך התחלה:
-          ${startText}
-
-          <br>
 
           ${routine.steps?.length || 0}
           Steps
@@ -1062,16 +952,6 @@ function openEditor(routine) {
     routine
       ? routine.name
       : "";
-
-
-  document
-  .getElementById(
-    "startDate"
-  )
-  .value =
-    routine
-      ? routine.startDate || ""
-      : getTodayDate();
 
 
   document
@@ -1254,6 +1134,28 @@ function addStep(step = null) {
 
     </div>
 
+
+    <div class="step-start-date">
+
+      <label>
+        תאריך התחלת ה-Step
+      </label>
+
+      <input
+        class="step-start-date-input"
+        type="date"
+        value="${
+          step && step.startDate
+            ? escapeAttr(step.startDate)
+            : getTodayDate()
+        }">
+
+      <small style="color:#777;">
+        התדירות של ה-Step תתחיל להיספר מתאריך זה.
+      </small>
+
+    </div>
+
   `;
 
 
@@ -1382,29 +1284,10 @@ async function saveRoutine() {
     .trim();
 
 
-  const startDate =
-    document
-    .getElementById(
-      "startDate"
-    )
-    .value;
-
-
   if (!name) {
 
     alert(
       "כתוב שם ל-Routine."
-    );
-
-    return;
-
-  }
-
-
-  if (!startDate) {
-
-    alert(
-      "בחר תאריך התחלה."
     );
 
     return;
@@ -1481,6 +1364,25 @@ async function saveRoutine() {
       }
 
 
+      const startDate =
+        div
+        .querySelector(
+          ".step-start-date-input"
+        )
+        .value;
+
+
+      if (!startDate) {
+
+        alert(
+          `בחר תאריך התחלה ל-Step ${index + 1}.`
+        );
+
+        return;
+
+      }
+
+
       steps.push({
 
         name: stepName,
@@ -1495,6 +1397,8 @@ async function saveRoutine() {
             finalFrequency
           ),
 
+        startDate,
+
         order:
           index
 
@@ -1507,8 +1411,6 @@ async function saveRoutine() {
   const data = {
 
     name,
-
-    startDate,
 
     days,
 
@@ -1674,7 +1576,6 @@ async function deleteRoutine(id) {
 function getTodaySteps(routine) {
 
   if (
-    !routine.startDate ||
     !routine.steps
   ) {
 
@@ -1687,48 +1588,16 @@ function getTodaySteps(routine) {
     new Date();
 
 
-  const start =
-    parseDate(
-      routine.startDate
-    );
-
-
   today.setHours(
     0, 0, 0, 0
   );
 
 
-  start.setHours(
-    0, 0, 0, 0
-  );
-
-
-  const difference =
-    Math.floor(
-      (
-        today.getTime() -
-        start.getTime()
-      ) /
-      86400000
-    );
-
-
-  // לפני תאריך ההתחלה
-
-  if (
-    difference < 0
-  ) {
-
-    return [];
-
-  }
-
-
-  // אם ה-Routine מוגבל לימים מסוימים
-
   const todayDay =
     today.getDay();
 
+
+  /* ROUTINE DAYS */
 
   if (
     routine.days &&
@@ -1746,11 +1615,61 @@ function getTodaySteps(routine) {
   return routine.steps.filter(
     step => {
 
+      /*
+       * לכל Step יש תאריך התחלה משלו.
+       */
+
+      if (!step.startDate) {
+
+        return false;
+
+      }
+
+
+      const start =
+        parseDate(
+          step.startDate
+        );
+
+
+      start.setHours(
+        0, 0, 0, 0
+      );
+
+
+      const difference =
+        Math.floor(
+          (
+            today.getTime() -
+            start.getTime()
+          ) /
+          86400000
+        );
+
+
+      /*
+       * ה-Step עדיין לא התחיל.
+       */
+
+      if (
+        difference < 0
+      ) {
+
+        return false;
+
+      }
+
+
       const frequency =
         Number(
           step.frequency || 1
         );
 
+
+      /*
+       * התדירות מתחילה להיספר
+       * מתאריך התחלת ה-Step.
+       */
 
       return (
         difference %
@@ -2053,23 +1972,6 @@ function parseDate(value) {
     Number(parts[0]),
     Number(parts[1]) - 1,
     Number(parts[2])
-  );
-
-}
-
-
-function formatDate(value) {
-
-  const parts =
-    value.split("-");
-
-
-  return (
-    parts[2] +
-    "/" +
-    parts[1] +
-    "/" +
-    parts[0]
   );
 
 }
