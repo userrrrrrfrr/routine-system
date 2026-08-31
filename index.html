@@ -1,1 +1,247 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <title>Routine</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: Arial, sans-serif;
+      background: #f5f5f7;
+    }
+
+    .login-box {
+      width: 90%;
+      max-width: 400px;
+      padding: 40px 30px;
+      background: white;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: 32px;
+    }
+
+    p {
+      margin: 0 0 30px;
+      color: #666;
+      font-size: 16px;
+    }
+
+    #loginBtn {
+      width: 100%;
+      padding: 15px;
+      border: 0;
+      border-radius: 12px;
+      background: #111;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    #loginBtn:hover {
+      opacity: 0.9;
+    }
+
+    #userArea {
+      display: none;
+    }
+
+    #userName {
+      margin-bottom: 20px;
+      font-size: 18px;
+    }
+
+    #logoutBtn {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      background: white;
+      font-size: 15px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="login-box">
+
+    <!-- LOGIN -->
+    <div id="loginArea">
+      <h1>Routine</h1>
+
+      <p>
+        התחבר כדי להיכנס למערכת
+      </p>
+
+      <button id="loginBtn">
+        כניסה עם Google
+      </button>
+    </div>
+
+
+    <!-- USER -->
+    <div id="userArea">
+
+      <h1>Routine</h1>
+
+      <div id="userName"></div>
+
+      <button id="logoutBtn">
+        התנתק
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <script type="module">
+
+    import { initializeApp }
+      from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
+    import {
+      getAuth,
+      GoogleAuthProvider,
+      signInWithPopup,
+      signOut,
+      onAuthStateChanged
+    }
+    from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+
+    // =========================
+    // FIREBASE
+    // =========================
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCGTJFidIrp_YAuKOg2CCEO-vjFCiakkHo",
+      authDomain: "site-c224f.firebaseapp.com",
+      projectId: "site-c224f",
+      storageBucket: "site-c224f.firebasestorage.app",
+      messagingSenderId: "709702843873",
+      appId: "1:709702843873:web:a326854107acb20e6ee6a0",
+      measurementId: "G-GC5LS15YEC"
+    };
+
+
+    const app = initializeApp(firebaseConfig);
+
+    const auth = getAuth(app);
+
+    const provider = new GoogleAuthProvider();
+
+
+    // =========================
+    // ELEMENTS
+    // =========================
+
+    const loginBtn =
+      document.getElementById("loginBtn");
+
+    const logoutBtn =
+      document.getElementById("logoutBtn");
+
+    const loginArea =
+      document.getElementById("loginArea");
+
+    const userArea =
+      document.getElementById("userArea");
+
+    const userName =
+      document.getElementById("userName");
+
+
+    // =========================
+    // GOOGLE LOGIN
+    // =========================
+
+    loginBtn.addEventListener("click", async () => {
+
+      try {
+
+        await signInWithPopup(auth, provider);
+
+      } catch (error) {
+
+        console.error(error);
+
+        alert(
+          "ההתחברות נכשלה.\n\n" +
+          error.message
+        );
+
+      }
+
+    });
+
+
+    // =========================
+    // LOGOUT
+    // =========================
+
+    logoutBtn.addEventListener("click", async () => {
+
+      try {
+
+        await signOut(auth);
+
+      } catch (error) {
+
+        console.error(error);
+
+      }
+
+    });
+
+
+    // =========================
+    // CHECK LOGIN
+    // =========================
+
+    onAuthStateChanged(auth, (user) => {
+
+      if (user) {
+
+        // המשתמש מחובר
+
+        loginArea.style.display = "none";
+
+        userArea.style.display = "block";
+
+        userName.textContent =
+          "שלום, " + (user.displayName || user.email);
+
+      } else {
+
+        // המשתמש לא מחובר
+
+        loginArea.style.display = "block";
+
+        userArea.style.display = "none";
+
+      }
+
+    });
+
+  </script>
+
+</body>
+</html>
