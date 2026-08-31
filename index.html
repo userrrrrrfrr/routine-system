@@ -4,19 +4,563 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Routine</title>
-  <!-- ... אותו CSS בדיוק כמו קודם ... -->
   <style>
-    /* העתק כאן את כל ה-CSS המקורי שלך – לא שיניתי כלום */
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f5f7;
+      color: #111;
+    }
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+    button {
+      cursor: pointer;
+    }
+    .hidden {
+      display: none !important;
+    }
+    /* =========================
+       LOGIN
+    ========================= */
+    #loginScreen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .login-box {
+      width: 90%;
+      max-width: 400px;
+      background: white;
+      padding: 40px 30px;
+      border-radius: 24px;
+      text-align: center;
+      box-shadow: 0 10px 40px rgba(0,0,0,.08);
+    }
+    .login-box h1 {
+      margin: 0 0 10px;
+      font-size: 36px;
+    }
+    .login-box p {
+      color: #666;
+      margin-bottom: 30px;
+    }
+    .google-btn {
+      width: 100%;
+      padding: 15px;
+      border: 0;
+      border-radius: 12px;
+      background: #111;
+      color: white;
+    }
+    /* =========================
+       APP
+    ========================= */
+    #app {
+      display: none;
+    }
+    .container {
+      width: 92%;
+      max-width: 900px;
+      margin: auto;
+      padding: 25px 0 60px;
+    }
+    header {
+      background: white;
+      padding: 20px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+    }
+    header h1 {
+      margin: 0;
+    }
+    #userInfo {
+      color: #666;
+      margin-top: 5px;
+      font-size: 14px;
+    }
+    .logout-btn {
+      padding: 10px 15px;
+      border: 1px solid #ddd;
+      background: white;
+      border-radius: 10px;
+    }
+    .card {
+      background: white;
+      border-radius: 20px;
+      padding: 22px;
+      margin-bottom: 20px;
+    }
+    .top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+    }
+    .top-row h2 {
+      margin: 0;
+    }
+    .primary {
+      background: #111;
+      color: white;
+      border: 0;
+      padding: 12px 18px;
+      border-radius: 10px;
+    }
+    .secondary {
+      background: white;
+      border: 1px solid #ddd;
+      padding: 10px 15px;
+      border-radius: 10px;
+    }
+    .danger {
+      color: #d00;
+      background: white;
+      border: 1px solid #ddd;
+      padding: 10px 15px;
+      border-radius: 10px;
+    }
+    /* =========================
+       IMAGE UPLOAD
+    ========================= */
+    .image-upload {
+      margin-top: 10px;
+    }
+    .image-upload label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+    .image-input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      background: white;
+    }
+    .image-preview {
+      margin-top: 12px;
+      position: relative;
+    }
+    .image-preview img {
+      width: 100%;
+      max-height: 250px;
+      object-fit: cover;
+      border-radius: 15px;
+      border: 1px solid #eee;
+      display: block;
+    }
+    .remove-image {
+      margin-top: 8px;
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      background: white;
+      border-radius: 8px;
+      color: #d00;
+    }
+    .routine-image {
+      width: 100%;
+      max-height: 220px;
+      object-fit: cover;
+      border-radius: 15px;
+      margin-bottom: 15px;
+      display: block;
+    }
+    .direct-routine-image {
+      width: 100%;
+      max-height: 300px;
+      object-fit: cover;
+      border-radius: 18px;
+      margin-bottom: 20px;
+    }
+    .active-step-image {
+      width: 100%;
+      max-height: 320px;
+      object-fit: cover;
+      border-radius: 18px;
+      margin: 20px 0;
+      display: block;
+    }
+    /* =========================
+       ROUTINES
+    ========================= */
+    .routine-card {
+      border: 1px solid #eee;
+      border-radius: 15px;
+      padding: 18px;
+      margin-top: 12px;
+    }
+    .routine-card h3 {
+      margin: 0 0 7px;
+    }
+    .routine-info {
+      color: #777;
+      font-size: 14px;
+      margin-bottom: 15px;
+      line-height: 1.7;
+    }
+    .today-info {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 10px;
+      background: #f5f5f7;
+      font-size: 14px;
+    }
+    .actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+    .empty {
+      text-align: center;
+      color: #777;
+      padding: 35px 10px;
+    }
+    /* =========================
+       FORM
+    ========================= */
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 7px;
+    }
+    input,
+    select {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      background: white;
+    }
+    .days {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .day input {
+      display: none;
+    }
+    .day span {
+      display: block;
+      padding: 10px 14px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    .day input:checked + span {
+      background: #111;
+      color: white;
+    }
+    /* =========================
+       STEPS
+    ========================= */
+    .step {
+      border: 1px solid #eee;
+      border-radius: 15px;
+      padding: 15px;
+      margin-bottom: 12px;
+    }
+    .step-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    .step-grid {
+      display: grid;
+      grid-template-columns: 1fr 180px;
+      gap: 12px;
+    }
+    .custom-days {
+      display: none;
+      margin-top: 12px;
+    }
+    .step-start-date {
+      margin-top: 15px;
+    }
+    .step-start-date label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 7px;
+    }
+    .step-start-date small {
+      display: block;
+      color: #777;
+      margin-top: 6px;
+    }
+    /* =========================
+       ACTIVE ROUTINE
+    ========================= */
+    #activeScreen {
+      display: none;
+      min-height: 100vh;
+      padding: 30px 15px;
+    }
+    .active-box {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      border-radius: 25px;
+      padding: 35px 25px;
+      text-align: center;
+    }
+    #activeStepName {
+      font-size: 32px;
+      margin: 35px 0 20px;
+    }
+    #timer {
+      font-size: 65px;
+      font-weight: bold;
+      margin-bottom: 30px;
+    }
+    .done-btn {
+      width: 100%;
+      padding: 18px;
+      background: #111;
+      color: white;
+      border: 0;
+      border-radius: 14px;
+      font-size: 20px;
+    }
+    .back-btn {
+      width: 100%;
+      padding: 14px;
+      margin-top: 10px;
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+    }
+    /* =========================
+       DIRECT ROUTINE
+    ========================= */
+    #directRoutineScreen {
+      display: none;
+    }
+    .direct-routine-box {
+      max-width: 700px;
+      margin: auto;
+      background: white;
+      border-radius: 25px;
+      padding: 30px 25px;
+    }
+    .direct-routine-box h1 {
+      margin-top: 0;
+    }
+    .direct-step {
+      padding: 15px;
+      border: 1px solid #eee;
+      border-radius: 12px;
+      margin-bottom: 10px;
+    }
+    .direct-step-image {
+      width: 100%;
+      max-height: 180px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin-top: 10px;
+    }
+    /* =========================
+       MOBILE
+    ========================= */
+    @media (max-width: 600px) {
+      .step-grid {
+        grid-template-columns: 1fr;
+      }
+      #timer {
+        font-size: 52px;
+      }
+      #activeStepName {
+        font-size: 26px;
+      }
+      .top-row {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
   </style>
 </head>
 <body>
-  <!-- ... אותו HTML בדיוק כמו קודם ... -->
-
+<!-- =========================
+     LOGIN
+========================= -->
+<div id="loginScreen">
+  <div class="login-box">
+    <h1>Routine</h1>
+    <p>
+      התחבר כדי להיכנס למערכת שלך
+    </p>
+    <button id="loginBtn" class="google-btn">
+      כניסה עם Google
+    </button>
+  </div>
+</div>
+<!-- =========================
+     APP
+========================= -->
+<div id="app">
+  <div class="container">
+    <header>
+      <div>
+        <h1>Routine</h1>
+        <div id="userInfo"></div>
+      </div>
+      <button id="logoutBtn" class="logout-btn">
+        התנתק
+      </button>
+    </header>
+    <!-- =========================
+         ROUTINE LIST
+    ========================= -->
+    <div id="routineListScreen">
+      <div class="card">
+        <div class="top-row">
+          <h2>
+            השגרות שלי
+          </h2>
+          <button id="newRoutineBtn" class="primary">
+            + Routine חדש
+          </button>
+        </div>
+        <div id="routineList"></div>
+      </div>
+    </div>
+    <!-- =========================
+         EDITOR
+    ========================= -->
+    <div id="editorScreen" class="hidden">
+      <div class="card">
+        <h2 id="editorTitle">
+          Routine חדש
+        </h2>
+        <!-- ROUTINE NAME -->
+        <div class="form-group">
+          <label>
+            שם ה-Routine
+          </label>
+          <input id="routineName" type="text" placeholder="לדוגמה: בוקר">
+        </div>
+        <!-- ROUTINE IMAGE -->
+        <div class="form-group image-upload">
+          <label>
+            תמונה ל-Routine
+          </label>
+          <input id="routineImageInput" class="image-input" type="file" accept="image/*">
+          <div id="routineImagePreview" class="image-preview">
+          </div>
+        </div>
+        <!-- DAYS -->
+        <div class="form-group">
+          <label>
+            באילו ימים ה-Routine פעיל?
+          </label>
+          <div class="days">
+            <label class="day">
+              <input type="checkbox" value="0">
+              <span>א׳</span>
+            </label>
+            <label class="day">
+              <input type="checkbox" value="1">
+              <span>ב׳</span>
+            </label>
+            <label class="day">
+              <input type="checkbox" value="2">
+              <span>ג׳</span>
+            </label>
+            <label class="day">
+              <input type="checkbox" value="3">
+              <span>ד׳</span>
+            </label>
+            <label class="day">
+              <input type="checkbox" value="4">
+              <span>ה׳</span>
+            </label>
+            <label class="day">
+              <input type="checkbox" value="5">
+              <span>ו׳</span>
+            </label>
+            <label class="day">
+              <input type="checkbox" value="6">
+              <span>ש׳</span>
+            </label>
+          </div>
+        </div>
+        <!-- STEPS -->
+        <h2>
+          Steps
+        </h2>
+        <div id="stepsContainer"></div>
+        <button id="addStepBtn" class="secondary">
+          + הוסף Step
+        </button>
+        <br>
+        <br>
+        <button id="saveRoutineBtn" class="primary">
+          שמור
+        </button>
+        <button id="cancelEditorBtn" class="secondary">
+          ביטול
+        </button>
+      </div>
+    </div>
+    <!-- =========================
+         DIRECT ROUTINE
+    ========================= -->
+    <div id="directRoutineScreen">
+      <div class="direct-routine-box">
+        <img id="directRoutineImage" class="direct-routine-image hidden">
+        <h1 id="directRoutineName"></h1>
+        <div id="directRoutineSteps"></div>
+        <br>
+        <button id="directStartBtn" class="primary">
+          התחל Routine
+        </button>
+        <button id="directBackBtn" class="secondary">
+          חזרה לשגרות
+        </button>
+      </div>
+    </div>
+    <!-- =========================
+         ACTIVE ROUTINE
+    ========================= -->
+    <div id="activeScreen">
+      <div class="active-box">
+        <h1 id="activeRoutineName"></h1>
+        <img id="activeStepImage" class="active-step-image hidden">
+        <div id="activeStepName"></div>
+        <div id="timer">
+          00:00
+        </div>
+        <button id="doneStepBtn" class="done-btn">
+          ✓ בוצע
+        </button>
+        <button id="exitActiveBtn" class="back-btn">
+          יציאה
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 <script type="module">
 /* =========================
    FIREBASE IMPORTS
 ========================= */
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+import {
+  initializeApp
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 import {
   getAuth,
   GoogleAuthProvider,
@@ -33,12 +577,6 @@ import {
   updateDoc,
   deleteDoc
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-import {
-  getStorage,
-  ref,
-  uploadString,
-  getDownloadURL
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-storage.js";
 
 /* =========================
    FIREBASE CONFIG
@@ -56,7 +594,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-const storage = getStorage(app);          // ← חדש
 const provider = new GoogleAuthProvider();
 
 /* =========================
@@ -70,18 +607,122 @@ let activeSteps = [];
 let activeStepIndex = 0;
 let timerInterval = null;
 let remainingSeconds = 0;
-let currentRoutineImage = "";          // עכשיו זה יהיה URL או base64 זמני
-let stepImages = new Map();            // key = stepId, value = base64 זמני או URL
+let currentRoutineImage = "";
+let stepImages = new Map();
 
 /* =========================
-   AUTH + LOAD + RENDER
-   (אותם פונקציות כמו קודם – לא שיניתי)
+   AUTH
 ========================= */
-// ... העתק את כל הפונקציות של Auth, loadRoutines, renderRoutines,
-// copyRoutineLink, openRoutineFromLink, showDirectRoutine וכו' בדיוק כמו שהיו ...
+document.getElementById("loginBtn").addEventListener("click", async () => {
+  try {
+    await signInWithPopup(auth, provider);
+  } catch (error) {
+    console.error(error);
+    alert("ההתחברות נכשלה:\n\n" + error.message);
+  }
+});
+
+document.getElementById("logoutBtn").addEventListener("click", async () => {
+  await signOut(auth);
+});
 
 /* =========================
-   IMAGE COMPRESSION (נשאר)
+   AUTH STATE
+========================= */
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    currentUser = user;
+    document.getElementById("loginScreen").style.display = "none";
+    document.getElementById("app").style.display = "block";
+    document.getElementById("userInfo").textContent = user.displayName || user.email;
+    await loadRoutines();
+  } else {
+    currentUser = null;
+    document.getElementById("loginScreen").style.display = "flex";
+    document.getElementById("app").style.display = "none";
+  }
+});
+
+/* =========================
+   LOAD ROUTINES
+========================= */
+async function loadRoutines() {
+  const list = document.getElementById("routineList");
+  list.innerHTML = "טוען...";
+  try {
+    const ref = collection(db, "users", currentUser.uid, "routines");
+    const snapshot = await getDocs(ref);
+    routines = [];
+    snapshot.forEach(item => {
+      routines.push({
+        id: item.id,
+        ...item.data()
+      });
+    });
+    renderRoutines();
+    openRoutineFromLink();
+  } catch (error) {
+    console.error(error);
+    list.innerHTML = `
+      <div class="empty">
+        לא ניתן לטעון את השגרות.<br><br>
+        ${escapeHtml(error.message)}
+      </div>
+    `;
+  }
+}
+
+/* =========================
+   RENDER ROUTINES
+========================= */
+function renderRoutines() {
+  const list = document.getElementById("routineList");
+  list.innerHTML = "";
+  if (routines.length === 0) {
+    list.innerHTML = `
+      <div class="empty">
+        עדיין אין לך שגרות.<br>
+        לחץ על "+ Routine חדש".
+      </div>
+    `;
+    return;
+  }
+  routines.forEach(routine => {
+    const card = document.createElement("div");
+    card.className = "routine-card";
+    const todaySteps = getTodaySteps(routine);
+    let imageHtml = "";
+    if (routine.image) {
+      imageHtml = `
+        <img class="routine-image" src="${routine.image}" alt="">
+      `;
+    }
+    card.innerHTML = `
+      ${imageHtml}
+      <h3>${escapeHtml(routine.name)}</h3>
+      <div class="routine-info">
+        ${routine.steps?.length || 0} Steps
+      </div>
+      <div class="today-info">
+        להיום: <strong>${todaySteps.length}</strong> Steps
+      </div>
+      <div class="actions">
+        <button class="primary start">התחל</button>
+        <button class="secondary edit">ערוך</button>
+        <button class="secondary share">🔗 העתק קישור</button>
+        <button class="danger delete">מחק</button>
+      </div>
+    `;
+    card.querySelector(".start").addEventListener("click", () => startRoutine(routine));
+    card.querySelector(".edit").addEventListener("click", () => openEditor(routine));
+    card.querySelector(".share").addEventListener("click", () => copyRoutineLink(routine.id));
+    card.querySelector(".delete").addEventListener("click", () => deleteRoutine(routine.id));
+    list.appendChild(card);
+  });
+}
+
+/* =========================
+   IMAGE COMPRESSION - דחיסה חזקה מאוד
 ========================= */
 function compressImage(file) {
   return new Promise((resolve, reject) => {
@@ -89,11 +730,11 @@ function compressImage(file) {
     reader.onload = event => {
       const img = new Image();
       img.onload = () => {
-        const maxWidth = 900;
+        const maxWidth = 600; // דחיסה חזקה
         let width = img.width;
         let height = img.height;
         if (width > maxWidth) {
-          height = height * maxWidth / width;
+          height = Math.round(height * maxWidth / width);
           width = maxWidth;
         }
         const canvas = document.createElement("canvas");
@@ -101,7 +742,9 @@ function compressImage(file) {
         canvas.height = height;
         const ctx = canvas.getContext("2d");
         ctx.drawImage(img, 0, 0, width, height);
-        resolve(canvas.toDataURL("image/jpeg", 0.65));
+        // איכות נמוכה מאוד כדי לחסוך מקום
+        const result = canvas.toDataURL("image/jpeg", 0.4);
+        resolve(result);
       };
       img.onerror = reject;
       img.src = event.target.result;
@@ -112,31 +755,287 @@ function compressImage(file) {
 }
 
 /* =========================
-   UPLOAD TO STORAGE (חדש)
+   ROUTINE IMAGE INPUT
 ========================= */
-async function uploadImage(base64, path) {
-  if (!base64 || !base64.startsWith("data:")) {
-    return base64; // כבר URL
+document.getElementById("routineImageInput").addEventListener("change", async event => {
+  const file = event.target.files[0];
+  if (!file) return;
+  try {
+    currentRoutineImage = await compressImage(file);
+    showRoutineImagePreview();
+  } catch (error) {
+    console.error(error);
+    alert("לא ניתן לקרוא את התמונה.");
   }
-  const storageRef = ref(storage, path);
-  await uploadString(storageRef, base64, "data_url");
-  return await getDownloadURL(storageRef);
+});
+
+/* =========================
+   ROUTINE IMAGE PREVIEW
+========================= */
+function showRoutineImagePreview() {
+  const preview = document.getElementById("routineImagePreview");
+  preview.innerHTML = "";
+  if (!currentRoutineImage) return;
+  const img = document.createElement("img");
+  img.src = currentRoutineImage;
+  img.alt = "";
+  const remove = document.createElement("button");
+  remove.className = "remove-image";
+  remove.textContent = "🗑 מחק תמונה";
+  remove.addEventListener("click", () => {
+    currentRoutineImage = "";
+    document.getElementById("routineImageInput").value = "";
+    showRoutineImagePreview();
+  });
+  preview.appendChild(img);
+  preview.appendChild(remove);
 }
 
 /* =========================
-   ROUTINE IMAGE INPUT + PREVIEW
-   (אותם כמו קודם)
+   COPY ROUTINE LINK
 ========================= */
-// ... העתק את event listener של routineImageInput ואת showRoutineImagePreview ...
+async function copyRoutineLink(routineId) {
+  const url = window.location.origin + window.location.pathname + "?routine=" + encodeURIComponent(routineId);
+  try {
+    await navigator.clipboard.writeText(url);
+    alert("הקישור הועתק!");
+  } catch (error) {
+    prompt("העתק את הקישור:", url);
+  }
+}
 
 /* =========================
-   ADD STEP + STEP IMAGE
-   (אותם כמו קודם)
+   OPEN ROUTINE FROM LINK
 ========================= */
-// ... העתק את addStep ו-showStepImagePreview ...
+function openRoutineFromLink() {
+  const params = new URLSearchParams(window.location.search);
+  const routineId = params.get("routine");
+  if (!routineId) return;
+  const routine = routines.find(item => item.id === routineId);
+  if (!routine) {
+    alert("ה-Routine לא נמצא בחשבון הזה.");
+    return;
+  }
+  showDirectRoutine(routine);
+}
 
 /* =========================
-   SAVE ROUTINE – החלק החשוב שהשתנה
+   SHOW DIRECT ROUTINE
+========================= */
+function showDirectRoutine(routine) {
+  document.getElementById("routineListScreen").style.display = "none";
+  document.getElementById("editorScreen").classList.add("hidden");
+  document.getElementById("activeScreen").style.display = "none";
+  document.getElementById("directRoutineScreen").style.display = "block";
+  document.getElementById("directRoutineName").textContent = routine.name;
+  const routineImage = document.getElementById("directRoutineImage");
+  if (routine.image) {
+    routineImage.src = routine.image;
+    routineImage.classList.remove("hidden");
+  } else {
+    routineImage.src = "";
+    routineImage.classList.add("hidden");
+  }
+  const stepsContainer = document.getElementById("directRoutineSteps");
+  stepsContainer.innerHTML = "";
+  const todaySteps = getTodaySteps(routine);
+  if (todaySteps.length === 0) {
+    stepsContainer.innerHTML = `
+      <div class="empty">
+        אין Steps פעילים להיום.
+      </div>
+    `;
+  } else {
+    todaySteps
+      .sort((a, b) => Number(a.order || 0) - Number(b.order || 0))
+      .forEach((step, index) => {
+        const div = document.createElement("div");
+        div.className = "direct-step";
+        let imageHtml = "";
+        if (step.image) {
+          imageHtml = `
+            <img class="direct-step-image" src="${step.image}" alt="">
+          `;
+        }
+        div.innerHTML = `
+          <strong>Step ${index + 1}</strong><br>
+          ${escapeHtml(step.name)}
+          ${imageHtml}
+        `;
+        stepsContainer.appendChild(div);
+      });
+  }
+  document.getElementById("directStartBtn").onclick = () => startRoutine(routine);
+}
+
+/* =========================
+   DIRECT BACK
+========================= */
+document.getElementById("directBackBtn").addEventListener("click", () => {
+  const url = window.location.origin + window.location.pathname;
+  window.history.replaceState({}, "", url);
+  document.getElementById("directRoutineScreen").style.display = "none";
+  document.getElementById("routineListScreen").style.display = "block";
+});
+
+/* =========================
+   NEW ROUTINE
+========================= */
+document.getElementById("newRoutineBtn").addEventListener("click", () => openEditor(null));
+
+/* =========================
+   OPEN EDITOR
+========================= */
+function openEditor(routine) {
+  document.getElementById("routineListScreen").style.display = "none";
+  document.getElementById("directRoutineScreen").style.display = "none";
+  document.getElementById("editorScreen").classList.remove("hidden");
+  editingRoutineId = routine ? routine.id : null;
+  document.getElementById("editorTitle").textContent = routine ? "עריכת Routine" : "Routine חדש";
+  document.getElementById("routineName").value = routine ? routine.name : "";
+  currentRoutineImage = routine?.image || "";
+  document.getElementById("routineImageInput").value = "";
+  showRoutineImagePreview();
+  document.querySelectorAll(".days input").forEach(checkbox => {
+    checkbox.checked = routine ? (routine.days || []).includes(Number(checkbox.value)) : false;
+  });
+  stepImages = new Map();
+  const container = document.getElementById("stepsContainer");
+  container.innerHTML = "";
+  if (routine && routine.steps) {
+    routine.steps.forEach(step => addStep(step));
+  }
+}
+
+/* =========================
+   ADD STEP
+========================= */
+document.getElementById("addStepBtn").addEventListener("click", () => addStep());
+
+function addStep(step = null) {
+  const container = document.getElementById("stepsContainer");
+  const stepId = crypto.randomUUID();
+  const div = document.createElement("div");
+  div.className = "step";
+  div.dataset.stepId = stepId;
+  const existingImage = step?.image || "";
+  if (existingImage) {
+    stepImages.set(stepId, existingImage);
+  }
+  div.innerHTML = `
+    <div class="step-title">
+      <strong>Step ${container.children.length + 1}</strong>
+      <button class="danger remove">מחק</button>
+    </div>
+    <div class="form-group">
+      <label>שם ה-Step</label>
+      <input class="step-name" type="text" placeholder="לדוגמה: לשתות מים" value="${step ? escapeAttr(step.name) : ""}">
+    </div>
+    <!-- STEP IMAGE -->
+    <div class="form-group image-upload">
+      <label>תמונה ל-Step</label>
+      <input class="image-input step-image-input" type="file" accept="image/*">
+      <div class="step-image-preview image-preview"></div>
+    </div>
+    <div class="step-grid">
+      <div>
+        <label>משך בשניות</label>
+        <input class="step-duration" type="number" min="1" value="${step ? step.duration : 60}">
+      </div>
+      <div>
+        <label>תדירות</label>
+        <select class="frequency">
+          <option value="1">כל יום</option>
+          <option value="2">כל יומיים</option>
+          <option value="3">כל 3 ימים</option>
+          <option value="7">כל 7 ימים</option>
+          <option value="custom">כל X ימים</option>
+        </select>
+      </div>
+    </div>
+    <div class="custom-days">
+      <label>כל כמה ימים?</label>
+      <input class="custom-value" type="number" min="1" value="2">
+    </div>
+    <!-- START DATE -->
+    <div class="step-start-date">
+      <label>תאריך התחלת ה-Step</label>
+      <input class="step-start-date-input" type="date" value="${step && step.startDate ? escapeAttr(step.startDate) : getTodayDate()}">
+      <small>התדירות של ה-Step מתחילה להיספר מתאריך זה.</small>
+    </div>
+  `;
+  container.appendChild(div);
+  showStepImagePreview(div);
+  const imageInput = div.querySelector(".step-image-input");
+  imageInput.addEventListener("change", async event => {
+    const file = event.target.files[0];
+    if (!file) return;
+    try {
+      const image = await compressImage(file);
+      stepImages.set(stepId, image);
+      showStepImagePreview(div);
+    } catch (error) {
+      console.error(error);
+      alert("לא ניתן לקרוא את התמונה.");
+    }
+  });
+  const frequency = div.querySelector(".frequency");
+  const custom = div.querySelector(".custom-days");
+  if (step) {
+    const saved = String(step.frequency || "1");
+    if (["1", "2", "3", "7"].includes(saved)) {
+      frequency.value = saved;
+    } else {
+      frequency.value = "custom";
+      custom.style.display = "block";
+      div.querySelector(".custom-value").value = saved;
+    }
+  }
+  frequency.addEventListener("change", () => {
+    custom.style.display = frequency.value === "custom" ? "block" : "none";
+  });
+  div.querySelector(".remove").addEventListener("click", () => {
+    stepImages.delete(stepId);
+    div.remove();
+    renumberSteps();
+  });
+}
+
+/* =========================
+   STEP IMAGE PREVIEW
+========================= */
+function showStepImagePreview(div) {
+  const preview = div.querySelector(".step-image-preview");
+  const stepId = div.dataset.stepId;
+  const image = stepImages.get(stepId);
+  preview.innerHTML = "";
+  if (!image) return;
+  const img = document.createElement("img");
+  img.src = image;
+  img.alt = "";
+  const remove = document.createElement("button");
+  remove.className = "remove-image";
+  remove.textContent = "🗑 מחק תמונה";
+  remove.addEventListener("click", () => {
+    stepImages.delete(stepId);
+    div.querySelector(".step-image-input").value = "";
+    showStepImagePreview(div);
+  });
+  preview.appendChild(img);
+  preview.appendChild(remove);
+}
+
+/* =========================
+   RENUMBER STEPS
+========================= */
+function renumberSteps() {
+  document.querySelectorAll(".step").forEach((step, index) => {
+    step.querySelector("strong").textContent = "Step " + (index + 1);
+  });
+}
+
+/* =========================
+   SAVE ROUTINE
 ========================= */
 document.getElementById("saveRoutineBtn").addEventListener("click", saveRoutine);
 
@@ -146,14 +1045,9 @@ async function saveRoutine() {
     alert("כתוב שם ל-Routine.");
     return;
   }
-
-  const days = [...document.querySelectorAll(".days input:checked")]
-    .map(box => Number(box.value));
-
+  const days = [...document.querySelectorAll(".days input:checked")].map(box => Number(box.value));
+  const steps = [];
   const stepElements = document.querySelectorAll(".step");
-  const stepsData = [];
-
-  // קודם אוספים את כל הנתונים (בלי להעלות עדיין)
   for (let index = 0; index < stepElements.length; index++) {
     const div = stepElements[index];
     const stepName = div.querySelector(".step-name").value.trim();
@@ -161,10 +1055,10 @@ async function saveRoutine() {
       alert(`כתוב שם ל-Step ${index + 1}.`);
       return;
     }
-
     const duration = Number(div.querySelector(".step-duration").value);
-    let finalFrequency = div.querySelector(".frequency").value;
-    if (finalFrequency === "custom") {
+    const frequency = div.querySelector(".frequency").value;
+    let finalFrequency = frequency;
+    if (frequency === "custom") {
       finalFrequency = div.querySelector(".custom-value").value;
     }
     const startDate = div.querySelector(".step-start-date-input").value;
@@ -177,68 +1071,42 @@ async function saveRoutine() {
       alert(`התדירות של Step ${index + 1} אינה תקינה.`);
       return;
     }
-
-    stepsData.push({
+    const stepImage = stepImages.get(div.dataset.stepId) || "";
+    steps.push({
       name: stepName,
+      image: stepImage,
       duration: duration > 0 ? duration : 60,
       frequency: numericFrequency,
-      startDate,
-      order: index,
-      tempImage: stepImages.get(div.dataset.stepId) || "",
-      stepId: div.dataset.stepId
+      startDate: startDate,
+      order: index
     });
   }
+  const data = {
+    name,
+    image: currentRoutineImage || "",
+    days,
+    steps,
+    updatedAt: new Date().toISOString()
+  };
 
-  // כפתור שמור – ננעל כדי למנוע לחיצות כפולות
+  // בדיקת גודל - כדי למנוע כשלון
+  const estimatedSize = JSON.stringify(data).length;
+  if (estimatedSize > 900000) {
+    alert("התמונות גדולות מדי (קרוב למגבלת 1MB).\n\nמחק חלק מהתמונות או בחר תמונות קטנות יותר.");
+    return;
+  }
+
   const saveBtn = document.getElementById("saveRoutineBtn");
   saveBtn.disabled = true;
   saveBtn.textContent = "שומר...";
 
   try {
-    // 1. מעלים את תמונת ה-Routine (אם יש)
-    let routineImageUrl = currentRoutineImage;
-    if (currentRoutineImage && currentRoutineImage.startsWith("data:")) {
-      const path = `users/${currentUser.uid}/routines/${crypto.randomUUID()}.jpg`;
-      routineImageUrl = await uploadImage(currentRoutineImage, path);
-    }
-
-    // 2. מעלים תמונות של ה-Steps
-    const steps = [];
-    for (const s of stepsData) {
-      let imageUrl = s.tempImage;
-      if (s.tempImage && s.tempImage.startsWith("data:")) {
-        const path = `users/${currentUser.uid}/steps/${s.stepId}.jpg`;
-        imageUrl = await uploadImage(s.tempImage, path);
-      }
-      steps.push({
-        name: s.name,
-        image: imageUrl || "",
-        duration: s.duration,
-        frequency: s.frequency,
-        startDate: s.startDate,
-        order: s.order
-      });
-    }
-
-    const data = {
-      name,
-      image: routineImageUrl || "",
-      days,
-      steps,
-      updatedAt: new Date().toISOString()
-    };
-
-    const refCol = collection(db, "users", currentUser.uid, "routines");
-
+    const ref = collection(db, "users", currentUser.uid, "routines");
     if (editingRoutineId) {
-      await updateDoc(
-        doc(db, "users", currentUser.uid, "routines", editingRoutineId),
-        data
-      );
+      await updateDoc(doc(db, "users", currentUser.uid, "routines", editingRoutineId), data);
     } else {
-      await addDoc(refCol, data);
+      await addDoc(ref, data);
     }
-
     closeEditor();
     await loadRoutines();
     alert("ה-Routine נשמר!");
@@ -252,11 +1120,139 @@ async function saveRoutine() {
 }
 
 /* =========================
-   שאר הפונקציות (closeEditor, delete, getTodaySteps, startRoutine, showStep, timer וכו')
-   נשארות בדיוק כמו במקור
+   CLOSE EDITOR
 ========================= */
-// ... העתק את כל השאר ...
+document.getElementById("cancelEditorBtn").addEventListener("click", closeEditor);
 
-</script>
-</body>
-</html>
+function closeEditor() {
+  document.getElementById("editorScreen").classList.add("hidden");
+  document.getElementById("routineListScreen").style.display = "block";
+  editingRoutineId = null;
+  currentRoutineImage = "";
+  stepImages = new Map();
+}
+
+/* =========================
+   DELETE ROUTINE
+========================= */
+async function deleteRoutine(id) {
+  if (!confirm("למחוק את ה-Routine?")) return;
+  try {
+    await deleteDoc(doc(db, "users", currentUser.uid, "routines", id));
+    await loadRoutines();
+  } catch (error) {
+    console.error(error);
+    alert("המחיקה נכשלה.");
+  }
+}
+
+/* =========================
+   TODAY STEPS
+========================= */
+function getTodaySteps(routine) {
+  if (!routine.steps || routine.steps.length === 0) return [];
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const todayDay = today.getDay();
+  if (routine.days && routine.days.length > 0 && !routine.days.includes(todayDay)) {
+    return [];
+  }
+  return routine.steps.filter(step => {
+    if (!step.startDate) return false;
+    const start = parseDate(step.startDate);
+    start.setHours(0, 0, 0, 0);
+    const difference = Math.floor((today.getTime() - start.getTime()) / 86400000);
+    if (difference < 0) return false;
+    const frequency = Number(step.frequency || 1);
+    return difference % frequency === 0;
+  });
+}
+
+/* =========================
+   START ROUTINE
+========================= */
+function startRoutine(routine) {
+  const todaySteps = getTodaySteps(routine);
+  if (todaySteps.length === 0) {
+    alert("אין Steps של ה-Routine הזה להיום.");
+    return;
+  }
+  todaySteps.sort((a, b) => Number(a.order || 0) - Number(b.order || 0));
+  activeRoutine = routine;
+  activeSteps = todaySteps;
+  activeStepIndex = 0;
+  document.getElementById("routineListScreen").style.display = "none";
+  document.getElementById("directRoutineScreen").style.display = "none";
+  document.getElementById("activeScreen").style.display = "block";
+  document.getElementById("activeRoutineName").textContent = routine.name;
+  showStep();
+}
+
+/* =========================
+   SHOW STEP
+========================= */
+function showStep() {
+  clearInterval(timerInterval);
+  if (activeStepIndex >= activeSteps.length) {
+    alert("ה-Routine הושלם!");
+    exitRoutine();
+    return;
+  }
+  const step = activeSteps[activeStepIndex];
+  document.getElementById("activeStepName").textContent = step.name;
+  const image = document.getElementById("activeStepImage");
+  if (step.image) {
+    image.src = step.image;
+    image.classList.remove("hidden");
+  } else {
+    image.src = "";
+    image.classList.add("hidden");
+  }
+  remainingSeconds = Number(step.duration);
+  updateTimer();
+  timerInterval = setInterval(() => {
+    remainingSeconds--;
+    updateTimer();
+    if (remainingSeconds <= 0) {
+      clearInterval(timerInterval);
+    }
+  }, 1000);
+}
+
+/* =========================
+   TIMER
+========================= */
+function updateTimer() {
+  const minutes = Math.floor(remainingSeconds / 60);
+  const seconds = remainingSeconds % 60;
+  document.getElementById("timer").textContent =
+    String(minutes).padStart(2, "0") + ":" + String(seconds).padStart(2, "0");
+}
+
+/* =========================
+   DONE
+========================= */
+document.getElementById("doneStepBtn").addEventListener("click", () => {
+  activeStepIndex++;
+  showStep();
+});
+
+/* =========================
+   EXIT
+========================= */
+document.getElementById("exitActiveBtn").addEventListener("click", exitRoutine);
+
+function exitRoutine() {
+  clearInterval(timerInterval);
+  document.getElementById("activeScreen").style.display = "none";
+  document.getElementById("directRoutineScreen").style.display = "none";
+  document.getElementById("routineListScreen").style.display = "block";
+  activeRoutine = null;
+  activeSteps = [];
+}
+
+/* =========================
+   DATE FUNCTIONS
+========================= */
+function getTodayDate() {
+  const 
