@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-
 <html lang="he" dir="rtl">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +8,7 @@
   <title>Routine</title>
 
   <style>
+
     * {
       box-sizing: border-box;
     }
@@ -106,10 +107,10 @@
       gap: 13px;
       box-shadow: 0 8px 30px rgba(0,0,0,.04);
 
-      /* תמיד בפינה השמאלית העליונה */
+      /* מעט יותר ימינה */
       position: absolute;
       top: 24px;
-      left: 20px;
+      left: 38px;
       z-index: 20;
     }
 
@@ -397,14 +398,15 @@
 
     /* =========================
        ACTIVE ROUTINE
-       ה-STEP למעלה בצד ימין
     ========================= */
 
     #activeScreen {
       display: none;
       width: 100%;
       min-height: auto;
-      padding: 0;
+      padding-top: 185px;
+      padding-right: 20px;
+      padding-left: 20px;
     }
 
     .active-box {
@@ -417,8 +419,6 @@
       text-align: center;
       box-shadow: 0 10px 35px rgba(0,0,0,0.06);
     }
-
-    /* שם ה-Routine נמצא למעלה בתוך חלונית ה-Step */
 
     #activeRoutineName {
       margin: 0 0 8px;
@@ -553,7 +553,9 @@
         padding: 14px 16px;
         border-radius: 18px;
         top: 15px;
-        left: 12px;
+
+        /* מעט יותר ימינה */
+        left: 25px;
       }
 
       header h1 {
@@ -571,7 +573,9 @@
       }
 
       #activeScreen {
-        padding: 0;
+        padding-top: 170px;
+        padding-left: 12px;
+        padding-right: 12px;
       }
 
       .active-box {
@@ -619,6 +623,7 @@
         align-items: flex-start;
         flex-direction: column;
       }
+
     }
 
     /* =========================
@@ -630,6 +635,10 @@
       .active-box {
         width: calc(100% - 150px);
         padding: 13px 10px 18px;
+      }
+
+      #activeScreen {
+        padding-top: 160px;
       }
 
       .active-step-image {
@@ -648,6 +657,7 @@
       #activeRoutineName {
         font-size: 15px;
       }
+
     }
 
   </style>
@@ -664,21 +674,20 @@
 
   <div class="login-box">
 
-```
-<h1>Routine</h1>
+    <h1>Routine</h1>
 
-<p>
-  התחבר כדי להיכנס למערכת שלך
-</p>
+    <p>
+      התחבר כדי להיכנס למערכת שלך
+    </p>
 
-<button id="loginBtn" class="google-btn">
-  כניסה עם Google
-</button>
-```
+    <button id="loginBtn" class="google-btn">
+      כניסה עם Google
+    </button>
 
   </div>
 
 </div>
+
 
 <!-- =========================
      APP
@@ -688,253 +697,255 @@
 
   <div class="container">
 
-```
-<!-- HEADER - שמאל למעלה -->
+    <!-- HEADER -->
 
-<header>
+    <header>
 
-  <div>
+      <div>
 
-    <h1>Routine</h1>
+        <h1>Routine</h1>
 
-    <div id="userInfo"></div>
+        <div id="userInfo"></div>
 
-  </div>
+      </div>
 
-  <button id="logoutBtn" class="logout-btn">
-    התנתק
-  </button>
-
-</header>
-
-
-<!-- =========================
-     ROUTINE LIST
-========================= -->
-
-<div id="routineListScreen">
-
-  <div class="card">
-
-    <div class="top-row">
-
-      <h2>
-        השגרות שלי
-      </h2>
-
-      <button id="newRoutineBtn" class="primary">
-        + Routine חדש
+      <button id="logoutBtn" class="logout-btn">
+        התנתק
       </button>
 
-    </div>
-
-    <div id="routineList"></div>
-
-  </div>
-
-</div>
+    </header>
 
 
-<!-- =========================
-     EDITOR
-========================= -->
+    <!-- =========================
+         ROUTINE LIST
+    ========================= -->
 
-<div id="editorScreen" class="hidden">
+    <div id="routineListScreen">
 
-  <div class="card">
+      <div class="card">
 
-    <h2 id="editorTitle">
-      Routine חדש
-    </h2>
+        <div class="top-row">
 
-    <div class="form-group">
+          <h2>
+            השגרות שלי
+          </h2>
 
-      <label>
-        שם ה-Routine
-      </label>
+          <button id="newRoutineBtn" class="primary">
+            + Routine חדש
+          </button>
 
-      <input
-        id="routineName"
-        type="text"
-        placeholder="לדוגמה: בוקר"
-      >
+        </div>
 
-    </div>
-
-    <div class="form-group image-upload">
-
-      <label>
-        תמונה ל-Routine
-      </label>
-
-      <input
-        id="routineImageInput"
-        class="image-input"
-        type="file"
-        accept="image/*"
-      >
-
-      <div
-        id="routineImagePreview"
-        class="image-preview">
-      </div>
-
-    </div>
-
-    <div class="form-group">
-
-      <label>
-        באילו ימים ה-Routine פעיל?
-      </label>
-
-      <div class="days">
-
-        <label class="day">
-          <input type="checkbox" value="0">
-          <span>א׳</span>
-        </label>
-
-        <label class="day">
-          <input type="checkbox" value="1">
-          <span>ב׳</span>
-        </label>
-
-        <label class="day">
-          <input type="checkbox" value="2">
-          <span>ג׳</span>
-        </label>
-
-        <label class="day">
-          <input type="checkbox" value="3">
-          <span>ד׳</span>
-        </label>
-
-        <label class="day">
-          <input type="checkbox" value="4">
-          <span>ה׳</span>
-        </label>
-
-        <label class="day">
-          <input type="checkbox" value="5">
-          <span>ו׳</span>
-        </label>
-
-        <label class="day">
-          <input type="checkbox" value="6">
-          <span>ש׳</span>
-        </label>
+        <div id="routineList"></div>
 
       </div>
 
     </div>
 
-    <h2>
-      Steps
-    </h2>
 
-    <div id="stepsContainer"></div>
+    <!-- =========================
+         EDITOR
+    ========================= -->
 
-    <button
-      id="addStepBtn"
-      class="secondary">
-      + הוסף Step
-    </button>
+    <div id="editorScreen" class="hidden">
 
-    <br>
-    <br>
+      <div class="card">
 
-    <button
-      id="saveRoutineBtn"
-      class="primary">
-      שמור
-    </button>
+        <h2 id="editorTitle">
+          Routine חדש
+        </h2>
 
-    <button
-      id="cancelEditorBtn"
-      class="secondary">
-      ביטול
-    </button>
+        <div class="form-group">
 
-  </div>
+          <label>
+            שם ה-Routine
+          </label>
 
-</div>
+          <input
+            id="routineName"
+            type="text"
+            placeholder="לדוגמה: בוקר"
+          >
+
+        </div>
 
 
-<!-- =========================
-     DIRECT ROUTINE
-========================= -->
+        <div class="form-group image-upload">
 
-<div id="directRoutineScreen">
+          <label>
+            תמונה ל-Routine
+          </label>
 
-  <div class="direct-routine-box">
+          <input
+            id="routineImageInput"
+            class="image-input"
+            type="file"
+            accept="image/*"
+          >
 
-    <img
-      id="directRoutineImage"
-      class="direct-routine-image hidden"
-    >
+          <div
+            id="routineImagePreview"
+            class="image-preview">
+          </div>
 
-    <h1 id="directRoutineName"></h1>
-
-    <div id="directRoutineSteps"></div>
-
-    <br>
-
-    <button
-      id="directStartBtn"
-      class="primary">
-      התחל Routine
-    </button>
-
-    <button
-      id="directBackBtn"
-      class="secondary">
-      חזרה לשגרות
-    </button>
-
-  </div>
-
-</div>
+        </div>
 
 
-<!-- =========================
-     ACTIVE ROUTINE
-========================= -->
+        <div class="form-group">
 
-<div id="activeScreen">
+          <label>
+            באילו ימים ה-Routine פעיל?
+          </label>
 
-  <div class="active-box">
+          <div class="days">
 
-    <h1 id="activeRoutineName"></h1>
+            <label class="day">
+              <input type="checkbox" value="0">
+              <span>א׳</span>
+            </label>
 
-    <img
-      id="activeStepImage"
-      class="active-step-image hidden"
-    >
+            <label class="day">
+              <input type="checkbox" value="1">
+              <span>ב׳</span>
+            </label>
 
-    <div id="activeStepName"></div>
+            <label class="day">
+              <input type="checkbox" value="2">
+              <span>ג׳</span>
+            </label>
 
-    <div id="timer">
-      00:00
+            <label class="day">
+              <input type="checkbox" value="3">
+              <span>ד׳</span>
+            </label>
+
+            <label class="day">
+              <input type="checkbox" value="4">
+              <span>ה׳</span>
+            </label>
+
+            <label class="day">
+              <input type="checkbox" value="5">
+              <span>ו׳</span>
+            </label>
+
+            <label class="day">
+              <input type="checkbox" value="6">
+              <span>ש׳</span>
+            </label>
+
+          </div>
+
+        </div>
+
+
+        <h2>
+          Steps
+        </h2>
+
+        <div id="stepsContainer"></div>
+
+        <button
+          id="addStepBtn"
+          class="secondary">
+          + הוסף Step
+        </button>
+
+        <br>
+        <br>
+
+        <button
+          id="saveRoutineBtn"
+          class="primary">
+          שמור
+        </button>
+
+        <button
+          id="cancelEditorBtn"
+          class="secondary">
+          ביטול
+        </button>
+
+      </div>
+
     </div>
 
-    <div class="long-press-hint">
-      נגיעה בתמונה מסמנת את ה-Step כבוצע
+
+    <!-- =========================
+         DIRECT ROUTINE
+    ========================= -->
+
+    <div id="directRoutineScreen">
+
+      <div class="direct-routine-box">
+
+        <img
+          id="directRoutineImage"
+          class="direct-routine-image hidden"
+        >
+
+        <h1 id="directRoutineName"></h1>
+
+        <div id="directRoutineSteps"></div>
+
+        <br>
+
+        <button
+          id="directStartBtn"
+          class="primary">
+          התחל Routine
+        </button>
+
+        <button
+          id="directBackBtn"
+          class="secondary">
+          חזרה לשגרות
+        </button>
+
+      </div>
+
     </div>
 
-    <button
-      id="exitActiveBtn"
-      class="back-btn">
-      יציאה
-    </button>
+
+    <!-- =========================
+         ACTIVE ROUTINE
+    ========================= -->
+
+    <div id="activeScreen">
+
+      <div class="active-box">
+
+        <h1 id="activeRoutineName"></h1>
+
+        <img
+          id="activeStepImage"
+          class="active-step-image hidden"
+        >
+
+        <div id="activeStepName"></div>
+
+        <div id="timer">
+          00:00
+        </div>
+
+        <div class="long-press-hint">
+          נגיעה בתמונה מסמנת את ה-Step כבוצע
+        </div>
+
+        <button
+          id="exitActiveBtn"
+          class="back-btn">
+          יציאה
+        </button>
+
+      </div>
+
+    </div>
 
   </div>
 
 </div>
-```
 
-  </div>
-
-</div>
 
 <script type="module">
 
@@ -978,7 +989,6 @@ const firebaseConfig = {
   appId: "1:709702843873:web:a326854107acb20e6ee6a0",
   measurementId: "G-GC5LS15YEC"
 };
-
 
 const app =
   initializeApp(firebaseConfig);
