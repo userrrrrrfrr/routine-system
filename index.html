@@ -34,6 +34,11 @@
       display: none !important;
     }
 
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
     /* =========================
        LOGIN
     ========================= */
@@ -94,7 +99,6 @@
       padding: 20px;
       border-radius: 20px;
       margin-bottom: 20px;
-
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -157,6 +161,59 @@
       border: 1px solid #ddd;
       padding: 10px 15px;
       border-radius: 10px;
+    }
+
+    /* =========================
+       IMAGES
+    ========================= */
+
+    .image-upload {
+      margin-top: 10px;
+    }
+
+    .image-upload input {
+      padding: 10px;
+    }
+
+    .image-preview {
+      margin-top: 12px;
+      width: 100%;
+      max-width: 300px;
+      border-radius: 15px;
+      overflow: hidden;
+      display: none;
+      border: 1px solid #eee;
+    }
+
+    .image-preview img {
+      width: 100%;
+      max-height: 250px;
+      object-fit: cover;
+    }
+
+    .routine-image {
+      width: 100%;
+      max-height: 220px;
+      object-fit: cover;
+      border-radius: 15px;
+      margin-bottom: 15px;
+    }
+
+    .step-image {
+      width: 100%;
+      max-height: 200px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin-top: 12px;
+    }
+
+    .active-image {
+      width: 100%;
+      max-width: 450px;
+      max-height: 300px;
+      object-fit: cover;
+      border-radius: 18px;
+      margin: 0 auto 25px;
     }
 
     /* =========================
@@ -314,7 +371,7 @@
 
     #activeStepName {
       font-size: 32px;
-      margin: 35px 0 20px;
+      margin: 25px 0 20px;
     }
 
     #timer {
@@ -343,7 +400,7 @@
     }
 
     /* =========================
-       DIRECT ROUTINE PAGE
+       DIRECT ROUTINE
     ========================= */
 
     #directRoutineScreen {
@@ -395,7 +452,6 @@
 
 <body>
 
-
 <!-- =========================
      LOGIN
 ========================= -->
@@ -410,12 +466,8 @@
       התחבר כדי להיכנס למערכת שלך
     </p>
 
-    <button
-      id="loginBtn"
-      class="google-btn">
-
+    <button id="loginBtn" class="google-btn">
       כניסה עם Google
-
     </button>
 
   </div>
@@ -441,18 +493,16 @@
 
       </div>
 
-      <button
-        id="logoutBtn"
-        class="logout-btn">
-
+      <button id="logoutBtn" class="logout-btn">
         התנתק
-
       </button>
 
     </header>
 
 
-    <!-- ROUTINE LIST -->
+    <!-- =========================
+         ROUTINE LIST
+    ========================= -->
 
     <div id="routineListScreen">
 
@@ -464,12 +514,8 @@
             השגרות שלי
           </h2>
 
-          <button
-            id="newRoutineBtn"
-            class="primary">
-
+          <button id="newRoutineBtn" class="primary">
             + Routine חדש
-
           </button>
 
         </div>
@@ -481,11 +527,11 @@
     </div>
 
 
-    <!-- EDITOR -->
+    <!-- =========================
+         EDITOR
+    ========================= -->
 
-    <div
-      id="editorScreen"
-      class="hidden">
+    <div id="editorScreen" class="hidden">
 
       <div class="card">
 
@@ -494,7 +540,7 @@
         </h2>
 
 
-        <!-- NAME -->
+        <!-- ROUTINE NAME -->
 
         <div class="form-group">
 
@@ -506,6 +552,36 @@
             id="routineName"
             type="text"
             placeholder="לדוגמה: בוקר">
+
+        </div>
+
+
+        <!-- ROUTINE IMAGE -->
+
+        <div class="form-group">
+
+          <label>
+            תמונה של ה-Routine
+          </label>
+
+          <div class="image-upload">
+
+            <input
+              id="routineImage"
+              type="file"
+              accept="image/*">
+
+          </div>
+
+          <div
+            id="routineImagePreview"
+            class="image-preview">
+
+            <img
+              id="routineImagePreviewImg"
+              alt="Routine">
+
+          </div>
 
         </div>
 
@@ -568,30 +644,18 @@
 
         <div id="stepsContainer"></div>
 
-        <button
-          id="addStepBtn"
-          class="secondary">
-
+        <button id="addStepBtn" class="secondary">
           + הוסף Step
-
         </button>
 
         <br><br>
 
-        <button
-          id="saveRoutineBtn"
-          class="primary">
-
+        <button id="saveRoutineBtn" class="primary">
           שמור
-
         </button>
 
-        <button
-          id="cancelEditorBtn"
-          class="secondary">
-
+        <button id="cancelEditorBtn" class="secondary">
           ביטול
-
         </button>
 
       </div>
@@ -599,11 +663,15 @@
     </div>
 
 
-    <!-- DIRECT ROUTINE -->
+    <!-- =========================
+         DIRECT ROUTINE
+    ========================= -->
 
     <div id="directRoutineScreen">
 
       <div class="direct-routine-box">
+
+        <div id="directRoutineImageContainer"></div>
 
         <h1 id="directRoutineName"></h1>
 
@@ -611,20 +679,12 @@
 
         <br>
 
-        <button
-          id="directStartBtn"
-          class="primary">
-
+        <button id="directStartBtn" class="primary">
           התחל Routine
-
         </button>
 
-        <button
-          id="directBackBtn"
-          class="secondary">
-
+        <button id="directBackBtn" class="secondary">
           חזרה לשגרות
-
         </button>
 
       </div>
@@ -632,13 +692,19 @@
     </div>
 
 
-    <!-- ACTIVE ROUTINE -->
+    <!-- =========================
+         ACTIVE ROUTINE
+    ========================= -->
 
     <div id="activeScreen">
 
       <div class="active-box">
 
+        <div id="activeRoutineImageContainer"></div>
+
         <h1 id="activeRoutineName"></h1>
+
+        <div id="activeStepImageContainer"></div>
 
         <div id="activeStepName"></div>
 
@@ -646,20 +712,12 @@
           00:00
         </div>
 
-        <button
-          id="doneStepBtn"
-          class="done-btn">
-
+        <button id="doneStepBtn" class="done-btn">
           ✓ בוצע
-
         </button>
 
-        <button
-          id="exitActiveBtn"
-          class="back-btn">
-
+        <button id="exitActiveBtn" class="back-btn">
           יציאה
-
         </button>
 
       </div>
@@ -673,7 +731,6 @@
 
 <script type="module">
 
-
 /* =========================
    FIREBASE IMPORTS
 ========================= */
@@ -684,7 +741,6 @@ import {
 from
 "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 
-
 import {
   getAuth,
   GoogleAuthProvider,
@@ -694,7 +750,6 @@ import {
 }
 from
 "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
-
 
 import {
   getFirestore,
@@ -707,6 +762,15 @@ import {
 }
 from
 "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+import {
+  getStorage,
+  ref,
+  uploadBytes,
+  getDownloadURL
+}
+from
+"https://www.gstatic.com/firebasejs/12.1.0/firebase-storage.js";
 
 
 /* =========================
@@ -742,14 +806,14 @@ const firebaseConfig = {
 const app =
 initializeApp(firebaseConfig);
 
-
 const auth =
 getAuth(app);
-
 
 const db =
 getFirestore(app);
 
+const storage =
+getStorage(app);
 
 const provider =
 new GoogleAuthProvider();
@@ -764,6 +828,8 @@ let currentUser = null;
 let routines = [];
 
 let editingRoutineId = null;
+
+let existingRoutineImageUrl = "";
 
 let activeRoutine = null;
 
@@ -880,10 +946,9 @@ async function loadRoutines() {
   list.innerHTML =
     "טוען...";
 
-
   try {
 
-    const ref =
+    const refCollection =
       collection(
         db,
         "users",
@@ -891,13 +956,12 @@ async function loadRoutines() {
         "routines"
       );
 
-
     const snapshot =
-      await getDocs(ref);
-
+      await getDocs(
+        refCollection
+      );
 
     routines = [];
-
 
     snapshot.forEach(
       item => {
@@ -912,7 +976,6 @@ async function loadRoutines() {
 
       }
     );
-
 
     renderRoutines();
 
@@ -945,9 +1008,7 @@ function renderRoutines() {
       "routineList"
     );
 
-
   list.innerHTML = "";
-
 
   if (routines.length === 0) {
 
@@ -962,7 +1023,6 @@ function renderRoutines() {
 
   }
 
-
   routines.forEach(
     routine => {
 
@@ -971,23 +1031,28 @@ function renderRoutines() {
           "div"
         );
 
-
       card.className =
         "routine-card";
-
 
       const todaySteps =
         getTodaySteps(routine);
 
-
       card.innerHTML = `
 
-        <h3>
-          ${escapeHtml(
-            routine.name
-          )}
-        </h3>
+        ${
+          routine.imageUrl
+            ? `
+              <img
+                class="routine-image"
+                src="${escapeAttr(routine.imageUrl)}"
+                alt="Routine">
+            `
+            : ""
+        }
 
+        <h3>
+          ${escapeHtml(routine.name)}
+        </h3>
 
         <div class="routine-info">
 
@@ -995,7 +1060,6 @@ function renderRoutines() {
           Steps
 
         </div>
-
 
         <div class="today-info">
 
@@ -1007,44 +1071,27 @@ function renderRoutines() {
 
         </div>
 
-
         <div class="actions">
 
-          <button
-            class="primary start">
-
+          <button class="primary start">
             התחל
-
           </button>
 
-
-          <button
-            class="secondary edit">
-
+          <button class="secondary edit">
             ערוך
-
           </button>
 
-
-          <button
-            class="secondary share">
-
+          <button class="secondary share">
             🔗 העתק קישור
-
           </button>
 
-
-          <button
-            class="danger delete">
-
+          <button class="danger delete">
             מחק
-
           </button>
 
         </div>
 
       `;
-
 
       card
       .querySelector(".start")
@@ -1053,14 +1100,12 @@ function renderRoutines() {
         () => startRoutine(routine)
       );
 
-
       card
       .querySelector(".edit")
       .addEventListener(
         "click",
         () => openEditor(routine)
       );
-
 
       card
       .querySelector(".share")
@@ -1069,14 +1114,12 @@ function renderRoutines() {
         () => copyRoutineLink(routine.id)
       );
 
-
       card
       .querySelector(".delete")
       .addEventListener(
         "click",
         () => deleteRoutine(routine.id)
       );
-
 
       list.appendChild(card);
 
@@ -1100,13 +1143,11 @@ async function copyRoutineLink(routineId) {
       routineId
     );
 
-
   try {
 
     await navigator.clipboard.writeText(
       url
     );
-
 
     alert(
       "הקישור הועתק!"
@@ -1137,24 +1178,18 @@ function openRoutineFromLink() {
       window.location.search
     );
 
-
   const routineId =
     params.get("routine");
 
-
   if (!routineId) {
-
     return;
-
   }
-
 
   const routine =
     routines.find(
       item =>
         item.id === routineId
     );
-
 
   if (!routine) {
 
@@ -1165,7 +1200,6 @@ function openRoutineFromLink() {
     return;
 
   }
-
 
   showDirectRoutine(routine);
 
@@ -1185,7 +1219,6 @@ function showDirectRoutine(routine) {
   .style.display =
     "none";
 
-
   document
   .getElementById(
     "editorScreen"
@@ -1194,7 +1227,6 @@ function showDirectRoutine(routine) {
     "hidden"
   );
 
-
   document
   .getElementById(
     "activeScreen"
@@ -1202,13 +1234,28 @@ function showDirectRoutine(routine) {
   .style.display =
     "none";
 
-
   document
   .getElementById(
     "directRoutineScreen"
   )
   .style.display =
     "block";
+
+
+  const imageContainer =
+    document.getElementById(
+      "directRoutineImageContainer"
+    );
+
+  imageContainer.innerHTML =
+    routine.imageUrl
+      ? `
+        <img
+          class="routine-image"
+          src="${escapeAttr(routine.imageUrl)}"
+          alt="Routine">
+      `
+      : "";
 
 
   document
@@ -1223,7 +1270,6 @@ function showDirectRoutine(routine) {
     document.getElementById(
       "directRoutineSteps"
     );
-
 
   stepsContainer.innerHTML = "";
 
@@ -1258,10 +1304,8 @@ function showDirectRoutine(routine) {
             "div"
           );
 
-
         div.className =
           "direct-step";
-
 
         div.innerHTML = `
 
@@ -1269,14 +1313,24 @@ function showDirectRoutine(routine) {
             Step ${index + 1}
           </strong>
 
+          <br><br>
+
+          ${
+            step.imageUrl
+              ? `
+                <img
+                  class="step-image"
+                  src="${escapeAttr(step.imageUrl)}"
+                  alt="Step">
+              `
+              : ""
+          }
+
           <br>
 
-          ${escapeHtml(
-            step.name
-          )}
+          ${escapeHtml(step.name)}
 
         `;
-
 
         stepsContainer.appendChild(
           div
@@ -1314,13 +1368,11 @@ document
       window.location.origin +
       window.location.pathname;
 
-
     window.history.replaceState(
       {},
       "",
       url
     );
-
 
     document
     .getElementById(
@@ -1328,7 +1380,6 @@ document
     )
     .style.display =
       "none";
-
 
     document
     .getElementById(
@@ -1354,6 +1405,35 @@ document
 
 
 /* =========================
+   ROUTINE IMAGE PREVIEW
+========================= */
+
+document
+.getElementById(
+  "routineImage"
+)
+.addEventListener(
+  "change",
+  event => {
+
+    const file =
+      event.target.files[0];
+
+    if (!file) {
+      return;
+    }
+
+    showImagePreview(
+      file,
+      "routineImagePreview",
+      "routineImagePreviewImg"
+    );
+
+  }
+);
+
+
+/* =========================
    OPEN EDITOR
 ========================= */
 
@@ -1366,14 +1446,12 @@ function openEditor(routine) {
   .style.display =
     "none";
 
-
   document
   .getElementById(
     "directRoutineScreen"
   )
   .style.display =
     "none";
-
 
   document
   .getElementById(
@@ -1388,6 +1466,10 @@ function openEditor(routine) {
     routine
       ? routine.id
       : null;
+
+
+  existingRoutineImageUrl =
+    routine?.imageUrl || "";
 
 
   document
@@ -1408,6 +1490,46 @@ function openEditor(routine) {
     routine
       ? routine.name
       : "";
+
+
+  document
+  .getElementById(
+    "routineImage"
+  )
+  .value = "";
+
+
+  const preview =
+    document.getElementById(
+      "routineImagePreview"
+    );
+
+  const previewImg =
+    document.getElementById(
+      "routineImagePreviewImg"
+    );
+
+
+  if (
+    routine &&
+    routine.imageUrl
+  ) {
+
+    preview.style.display =
+      "block";
+
+    previewImg.src =
+      routine.imageUrl;
+
+  } else {
+
+    preview.style.display =
+      "none";
+
+    previewImg.src =
+      "";
+
+  }
 
 
   document
@@ -1435,7 +1557,6 @@ function openEditor(routine) {
     document.getElementById(
       "stepsContainer"
     );
-
 
   container.innerHTML = "";
 
@@ -1494,9 +1615,7 @@ function addStep(step = null) {
 
       <button
         class="danger remove">
-
         מחק
-
       </button>
 
     </div>
@@ -1517,6 +1636,30 @@ function addStep(step = null) {
             ? escapeAttr(step.name)
             : ""
         }">
+
+    </div>
+
+
+    <!-- STEP IMAGE -->
+
+    <div class="form-group">
+
+      <label>
+        תמונה של ה-Step
+      </label>
+
+      <input
+        class="step-image-input"
+        type="file"
+        accept="image/*">
+
+      <div class="image-preview step-image-preview">
+
+        <img
+          class="step-preview-img"
+          alt="Step">
+
+      </div>
 
     </div>
 
@@ -1592,8 +1735,6 @@ function addStep(step = null) {
     </div>
 
 
-    <!-- START DATE OF THIS STEP -->
-
     <div class="step-start-date">
 
       <label>
@@ -1621,11 +1762,63 @@ function addStep(step = null) {
   container.appendChild(div);
 
 
+  const stepImageInput =
+    div.querySelector(
+      ".step-image-input"
+    );
+
+  const stepPreview =
+    div.querySelector(
+      ".step-image-preview"
+    );
+
+  const stepPreviewImg =
+    div.querySelector(
+      ".step-preview-img"
+    );
+
+
+  if (
+    step &&
+    step.imageUrl
+  ) {
+
+    stepPreview.style.display =
+      "block";
+
+    stepPreviewImg.src =
+      step.imageUrl;
+
+  }
+
+
+  stepImageInput.addEventListener(
+    "change",
+    event => {
+
+      const file =
+        event.target.files[0];
+
+      if (!file) {
+        return;
+      }
+
+      showImagePreview(
+        file,
+        null,
+        null,
+        stepPreview,
+        stepPreviewImg
+      );
+
+    }
+  );
+
+
   const frequency =
     div.querySelector(
       ".frequency"
     );
-
 
   const custom =
     div.querySelector(
@@ -1639,7 +1832,6 @@ function addStep(step = null) {
       String(
         step.frequency || "1"
       );
-
 
     if (
       ["1", "2", "3", "7"]
@@ -1656,7 +1848,6 @@ function addStep(step = null) {
 
       custom.style.display =
         "block";
-
 
       div.querySelector(
         ".custom-value"
@@ -1698,6 +1889,52 @@ function addStep(step = null) {
 
 
 /* =========================
+   IMAGE PREVIEW
+========================= */
+
+function showImagePreview(
+  file,
+  previewId,
+  imageId,
+  customPreview = null,
+  customImage = null
+) {
+
+  const preview =
+    customPreview ||
+    document.getElementById(
+      previewId
+    );
+
+  const image =
+    customImage ||
+    document.getElementById(
+      imageId
+    );
+
+
+  const reader =
+    new FileReader();
+
+
+  reader.onload =
+    event => {
+
+      preview.style.display =
+        "block";
+
+      image.src =
+        event.target.result;
+
+    };
+
+
+  reader.readAsDataURL(file);
+
+}
+
+
+/* =========================
    RENUMBER
 ========================= */
 
@@ -1720,6 +1957,40 @@ function renumberSteps() {
 
 
 /* =========================
+   UPLOAD IMAGE
+========================= */
+
+async function uploadImage(
+  file,
+  path
+) {
+
+  if (!file) {
+    return null;
+  }
+
+
+  const storageRef =
+    ref(
+      storage,
+      path
+    );
+
+
+  await uploadBytes(
+    storageRef,
+    file
+  );
+
+
+  return await getDownloadURL(
+    storageRef
+  );
+
+}
+
+
+/* =========================
    SAVE ROUTINE
 ========================= */
 
@@ -1734,6 +2005,11 @@ document
 
 
 async function saveRoutine() {
+
+  if (!currentUser) {
+    return;
+  }
+
 
   const name =
     document
@@ -1764,6 +2040,14 @@ async function saveRoutine() {
         box =>
           Number(box.value)
       );
+
+
+  const routineImageFile =
+    document
+    .getElementById(
+      "routineImage"
+    )
+    .files[0];
 
 
   const steps = [];
@@ -1880,6 +2164,14 @@ async function saveRoutine() {
     }
 
 
+    const imageFile =
+      div
+      .querySelector(
+        ".step-image-input"
+      )
+      .files[0];
+
+
     steps.push({
 
       name:
@@ -1897,30 +2189,22 @@ async function saveRoutine() {
         startDate,
 
       order:
-        index
+        index,
+
+      imageFile:
+        imageFile || null,
+
+      imageUrl:
+        step?.imageUrl || null
 
     });
 
   }
 
 
-  const data = {
-
-    name,
-
-    days,
-
-    steps,
-
-    updatedAt:
-      new Date().toISOString()
-
-  };
-
-
   try {
 
-    const ref =
+    const refCollection =
       collection(
         db,
         "users",
@@ -1929,30 +2213,132 @@ async function saveRoutine() {
       );
 
 
-    if (editingRoutineId) {
+    let routineId =
+      editingRoutineId;
 
-      await updateDoc(
 
-        doc(
-          db,
-          "users",
-          currentUser.uid,
-          "routines",
-          editingRoutineId
-        ),
+    if (!routineId) {
 
-        data
+      const newDoc =
+        await addDoc(
+          refCollection,
+          {
+            name,
+            days,
+            steps: [],
+            imageUrl:
+              null,
+            updatedAt:
+              new Date().toISOString()
+          }
+        );
 
-      );
-
-    } else {
-
-      await addDoc(
-        ref,
-        data
-      );
+      routineId =
+        newDoc.id;
 
     }
+
+
+    let routineImageUrl =
+      existingRoutineImageUrl ||
+      null;
+
+
+    if (routineImageFile) {
+
+      routineImageUrl =
+        await uploadImage(
+          routineImageFile,
+          `users/${currentUser.uid}/routines/${routineId}/routine.jpg`
+        );
+
+    }
+
+
+    const finalSteps = [];
+
+
+    for (
+      let index = 0;
+      index < steps.length;
+      index++
+    ) {
+
+      const step =
+        steps[index];
+
+
+      let imageUrl =
+        step.imageUrl || null;
+
+
+      if (step.imageFile) {
+
+        imageUrl =
+          await uploadImage(
+            step.imageFile,
+            `users/${currentUser.uid}/routines/${routineId}/step-${index}.jpg`
+          );
+
+      }
+
+
+      finalSteps.push({
+
+        name:
+          step.name,
+
+        duration:
+          step.duration,
+
+        frequency:
+          step.frequency,
+
+        startDate:
+          step.startDate,
+
+        order:
+          index,
+
+        imageUrl:
+          imageUrl
+
+      });
+
+    }
+
+
+    const data = {
+
+      name,
+
+      days,
+
+      steps:
+        finalSteps,
+
+      imageUrl:
+        routineImageUrl,
+
+      updatedAt:
+        new Date().toISOString()
+
+    };
+
+
+    await updateDoc(
+
+      doc(
+        db,
+        "users",
+        currentUser.uid,
+        "routines",
+        routineId
+      ),
+
+      data
+
+    );
 
 
     closeEditor();
@@ -2014,6 +2400,9 @@ function closeEditor() {
 
   editingRoutineId =
     null;
+
+  existingRoutineImageUrl =
+    "";
 
 }
 
@@ -2093,12 +2482,6 @@ function getTodaySteps(routine) {
   );
 
 
-  /*
-   * ימי ה-Routine עדיין
-   * קובעים באילו ימים
-   * אפשר להפעיל את ה-Routine.
-   */
-
   const todayDay =
     today.getDay();
 
@@ -2116,17 +2499,8 @@ function getTodaySteps(routine) {
   }
 
 
-  /*
-   * כל Step נבדק בנפרד.
-   */
-
   return routine.steps.filter(
     step => {
-
-      /*
-       * לכל Step יש תאריך
-       * התחלה עצמאי.
-       */
 
       if (!step.startDate) {
 
@@ -2149,11 +2523,6 @@ function getTodaySteps(routine) {
       );
 
 
-      /*
-       * מספר הימים שעברו
-       * מאז תאריך התחלת ה-Step.
-       */
-
       const difference =
         Math.floor(
           (
@@ -2163,10 +2532,6 @@ function getTodaySteps(routine) {
           86400000
         );
 
-
-      /*
-       * ה-Step עדיין לא התחיל.
-       */
 
       if (
         difference < 0
@@ -2182,11 +2547,6 @@ function getTodaySteps(routine) {
           step.frequency || 1
         );
 
-
-      /*
-       * התדירות מתחילה
-       * מתאריך ה-Step.
-       */
 
       return (
         difference %
@@ -2233,10 +2593,8 @@ function startRoutine(routine) {
   activeRoutine =
     routine;
 
-
   activeSteps =
     todaySteps;
-
 
   activeStepIndex =
     0;
@@ -2272,6 +2630,23 @@ function startRoutine(routine) {
   )
   .textContent =
     routine.name;
+
+
+  const routineImageContainer =
+    document.getElementById(
+      "activeRoutineImageContainer"
+    );
+
+
+  routineImageContainer.innerHTML =
+    routine.imageUrl
+      ? `
+        <img
+          class="active-image"
+          src="${escapeAttr(routine.imageUrl)}"
+          alt="Routine">
+      `
+      : "";
 
 
   showStep();
@@ -2313,6 +2688,23 @@ function showStep() {
     ];
 
 
+  const imageContainer =
+    document.getElementById(
+      "activeStepImageContainer"
+    );
+
+
+  imageContainer.innerHTML =
+    step.imageUrl
+      ? `
+        <img
+          class="active-image"
+          src="${escapeAttr(step.imageUrl)}"
+          alt="Step">
+      `
+      : "";
+
+
   document
   .getElementById(
     "activeStepName"
@@ -2335,6 +2727,15 @@ function showStep() {
       () => {
 
         remainingSeconds--;
+
+        if (
+          remainingSeconds < 0
+        ) {
+
+          remainingSeconds =
+            0;
+
+        }
 
         updateTimer();
 
