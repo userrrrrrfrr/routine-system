@@ -69,38 +69,34 @@
       width: 92%;
       max-width: 900px;
       margin: auto;
-      padding: 10px 0 60px; /* הוקטן מ-25px כדי להעלות את כל האתר למעלה */
+      padding: 8px 0 60px; /* הוקטן מ-25px כדי להעלות את כל האתר למעלה */
     }
-    
-    /* עדכון ה-Header: קטן יותר, מוזז לשמאל ומעלה את שאר האתר */
     header {
       background: white;
-      padding: 10px 15px; /* פדינג מוקטן מ-20px */
-      border-radius: 15px; /* מוקטן מ-20px */
-      margin-bottom: 10px; /* מוקטן מ-20px כדי להעלות את האתר */
+      padding: 10px 15px; /* הוקטן מ-20px כדי להיות קטן יותר */
+      border-radius: 14px; /* הוקטן מ-20px */
+      margin-bottom: 10px; /* הוקטן מ-20px כדי ששאר האתר יהיה למעלה יותר */
       display: flex;
-      flex-direction: row-reverse; /* הופך את הסדר - כותרת מימין, כפתור משמאל */
-      justify-content: space-between; /* דוחף את שני הצדדים לקצוות */
+      flex-direction: row-reverse; /* הופך את הסדר ומציב את הטקסט בימין והכפתור בשמאל */
+      justify-content: flex-end; /* מצמיד ומזיז את כל החלק הזה לשמאל של המסך */
       align-items: center;
-      gap: 15px;
+      gap: 12px;
     }
     header h1 {
       margin: 0;
-      font-size: 22px; /* הוקטן כדי להיות קומפקטי */
+      font-size: 20px; /* הקטנת כותרת ה-Routine */
     }
     #userInfo {
       color: #666;
-      margin-top: 3px;
-      font-size: 13px; /* הוקטן מ-14px */
+      margin-top: 2px;
+      font-size: 12px; /* הקטנת שם המשתמש */
     }
     .logout-btn {
-      padding: 6px 12px; /* הוקטן מ-10px 15px */
+      padding: 6px 12px; /* הוקטן מ-10px 15px כדי להיות קטן ונקי */
       border: 1px solid #ddd;
       background: white;
-      border-radius: 8px; /* הוקטן מ-10px */
-      font-size: 13px;
+      border-radius: 8px;
     }
-    
     .card {
       background: white;
       border-radius: 20px;
@@ -319,7 +315,6 @@
       display: none;
       min-height: 100vh;
       padding: 30px 15px;
-      cursor: pointer; /* הופך את כל שטח המסך לאינדיקציה לחיצה */
     }
     .active-box {
       max-width: 600px;
@@ -329,18 +324,15 @@
       padding: 35px 25px;
       text-align: center;
     }
-    
-    /* הגדלת ה-Steps (הצעד הפעיל) */
     #activeStepName {
-      font-size: 58px; /* הגדלה מ-42px לגודל ענק */
+      font-size: 64px; /* הגדלה מ-42px לגודל משמעותי לבקשתך */
       font-weight: bold;
       color: #d00;
       margin: 30px 0 20px;
       line-height: 1.3;
     }
-    /* הגדלת הטיימר שיתאים לגודל הצעד */
     #timer {
-      font-size: 85px; /* הגדלה מ-65px */
+      font-size: 90px; /* הגדלה מ-65px כדי להתאים לצעדים המוגדלים */
       font-weight: bold;
       margin-bottom: 30px;
     }
@@ -399,22 +391,26 @@
       max-height: 280px;
       object-fit: contain;
       background: #f5f5f7;
+      border-radius: 12px;
+      margin-top: 12px;
+      display: block;
     }
+    /* ========================= */
   </style>
 </head>
 <body>
 
-  <!-- הערה: כאן ימשיך ה-HTML המלא שלך (כולל ה-divs של הסקרינים והטפסים), הנה הקישור ללוגיקת המסך הפעיל החדש: -->
+  <!-- כאן יבוא שאר ה-HTML הקיים של האתר שלך (כמו ה-div של ה-app והאלמנטים) -->
 
   <script>
-    // מאזין לחיצה לכל מקום במסך הפעיל שמחליף את מקש ה"בוצע"
+    // לוגיקה שמנטרת הקשה על כל שטח המסך הפעיל ומדמה את מקש ה"בוצע"
     document.getElementById('activeScreen').addEventListener('click', function(e) {
-      // אם המשתמש לחץ על כפתור החזרה (back-btn), לא נסמן כבוצע אלא ניתן לכפתור לעבוד כרגיל
+      // אם הלחיצה בוצעה ספציפית על מקש החזרה (back-btn), אל תבצע התקדמות שלב
       if (e.target.classList.contains('back-btn')) {
         return;
       }
       
-      // מדמה לחיצה אוטומטית על כפתור הבוצע הקיים שלך (.done-btn) בכל לחיצה אחרת על המסך
+      // מוצא את מקש הבוצע הקיים שלך (.done-btn) ומפעיל עליו קליק אוטומטי
       const doneBtn = document.querySelector('.done-btn');
       if (doneBtn) {
         doneBtn.click();
