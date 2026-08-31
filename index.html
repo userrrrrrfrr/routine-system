@@ -7,7 +7,6 @@
   <title>Routine</title>
 
   <style>
-
     * {
       box-sizing: border-box;
     }
@@ -95,27 +94,27 @@
     header {
       width: 155px;
       background: white;
-      padding: 17px 20px 18px;
-      border-radius: 22px;
+      padding: 16px 18px;
+      border-radius: 20px;
       margin: 0;
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
       align-items: flex-start;
-      gap: 14px;
+      gap: 13px;
       box-shadow: 0 8px 30px rgba(0,0,0,.04);
     }
 
     header h1 {
       margin: 0;
-      font-size: 25px;
+      font-size: 24px;
       line-height: 1.1;
     }
 
     #userInfo {
       color: #777;
       margin-top: 7px;
-      font-size: 15px;
+      font-size: 14px;
       line-height: 1.2;
       white-space: nowrap;
       max-width: 115px;
@@ -124,11 +123,11 @@
     }
 
     .logout-btn {
-      padding: 10px 18px;
+      padding: 9px 16px;
       border: 1px solid #d8d8dc;
       background: white;
-      border-radius: 12px;
-      font-size: 16px;
+      border-radius: 11px;
+      font-size: 15px;
     }
 
     /* =========================
@@ -380,28 +379,28 @@
       display: none;
       width: 100%;
       min-height: auto;
-      padding: 32px 0 40px;
+      padding: 18px 0 40px;
     }
 
     .active-box {
       width: 100%;
-      max-width: 770px;
+      max-width: 800px;
       margin: 0 auto;
       background: white;
       border-radius: 32px;
-      padding: 38px 30px 32px;
+      padding: 28px 25px 30px;
       text-align: center;
       box-shadow: 0 10px 35px rgba(0,0,0,0.06);
     }
 
-    /* שם ה-Routine למעלה */
+    /* שם ה-Routine קטן למעלה */
 
     #activeRoutineName {
-      margin: 0 0 20px;
-      font-size: 24px;
-      font-weight: 700;
+      margin: 0 0 12px;
+      font-size: 20px;
+      font-weight: 600;
       color: #222;
-      text-align: right;
+      text-align: left;
       width: 100%;
     }
 
@@ -414,7 +413,7 @@
       height: 500px;
       object-fit: contain;
       border-radius: 20px;
-      margin: 0 auto 0;
+      margin: 0 auto;
       display: block;
       background: #fafafa;
       user-select: none;
@@ -430,14 +429,15 @@
 
     /* =========================
        STEP NAME
-       יותר למעלה
+       גבוה יותר
     ========================= */
 
     #activeStepName {
       font-size: 48px;
       font-weight: 800;
       color: #d00;
-      margin: 2px 0 8px;
+      margin: 0;
+      padding: 0;
       line-height: 1.05;
       letter-spacing: -0.7px;
     }
@@ -449,7 +449,7 @@
     #timer {
       font-size: 68px;
       font-weight: 700;
-      margin: 4px 0 18px;
+      margin: 7px 0 17px;
       color: #111;
       line-height: 1;
     }
@@ -459,9 +459,9 @@
     ========================= */
 
     .long-press-hint {
-      font-size: 15px;
+      font-size: 14px;
       color: #999;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
 
     /* =========================
@@ -470,11 +470,11 @@
 
     .back-btn {
       width: 100%;
-      padding: 17px;
+      padding: 16px;
       background: white;
       border: 1px solid #d8d8dc;
       border-radius: 15px;
-      font-size: 18px;
+      font-size: 17px;
       color: #333;
     }
 
@@ -520,60 +520,60 @@
     @media (max-width: 600px) {
 
       .container {
-        padding: 20px 15px 40px;
+        padding: 15px 12px 40px;
       }
 
       header {
-        width: 155px;
-        padding: 16px 18px;
-        border-radius: 20px;
+        width: 145px;
+        padding: 14px 16px;
+        border-radius: 18px;
       }
 
       header h1 {
-        font-size: 24px;
+        font-size: 22px;
       }
 
       #userInfo {
-        font-size: 14px;
+        font-size: 13px;
       }
 
       #activeScreen {
-        padding: 28px 0 30px;
+        padding: 15px 0 25px;
       }
 
       .active-box {
         max-width: 100%;
         border-radius: 28px;
-        padding: 25px 20px 25px;
+        padding: 20px 15px 22px;
       }
 
       #activeRoutineName {
-        font-size: 21px;
-        margin-bottom: 15px;
+        font-size: 18px;
+        margin-bottom: 8px;
       }
 
       .active-step-image {
         height: 430px;
         max-height: 430px;
         border-radius: 18px;
-        margin-bottom: 0;
+        margin: 0;
       }
 
       #activeStepName {
         font-size: 40px;
-        margin-top: 0;
-        margin-bottom: 8px;
+        margin: 0;
+        line-height: 1;
       }
 
       #timer {
         font-size: 58px;
-        margin-top: 3px;
-        margin-bottom: 17px;
+        margin-top: 6px;
+        margin-bottom: 15px;
       }
 
       .long-press-hint {
-        font-size: 13px;
-        margin-bottom: 18px;
+        font-size: 12px;
+        margin-bottom: 16px;
       }
 
       .step-grid {
@@ -593,7 +593,7 @@
     @media (max-width: 390px) {
 
       .active-box {
-        padding: 22px 16px 22px;
+        padding: 18px 12px 20px;
       }
 
       .active-step-image {
@@ -646,9 +646,7 @@
 
   <div class="container">
 
-    <!-- =========================
-         HEADER
-    ========================= -->
+    <!-- HEADER -->
 
     <header>
 
@@ -941,31 +939,27 @@ import {
 ========================= */
 
 const firebaseConfig = {
-
   apiKey: "AIzaSyCGTJFidIrp_YAuKOg2CCEO-vjFCiakkHo",
-
   authDomain: "site-c224f.firebaseapp.com",
-
   projectId: "site-c224f",
-
   storageBucket: "site-c224f.firebasestorage.app",
-
   messagingSenderId: "709702843873",
-
   appId: "1:709702843873:web:a326854107acb20e6ee6a0",
-
   measurementId: "G-GC5LS15YEC"
-
 };
 
 
-const app = initializeApp(firebaseConfig);
+const app =
+  initializeApp(firebaseConfig);
 
-const auth = getAuth(app);
+const auth =
+  getAuth(app);
 
-const db = getFirestore(app);
+const db =
+  getFirestore(app);
 
-const provider = new GoogleAuthProvider();
+const provider =
+  new GoogleAuthProvider();
 
 
 /* =========================
@@ -1008,36 +1002,42 @@ const LONG_PRESS_MS = 700;
 
 document
   .getElementById("loginBtn")
-  .addEventListener("click", async () => {
+  .addEventListener(
+    "click",
+    async () => {
 
-    try {
+      try {
 
-      await signInWithPopup(
-        auth,
-        provider
-      );
+        await signInWithPopup(
+          auth,
+          provider
+        );
 
-    } catch (error) {
+      } catch (error) {
 
-      console.error(error);
+        console.error(error);
 
-      alert(
-        "ההתחברות נכשלה:\n\n" +
-        error.message
-      );
+        alert(
+          "ההתחברות נכשלה:\n\n" +
+          error.message
+        );
+
+      }
 
     }
-
-  });
+  );
 
 
 document
   .getElementById("logoutBtn")
-  .addEventListener("click", async () => {
+  .addEventListener(
+    "click",
+    async () => {
 
-    await signOut(auth);
+      await signOut(auth);
 
-  });
+    }
+  );
 
 
 /* =========================
@@ -1046,7 +1046,7 @@ document
 
 onAuthStateChanged(
   auth,
-  async (user) => {
+  async user => {
 
     if (user) {
 
@@ -1097,7 +1097,8 @@ async function loadRoutines() {
       "routineList"
     );
 
-  list.innerHTML = "טוען...";
+  list.innerHTML =
+    "טוען...";
 
   try {
 
@@ -1117,11 +1118,8 @@ async function loadRoutines() {
     snapshot.forEach(item => {
 
       routines.push({
-
         id: item.id,
-
         ...item.data()
-
       });
 
     });
@@ -1142,7 +1140,9 @@ async function loadRoutines() {
 
         <br><br>
 
-        ${escapeHtml(error.message)}
+        ${escapeHtml(
+          error.message
+        )}
 
       </div>
 
@@ -1183,125 +1183,147 @@ function renderRoutines() {
     `;
 
     return;
-
   }
 
 
-  routines.forEach(routine => {
+  routines.forEach(
+    routine => {
 
-    const card =
-      document.createElement("div");
+      const card =
+        document.createElement(
+          "div"
+        );
 
-    card.className =
-      "routine-card";
-
-
-    const todaySteps =
-      getTodaySteps(routine);
-
-
-    let imageHtml = "";
+      card.className =
+        "routine-card";
 
 
-    if (routine.image) {
+      const todaySteps =
+        getTodaySteps(
+          routine
+        );
 
-      imageHtml = `
 
-        <img
-          class="routine-image"
-          src="${routine.image}"
-          alt=""
-        >
+      let imageHtml = "";
+
+
+      if (routine.image) {
+
+        imageHtml = `
+
+          <img
+            class="routine-image"
+            src="${routine.image}"
+            alt=""
+          >
+
+        `;
+
+      }
+
+
+      card.innerHTML = `
+
+        ${imageHtml}
+
+        <h3>
+          ${escapeHtml(
+            routine.name
+          )}
+        </h3>
+
+        <div class="routine-info">
+
+          ${routine.steps?.length || 0}
+          Steps
+
+        </div>
+
+        <div class="today-info">
+
+          להיום:
+
+          <strong>
+            ${todaySteps.length}
+          </strong>
+
+          Steps
+
+        </div>
+
+        <div class="actions">
+
+          <button class="primary start">
+            התחל
+          </button>
+
+          <button class="secondary edit">
+            ערוך
+          </button>
+
+          <button class="secondary share">
+            🔗 העתק קישור
+          </button>
+
+          <button class="danger delete">
+            מחק
+          </button>
+
+        </div>
 
       `;
 
+
+      card
+        .querySelector(".start")
+        .addEventListener(
+          "click",
+          () =>
+            startRoutine(
+              routine
+            )
+        );
+
+
+      card
+        .querySelector(".edit")
+        .addEventListener(
+          "click",
+          () =>
+            openEditor(
+              routine
+            )
+        );
+
+
+      card
+        .querySelector(".share")
+        .addEventListener(
+          "click",
+          () =>
+            copyRoutineLink(
+              routine.id
+            )
+        );
+
+
+      card
+        .querySelector(".delete")
+        .addEventListener(
+          "click",
+          () =>
+            deleteRoutine(
+              routine.id
+            )
+        );
+
+
+      list.appendChild(
+        card
+      );
+
     }
-
-
-    card.innerHTML = `
-
-      ${imageHtml}
-
-      <h3>
-        ${escapeHtml(routine.name)}
-      </h3>
-
-      <div class="routine-info">
-
-        ${routine.steps?.length || 0} Steps
-
-      </div>
-
-      <div class="today-info">
-
-        להיום:
-
-        <strong>
-          ${todaySteps.length}
-        </strong>
-
-        Steps
-
-      </div>
-
-      <div class="actions">
-
-        <button class="primary start">
-          התחל
-        </button>
-
-        <button class="secondary edit">
-          ערוך
-        </button>
-
-        <button class="secondary share">
-          🔗 העתק קישור
-        </button>
-
-        <button class="danger delete">
-          מחק
-        </button>
-
-      </div>
-
-    `;
-
-
-    card
-      .querySelector(".start")
-      .addEventListener(
-        "click",
-        () => startRoutine(routine)
-      );
-
-
-    card
-      .querySelector(".edit")
-      .addEventListener(
-        "click",
-        () => openEditor(routine)
-      );
-
-
-    card
-      .querySelector(".share")
-      .addEventListener(
-        "click",
-        () => copyRoutineLink(routine.id)
-      );
-
-
-    card
-      .querySelector(".delete")
-      .addEventListener(
-        "click",
-        () => deleteRoutine(routine.id)
-      );
-
-
-    list.appendChild(card);
-
-  });
+  );
 
 }
 
@@ -1318,18 +1340,17 @@ function compressImage(file) {
       const reader =
         new FileReader();
 
-
       reader.onload =
         event => {
 
           const img =
             new Image();
 
-
           img.onload =
             () => {
 
-              const maxWidth = 600;
+              const maxWidth =
+                600;
 
               let width =
                 img.width;
@@ -1338,7 +1359,10 @@ function compressImage(file) {
                 img.height;
 
 
-              if (width > maxWidth) {
+              if (
+                width >
+                maxWidth
+              ) {
 
                 height =
                   Math.round(
@@ -1357,7 +1381,6 @@ function compressImage(file) {
                 document.createElement(
                   "canvas"
                 );
-
 
               canvas.width =
                 width;
@@ -1388,12 +1411,15 @@ function compressImage(file) {
                 );
 
 
-              resolve(result);
+              resolve(
+                result
+              );
 
             };
 
 
-          img.onerror = reject;
+          img.onerror =
+            reject;
 
           img.src =
             event.target.result;
@@ -1401,9 +1427,12 @@ function compressImage(file) {
         };
 
 
-      reader.onerror = reject;
+      reader.onerror =
+        reject;
 
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(
+        file
+      );
 
     }
   );
@@ -1432,13 +1461,17 @@ document
       try {
 
         currentRoutineImage =
-          await compressImage(file);
+          await compressImage(
+            file
+          );
 
         showRoutineImagePreview();
 
       } catch (error) {
 
-        console.error(error);
+        console.error(
+          error
+        );
 
         alert(
           "לא ניתן לקרוא את התמונה."
@@ -1464,11 +1497,14 @@ function showRoutineImagePreview() {
   preview.innerHTML = "";
 
 
-  if (!currentRoutineImage) return;
+  if (!currentRoutineImage)
+    return;
 
 
   const img =
-    document.createElement("img");
+    document.createElement(
+      "img"
+    );
 
   img.src =
     currentRoutineImage;
@@ -1477,7 +1513,9 @@ function showRoutineImagePreview() {
 
 
   const remove =
-    document.createElement("button");
+    document.createElement(
+      "button"
+    );
 
   remove.className =
     "remove-image";
@@ -1490,13 +1528,15 @@ function showRoutineImagePreview() {
     "click",
     () => {
 
-      currentRoutineImage = "";
+      currentRoutineImage =
+        "";
 
       document
         .getElementById(
           "routineImageInput"
         )
-        .value = "";
+        .value =
+        "";
 
       showRoutineImagePreview();
 
@@ -1504,9 +1544,13 @@ function showRoutineImagePreview() {
   );
 
 
-  preview.appendChild(img);
+  preview.appendChild(
+    img
+  );
 
-  preview.appendChild(remove);
+  preview.appendChild(
+    remove
+  );
 
 }
 
@@ -1523,7 +1567,9 @@ async function copyRoutineLink(
     window.location.origin +
     window.location.pathname +
     "?routine=" +
-    encodeURIComponent(routineId);
+    encodeURIComponent(
+      routineId
+    );
 
 
   try {
@@ -1560,16 +1606,20 @@ function openRoutineFromLink() {
 
 
   const routineId =
-    params.get("routine");
+    params.get(
+      "routine"
+    );
 
 
-  if (!routineId) return;
+  if (!routineId)
+    return;
 
 
   const routine =
     routines.find(
       item =>
-        item.id === routineId
+        item.id ===
+        routineId
     );
 
 
@@ -1584,7 +1634,9 @@ function openRoutineFromLink() {
   }
 
 
-  showDirectRoutine(routine);
+  showDirectRoutine(
+    routine
+  );
 
 }
 
@@ -1601,28 +1653,33 @@ function showDirectRoutine(
     .getElementById(
       "routineListScreen"
     )
-    .style.display = "none";
+    .style.display =
+    "none";
 
 
   document
     .getElementById(
       "editorScreen"
     )
-    .classList.add("hidden");
+    .classList.add(
+      "hidden"
+    );
 
 
   document
     .getElementById(
       "activeScreen"
     )
-    .style.display = "none";
+    .style.display =
+    "none";
 
 
   document
     .getElementById(
       "directRoutineScreen"
     )
-    .style.display = "block";
+    .style.display =
+    "block";
 
 
   document
@@ -1645,14 +1702,19 @@ function showDirectRoutine(
       routine.image;
 
     routineImage.classList
-      .remove("hidden");
+      .remove(
+        "hidden"
+      );
 
   } else {
 
-    routineImage.src = "";
+    routineImage.src =
+      "";
 
     routineImage.classList
-      .add("hidden");
+      .add(
+        "hidden"
+      );
 
   }
 
@@ -1663,14 +1725,20 @@ function showDirectRoutine(
     );
 
 
-  stepsContainer.innerHTML = "";
+  stepsContainer.innerHTML =
+    "";
 
 
   const todaySteps =
-    getTodaySteps(routine);
+    getTodaySteps(
+      routine
+    );
 
 
-  if (todaySteps.length === 0) {
+  if (
+    todaySteps.length ===
+    0
+  ) {
 
     stepsContainer.innerHTML = `
 
@@ -1688,12 +1756,19 @@ function showDirectRoutine(
 
       .sort(
         (a, b) =>
-          Number(a.order || 0) -
-          Number(b.order || 0)
+          Number(
+            a.order || 0
+          ) -
+          Number(
+            b.order || 0
+          )
       )
 
       .forEach(
-        (step, index) => {
+        (
+          step,
+          index
+        ) => {
 
           const div =
             document.createElement(
@@ -1704,7 +1779,8 @@ function showDirectRoutine(
             "direct-step";
 
 
-          let imageHtml = "";
+          let imageHtml =
+            "";
 
 
           if (step.image) {
@@ -1730,7 +1806,9 @@ function showDirectRoutine(
 
             <br>
 
-            ${escapeHtml(step.name)}
+            ${escapeHtml(
+              step.name
+            )}
 
             ${imageHtml}
 
@@ -1738,7 +1816,9 @@ function showDirectRoutine(
 
 
           stepsContainer
-            .appendChild(div);
+            .appendChild(
+              div
+            );
 
         }
       );
@@ -1751,7 +1831,10 @@ function showDirectRoutine(
       "directStartBtn"
     )
     .onclick =
-    () => startRoutine(routine);
+    () =>
+      startRoutine(
+        routine
+      );
 
 }
 
@@ -1784,14 +1867,16 @@ document
         .getElementById(
           "directRoutineScreen"
         )
-        .style.display = "none";
+        .style.display =
+        "none";
 
 
       document
         .getElementById(
           "routineListScreen"
         )
-        .style.display = "block";
+        .style.display =
+        "block";
 
     }
   );
@@ -1807,7 +1892,10 @@ document
   )
   .addEventListener(
     "click",
-    () => openEditor(null)
+    () =>
+      openEditor(
+        null
+      )
   );
 
 
@@ -1815,33 +1903,39 @@ document
    OPEN EDITOR
 ========================= */
 
-function openEditor(routine) {
+function openEditor(
+  routine
+) {
 
   document
     .getElementById(
       "routineListScreen"
     )
-    .style.display = "none";
+    .style.display =
+    "none";
 
 
   document
     .getElementById(
       "directRoutineScreen"
     )
-    .style.display = "none";
+    .style.display =
+    "none";
 
 
   document
     .getElementById(
       "editorScreen"
     )
-    .classList.remove("hidden");
+    .classList.remove(
+      "hidden"
+    );
 
 
   editingRoutineId =
-    routine ?
-      routine.id :
-      null;
+    routine
+      ? routine.id
+      : null;
 
 
   document
@@ -1849,9 +1943,9 @@ function openEditor(routine) {
       "editorTitle"
     )
     .textContent =
-    routine ?
-      "עריכת Routine" :
-      "Routine חדש";
+    routine
+      ? "עריכת Routine"
+      : "Routine חדש";
 
 
   document
@@ -1859,9 +1953,9 @@ function openEditor(routine) {
       "routineName"
     )
     .value =
-    routine ?
-      routine.name :
-      "";
+    routine
+      ? routine.name
+      : "";
 
 
   currentRoutineImage =
@@ -1872,7 +1966,8 @@ function openEditor(routine) {
     .getElementById(
       "routineImageInput"
     )
-    .value = "";
+    .value =
+    "";
 
 
   showRoutineImagePreview();
@@ -1886,14 +1981,16 @@ function openEditor(routine) {
       checkbox => {
 
         checkbox.checked =
-          routine ?
-            (routine.days || [])
-              .includes(
+          routine
+            ? (
+                routine.days ||
+                []
+              ).includes(
                 Number(
                   checkbox.value
                 )
-              ) :
-            false;
+              )
+            : false;
 
       }
     );
@@ -1909,7 +2006,8 @@ function openEditor(routine) {
     );
 
 
-  container.innerHTML = "";
+  container.innerHTML =
+    "";
 
 
   if (
@@ -1917,11 +2015,12 @@ function openEditor(routine) {
     routine.steps
   ) {
 
-    routine.steps
-      .forEach(
-        step =>
-          addStep(step)
-      );
+    routine.steps.forEach(
+      step =>
+        addStep(
+          step
+        )
+    );
 
   }
 
@@ -1938,11 +2037,14 @@ document
   )
   .addEventListener(
     "click",
-    () => addStep()
+    () =>
+      addStep()
   );
 
 
-function addStep(step = null) {
+function addStep(
+  step = null
+) {
 
   const container =
     document.getElementById(
@@ -1960,7 +2062,9 @@ function addStep(step = null) {
     );
 
 
-  div.className = "step";
+  div.className =
+    "step";
+
 
   div.dataset.stepId =
     stepId;
@@ -1970,7 +2074,9 @@ function addStep(step = null) {
     step?.image || "";
 
 
-  if (existingImage) {
+  if (
+    existingImage
+  ) {
 
     stepImages.set(
       stepId,
@@ -1985,7 +2091,9 @@ function addStep(step = null) {
     <div class="step-title">
 
       <strong>
-        Step ${container.children.length + 1}
+        Step ${
+          container.children.length + 1
+        }
       </strong>
 
       <button class="danger remove">
@@ -2007,15 +2115,15 @@ function addStep(step = null) {
         placeholder="לדוגמה: לשתות מים"
         value="${
           step
-            ? escapeAttr(step.name)
+            ? escapeAttr(
+                step.name
+              )
             : ""
         }"
       >
 
     </div>
 
-
-    <!-- STEP IMAGE -->
 
     <div class="form-group image-upload">
 
@@ -2109,8 +2217,6 @@ function addStep(step = null) {
     </div>
 
 
-    <!-- START DATE -->
-
     <div class="step-start-date">
 
       <label>
@@ -2139,10 +2245,14 @@ function addStep(step = null) {
   `;
 
 
-  container.appendChild(div);
+  container.appendChild(
+    div
+  );
 
 
-  showStepImagePreview(div);
+  showStepImagePreview(
+    div
+  );
 
 
   const imageInput =
@@ -2159,13 +2269,16 @@ function addStep(step = null) {
         event.target.files[0];
 
 
-      if (!file) return;
+      if (!file)
+        return;
 
 
       try {
 
         const image =
-          await compressImage(file);
+          await compressImage(
+            file
+          );
 
 
         stepImages.set(
@@ -2174,11 +2287,15 @@ function addStep(step = null) {
         );
 
 
-        showStepImagePreview(div);
+        showStepImagePreview(
+          div
+        );
 
       } catch (error) {
 
-        console.error(error);
+        console.error(
+          error
+        );
 
         alert(
           "לא ניתן לקרוא את התמונה."
@@ -2206,13 +2323,20 @@ function addStep(step = null) {
 
     const saved =
       String(
-        step.frequency || "1"
+        step.frequency ||
+        "1"
       );
 
 
     if (
-      ["1", "2", "3", "7"]
-        .includes(saved)
+      [
+        "1",
+        "2",
+        "3",
+        "7"
+      ].includes(
+        saved
+      )
     ) {
 
       frequency.value =
@@ -2251,7 +2375,9 @@ function addStep(step = null) {
 
 
   div
-    .querySelector(".remove")
+    .querySelector(
+      ".remove"
+    )
     .addEventListener(
       "click",
       () => {
@@ -2274,7 +2400,9 @@ function addStep(step = null) {
    STEP IMAGE PREVIEW
 ========================= */
 
-function showStepImagePreview(div) {
+function showStepImagePreview(
+  div
+) {
 
   const preview =
     div.querySelector(
@@ -2287,13 +2415,17 @@ function showStepImagePreview(div) {
 
 
   const image =
-    stepImages.get(stepId);
+    stepImages.get(
+      stepId
+    );
 
 
-  preview.innerHTML = "";
+  preview.innerHTML =
+    "";
 
 
-  if (!image) return;
+  if (!image)
+    return;
 
 
   const img =
@@ -2302,9 +2434,11 @@ function showStepImagePreview(div) {
     );
 
 
-  img.src = image;
+  img.src =
+    image;
 
-  img.alt = "";
+  img.alt =
+    "";
 
 
   const remove =
@@ -2332,18 +2466,25 @@ function showStepImagePreview(div) {
 
       div.querySelector(
         ".step-image-input"
-      ).value = "";
+      ).value =
+        "";
 
 
-      showStepImagePreview(div);
+      showStepImagePreview(
+        div
+      );
 
     }
   );
 
 
-  preview.appendChild(img);
+  preview.appendChild(
+    img
+  );
 
-  preview.appendChild(remove);
+  preview.appendChild(
+    remove
+  );
 
 }
 
@@ -2359,7 +2500,10 @@ function renumberSteps() {
       ".step"
     )
     .forEach(
-      (step, index) => {
+      (
+        step,
+        index
+      ) => {
 
         step
           .querySelector(
@@ -2367,7 +2511,9 @@ function renumberSteps() {
           )
           .textContent =
           "Step " +
-          (index + 1);
+          (
+            index + 1
+          );
 
       }
     );
@@ -2416,13 +2562,12 @@ async function saveRoutine() {
       ...document.querySelectorAll(
         ".days input:checked"
       )
-    ]
-      .map(
-        box =>
-          Number(
-            box.value
-          )
-      );
+    ].map(
+      box =>
+        Number(
+          box.value
+        )
+    );
 
 
   const steps = [];
@@ -2456,7 +2601,9 @@ async function saveRoutine() {
     if (!stepName) {
 
       alert(
-        `כתוב שם ל-Step ${index + 1}.`
+        `כתוב שם ל-Step ${
+          index + 1
+        }.`
       );
 
       return;
@@ -2466,16 +2613,20 @@ async function saveRoutine() {
 
     const duration =
       Number(
-        div.querySelector(
-          ".step-duration"
-        ).value
+        div
+          .querySelector(
+            ".step-duration"
+          )
+          .value
       );
 
 
     const frequency =
-      div.querySelector(
-        ".frequency"
-      ).value;
+      div
+        .querySelector(
+          ".frequency"
+        )
+        .value;
 
 
     let finalFrequency =
@@ -2483,27 +2634,34 @@ async function saveRoutine() {
 
 
     if (
-      frequency === "custom"
+      frequency ===
+      "custom"
     ) {
 
       finalFrequency =
-        div.querySelector(
-          ".custom-value"
-        ).value;
+        div
+          .querySelector(
+            ".custom-value"
+          )
+          .value;
 
     }
 
 
     const startDate =
-      div.querySelector(
-        ".step-start-date-input"
-      ).value;
+      div
+        .querySelector(
+          ".step-start-date-input"
+        )
+        .value;
 
 
     if (!startDate) {
 
       alert(
-        `בחר תאריך התחלה ל-Step ${index + 1}.`
+        `בחר תאריך התחלה ל-Step ${
+          index + 1
+        }.`
       );
 
       return;
@@ -2523,7 +2681,9 @@ async function saveRoutine() {
     ) {
 
       alert(
-        `התדירות של Step ${index + 1} אינה תקינה.`
+        `התדירות של Step ${
+          index + 1
+        } אינה תקינה.`
       );
 
       return;
@@ -2539,9 +2699,11 @@ async function saveRoutine() {
 
     steps.push({
 
-      name: stepName,
+      name:
+        stepName,
 
-      image: stepImage,
+      image:
+        stepImage,
 
       duration:
         duration > 0
@@ -2552,7 +2714,6 @@ async function saveRoutine() {
         numericFrequency,
 
       startDate:
-
         startDate,
 
       order:
@@ -2568,7 +2729,8 @@ async function saveRoutine() {
     name,
 
     image:
-      currentRoutineImage || "",
+      currentRoutineImage ||
+      "",
 
     days,
 
@@ -2587,7 +2749,8 @@ async function saveRoutine() {
 
 
   if (
-    estimatedSize > 900000
+    estimatedSize >
+    900000
   ) {
 
     alert(
@@ -2605,7 +2768,9 @@ async function saveRoutine() {
     );
 
 
-  saveBtn.disabled = true;
+  saveBtn.disabled =
+    true;
+
 
   saveBtn.textContent =
     "שומר...";
@@ -2622,7 +2787,9 @@ async function saveRoutine() {
       );
 
 
-    if (editingRoutineId) {
+    if (
+      editingRoutineId
+    ) {
 
       await updateDoc(
         doc(
@@ -2655,7 +2822,9 @@ async function saveRoutine() {
 
   } catch (error) {
 
-    console.error(error);
+    console.error(
+      error
+    );
 
     alert(
       "השמירה נכשלה:\n\n" +
@@ -2664,7 +2833,8 @@ async function saveRoutine() {
 
   } finally {
 
-    saveBtn.disabled = false;
+    saveBtn.disabled =
+      false;
 
     saveBtn.textContent =
       "שמור";
@@ -2725,14 +2895,18 @@ function closeEditor() {
    DELETE ROUTINE
 ========================= */
 
-async function deleteRoutine(id) {
+async function deleteRoutine(
+  id
+) {
 
   if (
     !confirm(
       "למחוק את ה-Routine?"
     )
   ) {
+
     return;
+
   }
 
 
@@ -2753,7 +2927,9 @@ async function deleteRoutine(id) {
 
   } catch (error) {
 
-    console.error(error);
+    console.error(
+      error
+    );
 
     alert(
       "המחיקה נכשלה."
@@ -2768,13 +2944,17 @@ async function deleteRoutine(id) {
    TODAY STEPS
 ========================= */
 
-function getTodaySteps(routine) {
+function getTodaySteps(
+  routine
+) {
 
   if (
     !routine.steps ||
     routine.steps.length === 0
   ) {
+
     return [];
+
   }
 
 
@@ -2810,9 +2990,8 @@ function getTodaySteps(routine) {
   return routine.steps.filter(
     step => {
 
-      if (!step.startDate) {
+      if (!step.startDate)
         return false;
-      }
 
 
       const start =
@@ -2839,14 +3018,19 @@ function getTodaySteps(routine) {
         );
 
 
-      if (difference < 0) {
+      if (
+        difference < 0
+      ) {
+
         return false;
+
       }
 
 
       const frequency =
         Number(
-          step.frequency || 1
+          step.frequency ||
+          1
         );
 
 
@@ -2866,7 +3050,9 @@ function getTodaySteps(routine) {
    START ROUTINE
 ========================= */
 
-function startRoutine(routine) {
+function startRoutine(
+  routine
+) {
 
   const todaySteps =
     getTodaySteps(
@@ -2875,7 +3061,8 @@ function startRoutine(routine) {
 
 
   if (
-    todaySteps.length === 0
+    todaySteps.length ===
+    0
   ) {
 
     alert(
@@ -2889,8 +3076,12 @@ function startRoutine(routine) {
 
   todaySteps.sort(
     (a, b) =>
-      Number(a.order || 0) -
-      Number(b.order || 0)
+      Number(
+        a.order || 0
+      ) -
+      Number(
+        b.order || 0
+      )
   );
 
 
@@ -2999,14 +3190,19 @@ function showStep() {
       step.image;
 
     image.classList
-      .remove("hidden");
+      .remove(
+        "hidden"
+      );
 
   } else {
 
-    image.src = "";
+    image.src =
+      "";
 
     image.classList
-      .add("hidden");
+      .add(
+        "hidden"
+      );
 
   }
 
@@ -3030,7 +3226,8 @@ function showStep() {
 
 
         if (
-          remainingSeconds <= 0
+          remainingSeconds <=
+          0
         ) {
 
           clearInterval(
@@ -3070,13 +3267,21 @@ function updateTimer() {
     )
     .textContent =
 
-    String(minutes)
-      .padStart(2, "0") +
+    String(
+      minutes
+    ).padStart(
+      2,
+      "0"
+    ) +
 
     ":" +
 
-    String(seconds)
-      .padStart(2, "0");
+    String(
+      seconds
+    ).padStart(
+      2,
+      "0"
+    );
 
 }
 
@@ -3087,7 +3292,9 @@ function updateTimer() {
 
 function clearLongPress() {
 
-  if (longPressTimer) {
+  if (
+    longPressTimer
+  ) {
 
     clearTimeout(
       longPressTimer
@@ -3131,7 +3338,9 @@ function startLongPress() {
   if (img) {
 
     img.classList
-      .add("pressing");
+      .add(
+        "pressing"
+      );
 
   }
 
@@ -3292,15 +3501,19 @@ function getTodayDate() {
   const month =
     String(
       date.getMonth() + 1
-    )
-    .padStart(2, "0");
+    ).padStart(
+      2,
+      "0"
+    );
 
 
   const day =
     String(
       date.getDate()
-    )
-    .padStart(2, "0");
+    ).padStart(
+      2,
+      "0"
+    );
 
 
   return (
@@ -3314,16 +3527,26 @@ function getTodayDate() {
 }
 
 
-function parseDate(value) {
+function parseDate(
+  value
+) {
 
   const parts =
-    value.split("-");
+    value.split(
+      "-"
+    );
 
 
   return new Date(
-    Number(parts[0]),
-    Number(parts[1]) - 1,
-    Number(parts[2])
+    Number(
+      parts[0]
+    ),
+    Number(
+      parts[1]
+    ) - 1,
+    Number(
+      parts[2]
+    )
   );
 
 }
@@ -3333,9 +3556,13 @@ function parseDate(value) {
    SECURITY
 ========================= */
 
-function escapeHtml(text) {
+function escapeHtml(
+  text
+) {
 
-  return String(text)
+  return String(
+    text
+  )
 
     .replaceAll(
       "&",
@@ -3365,9 +3592,13 @@ function escapeHtml(text) {
 }
 
 
-function escapeAttr(text) {
+function escapeAttr(
+  text
+) {
 
-  return escapeHtml(text);
+  return escapeHtml(
+    text
+  );
 
 }
 
