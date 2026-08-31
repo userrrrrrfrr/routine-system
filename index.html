@@ -183,18 +183,6 @@
       border-radius: 18px;
       margin-bottom: 20px;
     }
-    .active-step-image {
-      width: 100%;
-      max-height: 420px;
-      object-fit: contain;
-      border-radius: 18px;
-      margin: 15px 0;
-      display: block;
-      background: #f8f8f8;
-      user-select: none;
-      -webkit-user-select: none;
-      touch-action: manipulation;
-    }
     /* =========================
        ROUTINES
     ========================= */
@@ -307,62 +295,77 @@
       margin-top: 6px;
     }
     /* =========================
-       ACTIVE ROUTINE
+       ACTIVE ROUTINE  ← העיצוב החדש כמו בתמונה
     ========================= */
     #activeScreen {
       display: none;
       min-height: 100vh;
-      padding: 30px 15px;
+      padding: 20px 15px 40px;
     }
     .active-box {
-      max-width: 600px;
+      max-width: 480px;
       margin: auto;
       background: white;
-      border-radius: 25px;
-      padding: 25px 20px 35px;
+      border-radius: 28px;
+      padding: 22px 22px 28px;
       text-align: center;
-      position: relative;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.06);
     }
+    /* כותרת העליונה – קטנה ומיושרת לשמאל */
     #activeRoutineName {
-      margin: 0 0 8px;
-      font-size: 18px;
+      margin: 0 0 14px;
+      font-size: 17px;
       font-weight: 600;
-      color: #555;
+      color: #222;
       text-align: left;
-      direction: ltr;
       width: 100%;
     }
+    /* התמונה – גדולה ומלאה */
+    .active-step-image {
+      width: 100%;
+      max-height: 340px;
+      object-fit: contain;
+      border-radius: 18px;
+      margin: 0 auto 8px;
+      display: block;
+      background: #fafafa;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+      transition: transform 0.15s, opacity 0.15s;
+    }
+    .active-step-image.pressing {
+      transform: scale(0.97);
+      opacity: 0.85;
+    }
+    /* שם ה-Step – גדול מאוד ובאדום */
     #activeStepName {
-      font-size: 36px;
-      font-weight: bold;
+      font-size: 42px;
+      font-weight: 800;
       color: #d00;
-      margin: 12px 0 18px;
-      line-height: 1.25;
+      margin: 12px 0 10px;
+      line-height: 1.15;
+      letter-spacing: -0.5px;
     }
     #timer {
-      font-size: 65px;
-      font-weight: bold;
-      margin-bottom: 20px;
+      font-size: 58px;
+      font-weight: 700;
+      margin: 6px 0 22px;
+      color: #111;
     }
     .long-press-hint {
-      font-size: 14px;
-      color: #888;
-      margin-top: 8px;
+      font-size: 13px;
+      color: #999;
       margin-bottom: 18px;
     }
     .back-btn {
       width: 100%;
       padding: 14px;
-      margin-top: 10px;
       background: white;
       border: 1px solid #ddd;
-      border-radius: 12px;
-    }
-    /* אפקט לחיצה ארוכה */
-    .active-step-image.pressing {
-      transform: scale(0.97);
-      opacity: 0.85;
-      transition: transform 0.15s, opacity 0.15s;
+      border-radius: 14px;
+      font-size: 16px;
+      color: #333;
     }
     /* =========================
        DIRECT ROUTINE
@@ -404,13 +407,13 @@
         font-size: 52px;
       }
       #activeStepName {
-        font-size: 30px;
+        font-size: 36px;
       }
       #activeRoutineName {
         font-size: 16px;
       }
       .active-step-image {
-        max-height: 340px;
+        max-height: 300px;
       }
       .top-row {
         align-items: flex-start;
@@ -567,15 +570,9 @@
         <h1 id="activeRoutineName"></h1>
         <img id="activeStepImage" class="active-step-image hidden">
         <div id="activeStepName"></div>
-        <div id="timer">
-          00:00
-        </div>
-        <div class="long-press-hint">
-          לחץ לחיצה ארוכה על התמונה כדי לסמן בוצע
-        </div>
-        <button id="exitActiveBtn" class="back-btn">
-          יציאה
-        </button>
+        <div id="timer">00:00</div>
+        <div class="long-press-hint">לחץ לחיצה ארוכה על התמונה כדי לסמן בוצע</div>
+        <button id="exitActiveBtn" class="back-btn">יציאה</button>
       </div>
     </div>
   </div>
@@ -1241,20 +1238,17 @@ function startLongPress() {
   longPressTimer = setTimeout(() => {
     longPressTimer = null;
     if (img) img.classList.remove("pressing");
-    // סימון בוצע
     activeStepIndex++;
     showStep();
   }, LONG_PRESS_MS);
 }
 const activeImg = document.getElementById("activeStepImage");
-// Touch
 activeImg.addEventListener("touchstart", (e) => {
   e.preventDefault();
   startLongPress();
 }, { passive: false });
 activeImg.addEventListener("touchend", clearLongPress);
 activeImg.addEventListener("touchcancel", clearLongPress);
-// Mouse (למחשב)
 activeImg.addEventListener("mousedown", startLongPress);
 activeImg.addEventListener("mouseup", clearLongPress);
 activeImg.addEventListener("mouseleave", clearLongPress);
