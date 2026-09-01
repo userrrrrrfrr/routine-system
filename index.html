@@ -1260,13 +1260,8 @@ function addStep(step = null) {
         <input class="step-duration" type="number" min="1" value="${step ? step.duration : 60}">
       </div>
       <div>
-        <label>תדירות</label>
-        <select class="frequency">
-          <option value="1">כל יום</option>
-          <option value="2">כל יומיים</option>
-          <option value="3">כל 3 ימים</option>
-          <option value="7">כל 7 ימים</option>
-        </select>
+        <label>תדירות (כל כמה ימים)</label>
+        <input class="frequency" type="number" min="1" placeholder="הכנס מספר ימים" value="${step ? (step.frequency || 1) : 1}">
       </div>
     </div>
 
