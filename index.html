@@ -417,34 +417,24 @@
       border-radius: 6px;
       color: #555;
       font-weight: normal;
-
     }
 
     .step-grid {
       display: grid;
-      grid-template-columns: 1fr 180px;
+      grid-template-columns: 1fr 1fr;
       gap: 12px;
     }
 
-    .custom-days {
-      display: none;
+    .disable-box {
       margin-top: 12px;
+      padding: 12px;
+      border: 1px dashed #ccc;
+      border-radius: 12px;
+      background: #fdfdfd;
     }
 
-    .step-start-date {
-      margin-top: 15px;
-    }
-
-    .step-start-date label {
-      display: block;
-      font-weight: bold;
-      margin-bottom: 7px;
-    }
-
-    .step-start-date small {
-      display: block;
-      color: #777;
-      margin-top: 6px;
+    .disable-box label {
+      font-size: 13px;
     }
 
     .step-actions-bar {
@@ -648,10 +638,7 @@
 
 <body>
 
-<!-- =========================
-     LOGIN
-========================= -->
-
+<!-- LOGIN -->
 <div id="loginScreen">
   <div class="login-box">
     <h1>Routine</h1>
@@ -660,10 +647,7 @@
   </div>
 </div>
 
-<!-- =========================
-     APP
-========================= -->
-
+<!-- APP -->
 <div id="app">
 
   <!-- USER SIDE TAB -->
@@ -779,7 +763,7 @@
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
-import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCGTJFidIrp_YAuKOg2CCEO-vjFCiakkHo",
@@ -798,6 +782,7 @@ const provider = new GoogleAuthProvider();
 
 let currentUser = null;
 let routines = [];
+let disabledStepsMap = {}; // לשמירת הצעדים המבוטלים מה-DB
 let editingRoutineId = null;
 let activeRoutine = null;
 let activeSteps = [];
@@ -854,6 +839,7 @@ onAuthStateChanged(auth, async (user) => {
     document.getElementById("loginScreen").style.display = "none";
     document.getElementById("app").style.display = "block";
     document.getElementById("panelUserInfo").textContent = user.displayName || user.email || "";
+    await loadDisabledSteps();
     await loadRoutines();
   } else {
     currentUser = null;
@@ -861,6 +847,20 @@ onAuthStateChanged(auth, async (user) => {
     document.getElementById("app").style.display = "none";
   }
 });
+
+async function loadDisabledSteps() {
+  try {
+    const docRef = doc(db, "users", currentUser.uid, "meta", "disabledSteps");
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      disabledStepsMap = docSnap.data();
+    } else {
+      disabledStepsMap = {};
+    }
+  } catch (e) {
+    console.error("Error loading disabled steps:", e);
+  }
+}
 
 async function loadRoutines() {
   const list = document.getElementById("routineList");
@@ -880,10 +880,20 @@ async function loadRoutines() {
   }
 }
 
+function isStepDisabled(stepId) {
+  if (!disabledStepsMap[stepId]) return false;
+  const until = new Date(disabledStepsMap[stepId]);
+  if (new Date() < until) {
+    return true;
+  }
+  return false;
+}
+
 function getTodaySteps(routine) {
   const today = new Date().getDay();
   if (routine.days && !routine.days.includes(today)) return [];
-  return routine.steps || [];
+  const steps = routine.steps || [];
+  return steps.filter(s => !isStepDisabled(s.id));
 }
 
 function renderRoutines() {
@@ -1049,26 +1059,47 @@ document.getElementById("directBackBtn").addEventListener("click", () => {
 
 document.getElementById("newRoutineBtn").addEventListener("click", () => openEditor(null));
 
-function populateStepReuseLibrary() {
-  const select = document.getElementById("reuseStepSelect");
-  select.innerHTML = '<option value="">-- בחר Step קיים מתוך הספרייה --</option>';
-  
-  const allStepsMap = new Map();
+function getAllStepsList() {
+  const list = [];
+  const map = new Map();
   routines.forEach(r => {
     if (r.steps) {
       r.steps.forEach(s => {
-        if (s.id && !allStepsMap.has(s.id)) {
-          allStepsMap.set(s.id, s);
+        if (s.id && !map.has(s.id)) {
+          map.set(s.id, s);
+          list.push(s);
         }
       });
     }
   });
+  return list;
+}
 
-  allStepsMap.forEach((step, id) => {
+function populateStepReuseLibrary() {
+  const select = document.getElementById("reuseStepSelect");
+  select.innerHTML = '<option value="">-- בחר Step קיים מתוך הספרייה --</option>';
+  
+  const allSteps = getAllStepsList();
+  allSteps.forEach(step => {
     const option = document.createElement("option");
-    option.value = id;
+    option.value = step.id;
     option.textContent = `[#${step.stepNumber || '?'}] ${step.name} (${step.duration} שנ')`;
     select.appendChild(option);
+  });
+}
+
+function updateDisableOptionsInEditor() {
+  const allSteps = getAllStepsList();
+  document.querySelectorAll(".disable-target-select").forEach(select => {
+    const currentVal = select.dataset.selectedVal || "";
+    select.innerHTML = '<option value="">-- ללא ביטול Step אחר --</option>';
+    allSteps.forEach(s => {
+      const opt = document.createElement("option");
+      opt.value = s.id;
+      opt.textContent = `#${s.stepNumber || '?'} - ${s.name}`;
+      if (s.id === currentVal) opt.selected = true;
+      select.appendChild(opt);
+    });
   });
 }
 
@@ -1098,9 +1129,13 @@ function openEditor(routine) {
   }
 
   populateStepReuseLibrary();
+  updateDisableOptionsInEditor();
 }
 
-document.getElementById("addStepBtn").addEventListener("click", () => addStep());
+document.getElementById("addStepBtn").addEventListener("click", () => {
+  addStep();
+  updateDisableOptionsInEditor();
+});
 
 document.getElementById("reuseStepBtn").addEventListener("click", () => {
   const select = document.getElementById("reuseStepSelect");
@@ -1110,16 +1145,12 @@ document.getElementById("reuseStepBtn").addEventListener("click", () => {
     return;
   }
 
-  let foundStep = null;
-  for (const r of routines) {
-    if (r.steps) {
-      foundStep = r.steps.find(s => s.id === stepId);
-      if (foundStep) break;
-    }
-  }
+  const allSteps = getAllStepsList();
+  const foundStep = allSteps.find(s => s.id === stepId);
 
   if (foundStep) {
     addStep(foundStep);
+    updateDisableOptionsInEditor();
   }
 });
 
@@ -1169,12 +1200,32 @@ function addStep(step = null) {
         </select>
       </div>
     </div>
+
+    <div class="disable-box">
+      <label><strong>ביטול Step אחר לאחר ביצוע:</strong></label>
+      <div class="step-grid" style="margin-top:8px;">
+        <div>
+          <select class="disable-target-select" data-selected-val="${step?.disableTargetId || ''}">
+            <option value="">-- ללא ביטול Step אחר --</option>
+          </select>
+        </div>
+        <div>
+          <select class="disable-days-select">
+            <option value="1" ${step?.disableDays == 1 ? 'selected' : ''}>בטל ל-24 שעות (יום 1)</option>
+            <option value="2" ${step?.disableDays == 2 ? 'selected' : ''}>בטל ל-2 ימים</option>
+            <option value="3" ${step?.disableDays == 3 ? 'selected' : ''}>בטל ל-3 ימים</option>
+            <option value="7" ${step?.disableDays == 7 ? 'selected' : ''}>בטל לשבוע</option>
+            <option value="14" ${step?.disableDays == 14 ? 'selected' : ''}>בטל ל-14 יום</option>
+            <option value="30" ${step?.disableDays == 30 ? 'selected' : ''}>בטל ל-30 יום</option>
+          </select>
+        </div>
+      </div>
+    </div>
   `;
 
   div.querySelector(".remove").addEventListener("click", () => {
     stepImages.delete(stepId);
     div.remove();
-    updateStepOrderNumbers();
   });
 
   const imgInput = div.querySelector(".step-image-input");
@@ -1217,10 +1268,6 @@ function addStep(step = null) {
   container.appendChild(div);
 }
 
-function updateStepOrderNumbers() {
-  // פונקציית עזר במידת הצורך
-}
-
 document.getElementById("cancelEditorBtn").addEventListener("click", () => {
   document.getElementById("editorScreen").classList.add("hidden");
   document.getElementById("routineListScreen").style.display = "block";
@@ -1248,6 +1295,9 @@ document.getElementById("saveRoutineBtn").addEventListener("click", async () => 
     const duration = Number(el.querySelector(".step-duration").value) || 60;
     const frequency = el.querySelector(".frequency").value;
     const image = stepImages.get(id) || "";
+    
+    const disableTargetId = el.querySelector(".disable-target-select").value || "";
+    const disableDays = Number(el.querySelector(".disable-days-select").value) || 1;
 
     steps.push({
       id: id,
@@ -1256,6 +1306,8 @@ document.getElementById("saveRoutineBtn").addEventListener("click", async () => 
       duration: duration,
       frequency: frequency,
       image: image,
+      disableTargetId: disableTargetId,
+      disableDays: disableDays,
       order: index + 1
     });
   });
@@ -1343,7 +1395,7 @@ function loadActiveStep() {
     remainingSeconds--;
     updateTimerDisplay();
     if (remainingSeconds <= 0) {
-      nextStep();
+      completeActiveStep();
     }
   }, 1000);
 }
@@ -1354,13 +1406,33 @@ function updateTimerDisplay() {
   document.getElementById("timer").textContent = `${String(min).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
 }
 
-function nextStep() {
+async function completeActiveStep() {
+  const currentStep = activeSteps[activeStepIndex];
+
+  // אם ה-Step מוגדר לבטל Step אחר
+  if (currentStep && currentStep.disableTargetId) {
+    const targetId = currentStep.disableTargetId;
+    const days = currentStep.disableDays || 1;
+    
+    const untilDate = new Date();
+    untilDate.setDate(untilDate.getDate() + days);
+
+    disabledStepsMap[targetId] = untilDate.toISOString();
+
+    try {
+      const docRef = doc(db, "users", currentUser.uid, "meta", "disabledSteps");
+      await setDoc(docRef, disabledStepsMap, { merge: true });
+    } catch (e) {
+      console.error("Failed to save disabled step state:", e);
+    }
+  }
+
   activeStepIndex++;
   loadActiveStep();
 }
 
 document.getElementById("activeStepArea").addEventListener("click", () => {
-  nextStep();
+  completeActiveStep();
 });
 
 document.getElementById("exitActiveBtn").addEventListener("click", () => {
@@ -1371,6 +1443,7 @@ function exitActiveRoutine() {
   if (timerInterval) clearInterval(timerInterval);
   document.getElementById("activeScreen").style.display = "none";
   document.getElementById("routineListScreen").style.display = "block";
+  renderRoutines(); // רענון תצוגת השגרות לפי ה-Steps המעודכנים
 }
 
 </script>
