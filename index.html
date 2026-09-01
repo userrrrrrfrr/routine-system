@@ -828,9 +828,9 @@ document.getElementById("loginBtn").addEventListener("click", async () => {
   }
 });
 
-document.getElementById("logoutBtn").addEventListener("click", async () => {
-  closeUserPanelFunction();
-  await signOut(auth);
+document.querySelector(".active-box").addEventListener("click", (e) => {
+  if (e.target.id === "exitActiveBtn") return; // מונע מעבר שלב בלחיצה על יציאה
+  completeActiveStep();
 });
 
 onAuthStateChanged(auth, async (user) => {
