@@ -521,19 +521,6 @@
       width: 100%;
     }
 
-    .active-step-area {
-      cursor: pointer;
-      touch-action: manipulation;
-      user-select: none;
-      -webkit-user-select: none;
-      transition: transform .12s ease, opacity .12s ease;
-    }
-
-    .active-step-area:active {
-      transform: scale(.98);
-      opacity: .85;
-    }
-
     .active-step-image {
       width: 100%;
       max-height: 340px;
@@ -542,9 +529,14 @@
       margin: 0 auto 6px;
       display: block;
       background: #fafafa;
-      user-select: none;
-      -webkit-user-select: none;
-      pointer-events: none;
+      cursor: pointer;
+      touch-action: manipulation;
+      transition: transform .12s ease, opacity .12s ease;
+    }
+
+    .active-step-image:active {
+      transform: scale(.98);
+      opacity: .85;
     }
 
     #activeStepName {
@@ -554,6 +546,12 @@
       margin: 8px 0 8px;
       line-height: 1.15;
       letter-spacing: -0.5px;
+      word-break: break-word;
+    }
+
+    #activeStepName a {
+      color: #007aff;
+      text-decoration: underline;
     }
 
     #timer {
@@ -797,7 +795,7 @@
           <div id="activeStepName"></div>
         </div>
         <div id="timer">00:00</div>
-        <div class="tap-hint">נגיעה ב-Step = בוצע</div>
+        <div class="tap-hint">נגיעה בתמונה = בוצע</div>
         <button id="exitActiveBtn" class="back-btn">יציאה</button>
       </div>
     </div>
@@ -879,8 +877,8 @@ document.getElementById("logoutBtn").addEventListener("click", async () => {
   closeUserPanelFunction();
 });
 
-document.querySelector(".active-box").addEventListener("click", (e) => {
-  if (e.target.id === "exitActiveBtn") return; 
+// שינוי: מעכשיו רק נגיעה בתמונה מסמנת את הצעד כבוצע
+document.getElementById("activeStepImage").addEventListener("click", () => {
   completeActiveStep();
 });
 
@@ -1299,7 +1297,6 @@ function addStep(step = null) {
     addDisableRuleRow(rulesContainer);
   });
 
-  // טעינת חוקים קיימים בלבד
   let initialRules = step?.disableRules || [];
   if (initialRules.length === 0 && step?.disableTargetId) {
     const fallbackHours = step.disableHours !== undefined ? step.disableHours : ((step.disableDays || 1) * 24);
@@ -1460,7 +1457,7 @@ function runStep() {
 
   const currentStep = activeSteps[activeStepIndex];
   
-  document.getElementById("activeStepName").textContent = currentStep.name;
+  document.getElementById("activeStepName").innerHTML = escapeHtml(currentStep.name);
 
   const activeImg = document.getElementById("activeStepImage");
   if (currentStep.image) {
@@ -1494,7 +1491,6 @@ async function completeActiveStep() {
   
   let rulesToApply = currentStep.disableRules || [];
   
-  // תמיכה אחורית במבנה ישן
   if (rulesToApply.length === 0 && currentStep.disableTargetId) {
     const fallbackHours = currentStep.disableHours !== undefined ? currentStep.disableHours : ((currentStep.disableDays || 1) * 24);
     rulesToApply = [{ targetId: currentStep.disableTargetId, hours: fallbackHours }];
