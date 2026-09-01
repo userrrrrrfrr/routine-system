@@ -426,17 +426,56 @@
     }
 
     .disable-box {
-      margin-top: 12px;
-      padding: 12px;
+      margin-top: 15px;
+      padding: 14px;
       border: 1px dashed #ccc;
       border-radius: 12px;
-      background: #fdfdfd;
+      background: #fcfcfc;
     }
 
-    .disable-box label {
-      font-size: 13px;
+    .disable-box-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .disable-rule-row {
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+      margin-bottom: 10px;
+      background: #fff;
+      padding: 10px;
+      border: 1px solid #eaeaea;
+      border-radius: 10px;
+    }
+
+    .disable-rule-row > div {
+      flex: 1;
+    }
+
+    .disable-rule-row label {
+      font-size: 12px;
+      color: #666;
       display: block;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
+    }
+
+    .btn-add-rule {
+      background: #f0f0f3;
+      border: 1px solid #ddd;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+    }
+
+    .btn-remove-rule {
+      padding: 10px 14px;
+      background: #fff;
+      border: 1px solid #ddd;
+      color: #d00;
+      border-radius: 8px;
     }
 
     .step-actions-bar {
@@ -596,6 +635,11 @@
 
       .step-grid {
         grid-template-columns: 1fr;
+      }
+
+      .disable-rule-row {
+        flex-direction: column;
+        align-items: stretch;
       }
 
       #timer {
@@ -1096,7 +1140,7 @@ function updateDisableOptionsInEditor() {
   const allSteps = getAllStepsList();
   document.querySelectorAll(".disable-target-select").forEach(select => {
     const currentVal = select.dataset.selectedVal || "";
-    select.innerHTML = '<option value="">-- ללא ביטול Step אחר --</option>';
+    select.innerHTML = '<option value="">-- בחר Step --</option>';
     allSteps.forEach(s => {
       const opt = document.createElement("option");
       opt.value = s.id;
@@ -1158,6 +1202,35 @@ document.getElementById("reuseStepBtn").addEventListener("click", () => {
   }
 });
 
+function addDisableRuleRow(rulesContainer, rule = null) {
+  const row = document.createElement("div");
+  row.className = "disable-rule-row";
+
+  row.innerHTML = `
+    <div>
+      <label>Step לביטול</label>
+      <select class="disable-target-select" data-selected-val="${rule?.targetId || ''}">
+        <option value="">-- בחר Step --</option>
+      </select>
+    </div>
+    <div>
+      <label>משך הביטול (בשעות)</label>
+      <input class="disable-hours-input" type="number" min="1" placeholder="24" value="${rule?.hours || 24}">
+    </div>
+    <button type="button" class="btn-remove-rule">✕</button>
+  `;
+
+  row.querySelector(".btn-remove-rule").addEventListener("click", () => row.remove());
+  
+  const select = row.querySelector(".disable-target-select");
+  select.addEventListener("change", (e) => {
+    select.dataset.selectedVal = e.target.value;
+  });
+
+  rulesContainer.appendChild(row);
+  updateDisableOptionsInEditor();
+}
+
 function addStep(step = null) {
   const container = document.getElementById("stepsContainer");
   const stepId = step?.id || crypto.randomUUID();
@@ -1172,12 +1245,10 @@ function addStep(step = null) {
     stepImages.set(stepId, step.image);
   }
 
-  const disableHoursVal = step?.disableHours !== undefined ? step.disableHours : (step?.disableDays ? step.disableDays * 24 : 24);
-
   div.innerHTML = `
     <div class="step-title">
       <strong>Step #${stepNumber} <span class="step-id-tag">ID: ${stepId.substring(0, 8)}</span></strong>
-      <button class="danger remove">מחק</button>
+      <button class="danger remove">מחק Step</button>
     </div>
 
     <div class="form-group">
@@ -1208,25 +1279,35 @@ function addStep(step = null) {
     </div>
 
     <div class="disable-box">
-      <strong>ביטול Step אחר לאחר ביצוע:</strong>
-      <div class="step-grid" style="margin-top:8px;">
-        <div>
-          <label>בחר Step לביטול</label>
-          <select class="disable-target-select" data-selected-val="${step?.disableTargetId || ''}">
-            <option value="">-- ללא ביטול Step אחר --</option>
-          </select>
-        </div>
-        <div>
-          <label>זמן ביטול (בשעות)</label>
-          <input class="disable-hours-input" type="number" min="1" placeholder="24" value="${disableHoursVal}">
-        </div>
+      <div class="disable-box-header">
+        <strong>ביטול Steps אחרים לאחר ביצוע:</strong>
+        <button type="button" class="btn-add-rule">+ הוסף כלל ביטול</button>
       </div>
+      <div class="disable-rules-container"></div>
     </div>
   `;
 
   div.querySelector(".remove").addEventListener("click", () => {
     stepImages.delete(stepId);
     div.remove();
+  });
+
+  const rulesContainer = div.querySelector(".disable-rules-container");
+  const addRuleBtn = div.querySelector(".btn-add-rule");
+
+  addRuleBtn.addEventListener("click", () => {
+    addDisableRuleRow(rulesContainer);
+  });
+
+  // טעינת חוקים קיימים בלבד
+  let initialRules = step?.disableRules || [];
+  if (initialRules.length === 0 && step?.disableTargetId) {
+    const fallbackHours = step.disableHours !== undefined ? step.disableHours : ((step.disableDays || 1) * 24);
+    initialRules = [{ targetId: step.disableTargetId, hours: fallbackHours }];
+  }
+
+  initialRules.forEach(rule => {
+    addDisableRuleRow(rulesContainer, rule);
   });
 
   const imgInput = div.querySelector(".step-image-input");
@@ -1291,9 +1372,18 @@ document.getElementById("saveRoutineBtn").addEventListener("click", async () => 
     const sName = el.querySelector(".step-name").value.trim() || "Step ללא שם";
     const sDuration = Number(el.querySelector(".step-duration").value) || 60;
     const sFreq = Number(el.querySelector(".frequency").value) || 1;
-    const sDisableTarget = el.querySelector(".disable-target-select").value || null;
-    const sDisableHours = Number(el.querySelector(".disable-hours-input").value) || 24;
     const sImg = stepImages.get(sId) || "";
+
+    const ruleRows = el.querySelectorAll(".disable-rule-row");
+    const disableRules = [];
+
+    ruleRows.forEach(row => {
+      const targetId = row.querySelector(".disable-target-select").value;
+      const hours = Number(row.querySelector(".disable-hours-input").value) || 24;
+      if (targetId) {
+        disableRules.push({ targetId, hours });
+      }
+    });
 
     steps.push({
       id: sId,
@@ -1301,8 +1391,7 @@ document.getElementById("saveRoutineBtn").addEventListener("click", async () => 
       name: sName,
       duration: sDuration,
       frequency: sFreq,
-      disableTargetId: sDisableTarget,
-      disableHours: sDisableHours,
+      disableRules,
       image: sImg
     });
   });
@@ -1402,12 +1491,22 @@ function updateTimerDisplay() {
 
 async function completeActiveStep() {
   const currentStep = activeSteps[activeStepIndex];
-  if (currentStep.disableTargetId) {
-    const hours = currentStep.disableHours !== undefined ? currentStep.disableHours : ((currentStep.disableDays || 1) * 24);
-    const untilDate = new Date();
-    untilDate.setTime(untilDate.getTime() + (hours * 60 * 60 * 1000));
-    
-    disabledStepsMap[currentStep.disableTargetId] = untilDate.toISOString();
+  
+  let rulesToApply = currentStep.disableRules || [];
+  
+  // תמיכה אחורית במבנה ישן
+  if (rulesToApply.length === 0 && currentStep.disableTargetId) {
+    const fallbackHours = currentStep.disableHours !== undefined ? currentStep.disableHours : ((currentStep.disableDays || 1) * 24);
+    rulesToApply = [{ targetId: currentStep.disableTargetId, hours: fallbackHours }];
+  }
+
+  if (rulesToApply.length > 0) {
+    const now = new Date();
+    rulesToApply.forEach(rule => {
+      const untilDate = new Date(now.getTime() + (rule.hours * 60 * 60 * 1000));
+      disabledStepsMap[rule.targetId] = untilDate.toISOString();
+    });
+
     try {
       const docRef = doc(db, "users", currentUser.uid, "meta", "disabledSteps");
       await setDoc(docRef, disabledStepsMap, { merge: true });
