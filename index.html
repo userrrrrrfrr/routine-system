@@ -1371,6 +1371,8 @@ function runStep() {
   }
 
   const currentStep = activeSteps[activeStepIndex];
+  
+  // הצגת שם השלב בלבד ללא מספר/ID
   document.getElementById("activeStepName").textContent = currentStep.name;
 
   const activeImg = document.getElementById("activeStepImage");
