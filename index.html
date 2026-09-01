@@ -435,6 +435,8 @@
 
     .disable-box label {
       font-size: 13px;
+      display: block;
+      margin-bottom: 6px;
     }
 
     .step-actions-bar {
@@ -1170,6 +1172,8 @@ function addStep(step = null) {
     stepImages.set(stepId, step.image);
   }
 
+  const disableHoursVal = step?.disableHours !== undefined ? step.disableHours : (step?.disableDays ? step.disableDays * 24 : 24);
+
   div.innerHTML = `
     <div class="step-title">
       <strong>Step #${stepNumber} <span class="step-id-tag">ID: ${stepId.substring(0, 8)}</span></strong>
@@ -1204,22 +1208,17 @@ function addStep(step = null) {
     </div>
 
     <div class="disable-box">
-      <label><strong>ביטול Step אחר לאחר ביצוע:</strong></label>
+      <strong>ביטול Step אחר לאחר ביצוע:</strong>
       <div class="step-grid" style="margin-top:8px;">
         <div>
+          <label>בחר Step לביטול</label>
           <select class="disable-target-select" data-selected-val="${step?.disableTargetId || ''}">
             <option value="">-- ללא ביטול Step אחר --</option>
           </select>
         </div>
         <div>
-          <select class="disable-days-select">
-            <option value="1" ${step?.disableDays == 1 ? 'selected' : ''}>בטל ל-24 שעות (יום 1)</option>
-            <option value="2" ${step?.disableDays == 2 ? 'selected' : ''}>בטל ל-2 ימים</option>
-            <option value="3" ${step?.disableDays == 3 ? 'selected' : ''}>בטל ל-3 ימים</option>
-            <option value="7" ${step?.disableDays == 7 ? 'selected' : ''}>בטל לשבוע</option>
-            <option value="14" ${step?.disableDays == 14 ? 'selected' : ''}>בטל ל-14 יום</option>
-            <option value="30" ${step?.disableDays == 30 ? 'selected' : ''}>בטל ל-30 יום</option>
-          </select>
+          <label>זמן ביטול (בשעות)</label>
+          <input class="disable-hours-input" type="number" min="1" placeholder="24" value="${disableHoursVal}">
         </div>
       </div>
     </div>
@@ -1293,7 +1292,7 @@ document.getElementById("saveRoutineBtn").addEventListener("click", async () => 
     const sDuration = Number(el.querySelector(".step-duration").value) || 60;
     const sFreq = Number(el.querySelector(".frequency").value) || 1;
     const sDisableTarget = el.querySelector(".disable-target-select").value || null;
-    const sDisableDays = Number(el.querySelector(".disable-days-select").value) || 1;
+    const sDisableHours = Number(el.querySelector(".disable-hours-input").value) || 24;
     const sImg = stepImages.get(sId) || "";
 
     steps.push({
@@ -1303,7 +1302,7 @@ document.getElementById("saveRoutineBtn").addEventListener("click", async () => 
       duration: sDuration,
       frequency: sFreq,
       disableTargetId: sDisableTarget,
-      disableDays: sDisableDays,
+      disableHours: sDisableHours,
       image: sImg
     });
   });
@@ -1372,7 +1371,6 @@ function runStep() {
 
   const currentStep = activeSteps[activeStepIndex];
   
-  // הצגת שם השלב בלבד ללא מספר/ID
   document.getElementById("activeStepName").textContent = currentStep.name;
 
   const activeImg = document.getElementById("activeStepImage");
@@ -1405,9 +1403,9 @@ function updateTimerDisplay() {
 async function completeActiveStep() {
   const currentStep = activeSteps[activeStepIndex];
   if (currentStep.disableTargetId) {
-    const days = currentStep.disableDays || 1;
+    const hours = currentStep.disableHours !== undefined ? currentStep.disableHours : ((currentStep.disableDays || 1) * 24);
     const untilDate = new Date();
-    untilDate.setDate(untilDate.getDate() + days);
+    untilDate.setTime(untilDate.getTime() + (hours * 60 * 60 * 1000));
     
     disabledStepsMap[currentStep.disableTargetId] = untilDate.toISOString();
     try {
