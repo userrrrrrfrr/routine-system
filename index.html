@@ -782,7 +782,7 @@ const provider = new GoogleAuthProvider();
 
 let currentUser = null;
 let routines = [];
-let disabledStepsMap = {}; // לשמירת הצעדים המבוטלים מה-DB
+let disabledStepsMap = {}; 
 let editingRoutineId = null;
 let activeRoutine = null;
 let activeSteps = [];
@@ -828,8 +828,13 @@ document.getElementById("loginBtn").addEventListener("click", async () => {
   }
 });
 
+document.getElementById("logoutBtn").addEventListener("click", async () => {
+  await signOut(auth);
+  closeUserPanelFunction();
+});
+
 document.querySelector(".active-box").addEventListener("click", (e) => {
-  if (e.target.id === "exitActiveBtn") return; // מונע מעבר שלב בלחיצה על יציאה
+  if (e.target.id === "exitActiveBtn") return; 
   completeActiveStep();
 });
 
@@ -883,10 +888,7 @@ async function loadRoutines() {
 function isStepDisabled(stepId) {
   if (!disabledStepsMap[stepId]) return false;
   const until = new Date(disabledStepsMap[stepId]);
-  if (new Date() < until) {
-    return true;
-  }
-  return false;
+  return new Date() < until;
 }
 
 function getTodaySteps(routine) {
@@ -1256,11 +1258,11 @@ function addStep(step = null) {
     const file = e.target.files[0];
     if (!file) return;
     try {
-      const compressed = await compressImage(file);
-      stepImages.set(stepId, compressed);
+      const base64 = await compressImage(file);
+      stepImages.set(stepId, base64);
       renderLocalPreview();
     } catch (err) {
-      alert("שגיאה בטעינת תמונה");
+      alert("טעינת תמונה נכשלה");
     }
   });
 
@@ -1280,72 +1282,63 @@ document.getElementById("saveRoutineBtn").addEventListener("click", async () => 
     return;
   }
 
-  const selectedDays = [];
-  document.querySelectorAll(".days input:checked").forEach(cb => {
-    selectedDays.push(Number(cb.value));
-  });
-
+  const selectedDays = Array.from(document.querySelectorAll(".days input:checked")).map(el => Number(el.value));
   const stepElements = document.querySelectorAll("#stepsContainer .step");
   const steps = [];
 
-  stepElements.forEach((el, index) => {
-    const id = el.dataset.stepId;
-    const stepNumber = Number(el.dataset.stepNumber);
-    const stepName = el.querySelector(".step-name").value.trim();
-    const duration = Number(el.querySelector(".step-duration").value) || 60;
-    const frequency = el.querySelector(".frequency").value;
-    const image = stepImages.get(id) || "";
-    
-    const disableTargetId = el.querySelector(".disable-target-select").value || "";
-    const disableDays = Number(el.querySelector(".disable-days-select").value) || 1;
+  stepElements.forEach(el => {
+    const sId = el.dataset.stepId;
+    const sNum = Number(el.dataset.stepNumber);
+    const sName = el.querySelector(".step-name").value.trim() || "Step ללא שם";
+    const sDuration = Number(el.querySelector(".step-duration").value) || 60;
+    const sFreq = Number(el.querySelector(".frequency").value) || 1;
+    const sDisableTarget = el.querySelector(".disable-target-select").value || null;
+    const sDisableDays = Number(el.querySelector(".disable-days-select").value) || 1;
+    const sImg = stepImages.get(sId) || "";
 
     steps.push({
-      id: id,
-      stepNumber: stepNumber,
-      name: stepName,
-      duration: duration,
-      frequency: frequency,
-      image: image,
-      disableTargetId: disableTargetId,
-      disableDays: disableDays,
-      order: index + 1
+      id: sId,
+      stepNumber: sNum,
+      name: sName,
+      duration: sDuration,
+      frequency: sFreq,
+      disableTargetId: sDisableTarget,
+      disableDays: sDisableDays,
+      image: sImg
     });
   });
 
   const routineData = {
-    name: name,
+    name,
     image: currentRoutineImage,
     days: selectedDays,
-    steps: steps,
-    updatedAt: new Date()
+    steps
   };
 
   try {
     if (editingRoutineId) {
-      const ref = doc(db, "users", currentUser.uid, "routines", editingRoutineId);
-      await updateDoc(ref, routineData);
+      const docRef = doc(db, "users", currentUser.uid, "routines", editingRoutineId);
+      await updateDoc(docRef, routineData);
     } else {
       const ref = collection(db, "users", currentUser.uid, "routines");
       await addDoc(ref, routineData);
     }
-
     document.getElementById("editorScreen").classList.add("hidden");
-    await loadRoutines();
     document.getElementById("routineListScreen").style.display = "block";
-  } catch (error) {
-    console.error(error);
-    alert("שגיאה בשמירת השגרה: " + error.message);
+    await loadRoutines();
+  } catch (e) {
+    console.error(e);
+    alert("שגיאה בשמירת השגרה: " + e.message);
   }
 });
 
 async function deleteRoutine(id) {
-  if (!confirm("האם אתה בטוח שברצונך למחוק שגרה זו?")) return;
+  if (!confirm("האם למחוק שגרה זו?")) return;
   try {
-    const ref = doc(db, "users", currentUser.uid, "routines", id);
-    await deleteDoc(ref);
+    await deleteDoc(doc(db, "users", currentUser.uid, "routines", id));
     await loadRoutines();
-  } catch (error) {
-    alert("מחיקה נכשלה: " + error.message);
+  } catch (e) {
+    alert("שגיאה במחיקה: " + e.message);
   }
 }
 
@@ -1354,41 +1347,42 @@ function startRoutine(routine) {
   activeSteps = getTodaySteps(routine);
 
   if (activeSteps.length === 0) {
-    alert("אין Steps מתוכננים להיום לשגרה זו.");
+    alert("אין Steps פעילים לשגרה זו להיום.");
     return;
   }
 
+  activeStepIndex = 0;
   document.getElementById("routineListScreen").style.display = "none";
   document.getElementById("directRoutineScreen").style.display = "none";
+  document.getElementById("editorScreen").classList.add("hidden");
   document.getElementById("activeScreen").style.display = "block";
   document.getElementById("activeRoutineName").textContent = routine.name;
 
-  activeStepIndex = 0;
-  loadActiveStep();
+  runStep();
 }
 
-function loadActiveStep() {
+function runStep() {
   if (timerInterval) clearInterval(timerInterval);
 
   if (activeStepIndex >= activeSteps.length) {
     alert("כל הכבוד! סיימת את השגרה!");
-    exitActiveRoutine();
+    exitActiveScreen();
     return;
   }
 
-  const step = activeSteps[activeStepIndex];
-  document.getElementById("activeStepName").textContent = `#${step.stepNumber || (activeStepIndex+1)}: ${step.name}`;
+  const currentStep = activeSteps[activeStepIndex];
+  document.getElementById("activeStepName").textContent = currentStep.name;
 
-  const imgEl = document.getElementById("activeStepImage");
-  if (step.image) {
-    imgEl.src = step.image;
-    imgEl.classList.remove("hidden");
+  const activeImg = document.getElementById("activeStepImage");
+  if (currentStep.image) {
+    activeImg.src = currentStep.image;
+    activeImg.classList.remove("hidden");
   } else {
-    imgEl.src = "";
-    imgEl.classList.add("hidden");
+    activeImg.src = "";
+    activeImg.classList.add("hidden");
   }
 
-  remainingSeconds = Number(step.duration) || 60;
+  remainingSeconds = currentStep.duration || 60;
   updateTimerDisplay();
 
   timerInterval = setInterval(() => {
@@ -1401,50 +1395,39 @@ function loadActiveStep() {
 }
 
 function updateTimerDisplay() {
-  const min = Math.floor(remainingSeconds / 60);
-  const sec = remainingSeconds % 60;
-  document.getElementById("timer").textContent = `${String(min).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+  const m = String(Math.floor(remainingSeconds / 60)).padStart(2, '0');
+  const s = String(remainingSeconds % 60).padStart(2, '0');
+  document.getElementById("timer").textContent = `${m}:${s}`;
 }
 
 async function completeActiveStep() {
   const currentStep = activeSteps[activeStepIndex];
-
-  // אם ה-Step מוגדר לבטל Step אחר
-  if (currentStep && currentStep.disableTargetId) {
-    const targetId = currentStep.disableTargetId;
+  if (currentStep.disableTargetId) {
     const days = currentStep.disableDays || 1;
-    
     const untilDate = new Date();
     untilDate.setDate(untilDate.getDate() + days);
-
-    disabledStepsMap[targetId] = untilDate.toISOString();
-
+    
+    disabledStepsMap[currentStep.disableTargetId] = untilDate.toISOString();
     try {
       const docRef = doc(db, "users", currentUser.uid, "meta", "disabledSteps");
       await setDoc(docRef, disabledStepsMap, { merge: true });
     } catch (e) {
-      console.error("Failed to save disabled step state:", e);
+      console.error("שגיאה בעדכון ביטול צעד ב-DB:", e);
     }
   }
 
   activeStepIndex++;
-  loadActiveStep();
+  runStep();
 }
 
-document.getElementById("activeStepArea").addEventListener("click", () => {
-  completeActiveStep();
-});
-
-document.getElementById("exitActiveBtn").addEventListener("click", () => {
-  exitActiveRoutine();
-});
-
-function exitActiveRoutine() {
+function exitActiveScreen() {
   if (timerInterval) clearInterval(timerInterval);
   document.getElementById("activeScreen").style.display = "none";
   document.getElementById("routineListScreen").style.display = "block";
-  renderRoutines(); // רענון תצוגת השגרות לפי ה-Steps המעודכנים
+  renderRoutines();
 }
+
+document.getElementById("exitActiveBtn").addEventListener("click", exitActiveScreen);
 
 </script>
 </body>
