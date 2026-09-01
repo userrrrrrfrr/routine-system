@@ -3,204 +3,127 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ניהול שגרה ומשימות</title>
+  <title>ניהול שגרה</title>
   <style>
-    * {
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
-    }
     body {
-      background-color: #f0f2f5;
-      margin: 0;
-      padding: 20px;
-      direction: rtl;
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #f4f4f9;
+      color: #333;
     }
-    .card {
-      background: #ffffff;
-      padding: 25px;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      max-width: 550px;
+    .screen {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      max-width: 500px;
       margin: 0 auto 20px auto;
     }
     .hidden {
-      display: none !important;
+      display: none;
     }
-    h2 {
-      margin-top: 0;
-      color: #333;
-    }
-    .step-card {
-      border: 1px solid #e0e0e0;
-      background: #fafafa;
-      padding: 15px;
-      border-radius: 8px;
-      margin-bottom: 15px;
-      position: relative;
-    }
-    .form-group {
-      margin-bottom: 10px;
-    }
-    label {
-      display: block;
-      font-size: 0.95em;
-      margin-bottom: 5px;
-      color: #666;
-    }
-    input[type="text"], input[type="number"] {
-      width: 100%;
+    .step-item {
+      border: 1px solid #ddd;
       padding: 10px;
-      font-size: 1em;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-    .btn {
-      padding: 12px 18px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: background 0.2s;
-    }
-    .btn-primary { background: #007bff; color: white; }
-    .btn-primary:hover { background: #0056b3; }
-    .btn-success { background: #28a745; color: white; width: 100%; margin-top: 12px; font-size: 1.2em; }
-    .btn-success:hover { background: #218838; }
-    .btn-danger { background: #dc3545; color: white; padding: 6px 12px; font-size: 0.9em; }
-    .btn-danger:hover { background: #c82333; }
-    
-    /* עיצוב מסך הרצה מוגדל */
-    .active-container {
-      text-align: center;
-      padding: 35px 25px;
-    }
-    .active-title {
-      font-size: 3.5em; /* הוגדל מ-3em */
-      font-weight: 800;
-      margin-bottom: 20px;
-      color: #111;
-      line-height: 1.2;
-      word-wrap: break-word;
-    }
-    .timer-display {
-      font-size: 3.2em; /* הוגדל מ-2.5em */
-      font-weight: bold;
-      color: #d9534f;
-      margin: 25px 0;
-      letter-spacing: 2px;
-    }
-    .step-image {
-      max-width: 100%;
-      max-height: 320px; /* הוגדל מ-250px */
-      border-radius: 12px;
-      object-fit: cover;
-      margin-bottom: 20px;
-    }
-    .btn-next {
-      width: 100%;
-      font-size: 1.4em; /* כפתור בולט וגדול יותר */
-      padding: 16px;
-    }
-    .header-flex {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
       margin-bottom: 10px;
+      border-radius: 5px;
+      background: #fafafa;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .active-display {
+      text-align: center;
+    }
+    /* הגדלת שם השלב במסך הביצוע */
+    .active-display h2 {
+      font-size: 3.2em;
+      font-weight: bold;
+      margin-bottom: 15px;
     }
   </style>
 </head>
 <body>
 
-  <!-- מסך עריכה (Editor Screen) -->
-  <div id="editorScreen" class="card">
+  <!-- מסך עריכת השגרה (Editor) -->
+  <div id="editorScreen" class="screen">
     <h2>עריכת שגרה</h2>
     <div id="stepsList"></div>
-    <button class="btn btn-primary" onclick="addStep()">+ הוסף שלב</button>
-    <button class="btn btn-success" onclick="startRoutine()">התחל שגרה</button>
+    <button onclick="addStep()">הוסף שלב</button>
+    <br><br>
+    <button onclick="startRoutine()" style="background-color: #28a745;">התחל שגרה</button>
   </div>
 
-  <!-- מסך ביצוע מוגדל (Active Screen) -->
-  <div id="activeScreen" class="card hidden active-container">
-    <h2 id="activeStepName" class="active-title">שם השלב</h2>
-    
-    <img id="activeStepImg" class="step-image hidden" src="" alt="תמונת משימה">
-    
-    <div id="activeStepTimer" class="timer-display">00:00</div>
-    
-    <button class="btn btn-primary btn-next" onclick="nextStep()">השלב הבא</button>
+  <!-- מסך ביצוע המשימה (Active Screen) -->
+  <div id="activeScreen" class="screen hidden active-display">
+    <h2 id="activeStepName">שם השלב</h2>
+    <p id="activeStepTimer">00:00</p>
+    <button onclick="nextStep()">השלב הבא</button>
   </div>
 
   <script>
     let steps = [];
-    let currentStepIndex = 0;
-    let timerInterval = null;
-    let timeRemaining = 0;
 
+    // יצירת ID ייחודי לשימוש פנימי בלבד
     function generateUniqueId() {
-      return 'id_' + Math.random().toString(36).substr(2, 9);
+      return 'step_' + Math.random().toString(36).substr(2, 9);
     }
 
+    // הוספת שלב חדש
     function addStep() {
       const stepId = generateUniqueId();
+      const stepIndex = steps.length + 1;
+
       steps.push({
         id: stepId,
-        name: `שלב ${steps.length + 1}`,
-        durationMinutes: 1,
-        imageUrl: ''
+        name: `שלב ${stepIndex}`
       });
+
       renderEditor();
     }
 
-    function deleteStep(id) {
-      steps = steps.filter(step => step.id !== id);
-      renderEditor();
-    }
-
+    // רינדור רשימת השלבים בעורך (ללא הצגת תגית ה-ID)
     function renderEditor() {
       const stepsListDiv = document.getElementById('stepsList');
       stepsListDiv.innerHTML = '';
 
       steps.forEach((step, index) => {
         const stepDiv = document.createElement('div');
-        stepDiv.className = 'step-card';
-        stepDiv.setAttribute('data-id', step.id);
-
+        stepDiv.className = 'step-item';
+        stepDiv.setAttribute('data-id', step.id); 
+        
         stepDiv.innerHTML = `
-          <div class="header-flex">
-            <strong>שלב #${index + 1}</strong>
-            <button class="btn btn-danger" onclick="deleteStep('${step.id}')">מחק</button>
-          </div>
-          <div class="form-group">
-            <label>שם המשימה:</label>
-            <input type="text" value="${step.name}" onchange="updateStepData('${step.id}', 'name', this.value)">
-          </div>
-          <div class="form-group">
-            <label>זמן בדקות:</label>
-            <input type="number" min="1" value="${step.durationMinutes}" onchange="updateStepData('${step.id}', 'durationMinutes', this.value)">
-          </div>
-          <div class="form-group">
-            <label>קישור לתמונה (אופציונלי):</label>
-            <input type="text" placeholder="https://example.com/image.jpg" value="${step.imageUrl}" onchange="updateStepData('${step.id}', 'imageUrl', this.value)">
+          <strong>שלב #${index + 1}</strong>
+          <div>
+            <input type="text" value="${step.name}" onchange="updateStepName('${step.id}', this.value)" placeholder="שם השלב">
           </div>
         `;
         stepsListDiv.appendChild(stepDiv);
       });
     }
 
-    function updateStepData(id, field, value) {
+    // עדכון שם השלב בלוגיקה
+    function updateStepName(id, newName) {
       const step = steps.find(s => s.id === id);
       if (step) {
-        if (field === 'durationMinutes') {
-          step[field] = parseInt(value) || 1;
-        } else {
-          step[field] = value;
-        }
+        step.name = newName;
       }
     }
 
+    let currentStepIndex = 0;
+
+    // התחלת השגרה ומעבר למסך הביצוע
     function startRoutine() {
       if (steps.length === 0) {
-        alert('יש להוסיף לפחות שלב אחד לפני התחלת השגרה!');
+        alert('יש להוסיף לפחות שלב אחד!');
         return;
       }
       currentStepIndex = 0;
@@ -209,56 +132,23 @@
       showCurrentActiveStep();
     }
 
+    // הצגת השלב הנוכחי במסך הביצוע
     function showCurrentActiveStep() {
-      clearInterval(timerInterval);
-      
       const currentStep = steps[currentStepIndex];
       document.getElementById('activeStepName').innerText = currentStep.name;
-
-      const imgEl = document.getElementById('activeStepImg');
-      if (currentStep.imageUrl && currentStep.imageUrl.trim() !== '') {
-        imgEl.src = currentStep.imageUrl;
-        imgEl.classList.remove('hidden');
-      } else {
-        imgEl.classList.add('hidden');
-      }
-
-      timeRemaining = currentStep.durationMinutes * 60;
-      updateTimerDisplay();
-
-      timerInterval = setInterval(() => {
-        timeRemaining--;
-        updateTimerDisplay();
-
-        if (timeRemaining <= 0) {
-          clearInterval(timerInterval);
-          nextStep();
-        }
-      }, 1000);
     }
 
-    function updateTimerDisplay() {
-      const minutes = Math.floor(timeRemaining / 60);
-      const seconds = timeRemaining % 60;
-      const formattedMin = String(minutes).padStart(2, '0');
-      const formattedSec = String(seconds).padStart(2, '0');
-      document.getElementById('activeStepTimer').innerText = `${formattedMin}:${formattedSec}`;
-    }
-
+    // מעבר לשלב הבא
     function nextStep() {
-      clearInterval(timerInterval);
       currentStepIndex++;
-
       if (currentStepIndex < steps.length) {
         showCurrentActiveStep();
       } else {
-        alert('כל הכבוד! סיימת את כל השגרה.');
+        alert('כל הכבוד! סיימת את השגרה.');
         document.getElementById('activeScreen').classList.add('hidden');
         document.getElementById('editorScreen').classList.remove('hidden');
       }
     }
-
-    addStep();
   </script>
 
 </body>
