@@ -20,7 +20,7 @@
       padding: 25px;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      max-width: 500px;
+      max-width: 550px;
       margin: 0 auto 20px auto;
     }
     .hidden {
@@ -43,52 +43,63 @@
     }
     label {
       display: block;
-      font-size: 0.9em;
+      font-size: 0.95em;
       margin-bottom: 5px;
       color: #666;
     }
     input[type="text"], input[type="number"] {
       width: 100%;
-      padding: 8px;
+      padding: 10px;
+      font-size: 1em;
       border: 1px solid #ccc;
-      border-radius: 4px;
+      border-radius: 6px;
     }
     .btn {
-      padding: 10px 16px;
+      padding: 12px 18px;
       border: none;
-      border-radius: 6px;
+      border-radius: 8px;
       cursor: pointer;
       font-weight: bold;
       transition: background 0.2s;
     }
     .btn-primary { background: #007bff; color: white; }
     .btn-primary:hover { background: #0056b3; }
-    .btn-success { background: #28a745; color: white; width: 100%; margin-top: 10px; font-size: 1.1em; }
+    .btn-success { background: #28a745; color: white; width: 100%; margin-top: 12px; font-size: 1.2em; }
     .btn-success:hover { background: #218838; }
-    .btn-danger { background: #dc3545; color: white; padding: 5px 10px; font-size: 0.85em; }
+    .btn-danger { background: #dc3545; color: white; padding: 6px 12px; font-size: 0.9em; }
     .btn-danger:hover { background: #c82333; }
     
-    /* עיצוב מסך הרצה */
+    /* עיצוב מסך הרצה מוגדל */
     .active-container {
       text-align: center;
+      padding: 35px 25px;
     }
     .active-title {
-      font-size: 1.8em;
-      margin-bottom: 15px;
+      font-size: 3.5em; /* הוגדל מ-3em */
+      font-weight: 800;
+      margin-bottom: 20px;
       color: #111;
+      line-height: 1.2;
+      word-wrap: break-word;
     }
     .timer-display {
-      font-size: 3em;
+      font-size: 3.2em; /* הוגדל מ-2.5em */
       font-weight: bold;
       color: #d9534f;
-      margin: 20px 0;
+      margin: 25px 0;
+      letter-spacing: 2px;
     }
     .step-image {
       max-width: 100%;
-      max-height: 250px;
-      border-radius: 8px;
+      max-height: 320px; /* הוגדל מ-250px */
+      border-radius: 12px;
       object-fit: cover;
-      margin-bottom: 15px;
+      margin-bottom: 20px;
+    }
+    .btn-next {
+      width: 100%;
+      font-size: 1.4em; /* כפתור בולט וגדול יותר */
+      padding: 16px;
     }
     .header-flex {
       display: flex;
@@ -108,16 +119,15 @@
     <button class="btn btn-success" onclick="startRoutine()">התחל שגרה</button>
   </div>
 
-  <!-- מסך ביצוע (Active Screen) -->
+  <!-- מסך ביצוע מוגדל (Active Screen) -->
   <div id="activeScreen" class="card hidden active-container">
     <h2 id="activeStepName" class="active-title">שם השלב</h2>
     
-    <!-- תמונה מוצגת רק אם הזינו קישור -->
     <img id="activeStepImg" class="step-image hidden" src="" alt="תמונת משימה">
     
     <div id="activeStepTimer" class="timer-display">00:00</div>
     
-    <button class="btn btn-primary" style="width: 100%; font-size: 1.2em; padding: 12px;" onclick="nextStep()">השלב הבא</button>
+    <button class="btn btn-primary btn-next" onclick="nextStep()">השלב הבא</button>
   </div>
 
   <script>
@@ -126,12 +136,10 @@
     let timerInterval = null;
     let timeRemaining = 0;
 
-    // יצירת מזהה ייחודי פנימי (נסתר לחלוטין)
     function generateUniqueId() {
       return 'id_' + Math.random().toString(36).substr(2, 9);
     }
 
-    // הוספת שלב ברקע
     function addStep() {
       const stepId = generateUniqueId();
       steps.push({
@@ -143,13 +151,11 @@
       renderEditor();
     }
 
-    // מחיקת שלב
     function deleteStep(id) {
       steps = steps.filter(step => step.id !== id);
       renderEditor();
     }
 
-    // הצגת השלבים בעורך (ללא שום אזכור ל-ID)
     function renderEditor() {
       const stepsListDiv = document.getElementById('stepsList');
       stepsListDiv.innerHTML = '';
@@ -181,7 +187,6 @@
       });
     }
 
-    // עדכון הנתונים במערך
     function updateStepData(id, field, value) {
       const step = steps.find(s => s.id === id);
       if (step) {
@@ -193,7 +198,6 @@
       }
     }
 
-    // התחלת השגרה ומעבר למסך הביצוע
     function startRoutine() {
       if (steps.length === 0) {
         alert('יש להוסיף לפחות שלב אחד לפני התחלת השגרה!');
@@ -205,16 +209,12 @@
       showCurrentActiveStep();
     }
 
-    // הצגת השלב הפעיל והפעלת הטיימר
     function showCurrentActiveStep() {
-      clearInterval(timerInterval); // איפוס טיימר קודם
+      clearInterval(timerInterval);
       
       const currentStep = steps[currentStepIndex];
-      
-      // הצגת שם המשימה בלבד (ללא מזהים)
       document.getElementById('activeStepName').innerText = currentStep.name;
 
-      // טיפול בתמונה
       const imgEl = document.getElementById('activeStepImg');
       if (currentStep.imageUrl && currentStep.imageUrl.trim() !== '') {
         imgEl.src = currentStep.imageUrl;
@@ -223,7 +223,6 @@
         imgEl.classList.add('hidden');
       }
 
-      // הגדרת הטיימר
       timeRemaining = currentStep.durationMinutes * 60;
       updateTimerDisplay();
 
@@ -238,7 +237,6 @@
       }, 1000);
     }
 
-    // עדכון תצוגת השעון (MM:SS)
     function updateTimerDisplay() {
       const minutes = Math.floor(timeRemaining / 60);
       const seconds = timeRemaining % 60;
@@ -247,7 +245,6 @@
       document.getElementById('activeStepTimer').innerText = `${formattedMin}:${formattedSec}`;
     }
 
-    // מעבר לשלב הבא
     function nextStep() {
       clearInterval(timerInterval);
       currentStepIndex++;
@@ -261,7 +258,6 @@
       }
     }
 
-    // הוספת שלב ראשון כברירת מחדל בטעינה
     addStep();
   </script>
 
