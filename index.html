@@ -521,6 +521,18 @@
       width: 100%;
     }
 
+    .active-step-area {
+      cursor: pointer;
+      padding: 10px;
+      border-radius: 18px;
+      transition: background-color 0.15s ease;
+      user-select: none;
+    }
+
+    .active-step-area:active {
+      background-color: #f0f0f3;
+    }
+
     .active-step-image {
       width: 100%;
       max-height: 340px;
@@ -529,14 +541,7 @@
       margin: 0 auto 6px;
       display: block;
       background: #fafafa;
-      cursor: pointer;
       touch-action: manipulation;
-      transition: transform .12s ease, opacity .12s ease;
-    }
-
-    .active-step-image:active {
-      transform: scale(.98);
-      opacity: .85;
     }
 
     #activeStepName {
@@ -553,6 +558,8 @@
       color: #007aff;
       text-decoration: underline;
       cursor: pointer;
+      position: relative;
+      z-index: 10;
     }
 
     #timer {
@@ -796,7 +803,7 @@
           <div id="activeStepName"></div>
         </div>
         <div id="timer">00:00</div>
-        <div class="tap-hint">נגיעה בתמונה = בוצע</div>
+        <div class="tap-hint">נגיעה באזור ה-Step = בוצע</div>
         <button id="exitActiveBtn" class="back-btn">יציאה</button>
       </div>
     </div>
@@ -845,13 +852,12 @@ function escapeAttr(text) {
   return String(text || '').replace(/"/g, "&quot;");
 }
 
-// פונקציה להמרת טקסט חופשי הכולל כתובות URL ל-HTML עם קישורים לחיצים
 function formatTextWithLinks(text) {
   if (!text) return '';
   const urlRegex = /(https?:\/\/[^\s]+)/g;
   const escaped = escapeHtml(text);
   return escaped.replace(urlRegex, (url) => {
-    return `<a href="${url}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();">${url}</a>`;
+    return `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`;
   });
 }
 
@@ -888,8 +894,11 @@ document.getElementById("logoutBtn").addEventListener("click", async () => {
   closeUserPanelFunction();
 });
 
-// מעכשיו רק נגיעה בתמונה מסמנת את הצעד כבוצע
-document.getElementById("activeStepImage").addEventListener("click", () => {
+// טיפול בלחיצה על אזור ה-Step עם החרגה של קישורים
+document.getElementById("activeStepArea").addEventListener("click", (e) => {
+  if (e.target.tagName === 'A' || e.target.closest('a')) {
+    return; // אם נלחץ קישור, אפשר לו להפתח ואל תסמן את הצעד כבוצע
+  }
   completeActiveStep();
 });
 
@@ -1468,7 +1477,6 @@ function runStep() {
 
   const currentStep = activeSteps[activeStepIndex];
   
-  // שימוש בפונקציית העזר לזיהוי והפיכת קישורים לבלחיצים
   document.getElementById("activeStepName").innerHTML = formatTextWithLinks(currentStep.name);
 
   const activeImg = document.getElementById("activeStepImage");
