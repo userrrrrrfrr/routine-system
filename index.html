@@ -138,12 +138,7 @@
       font-size: 15px;
     }
 
-    /* כפתור פתיחת התפריט בטלפון */
-    #mobileHeaderToggle {
-      display: none;
-    }
-
-    /* רקע שקוף כשנפתח התפריט בטלפון */
+    #mobileHeaderToggle,
     #mobileHeaderOverlay {
       display: none;
     }
@@ -560,31 +555,33 @@
       }
 
       .container {
-        padding: 12px 10px 30px;
+        padding: 10px;
       }
 
-      /* --------------------------------
-         HEADER - נפתח מהצד
-      -------------------------------- */
+      /* =========================
+         MOBILE HEADER DRAWER
+      ========================= */
 
       header {
         position: fixed;
-        top: 12px;
+        top: 0;
         left: 0;
 
         width: 190px;
-        min-height: 150px;
+        min-height: 145px;
 
         padding: 18px 16px;
 
+        background: white;
+
         border-radius: 0 20px 20px 0;
 
-        transform: translateX(-100%);
+        transform: translateX(-105%);
         transition: transform 0.25s ease;
 
-        z-index: 1000;
+        z-index: 1001;
 
-        box-shadow: 5px 8px 25px rgba(0,0,0,.12);
+        box-shadow: 5px 8px 25px rgba(0,0,0,.14);
 
         gap: 14px;
       }
@@ -597,37 +594,40 @@
         display: flex;
 
         position: fixed;
+        top: 12px;
         left: 0;
-        top: 15px;
 
         width: 42px;
         height: 42px;
 
-        border: 0;
-        background: white;
-
-        border-radius: 0 12px 12px 0;
+        padding: 0;
 
         align-items: center;
         justify-content: center;
+
+        border: 0;
+        border-radius: 0 12px 12px 0;
+
+        background: white;
 
         font-size: 20px;
 
         box-shadow: 4px 5px 20px rgba(0,0,0,.10);
 
-        z-index: 1001;
+        z-index: 1002;
       }
 
       #mobileHeaderToggle.open {
         left: 190px;
-        border-radius: 0 12px 12px 0;
       }
 
       #mobileHeaderOverlay {
         position: fixed;
         inset: 0;
-        background: rgba(0,0,0,.15);
-        z-index: 999;
+
+        background: rgba(0,0,0,.12);
+
+        z-index: 1000;
       }
 
       #mobileHeaderOverlay.show {
@@ -648,48 +648,45 @@
         font-size: 14px;
       }
 
-      /* --------------------------------
-         שאר האתר תופס את כל המסך
-      -------------------------------- */
+      /* =========================
+         ROUTINE / EDITOR
+      ========================= */
 
       #routineListScreen,
       #editorScreen,
       #directRoutineScreen {
-        padding-top: 70px;
+        padding-top: 58px;
       }
 
-      /* --------------------------------
-         ACTIVE ROUTINE
-      -------------------------------- */
+      /* =========================
+         ACTIVE SCREEN
+      ========================= */
 
       #activeScreen {
-        padding-top: 12px;
-        padding-left: 0;
-        padding-right: 0;
+        padding: 10px 0 0;
         width: 100%;
       }
 
       .active-box {
         width: 100%;
         max-width: none;
+        min-height: calc(100vh - 20px);
 
         margin: 0;
 
         border-radius: 22px;
 
-        padding: 14px 12px 18px;
-
-        min-height: calc(100vh - 24px);
+        padding: 12px 10px 16px;
       }
 
       #activeRoutineName {
         font-size: 17px;
-        margin-bottom: 8px;
-        text-align: right;
+        margin-bottom: 7px;
       }
 
       .active-step-image {
         width: 100%;
+
         height: 58vh;
         max-height: 58vh;
 
@@ -700,6 +697,7 @@
       #activeStepName {
         font-size: clamp(40px, 11vw, 68px);
         line-height: 0.98;
+
         margin: 8px 0 0;
 
         word-break: break-word;
@@ -721,10 +719,6 @@
         padding: 14px;
       }
 
-      /* --------------------------------
-         EDITOR
-      -------------------------------- */
-
       .step-grid {
         grid-template-columns: 1fr;
       }
@@ -733,7 +727,6 @@
         align-items: flex-start;
         flex-direction: column;
       }
-
     }
 
     /* =========================
@@ -752,7 +745,7 @@
 
       .active-box {
         border-radius: 20px;
-        padding: 12px 9px 15px;
+        padding: 10px 8px 14px;
       }
 
       .active-step-image {
@@ -767,7 +760,6 @@
       #timer {
         font-size: clamp(48px, 14vw, 65px);
       }
-
     }
 
   </style>
@@ -807,17 +799,15 @@
 
   <div class="container">
 
-    <!-- כפתור קטן לפתיחת ה-HEADER בטלפון -->
+    <!-- MOBILE HEADER BUTTON -->
 
     <button
       id="mobileHeaderToggle"
-      aria-label="פתיחת תפריט"
-      type="button">
+      type="button"
+      aria-label="פתיחת תפריט">
       ☰
     </button>
 
-
-    <!-- רקע כאשר התפריט פתוח -->
 
     <div id="mobileHeaderOverlay"></div>
 
@@ -836,7 +826,9 @@
 
       </div>
 
-      <button id="logoutBtn" class="logout-btn">
+      <button
+        id="logoutBtn"
+        class="logout-btn">
         התנתק
       </button>
 
@@ -1283,7 +1275,20 @@ document
     "click",
     async () => {
 
-      await signOut(auth);
+      try {
+
+        await signOut(auth);
+
+      } catch (error) {
+
+        console.error(error);
+
+        alert(
+          "ההתנתקות נכשלה:\n\n" +
+          error.message
+        );
+
+      }
 
     }
   );
@@ -2818,7 +2823,7 @@ async function saveRoutine() {
         Number(
           box.value
         )
-      );
+    );
 
 
   const steps = [];
@@ -3684,7 +3689,6 @@ function parseDate(
       "-"
     );
 
-
   return new Date(
     Number(
       parts[0]
@@ -3692,9 +3696,9 @@ function parseDate(
     Number(
       parts[1]
     ) - 1,
-      Number(
-        parts[2]
-      )
+    Number(
+      parts[2]
+    )
   );
 
 }
