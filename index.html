@@ -31,10 +31,7 @@
       display: none !important;
     }
 
-    /* =========================
-       LOGIN
-    ========================= */
-
+    /* LOGIN */
     #loginScreen {
       min-height: 100vh;
       display: flex;
@@ -71,10 +68,7 @@
       color: white;
     }
 
-    /* =========================
-       APP
-    ========================= */
-
+    /* APP */
     #app {
       display: none;
     }
@@ -86,10 +80,7 @@
       padding: 12px 0 60px;
     }
 
-    /* =========================
-       USER SIDE PANEL
-    ========================= */
-
+    /* USER SIDE PANEL */
     .user-tab {
       position: fixed;
       top: 18px;
@@ -178,10 +169,7 @@
       display: block;
     }
 
-    /* =========================
-       MAIN HEADER
-    ========================= */
-
+    /* MAIN HEADER */
     .main-title {
       background: white;
       padding: 18px 20px;
@@ -195,10 +183,7 @@
       font-size: 30px;
     }
 
-    /* =========================
-       CARDS
-    ========================= */
-
+    /* CARDS */
     .card {
       background: white;
       border-radius: 20px;
@@ -240,10 +225,7 @@
       border-radius: 10px;
     }
 
-    /* =========================
-       IMAGE UPLOAD
-    ========================= */
-
+    /* IMAGE UPLOAD */
     .image-upload {
       margin-top: 10px;
     }
@@ -302,10 +284,7 @@
       margin-bottom: 20px;
     }
 
-    /* =========================
-       ROUTINES
-    ========================= */
-
+    /* ROUTINES */
     .routine-card {
       border: 1px solid #eee;
       border-radius: 15px;
@@ -345,10 +324,7 @@
       padding: 35px 10px;
     }
 
-    /* =========================
-       FORM
-    ========================= */
-
+    /* FORM */
     .form-group {
       margin-bottom: 20px;
     }
@@ -391,10 +367,7 @@
       color: white;
     }
 
-    /* =========================
-       STEPS & REUSE CONTROL
-    ========================= */
-
+    /* STEPS & REUSE CONTROL */
     .step {
       border: 1px solid #eee;
       border-radius: 15px;
@@ -492,10 +465,7 @@
       flex: 1;
     }
 
-    /* =========================
-       ACTIVE ROUTINE
-    ========================= */
-
+    /* ACTIVE ROUTINE */
     #activeScreen {
       display: none;
       min-height: auto;
@@ -549,7 +519,7 @@
       border-radius: 18px;
       margin: 0 auto 6px;
       display: block;
-      touch-action: manipulation;
+      pointer-events: none;
     }
 
     #activeStepName {
@@ -568,6 +538,7 @@
       cursor: pointer;
       position: relative;
       z-index: 10;
+      pointer-events: auto;
     }
 
     #timer {
@@ -575,6 +546,7 @@
       font-weight: 700;
       margin: 4px 0 18px;
       color: #111;
+      pointer-events: none;
     }
 
     .tap-hint {
@@ -593,10 +565,7 @@
       color: #333;
     }
 
-    /* =========================
-       DIRECT ROUTINE
-    ========================= */
-
+    /* DIRECT ROUTINE */
     #directRoutineScreen {
       display: none;
     }
@@ -628,10 +597,7 @@
       margin-top: 10px;
     }
 
-    /* =========================
-       MOBILE
-    ========================= */
-
+    /* MOBILE */
     @media (max-width: 600px) {
       .container {
         width: 94%;
@@ -693,7 +659,6 @@
       }
     }
   </style>
-
 </head>
 
 <body>
@@ -793,7 +758,7 @@
     <!-- DIRECT ROUTINE -->
     <div id="directRoutineScreen">
       <div class="direct-routine-box">
-        <img id="directRoutineImage" class="direct-routine-image hidden">
+        <img id="directRoutineImage" class="direct-routine-image hidden" alt="">
         <h1 id="directRoutineName"></h1>
         <div id="directRoutineSteps"></div>
         <br>
@@ -807,9 +772,8 @@
       <div class="active-box">
         <h1 id="activeRoutineName"></h1>
         
-        <!-- כל הריבוע של ה-Step הפעיל לחיץ מעכשיו -->
         <div id="activeStepCard" class="active-step-card">
-          <img id="activeStepImage" class="active-step-image hidden">
+          <img id="activeStepImage" class="active-step-image hidden" alt="">
           <div id="activeStepName"></div>
           <div id="timer">00:00</div>
         </div>
@@ -905,9 +869,7 @@ document.getElementById("logoutBtn").addEventListener("click", async () => {
   closeUserPanelFunction();
 });
 
-// מאזין לחיצה לכל הריבוע של ה-Step הפעיל
 document.getElementById("activeStepCard").addEventListener("click", (e) => {
-  // במידה והלחיצה הייתה על הקישור עצמו, הוא יפתח כרגיל ולא יעבור צעד
   if (e.target.tagName === 'A' || e.target.closest('a')) {
     return;
   }
