@@ -1,5 +1,5 @@
-```html
 <!DOCTYPE html>
+
 <html lang="he" dir="rtl">
 <head>
   <meta charset="UTF-8">
@@ -84,109 +84,136 @@
       width: 92%;
       max-width: 900px;
       margin: auto;
-      padding: 10px 0 60px;
+      padding: 12px 0 60px;
     }
 
     /* =========================
-       SIDE MENU
+       USER SIDE PANEL
     ========================= */
 
-    .menu-button {
+    .user-tab {
       position: fixed;
-      top: 14px;
-      right: 14px;
-      width: 44px;
-      height: 44px;
-      border: 0;
-      border-radius: 12px;
+      top: 18px;
+      left: 0;
+      z-index: 1000;
+
       background: white;
-      box-shadow: 0 4px 20px rgba(0,0,0,.08);
-      z-index: 1001;
-      font-size: 22px;
+      border: 1px solid #e5e5e5;
+      border-left: 0;
+
+      border-radius: 0 14px 14px 0;
+      padding: 9px 12px;
+
+      box-shadow: 0 4px 18px rgba(0,0,0,.08);
+
       display: flex;
       align-items: center;
-      justify-content: center;
-    }
+      gap: 7px;
 
-    .side-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,.25);
-      z-index: 1000;
-      display: none;
-    }
+      font-size: 13px;
+      color: #555;
 
-    .side-overlay.open {
-      display: block;
-    }
-
-    .side-menu {
-      position: fixed;
-      top: 0;
-      right: 0;
-      width: 280px;
-      max-width: 85%;
-      height: 100vh;
-      background: white;
-      z-index: 1002;
-      padding: 25px 20px;
-      box-shadow: -10px 0 35px rgba(0,0,0,.12);
-      transform: translateX(100%);
       transition: transform .25s ease;
     }
 
-    .side-menu.open {
+    .user-tab-icon {
+      font-size: 16px;
+    }
+
+    .user-panel {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 260px;
+      max-width: 80vw;
+      height: 100vh;
+
+      background: white;
+      z-index: 1001;
+
+      box-shadow: 8px 0 30px rgba(0,0,0,.12);
+
+      transform: translateX(-100%);
+      transition: transform .28s ease;
+
+      padding: 25px 20px;
+
+      display: flex;
+      flex-direction: column;
+    }
+
+    .user-panel.open {
       transform: translateX(0);
     }
 
-    .side-menu-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      padding-bottom: 20px;
-      border-bottom: 1px solid #eee;
-      margin-bottom: 20px;
-    }
+    .user-panel-close {
+      width: 36px;
+      height: 36px;
 
-    .side-menu-title {
-      font-size: 22px;
-      font-weight: bold;
-    }
-
-    .close-menu {
-      width: 38px;
-      height: 38px;
       border: 0;
-      border-radius: 10px;
       background: #f5f5f7;
+
+      border-radius: 10px;
+
       font-size: 20px;
+
+      margin-bottom: 30px;
     }
 
-    #sideUserInfo {
-      color: #666;
-      font-size: 14px;
-      line-height: 1.5;
-      margin-bottom: 20px;
+    .user-panel-title {
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 8px;
+    }
+
+    #panelUserInfo {
+      font-size: 16px;
+      font-weight: 600;
       word-break: break-word;
+      margin-bottom: 30px;
     }
 
-    .side-logout-btn {
+    .panel-logout {
       width: 100%;
       padding: 13px;
+
       border: 1px solid #ddd;
       background: white;
+
       border-radius: 12px;
+
       color: #d00;
-      text-align: center;
+    }
+
+    .user-panel-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.18);
+
+      z-index: 1000;
+
+      display: none;
+    }
+
+    .user-panel-overlay.show {
+      display: block;
     }
 
     /* =========================
-       OLD HEADER HIDDEN
+       MAIN HEADER
     ========================= */
 
-    header {
-      display: none;
+    .main-title {
+      background: white;
+      padding: 18px 20px;
+      border-radius: 20px;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    .main-title h1 {
+      margin: 0;
+      font-size: 30px;
     }
 
     /* =========================
@@ -436,8 +463,8 @@
 
     #activeScreen {
       display: none;
-      min-height: 100vh;
-      padding: 5px 15px 30px;
+      min-height: auto;
+      padding: 0;
     }
 
     .active-box {
@@ -445,7 +472,7 @@
       margin: 0 auto;
       background: white;
       border-radius: 28px;
-      padding: 14px 22px 24px;
+      padding: 16px 22px 24px;
       text-align: center;
       box-shadow: 0 8px 30px rgba(0,0,0,0.06);
     }
@@ -459,23 +486,30 @@
       width: 100%;
     }
 
+    .active-step-area {
+      cursor: pointer;
+      touch-action: manipulation;
+      user-select: none;
+      -webkit-user-select: none;
+      transition: transform .12s ease, opacity .12s ease;
+    }
+
+    .active-step-area:active {
+      transform: scale(.98);
+      opacity: .85;
+    }
+
     .active-step-image {
       width: 100%;
       max-height: 340px;
       object-fit: contain;
       border-radius: 18px;
-      margin: 0 auto 8px;
+      margin: 0 auto 6px;
       display: block;
       background: #fafafa;
       user-select: none;
       -webkit-user-select: none;
-      touch-action: manipulation;
-      transition: transform 0.12s, opacity 0.12s;
-    }
-
-    .active-step-image:active {
-      transform: scale(0.97);
-      opacity: 0.8;
+      pointer-events: none;
     }
 
     #activeStepName {
@@ -494,10 +528,10 @@
       color: #111;
     }
 
-    .long-press-hint {
+    .tap-hint {
       font-size: 13px;
       color: #999;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
     }
 
     .back-btn {
@@ -550,10 +584,18 @@
     ========================= */
 
     @media (max-width: 600px) {
-
       .container {
         width: 94%;
-        padding-top: 5px;
+        padding-top: 10px;
+      }
+
+      .main-title {
+        padding: 14px 18px;
+        margin-bottom: 12px;
+      }
+
+      .main-title h1 {
+        font-size: 27px;
       }
 
       .step-grid {
@@ -581,8 +623,10 @@
         flex-direction: column;
       }
 
-      #activeScreen {
-        padding-top: 3px;
+      .user-tab {
+        top: 12px;
+        font-size: 12px;
+        padding: 8px 10px;
       }
 
       .active-box {
@@ -590,6 +634,7 @@
       }
     }
   </style>
+
 </head>
 
 <body>
@@ -601,17 +646,18 @@
 <div id="loginScreen">
   <div class="login-box">
     <h1>Routine</h1>
-
     <p>
       התחבר כדי להיכנס למערכת שלך
     </p>
 
-    <button id="loginBtn" class="google-btn">
-      כניסה עם Google
-    </button>
+```
+<button id="loginBtn" class="google-btn">
+  כניסה עם Google
+</button>
+```
+
   </div>
 </div>
-
 
 <!-- =========================
      APP
@@ -619,284 +665,265 @@
 
 <div id="app">
 
-  <!-- SIDE MENU BUTTON -->
+  <!-- USER SIDE TAB -->
 
-  <button id="menuButton" class="menu-button">
-    ☰
+  <button id="userTab" class="user-tab">
+    <span class="user-tab-icon">☰</span>
+    <span>משתמש</span>
   </button>
 
-  <!-- SIDE MENU -->
+  <div id="userPanelOverlay" class="user-panel-overlay"></div>
 
-  <div id="sideOverlay" class="side-overlay"></div>
+  <div id="userPanel" class="user-panel">
 
-  <div id="sideMenu" class="side-menu">
+```
+<button id="closeUserPanel" class="user-panel-close">
+  ×
+</button>
 
-    <div class="side-menu-header">
-      <div class="side-menu-title">
-        Routine
-      </div>
+<div class="user-panel-title">
+  מחובר כ:
+</div>
 
-      <button id="closeMenuBtn" class="close-menu">
-        ×
+<div id="panelUserInfo">
+</div>
+
+<button id="logoutBtn" class="panel-logout">
+  התנתק
+</button>
+```
+
+  </div>
+
+  <div class="container">
+
+```
+<!-- MAIN TITLE -->
+
+<div class="main-title">
+  <h1>Routine</h1>
+</div>
+
+<!-- =========================
+     ROUTINE LIST
+========================= -->
+
+<div id="routineListScreen">
+
+  <div class="card">
+
+    <div class="top-row">
+
+      <h2>
+        השגרות שלי
+      </h2>
+
+      <button id="newRoutineBtn" class="primary">
+        + Routine חדש
       </button>
+
     </div>
 
-    <div id="sideUserInfo"></div>
+    <div id="routineList"></div>
 
-    <button id="logoutBtn" class="side-logout-btn">
-      התנתק
+  </div>
+
+</div>
+
+<!-- =========================
+     EDITOR
+========================= -->
+
+<div id="editorScreen" class="hidden">
+
+  <div class="card">
+
+    <h2 id="editorTitle">
+      Routine חדש
+    </h2>
+
+    <div class="form-group">
+
+      <label>
+        שם ה-Routine
+      </label>
+
+      <input
+        id="routineName"
+        type="text"
+        placeholder="לדוגמה: בוקר"
+      >
+
+    </div>
+
+    <div class="form-group image-upload">
+
+      <label>
+        תמונה ל-Routine
+      </label>
+
+      <input
+        id="routineImageInput"
+        class="image-input"
+        type="file"
+        accept="image/*"
+      >
+
+      <div
+        id="routineImagePreview"
+        class="image-preview">
+      </div>
+
+    </div>
+
+    <div class="form-group">
+
+      <label>
+        באילו ימים ה-Routine פעיל?
+      </label>
+
+      <div class="days">
+
+        <label class="day">
+          <input type="checkbox" value="0">
+          <span>א׳</span>
+        </label>
+
+        <label class="day">
+          <input type="checkbox" value="1">
+          <span>ב׳</span>
+        </label>
+
+        <label class="day">
+          <input type="checkbox" value="2">
+          <span>ג׳</span>
+        </label>
+
+        <label class="day">
+          <input type="checkbox" value="3">
+          <span>ד׳</span>
+        </label>
+
+        <label class="day">
+          <input type="checkbox" value="4">
+          <span>ה׳</span>
+        </label>
+
+        <label class="day">
+          <input type="checkbox" value="5">
+          <span>ו׳</span>
+        </label>
+
+        <label class="day">
+          <input type="checkbox" value="6">
+          <span>ש׳</span>
+        </label>
+
+      </div>
+
+    </div>
+
+    <h2>
+      Steps
+    </h2>
+
+    <div id="stepsContainer"></div>
+
+    <button id="addStepBtn" class="secondary">
+      + הוסף Step
+    </button>
+
+    <br>
+    <br>
+
+    <button id="saveRoutineBtn" class="primary">
+      שמור
+    </button>
+
+    <button id="cancelEditorBtn" class="secondary">
+      ביטול
     </button>
 
   </div>
 
-
-  <div class="container">
-
-    <!-- =========================
-         OLD HEADER
-    ========================= -->
-
-    <header>
-      <div>
-        <h1>Routine</h1>
-        <div id="userInfo"></div>
-      </div>
-
-      <button id="logoutBtnOld" class="logout-btn">
-        התנתק
-      </button>
-    </header>
-
-
-    <!-- =========================
-         ROUTINE LIST
-    ========================= -->
-
-    <div id="routineListScreen">
-
-      <div class="card">
-
-        <div class="top-row">
-
-          <h2>
-            השגרות שלי
-          </h2>
-
-          <button id="newRoutineBtn" class="primary">
-            + Routine חדש
-          </button>
-
-        </div>
-
-        <div id="routineList"></div>
-
-      </div>
-
-    </div>
-
-
-    <!-- =========================
-         EDITOR
-    ========================= -->
-
-    <div id="editorScreen" class="hidden">
-
-      <div class="card">
-
-        <h2 id="editorTitle">
-          Routine חדש
-        </h2>
-
-
-        <!-- ROUTINE NAME -->
-
-        <div class="form-group">
-
-          <label>
-            שם ה-Routine
-          </label>
-
-          <input
-            id="routineName"
-            type="text"
-            placeholder="לדוגמה: בוקר"
-          >
-
-        </div>
-
-
-        <!-- ROUTINE IMAGE -->
-
-        <div class="form-group image-upload">
-
-          <label>
-            תמונה ל-Routine
-          </label>
-
-          <input
-            id="routineImageInput"
-            class="image-input"
-            type="file"
-            accept="image/*"
-          >
-
-          <div
-            id="routineImagePreview"
-            class="image-preview">
-          </div>
-
-        </div>
-
-
-        <!-- DAYS -->
-
-        <div class="form-group">
-
-          <label>
-            באילו ימים ה-Routine פעיל?
-          </label>
-
-          <div class="days">
-
-            <label class="day">
-              <input type="checkbox" value="0">
-              <span>א׳</span>
-            </label>
-
-            <label class="day">
-              <input type="checkbox" value="1">
-              <span>ב׳</span>
-            </label>
-
-            <label class="day">
-              <input type="checkbox" value="2">
-              <span>ג׳</span>
-            </label>
-
-            <label class="day">
-              <input type="checkbox" value="3">
-              <span>ד׳</span>
-            </label>
-
-            <label class="day">
-              <input type="checkbox" value="4">
-              <span>ה׳</span>
-            </label>
-
-            <label class="day">
-              <input type="checkbox" value="5">
-              <span>ו׳</span>
-            </label>
-
-            <label class="day">
-              <input type="checkbox" value="6">
-              <span>ש׳</span>
-            </label>
-
-          </div>
-
-        </div>
-
-
-        <!-- STEPS -->
-
-        <h2>
-          Steps
-        </h2>
-
-        <div id="stepsContainer"></div>
-
-        <button id="addStepBtn" class="secondary">
-          + הוסף Step
-        </button>
-
-        <br>
-        <br>
-
-        <button id="saveRoutineBtn" class="primary">
-          שמור
-        </button>
-
-        <button id="cancelEditorBtn" class="secondary">
-          ביטול
-        </button>
-
-      </div>
-
-    </div>
-
-
-    <!-- =========================
-         DIRECT ROUTINE
-    ========================= -->
-
-    <div id="directRoutineScreen">
-
-      <div class="direct-routine-box">
-
-        <img
-          id="directRoutineImage"
-          class="direct-routine-image hidden"
-        >
-
-        <h1 id="directRoutineName"></h1>
-
-        <div id="directRoutineSteps"></div>
-
-        <br>
-
-        <button id="directStartBtn" class="primary">
-          התחל Routine
-        </button>
-
-        <button id="directBackBtn" class="secondary">
-          חזרה לשגרות
-        </button>
-
-      </div>
-
-    </div>
-
-
-    <!-- =========================
-         ACTIVE ROUTINE
-    ========================= -->
-
-    <div id="activeScreen">
-
-      <div class="active-box">
-
-        <h1 id="activeRoutineName"></h1>
-
-        <img
-          id="activeStepImage"
-          class="active-step-image hidden"
-        >
-
-        <div id="activeStepName"></div>
-
-        <div id="timer">
-          00:00
-        </div>
-
-        <div class="long-press-hint">
-          נגיעה בתמונה = בוצע
-        </div>
-
-        <button
-          id="exitActiveBtn"
-          class="back-btn"
-        >
-          יציאה
-        </button>
-
-      </div>
-
-    </div>
-
-  </div>
 </div>
 
+<!-- =========================
+     DIRECT ROUTINE
+========================= -->
+
+<div id="directRoutineScreen">
+
+  <div class="direct-routine-box">
+
+    <img
+      id="directRoutineImage"
+      class="direct-routine-image hidden"
+    >
+
+    <h1 id="directRoutineName"></h1>
+
+    <div id="directRoutineSteps"></div>
+
+    <br>
+
+    <button id="directStartBtn" class="primary">
+      התחל Routine
+    </button>
+
+    <button id="directBackBtn" class="secondary">
+      חזרה לשגרות
+    </button>
+
+  </div>
+
+</div>
+
+<!-- =========================
+     ACTIVE ROUTINE
+========================= -->
+
+<div id="activeScreen">
+
+  <div class="active-box">
+
+    <h1 id="activeRoutineName"></h1>
+
+    <!-- כל אזור ה-Step ניתן ללחיצה -->
+
+    <div id="activeStepArea" class="active-step-area">
+
+      <img
+        id="activeStepImage"
+        class="active-step-image hidden"
+      >
+
+      <div id="activeStepName"></div>
+
+    </div>
+
+    <div id="timer">
+      00:00
+    </div>
+
+    <div class="tap-hint">
+      נגיעה ב-Step = בוצע
+    </div>
+
+    <button
+      id="exitActiveBtn"
+      class="back-btn">
+      יציאה
+    </button>
+
+  </div>
+
+</div>
+```
+
+  </div>
+
+</div>
 
 <script type="module">
 
@@ -942,8 +969,11 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+
 const auth = getAuth(app);
+
 const db = getFirestore(app);
+
 const provider = new GoogleAuthProvider();
 
 
@@ -952,110 +982,161 @@ const provider = new GoogleAuthProvider();
 ========================= */
 
 let currentUser = null;
+
 let routines = [];
+
 let editingRoutineId = null;
+
 let activeRoutine = null;
+
 let activeSteps = [];
+
 let activeStepIndex = 0;
+
 let timerInterval = null;
+
 let remainingSeconds = 0;
+
 let currentRoutineImage = "";
+
 let stepImages = new Map();
 
 
 /* =========================
-   SIDE MENU
+   USER SIDE PANEL
 ========================= */
 
-const menuButton = document.getElementById("menuButton");
-const sideMenu = document.getElementById("sideMenu");
-const sideOverlay = document.getElementById("sideOverlay");
-const closeMenuBtn = document.getElementById("closeMenuBtn");
+const userTab =
+  document.getElementById("userTab");
 
-function openSideMenu() {
-  sideMenu.classList.add("open");
-  sideOverlay.classList.add("open");
+const userPanel =
+  document.getElementById("userPanel");
+
+const userPanelOverlay =
+  document.getElementById("userPanelOverlay");
+
+const closeUserPanel =
+  document.getElementById("closeUserPanel");
+
+function openUserPanel() {
+
+  userPanel.classList.add("open");
+
+  userPanelOverlay.classList.add("show");
+
 }
 
-function closeSideMenu() {
-  sideMenu.classList.remove("open");
-  sideOverlay.classList.remove("open");
+function closeUserPanelFunction() {
+
+  userPanel.classList.remove("open");
+
+  userPanelOverlay.classList.remove("show");
+
 }
 
-menuButton.addEventListener("click", openSideMenu);
-closeMenuBtn.addEventListener("click", closeSideMenu);
-sideOverlay.addEventListener("click", closeSideMenu);
+userTab.addEventListener(
+  "click",
+  openUserPanel
+);
+
+closeUserPanel.addEventListener(
+  "click",
+  closeUserPanelFunction
+);
+
+userPanelOverlay.addEventListener(
+  "click",
+  closeUserPanelFunction
+);
 
 
 /* =========================
    AUTH
 ========================= */
 
-document.getElementById("loginBtn").addEventListener("click", async () => {
+document
+  .getElementById("loginBtn")
+  .addEventListener("click", async () => {
 
-  try {
+    try {
 
-    await signInWithPopup(auth, provider);
+      await signInWithPopup(
+        auth,
+        provider
+      );
 
-  } catch (error) {
+    } catch (error) {
 
-    console.error(error);
+      console.error(error);
 
-    alert(
-      "ההתחברות נכשלה:\n\n" +
-      error.message
-    );
+      alert(
+        "ההתחברות נכשלה:\n\n" +
+        error.message
+      );
 
-  }
+    }
 
-});
+  });
 
 
-document.getElementById("logoutBtn").addEventListener("click", async () => {
+document
+  .getElementById("logoutBtn")
+  .addEventListener("click", async () => {
 
-  closeSideMenu();
+    closeUserPanelFunction();
 
-  await signOut(auth);
+    await signOut(auth);
 
-});
+  });
 
 
 /* =========================
    AUTH STATE
 ========================= */
 
-onAuthStateChanged(auth, async (user) => {
+onAuthStateChanged(
+  auth,
+  async (user) => {
 
-  if (user) {
+    if (user) {
 
-    currentUser = user;
+      currentUser = user;
 
-    document.getElementById("loginScreen").style.display = "none";
-    document.getElementById("app").style.display = "block";
+      document
+        .getElementById("loginScreen")
+        .style.display = "none";
 
-    const userText =
-      user.displayName ||
-      user.email ||
-      "";
+      document
+        .getElementById("app")
+        .style.display = "block";
 
-    document.getElementById("userInfo").textContent =
-      userText;
+      const userText =
+        user.displayName ||
+        user.email ||
+        "";
 
-    document.getElementById("sideUserInfo").textContent =
-      userText;
+      document
+        .getElementById("panelUserInfo")
+        .textContent = userText;
 
-    await loadRoutines();
+      await loadRoutines();
 
-  } else {
+    } else {
 
-    currentUser = null;
+      currentUser = null;
 
-    document.getElementById("loginScreen").style.display = "flex";
-    document.getElementById("app").style.display = "none";
+      document
+        .getElementById("loginScreen")
+        .style.display = "flex";
+
+      document
+        .getElementById("app")
+        .style.display = "none";
+
+    }
 
   }
-
-});
+);
 
 
 /* =========================
@@ -1134,6 +1215,7 @@ function renderRoutines() {
     `;
 
     return;
+
   }
 
   routines.forEach(routine => {
@@ -1141,7 +1223,8 @@ function renderRoutines() {
     const card =
       document.createElement("div");
 
-    card.className = "routine-card";
+    card.className =
+      "routine-card";
 
     const todaySteps =
       getTodaySteps(routine);
@@ -1154,8 +1237,7 @@ function renderRoutines() {
         <img
           class="routine-image"
           src="${routine.image}"
-          alt=""
-        >
+          alt="">
       `;
 
     }
@@ -1199,6 +1281,7 @@ function renderRoutines() {
         </button>
 
       </div>
+
     `;
 
     card
@@ -1244,17 +1327,20 @@ function compressImage(file) {
 
   return new Promise((resolve, reject) => {
 
-    const reader = new FileReader();
+    const reader =
+      new FileReader();
 
     reader.onload = event => {
 
-      const img = new Image();
+      const img =
+        new Image();
 
       img.onload = () => {
 
         const maxWidth = 600;
 
         let width = img.width;
+
         let height = img.height;
 
         if (width > maxWidth) {
@@ -1272,6 +1358,7 @@ function compressImage(file) {
           document.createElement("canvas");
 
         canvas.width = width;
+
         canvas.height = height;
 
         const ctx =
@@ -1297,8 +1384,7 @@ function compressImage(file) {
 
       img.onerror = reject;
 
-      img.src =
-        event.target.result;
+      img.src = event.target.result;
 
     };
 
@@ -1360,12 +1446,15 @@ function showRoutineImagePreview() {
 
   preview.innerHTML = "";
 
-  if (!currentRoutineImage) return;
+  if (!currentRoutineImage)
+    return;
 
   const img =
     document.createElement("img");
 
-  img.src = currentRoutineImage;
+  img.src =
+    currentRoutineImage;
+
   img.alt = "";
 
   const remove =
@@ -1384,7 +1473,9 @@ function showRoutineImagePreview() {
       currentRoutineImage = "";
 
       document
-        .getElementById("routineImageInput")
+        .getElementById(
+          "routineImageInput"
+        )
         .value = "";
 
       showRoutineImagePreview();
@@ -1393,6 +1484,7 @@ function showRoutineImagePreview() {
   );
 
   preview.appendChild(img);
+
   preview.appendChild(remove);
 
 }
@@ -1402,7 +1494,9 @@ function showRoutineImagePreview() {
    COPY ROUTINE LINK
 ========================= */
 
-async function copyRoutineLink(routineId) {
+async function copyRoutineLink(
+  routineId
+) {
 
   const url =
     window.location.origin +
@@ -1442,7 +1536,8 @@ function openRoutineFromLink() {
   const routineId =
     params.get("routine");
 
-  if (!routineId) return;
+  if (!routineId)
+    return;
 
   const routine =
     routines.find(
@@ -1456,6 +1551,7 @@ function openRoutineFromLink() {
     );
 
     return;
+
   }
 
   showDirectRoutine(routine);
@@ -1470,23 +1566,33 @@ function openRoutineFromLink() {
 function showDirectRoutine(routine) {
 
   document
-    .getElementById("routineListScreen")
+    .getElementById(
+      "routineListScreen"
+    )
     .style.display = "none";
 
   document
-    .getElementById("editorScreen")
+    .getElementById(
+      "editorScreen"
+    )
     .classList.add("hidden");
 
   document
-    .getElementById("activeScreen")
+    .getElementById(
+      "activeScreen"
+    )
     .style.display = "none";
 
   document
-    .getElementById("directRoutineScreen")
+    .getElementById(
+      "directRoutineScreen"
+    )
     .style.display = "block";
 
   document
-    .getElementById("directRoutineName")
+    .getElementById(
+      "directRoutineName"
+    )
     .textContent = routine.name;
 
   const routineImage =
@@ -1496,7 +1602,8 @@ function showDirectRoutine(routine) {
 
   if (routine.image) {
 
-    routineImage.src = routine.image;
+    routineImage.src =
+      routine.image;
 
     routineImage.classList.remove(
       "hidden"
@@ -1538,49 +1645,52 @@ function showDirectRoutine(routine) {
           Number(a.order || 0) -
           Number(b.order || 0)
       )
-      .forEach(
-        (step, index) => {
+      .forEach((step, index) => {
 
-          const div =
-            document.createElement("div");
+        const div =
+          document.createElement("div");
 
-          div.className =
-            "direct-step";
+        div.className =
+          "direct-step";
 
-          let imageHtml = "";
+        let imageHtml = "";
 
-          if (step.image) {
+        if (step.image) {
 
-            imageHtml = `
-              <img
-                class="direct-step-image"
-                src="${step.image}"
-                alt=""
-              >
-            `;
-
-          }
-
-          div.innerHTML = `
-            <strong>
-              Step ${index + 1}
-            </strong>
-            <br>
-            ${escapeHtml(step.name)}
-            ${imageHtml}
+          imageHtml = `
+            <img
+              class="direct-step-image"
+              src="${step.image}"
+              alt="">
           `;
 
-          stepsContainer.appendChild(div);
-
         }
-      );
+
+        div.innerHTML = `
+
+          <strong>
+            Step ${index + 1}
+          </strong>
+          <br>
+
+          ${escapeHtml(step.name)}
+
+          ${imageHtml}
+
+        `;
+
+        stepsContainer.appendChild(div);
+
+      });
 
   }
 
   document
-    .getElementById("directStartBtn")
-    .onclick =
-    () => startRoutine(routine);
+    .getElementById(
+      "directStartBtn"
+    )
+    .onclick = () =>
+      startRoutine(routine);
 
 }
 
@@ -1658,17 +1768,23 @@ function openEditor(routine) {
     .classList.remove("hidden");
 
   editingRoutineId =
-    routine ? routine.id : null;
+    routine
+      ? routine.id
+      : null;
 
   document
-    .getElementById("editorTitle")
+    .getElementById(
+      "editorTitle"
+    )
     .textContent =
       routine
         ? "עריכת Routine"
         : "Routine חדש";
 
   document
-    .getElementById("routineName")
+    .getElementById(
+      "routineName"
+    )
     .value =
       routine
         ? routine.name
@@ -1686,20 +1802,24 @@ function openEditor(routine) {
   showRoutineImagePreview();
 
   document
-    .querySelectorAll(".days input")
+    .querySelectorAll(
+      ".days input"
+    )
     .forEach(checkbox => {
 
       checkbox.checked =
         routine
-          ? (routine.days || [])
-              .includes(
-                Number(checkbox.value)
-              )
+          ? (
+              routine.days || []
+            ).includes(
+              Number(checkbox.value)
+            )
           : false;
 
     });
 
-  stepImages = new Map();
+  stepImages =
+    new Map();
 
   const container =
     document.getElementById(
@@ -1708,7 +1828,10 @@ function openEditor(routine) {
 
   container.innerHTML = "";
 
-  if (routine && routine.steps) {
+  if (
+    routine &&
+    routine.steps
+  ) {
 
     routine.steps.forEach(
       step => addStep(step)
@@ -1744,7 +1867,8 @@ function addStep(step = null) {
   const div =
     document.createElement("div");
 
-  div.className = "step";
+  div.className =
+    "step";
 
   div.dataset.stepId =
     stepId;
@@ -1775,7 +1899,6 @@ function addStep(step = null) {
 
     </div>
 
-
     <div class="form-group">
 
       <label>
@@ -1786,11 +1909,14 @@ function addStep(step = null) {
         class="step-name"
         type="text"
         placeholder="לדוגמה: לשתות מים"
-        value="${step ? escapeAttr(step.name) : ""}"
+        value="${
+          step
+            ? escapeAttr(step.name)
+            : ""
+        }"
       >
 
     </div>
-
 
     <div class="form-group image-upload">
 
@@ -1810,7 +1936,6 @@ function addStep(step = null) {
 
     </div>
 
-
     <div class="step-grid">
 
       <div>
@@ -1823,11 +1948,14 @@ function addStep(step = null) {
           class="step-duration"
           type="number"
           min="1"
-          value="${step ? step.duration : 60}"
+          value="${
+            step
+              ? step.duration
+              : 60
+          }"
         >
 
       </div>
-
 
       <div>
 
@@ -1863,7 +1991,6 @@ function addStep(step = null) {
 
     </div>
 
-
     <div class="custom-days">
 
       <label>
@@ -1878,7 +2005,6 @@ function addStep(step = null) {
       >
 
     </div>
-
 
     <div class="step-start-date">
 
@@ -1902,6 +2028,7 @@ function addStep(step = null) {
       </small>
 
     </div>
+
   `;
 
   container.appendChild(div);
@@ -1920,7 +2047,8 @@ function addStep(step = null) {
       const file =
         event.target.files[0];
 
-      if (!file) return;
+      if (!file)
+        return;
 
       try {
 
@@ -1948,10 +2076,14 @@ function addStep(step = null) {
   );
 
   const frequency =
-    div.querySelector(".frequency");
+    div.querySelector(
+      ".frequency"
+    );
 
   const custom =
-    div.querySelector(".custom-days");
+    div.querySelector(
+      ".custom-days"
+    );
 
   if (step) {
 
@@ -1976,9 +2108,11 @@ function addStep(step = null) {
       custom.style.display =
         "block";
 
-      div.querySelector(
-        ".custom-value"
-      ).value = saved;
+      div
+        .querySelector(
+          ".custom-value"
+        )
+        .value = saved;
 
     }
 
@@ -2035,12 +2169,14 @@ function showStepImagePreview(div) {
 
   preview.innerHTML = "";
 
-  if (!image) return;
+  if (!image)
+    return;
 
   const img =
     document.createElement("img");
 
   img.src = image;
+
   img.alt = "";
 
   const remove =
@@ -2060,9 +2196,11 @@ function showStepImagePreview(div) {
         stepId
       );
 
-      div.querySelector(
-        ".step-image-input"
-      ).value = "";
+      div
+        .querySelector(
+          ".step-image-input"
+        )
+        .value = "";
 
       showStepImagePreview(div);
 
@@ -2070,6 +2208,7 @@ function showStepImagePreview(div) {
   );
 
   preview.appendChild(img);
+
   preview.appendChild(remove);
 
 }
@@ -2086,10 +2225,11 @@ function renumberSteps() {
     .forEach(
       (step, index) => {
 
-        step.querySelector(
-          "strong"
-        ).textContent =
-          "Step " + (index + 1);
+        step
+          .querySelector("strong")
+          .textContent =
+            "Step " +
+            (index + 1);
 
       }
     );
@@ -2102,9 +2242,7 @@ function renumberSteps() {
 ========================= */
 
 document
-  .getElementById(
-    "saveRoutineBtn"
-  )
+  .getElementById("saveRoutineBtn")
   .addEventListener(
     "click",
     saveRoutine
@@ -2128,6 +2266,7 @@ async function saveRoutine() {
     );
 
     return;
+
   }
 
   const days =
@@ -2135,7 +2274,8 @@ async function saveRoutine() {
       ...document.querySelectorAll(
         ".days input:checked"
       )
-    ].map(
+    ]
+    .map(
       box => Number(box.value)
     );
 
@@ -2170,38 +2310,45 @@ async function saveRoutine() {
       );
 
       return;
+
     }
 
     const duration =
       Number(
-        div.querySelector(
-          ".step-duration"
-        ).value
+        div
+          .querySelector(
+            ".step-duration"
+          )
+          .value
       );
 
     const frequency =
-      div.querySelector(
-        ".frequency"
-      ).value;
+      div
+        .querySelector(
+          ".frequency"
+        )
+        .value;
 
     let finalFrequency =
       frequency;
 
-    if (
-      frequency === "custom"
-    ) {
+    if (frequency === "custom") {
 
       finalFrequency =
-        div.querySelector(
-          ".custom-value"
-        ).value;
+        div
+          .querySelector(
+            ".custom-value"
+          )
+          .value;
 
     }
 
     const startDate =
-      div.querySelector(
-        ".step-start-date-input"
-      ).value;
+      div
+        .querySelector(
+          ".step-start-date-input"
+        )
+        .value;
 
     if (!startDate) {
 
@@ -2210,6 +2357,7 @@ async function saveRoutine() {
       );
 
       return;
+
     }
 
     const numericFrequency =
@@ -2225,6 +2373,7 @@ async function saveRoutine() {
       );
 
       return;
+
     }
 
     const stepImage =
@@ -2278,11 +2427,11 @@ async function saveRoutine() {
   ) {
 
     alert(
-      "התמונות גדולות מדי (קרוב למגבלת 1MB).\n\n" +
-      "מחק חלק מהתמונות או בחר תמונות קטנות יותר."
+      "התמונות גדולות מדי (קרוב למגבלת 1MB).\n\nמחק חלק מהתמונות או בחר תמונות קטנות יותר."
     );
 
     return;
+
   }
 
   const saveBtn =
@@ -2388,7 +2537,8 @@ function closeEditor() {
 
   currentRoutineImage = "";
 
-  stepImages = new Map();
+  stepImages =
+    new Map();
 
 }
 
@@ -2403,7 +2553,8 @@ async function deleteRoutine(id) {
     !confirm(
       "למחוק את ה-Routine?"
     )
-  ) return;
+  )
+    return;
 
   try {
 
@@ -2441,9 +2592,8 @@ function getTodaySteps(routine) {
   if (
     !routine.steps ||
     routine.steps.length === 0
-  ) {
+  )
     return [];
-  }
 
   const today =
     new Date();
@@ -2465,15 +2615,16 @@ function getTodaySteps(routine) {
       todayDay
     )
   ) {
+
     return [];
+
   }
 
   return routine.steps.filter(
     step => {
 
-      if (!step.startDate) {
+      if (!step.startDate)
         return false;
-      }
 
       const start =
         parseDate(
@@ -2496,11 +2647,8 @@ function getTodaySteps(routine) {
           86400000
         );
 
-      if (
-        difference < 0
-      ) {
+      if (difference < 0)
         return false;
-      }
 
       const frequency =
         Number(
@@ -2509,8 +2657,7 @@ function getTodaySteps(routine) {
 
       return (
         difference %
-        frequency ===
-        0
+        frequency === 0
       );
 
     }
@@ -2526,9 +2673,7 @@ function getTodaySteps(routine) {
 function startRoutine(routine) {
 
   const todaySteps =
-    getTodaySteps(
-      routine
-    );
+    getTodaySteps(routine);
 
   if (
     todaySteps.length === 0
@@ -2539,6 +2684,7 @@ function startRoutine(routine) {
     );
 
     return;
+
   }
 
   todaySteps.sort(
@@ -2553,8 +2699,7 @@ function startRoutine(routine) {
   activeSteps =
     todaySteps;
 
-  activeStepIndex =
-    0;
+  activeStepIndex = 0;
 
   document
     .getElementById(
@@ -2608,6 +2753,7 @@ function showStep() {
     exitRoutine();
 
     return;
+
   }
 
   const step =
@@ -2697,9 +2843,9 @@ function updateTimer() {
     .textContent =
 
       String(minutes)
-        .padStart(2, "0")
+        .padStart(2, "0") +
 
-      + ":" +
+      ":" +
 
       String(seconds)
         .padStart(2, "0");
@@ -2711,21 +2857,26 @@ function updateTimer() {
    ONE TAP → DONE
 ========================= */
 
-const activeImg =
-  document.getElementById(
-    "activeStepImage"
+document
+  .getElementById(
+    "activeStepArea"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      if (
+        !activeRoutine ||
+        !activeSteps.length
+      )
+        return;
+
+      activeStepIndex++;
+
+      showStep();
+
+    }
   );
-
-activeImg.addEventListener(
-  "click",
-  () => {
-
-    activeStepIndex++;
-
-    showStep();
-
-  }
-);
 
 
 /* =========================
@@ -2866,4 +3017,3 @@ function escapeAttr(text) {
 
 </body>
 </html>
-```
