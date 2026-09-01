@@ -552,6 +552,7 @@
     #activeStepName a {
       color: #007aff;
       text-decoration: underline;
+      cursor: pointer;
     }
 
     #timer {
@@ -844,6 +845,16 @@ function escapeAttr(text) {
   return String(text || '').replace(/"/g, "&quot;");
 }
 
+// פונקציה להמרת טקסט חופשי הכולל כתובות URL ל-HTML עם קישורים לחיצים
+function formatTextWithLinks(text) {
+  if (!text) return '';
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
+  const escaped = escapeHtml(text);
+  return escaped.replace(urlRegex, (url) => {
+    return `<a href="${url}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();">${url}</a>`;
+  });
+}
+
 const userTab = document.getElementById("userTab");
 const userPanel = document.getElementById("userPanel");
 const userPanelOverlay = document.getElementById("userPanelOverlay");
@@ -877,7 +888,7 @@ document.getElementById("logoutBtn").addEventListener("click", async () => {
   closeUserPanelFunction();
 });
 
-// שינוי: מעכשיו רק נגיעה בתמונה מסמנת את הצעד כבוצע
+// מעכשיו רק נגיעה בתמונה מסמנת את הצעד כבוצע
 document.getElementById("activeStepImage").addEventListener("click", () => {
   completeActiveStep();
 });
@@ -1087,7 +1098,7 @@ function showDirectRoutine(routine) {
       div.className = "direct-step";
       const imageHtml = step.image ? `<img class="direct-step-image" src="${step.image}" alt="">` : "";
       div.innerHTML = `
-        <strong>Step #${step.stepNumber || (index + 1)}: ${escapeHtml(step.name)}</strong>
+        <strong>Step #${step.stepNumber || (index + 1)}: ${formatTextWithLinks(step.name)}</strong>
         ${imageHtml}
       `;
       stepsContainer.appendChild(div);
@@ -1457,7 +1468,8 @@ function runStep() {
 
   const currentStep = activeSteps[activeStepIndex];
   
-  document.getElementById("activeStepName").innerHTML = escapeHtml(currentStep.name);
+  // שימוש בפונקציית העזר לזיהוי והפיכת קישורים לבלחיצים
+  document.getElementById("activeStepName").innerHTML = formatTextWithLinks(currentStep.name);
 
   const activeImg = document.getElementById("activeStepImage");
   if (currentStep.image) {
