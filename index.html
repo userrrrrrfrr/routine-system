@@ -491,7 +491,6 @@
       width: 100%;
     }
 
-    /* הריבוע של ה-Step הפעיל */
     .active-step-card {
       background: #fafafa;
       border: 2px dashed #e0e0e0;
@@ -555,8 +554,24 @@
       margin-bottom: 16px;
     }
 
+    .active-action-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .skip-btn {
+      flex: 1;
+      padding: 14px;
+      background: #f0f0f3;
+      border: 1px solid #ddd;
+      border-radius: 14px;
+      font-size: 16px;
+      color: #555;
+    }
+
     .back-btn {
-      width: 100%;
+      flex: 1;
       padding: 14px;
       background: white;
       border: 1px solid #ddd;
@@ -779,7 +794,11 @@
         </div>
 
         <div class="tap-hint">לחיצה בתוך הריבוע = בוצע</div>
-        <button id="exitActiveBtn" class="back-btn">יציאה</button>
+        
+        <div class="active-action-buttons">
+          <button id="skipStepBtn" class="skip-btn">⏭ דילוג</button>
+          <button id="exitActiveBtn" class="back-btn">יציאה</button>
+        </div>
       </div>
     </div>
 
@@ -874,6 +893,10 @@ document.getElementById("activeStepCard").addEventListener("click", (e) => {
     return;
   }
   completeActiveStep();
+});
+
+document.getElementById("skipStepBtn").addEventListener("click", () => {
+  skipActiveStep();
 });
 
 onAuthStateChanged(auth, async (user) => {
@@ -1477,13 +1500,18 @@ function updateTimerDisplay() {
 
 async function completeActiveStep() {
   const currentStep = activeSteps[activeStepIndex];
-  
-  let rulesToApply = currentStep.disableRules || [];
+
+  // חישוב ביטול בעקבות ביצוע תקין (הופך ל-disabled לפי התדירות/השעות)
+  let rulesToApply = [...(currentStep.disableRules || [])];
   
   if (rulesToApply.length === 0 && currentStep.disableTargetId) {
     const fallbackHours = currentStep.disableHours !== undefined ? currentStep.disableHours : ((currentStep.disableDays || 1) * 24);
     rulesToApply = [{ targetId: currentStep.disableTargetId, hours: fallbackHours }];
   }
+
+  // הוספת ביטול עצמי לפי התדירות שהוגדרה ל-Step
+  const selfFrequencyHours = (currentStep.frequency || 1) * 24;
+  rulesToApply.push({ targetId: currentStep.id, hours: selfFrequencyHours });
 
   if (rulesToApply.length > 0) {
     const now = new Date();
@@ -1500,6 +1528,12 @@ async function completeActiveStep() {
     }
   }
 
+  activeStepIndex++;
+  runStep();
+}
+
+function skipActiveStep() {
+  // דילוג פשוט: עוברים לצעד הבא בלבד, ללא שמירת השלמה וללא ביטולים
   activeStepIndex++;
   runStep();
 }
