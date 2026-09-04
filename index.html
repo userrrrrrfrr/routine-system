@@ -3649,11 +3649,13 @@ document
           );
 
 
-        await setDoc(
-          activationRulesRef,
-          activationRules
-        );
-
+       await setDoc(
+  activationRulesRef,
+  activationRulesMap,
+  {
+    merge: true
+  }
+);
 
         /* SAVE ROUTINE */
 
