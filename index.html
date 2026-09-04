@@ -4,33 +4,27 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Routine</title>
-
   <style>
     * {
       box-sizing: border-box;
     }
-
     body {
       margin: 0;
       font-family: Arial, sans-serif;
       background: #f5f5f7;
       color: #111;
     }
-
     button,
     input,
     select {
       font: inherit;
     }
-
     button {
       cursor: pointer;
     }
-
     .hidden {
       display: none !important;
     }
-
     /* LOGIN */
     #loginScreen {
       min-height: 100vh;
@@ -38,7 +32,6 @@
       align-items: center;
       justify-content: center;
     }
-
     .login-box {
       width: 90%;
       max-width: 400px;
@@ -48,17 +41,14 @@
       text-align: center;
       box-shadow: 0 10px 40px rgba(0,0,0,.08);
     }
-
     .login-box h1 {
       margin: 0 0 10px;
       font-size: 36px;
     }
-
     .login-box p {
       color: #666;
       margin-bottom: 30px;
     }
-
     .google-btn {
       width: 100%;
       padding: 15px;
@@ -67,19 +57,16 @@
       background: #111;
       color: white;
     }
-
     /* APP */
     #app {
       display: none;
     }
-
     .container {
       width: 92%;
       max-width: 900px;
       margin: auto;
       padding: 12px 0 60px;
     }
-
     /* USER SIDE PANEL */
     .user-tab {
       position: fixed;
@@ -99,11 +86,9 @@
       color: #555;
       transition: transform .25s ease;
     }
-
     .user-tab-icon {
       font-size: 16px;
     }
-
     .user-panel {
       position: fixed;
       top: 0;
@@ -120,11 +105,9 @@
       display: flex;
       flex-direction: column;
     }
-
     .user-panel.open {
       transform: translateX(0);
     }
-
     .user-panel-close {
       width: 36px;
       height: 36px;
@@ -134,20 +117,17 @@
       font-size: 20px;
       margin-bottom: 30px;
     }
-
     .user-panel-title {
       font-size: 13px;
       color: #888;
       margin-bottom: 8px;
     }
-
     #panelUserInfo {
       font-size: 16px;
       font-weight: 600;
       word-break: break-word;
       margin-bottom: 30px;
     }
-
     .panel-logout {
       width: 100%;
       padding: 13px;
@@ -156,7 +136,6 @@
       border-radius: 12px;
       color: #d00;
     }
-
     .user-panel-overlay {
       position: fixed;
       inset: 0;
@@ -164,11 +143,9 @@
       z-index: 1000;
       display: none;
     }
-
     .user-panel-overlay.show {
       display: block;
     }
-
     /* MAIN HEADER */
     .main-title {
       background: white;
@@ -177,12 +154,10 @@
       margin-bottom: 16px;
       text-align: center;
     }
-
     .main-title h1 {
       margin: 0;
       font-size: 30px;
     }
-
     /* CARDS */
     .card {
       background: white;
@@ -190,18 +165,15 @@
       padding: 22px;
       margin-bottom: 20px;
     }
-
     .top-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 15px;
     }
-
     .top-row h2 {
       margin: 0;
     }
-
     .primary {
       background: #111;
       color: white;
@@ -209,14 +181,12 @@
       padding: 12px 18px;
       border-radius: 10px;
     }
-
     .secondary {
       background: white;
       border: 1px solid #ddd;
       padding: 10px 15px;
       border-radius: 10px;
     }
-
     .danger {
       color: #d00;
       background: white;
@@ -224,18 +194,15 @@
       padding: 10px 15px;
       border-radius: 10px;
     }
-
     /* IMAGE UPLOAD */
     .image-upload {
       margin-top: 10px;
     }
-
     .image-upload label {
       display: block;
       font-weight: bold;
       margin-bottom: 8px;
     }
-
     .image-input {
       width: 100%;
       padding: 10px;
@@ -243,12 +210,10 @@
       border-radius: 10px;
       background: white;
     }
-
     .image-preview {
       margin-top: 12px;
       position: relative;
     }
-
     .image-preview img {
       width: 100%;
       max-height: 250px;
@@ -257,7 +222,6 @@
       border: 1px solid #eee;
       display: block;
     }
-
     .remove-image {
       margin-top: 8px;
       padding: 8px 12px;
@@ -266,7 +230,6 @@
       border-radius: 8px;
       color: #d00;
     }
-
     .routine-image {
       width: 100%;
       max-height: 220px;
@@ -275,7 +238,6 @@
       margin-bottom: 15px;
       display: block;
     }
-
     .direct-routine-image {
       width: 100%;
       max-height: 300px;
@@ -283,7 +245,6 @@
       border-radius: 18px;
       margin-bottom: 20px;
     }
-
     /* ROUTINES */
     .routine-card {
       border: 1px solid #eee;
@@ -291,18 +252,15 @@
       padding: 18px;
       margin-top: 12px;
     }
-
     .routine-card h3 {
       margin: 0 0 7px;
     }
-
     .routine-info {
       color: #777;
       font-size: 14px;
       margin-bottom: 15px;
       line-height: 1.7;
     }
-
     .today-info {
       margin-top: 10px;
       padding: 10px;
@@ -310,31 +268,26 @@
       background: #f5f5f7;
       font-size: 14px;
     }
-
     .actions {
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
       margin-top: 12px;
     }
-
     .empty {
       text-align: center;
       color: #777;
       padding: 35px 10px;
     }
-
     /* FORM */
     .form-group {
       margin-bottom: 20px;
     }
-
     .form-group label {
       display: block;
       font-weight: bold;
       margin-bottom: 7px;
     }
-
     input,
     select {
       width: 100%;
@@ -343,17 +296,14 @@
       border-radius: 10px;
       background: white;
     }
-
     .days {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
     }
-
     .day input {
       display: none;
     }
-
     .day span {
       display: block;
       padding: 10px 14px;
@@ -361,12 +311,10 @@
       border-radius: 10px;
       cursor: pointer;
     }
-
     .day input:checked + span {
       background: #111;
       color: white;
     }
-
     /* STEPS & REUSE CONTROL */
     .step {
       border: 1px solid #eee;
@@ -374,15 +322,33 @@
       padding: 15px;
       margin-bottom: 12px;
       background: #fafafa;
+      position: relative;
+      transition: opacity 0.15s ease, border-color 0.15s ease;
     }
-
+    .step.dragging {
+      opacity: 0.45;
+      border: 2px dashed #111;
+    }
+    .step-drag-handle {
+      cursor: grab;
+      padding: 4px 10px;
+      background: #e5e5ea;
+      border-radius: 6px;
+      font-size: 16px;
+      user-select: none;
+      margin-left: 8px;
+      display: inline-block;
+      line-height: 1;
+    }
+    .step-drag-handle:active {
+      cursor: grabbing;
+    }
     .step-title {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 15px;
     }
-
     .step-id-tag {
       font-size: 11px;
       background: #e5e5ea;
@@ -391,13 +357,11 @@
       color: #555;
       font-weight: normal;
     }
-
     .step-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 12px;
     }
-
     .disable-box {
       margin-top: 15px;
       padding: 14px;
@@ -405,14 +369,12 @@
       border-radius: 12px;
       background: #fcfcfc;
     }
-
     .disable-box-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 10px;
     }
-
     .disable-rule-row {
       display: flex;
       gap: 10px;
@@ -423,18 +385,15 @@
       border: 1px solid #eaeaea;
       border-radius: 10px;
     }
-
     .disable-rule-row > div {
       flex: 1;
     }
-
     .disable-rule-row label {
       font-size: 12px;
       color: #666;
       display: block;
       margin-bottom: 4px;
     }
-
     .btn-add-rule {
       background: #f0f0f3;
       border: 1px solid #ddd;
@@ -442,7 +401,6 @@
       border-radius: 8px;
       font-size: 13px;
     }
-
     .btn-remove-rule {
       padding: 10px 14px;
       background: #fff;
@@ -450,7 +408,6 @@
       color: #d00;
       border-radius: 8px;
     }
-
     .step-actions-bar {
       display: flex;
       gap: 10px;
@@ -460,18 +417,15 @@
       border-radius: 12px;
       align-items: center;
     }
-
     .step-actions-bar select {
       flex: 1;
     }
-
     /* ACTIVE ROUTINE */
     #activeScreen {
       display: none;
       min-height: auto;
       padding: 0;
     }
-
     .active-box {
       max-width: 480px;
       margin: 0 auto;
@@ -481,7 +435,6 @@
       text-align: center;
       box-shadow: 0 8px 30px rgba(0,0,0,0.06);
     }
-
     #activeRoutineName {
       margin: 0 0 8px;
       font-size: 17px;
@@ -490,7 +443,6 @@
       text-align: left;
       width: 100%;
     }
-
     .active-step-card {
       background: #fafafa;
       border: 2px dashed #e0e0e0;
@@ -501,16 +453,13 @@
       user-select: none;
       transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
     }
-
     .active-step-card:hover {
       border-color: #bbb;
     }
-
     .active-step-card:active {
       background-color: #f0f0f3;
       transform: scale(0.99);
     }
-
     .active-step-image {
       width: 100%;
       max-height: 340px;
@@ -520,7 +469,6 @@
       display: block;
       pointer-events: none;
     }
-
     #activeStepName {
       font-size: 42px;
       font-weight: 800;
@@ -530,7 +478,6 @@
       letter-spacing: -0.5px;
       word-break: break-word;
     }
-
     #activeStepName a {
       color: #007aff;
       text-decoration: underline;
@@ -539,7 +486,6 @@
       z-index: 10;
       pointer-events: auto;
     }
-
     #timer {
       font-size: 58px;
       font-weight: 700;
@@ -547,19 +493,16 @@
       color: #111;
       pointer-events: none;
     }
-
     .tap-hint {
       font-size: 13px;
       color: #999;
       margin-bottom: 16px;
     }
-
     .active-action-buttons {
       display: flex;
       gap: 10px;
       margin-top: 10px;
     }
-
     .skip-btn {
       flex: 1;
       padding: 14px;
@@ -569,7 +512,6 @@
       font-size: 16px;
       color: #555;
     }
-
     .back-btn {
       flex: 1;
       padding: 14px;
@@ -579,12 +521,10 @@
       font-size: 16px;
       color: #333;
     }
-
     /* DIRECT ROUTINE */
     #directRoutineScreen {
       display: none;
     }
-
     .direct-routine-box {
       max-width: 700px;
       margin: auto;
@@ -592,18 +532,15 @@
       border-radius: 25px;
       padding: 30px 25px;
     }
-
     .direct-routine-box h1 {
       margin-top: 0;
     }
-
     .direct-step {
       padding: 15px;
       border: 1px solid #eee;
       border-radius: 12px;
       margin-bottom: 10px;
     }
-
     .direct-step-image {
       width: 100%;
       max-height: 180px;
@@ -611,63 +548,50 @@
       border-radius: 12px;
       margin-top: 10px;
     }
-
     /* MOBILE */
     @media (max-width: 600px) {
       .container {
         width: 94%;
         padding-top: 10px;
       }
-
       .main-title {
         padding: 14px 18px;
         margin-bottom: 12px;
       }
-
       .main-title h1 {
         font-size: 27px;
       }
-
       .step-grid {
         grid-template-columns: 1fr;
       }
-
       .disable-rule-row {
         flex-direction: column;
         align-items: stretch;
       }
-
       #timer {
         font-size: 52px;
       }
-
       #activeStepName {
         font-size: 36px;
       }
-
       #activeRoutineName {
         font-size: 16px;
       }
-
       .active-step-image {
         max-height: 300px;
       }
-
       .top-row {
         align-items: flex-start;
         flex-direction: column;
       }
-
       .user-tab {
         top: 12px;
         font-size: 12px;
         padding: 8px 10px;
       }
-
       .active-box {
         padding-top: 12px;
       }
-
       .step-actions-bar {
         flex-direction: column;
         align-items: stretch;
@@ -675,9 +599,7 @@
     }
   </style>
 </head>
-
 <body>
-
 <!-- LOGIN -->
 <div id="loginScreen">
   <div class="login-box">
@@ -686,32 +608,25 @@
     <button id="loginBtn" class="google-btn">כניסה עם Google</button>
   </div>
 </div>
-
 <!-- APP -->
 <div id="app">
-
   <!-- USER SIDE TAB -->
   <button id="userTab" class="user-tab">
     <span class="user-tab-icon">☰</span>
     <span>משתמש</span>
   </button>
-
   <div id="userPanelOverlay" class="user-panel-overlay"></div>
-
   <div id="userPanel" class="user-panel">
     <button id="closeUserPanel" class="user-panel-close">×</button>
     <div class="user-panel-title">מחובר כ:</div>
     <div id="panelUserInfo"></div>
     <button id="logoutBtn" class="panel-logout">התנתק</button>
   </div>
-
   <div class="container">
-
     <!-- MAIN TITLE -->
     <div class="main-title">
       <h1>Routine</h1>
     </div>
-
     <!-- ROUTINE LIST -->
     <div id="routineListScreen">
       <div class="card">
@@ -722,23 +637,19 @@
         <div id="routineList"></div>
       </div>
     </div>
-
     <!-- EDITOR -->
     <div id="editorScreen" class="hidden">
       <div class="card">
         <h2 id="editorTitle">Routine חדש</h2>
-
         <div class="form-group">
           <label>שם ה-Routine</label>
           <input id="routineName" type="text" placeholder="לדוגמה: בוקר">
         </div>
-
         <div class="form-group image-upload">
           <label>תמונה ל-Routine</label>
           <input id="routineImageInput" class="image-input" type="file" accept="image/*">
           <div id="routineImagePreview" class="image-preview"></div>
         </div>
-
         <div class="form-group">
           <label>באילו ימים ה-Routine פעיל?</label>
           <div class="days">
@@ -751,10 +662,8 @@
             <label class="day"><input type="checkbox" value="6"><span>ש׳</span></label>
           </div>
         </div>
-
         <h2>Steps</h2>
         <div id="stepsContainer"></div>
-
         <div class="step-actions-bar">
           <button id="addStepBtn" class="secondary">+ צור Step חדש</button>
           <select id="reuseStepSelect">
@@ -762,14 +671,11 @@
           </select>
           <button id="reuseStepBtn" class="secondary">שבץ Step נבחר</button>
         </div>
-
         <br><br>
-
         <button id="saveRoutineBtn" class="primary">שמור</button>
         <button id="cancelEditorBtn" class="secondary">ביטול</button>
       </div>
     </div>
-
     <!-- DIRECT ROUTINE -->
     <div id="directRoutineScreen">
       <div class="direct-routine-box">
@@ -781,7 +687,6 @@
         <button id="directBackBtn" class="secondary">חזרה לשגרות</button>
       </div>
     </div>
-
     <!-- ACTIVE ROUTINE -->
     <div id="activeScreen">
       <div class="active-box">
@@ -792,7 +697,6 @@
           <div id="activeStepName"></div>
           <div id="timer">00:00</div>
         </div>
-
         <div class="tap-hint">לחיצה בתוך הריבוע = בוצע</div>
         
         <div class="active-action-buttons">
@@ -801,16 +705,12 @@
         </div>
       </div>
     </div>
-
   </div>
 </div>
-
 <script type="module">
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-
 const firebaseConfig = {
   apiKey: "AIzaSyCGTJFidIrp_YAuKOg2CCEO-vjFCiakkHo",
   authDomain: "site-c224f.firebaseapp.com",
@@ -820,12 +720,10 @@ const firebaseConfig = {
   appId: "1:709702843873:web:a326854107acb20e6ee6a0",
   measurementId: "G-GC5LS15YEC"
 };
-
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
-
 let currentUser = null;
 let routines = [];
 let disabledStepsMap = {}; 
@@ -837,15 +735,12 @@ let timerInterval = null;
 let remainingSeconds = 0;
 let currentRoutineImage = "";
 let stepImages = new Map();
-
 function escapeHtml(text) {
   return String(text || '').replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }
-
 function escapeAttr(text) {
   return String(text || '').replace(/"/g, "&quot;");
 }
-
 function formatTextWithLinks(text) {
   if (!text) return '';
   const urlRegex = /(https?:\/\/[^\s]+)/g;
@@ -854,26 +749,21 @@ function formatTextWithLinks(text) {
     return `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`;
   });
 }
-
 const userTab = document.getElementById("userTab");
 const userPanel = document.getElementById("userPanel");
 const userPanelOverlay = document.getElementById("userPanelOverlay");
 const closeUserPanel = document.getElementById("closeUserPanel");
-
 function openUserPanel() {
   userPanel.classList.add("open");
   userPanelOverlay.classList.add("show");
 }
-
 function closeUserPanelFunction() {
   userPanel.classList.remove("open");
   userPanelOverlay.classList.remove("show");
 }
-
 userTab.addEventListener("click", openUserPanel);
 closeUserPanel.addEventListener("click", closeUserPanelFunction);
 userPanelOverlay.addEventListener("click", closeUserPanelFunction);
-
 document.getElementById("loginBtn").addEventListener("click", async () => {
   try {
     await signInWithPopup(auth, provider);
@@ -882,23 +772,19 @@ document.getElementById("loginBtn").addEventListener("click", async () => {
     alert("ההתחברות נכשלה:\n\n" + error.message);
   }
 });
-
 document.getElementById("logoutBtn").addEventListener("click", async () => {
   await signOut(auth);
   closeUserPanelFunction();
 });
-
 document.getElementById("activeStepCard").addEventListener("click", (e) => {
   if (e.target.tagName === 'A' || e.target.closest('a')) {
     return;
   }
   completeActiveStep();
 });
-
 document.getElementById("skipStepBtn").addEventListener("click", () => {
   skipActiveStep();
 });
-
 onAuthStateChanged(auth, async (user) => {
   if (user) {
     currentUser = user;
@@ -913,7 +799,6 @@ onAuthStateChanged(auth, async (user) => {
     document.getElementById("app").style.display = "none";
   }
 });
-
 async function loadDisabledSteps() {
   try {
     const docRef = doc(db, "users", currentUser.uid, "meta", "disabledSteps");
@@ -927,7 +812,6 @@ async function loadDisabledSteps() {
     console.error("Error loading disabled steps:", e);
   }
 }
-
 async function loadRoutines() {
   const list = document.getElementById("routineList");
   list.innerHTML = "טוען...";
@@ -945,20 +829,17 @@ async function loadRoutines() {
     list.innerHTML = `<div class="empty">לא ניתן לטעון את השגרות.<br><br>${escapeHtml(error.message)}</div>`;
   }
 }
-
 function isStepDisabled(stepId) {
   if (!disabledStepsMap[stepId]) return false;
   const until = new Date(disabledStepsMap[stepId]);
   return new Date() < until;
 }
-
 function getTodaySteps(routine) {
   const today = new Date().getDay();
   if (routine.days && !routine.days.includes(today)) return [];
   const steps = routine.steps || [];
   return steps.filter(s => !isStepDisabled(s.id));
 }
-
 function renderRoutines() {
   const list = document.getElementById("routineList");
   list.innerHTML = "";
@@ -971,7 +852,6 @@ function renderRoutines() {
     card.className = "routine-card";
     const todaySteps = getTodaySteps(routine);
     const imageHtml = routine.image ? `<img class="routine-image" src="${routine.image}" alt="">` : "";
-
     card.innerHTML = `
       ${imageHtml}
       <h3>${escapeHtml(routine.name)}</h3>
@@ -984,16 +864,13 @@ function renderRoutines() {
         <button class="danger delete">מחק</button>
       </div>
     `;
-
     card.querySelector(".start").addEventListener("click", () => startRoutine(routine));
     card.querySelector(".edit").addEventListener("click", () => openEditor(routine));
     card.querySelector(".share").addEventListener("click", () => copyRoutineLink(routine.id));
     card.querySelector(".delete").addEventListener("click", () => deleteRoutine(routine.id));
-
     list.appendChild(card);
   });
 }
-
 function compressImage(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -1021,7 +898,6 @@ function compressImage(file) {
     reader.readAsDataURL(file);
   });
 }
-
 document.getElementById("routineImageInput").addEventListener("change", async event => {
   const file = event.target.files[0];
   if (!file) return;
@@ -1032,15 +908,12 @@ document.getElementById("routineImageInput").addEventListener("change", async ev
     alert("לא ניתן לקרוא את התמונה.");
   }
 });
-
 function showRoutineImagePreview() {
   const preview = document.getElementById("routineImagePreview");
   preview.innerHTML = "";
   if (!currentRoutineImage) return;
-
   const img = document.createElement("img");
   img.src = currentRoutineImage;
-
   const remove = document.createElement("button");
   remove.className = "remove-image";
   remove.textContent = "🗑 מחק תמונה";
@@ -1049,11 +922,9 @@ function showRoutineImagePreview() {
     document.getElementById("routineImageInput").value = "";
     showRoutineImagePreview();
   });
-
   preview.appendChild(img);
   preview.appendChild(remove);
 }
-
 async function copyRoutineLink(routineId) {
   const url = window.location.origin + window.location.pathname + "?routine=" + encodeURIComponent(routineId);
   try {
@@ -1063,7 +934,6 @@ async function copyRoutineLink(routineId) {
     prompt("העתק את הקישור:", url);
   }
 }
-
 function openRoutineFromLink() {
   const params = new URLSearchParams(window.location.search);
   const routineId = params.get("routine");
@@ -1075,14 +945,12 @@ function openRoutineFromLink() {
   }
   showDirectRoutine(routine);
 }
-
 function showDirectRoutine(routine) {
   document.getElementById("routineListScreen").style.display = "none";
   document.getElementById("editorScreen").classList.add("hidden");
   document.getElementById("activeScreen").style.display = "none";
   document.getElementById("directRoutineScreen").style.display = "block";
   document.getElementById("directRoutineName").textContent = routine.name;
-
   const routineImage = document.getElementById("directRoutineImage");
   if (routine.image) {
     routineImage.src = routine.image;
@@ -1091,11 +959,9 @@ function showDirectRoutine(routine) {
     routineImage.src = "";
     routineImage.classList.add("hidden");
   }
-
   const stepsContainer = document.getElementById("directRoutineSteps");
   stepsContainer.innerHTML = "";
   const todaySteps = getTodaySteps(routine);
-
   if (todaySteps.length === 0) {
     stepsContainer.innerHTML = `<div class="empty">אין Steps פעילים להיום.</div>`;
   } else {
@@ -1110,18 +976,14 @@ function showDirectRoutine(routine) {
       stepsContainer.appendChild(div);
     });
   }
-
   document.getElementById("directStartBtn").onclick = () => startRoutine(routine);
 }
-
 document.getElementById("directBackBtn").addEventListener("click", () => {
   window.history.replaceState({}, "", window.location.origin + window.location.pathname);
   document.getElementById("directRoutineScreen").style.display = "none";
   document.getElementById("routineListScreen").style.display = "block";
 });
-
 document.getElementById("newRoutineBtn").addEventListener("click", () => openEditor(null));
-
 function getAllStepsList() {
   const list = [];
   const map = new Map();
@@ -1137,7 +999,6 @@ function getAllStepsList() {
   });
   return list;
 }
-
 function populateStepReuseLibrary() {
   const select = document.getElementById("reuseStepSelect");
   select.innerHTML = '<option value="">-- בחר Step קיים מתוך הספרייה --</option>';
@@ -1150,7 +1011,6 @@ function populateStepReuseLibrary() {
     select.appendChild(option);
   });
 }
-
 function updateDisableOptionsInEditor() {
   const allSteps = getAllStepsList();
   document.querySelectorAll(".disable-target-select").forEach(select => {
@@ -1165,41 +1025,32 @@ function updateDisableOptionsInEditor() {
     });
   });
 }
-
 function openEditor(routine) {
   document.getElementById("routineListScreen").style.display = "none";
   document.getElementById("directRoutineScreen").style.display = "none";
   document.getElementById("editorScreen").classList.remove("hidden");
-
   editingRoutineId = routine ? routine.id : null;
   document.getElementById("editorTitle").textContent = routine ? "עריכת Routine" : "Routine חדש";
   document.getElementById("routineName").value = routine ? routine.name : "";
-
   currentRoutineImage = routine?.image || "";
   document.getElementById("routineImageInput").value = "";
   showRoutineImagePreview();
-
   document.querySelectorAll(".days input").forEach(checkbox => {
     checkbox.checked = routine ? (routine.days || []).includes(Number(checkbox.value)) : false;
   });
-
   stepImages = new Map();
   const container = document.getElementById("stepsContainer");
   container.innerHTML = "";
-
   if (routine && routine.steps) {
     routine.steps.forEach(step => addStep(step));
   }
-
   populateStepReuseLibrary();
   updateDisableOptionsInEditor();
 }
-
 document.getElementById("addStepBtn").addEventListener("click", () => {
   addStep();
   updateDisableOptionsInEditor();
 });
-
 document.getElementById("reuseStepBtn").addEventListener("click", () => {
   const select = document.getElementById("reuseStepSelect");
   const stepId = select.value;
@@ -1207,20 +1058,16 @@ document.getElementById("reuseStepBtn").addEventListener("click", () => {
     alert("נא לבחור Step מהרשימה");
     return;
   }
-
   const allSteps = getAllStepsList();
   const foundStep = allSteps.find(s => s.id === stepId);
-
   if (foundStep) {
     addStep(foundStep);
     updateDisableOptionsInEditor();
   }
 });
-
 function addDisableRuleRow(rulesContainer, rule = null) {
   const row = document.createElement("div");
   row.className = "disable-rule-row";
-
   row.innerHTML = `
     <div>
       <label>Step לביטול</label>
@@ -1234,49 +1081,58 @@ function addDisableRuleRow(rulesContainer, rule = null) {
     </div>
     <button type="button" class="btn-remove-rule">✕</button>
   `;
-
   row.querySelector(".btn-remove-rule").addEventListener("click", () => row.remove());
   
   const select = row.querySelector(".disable-target-select");
   select.addEventListener("change", (e) => {
     select.dataset.selectedVal = e.target.value;
   });
-
   rulesContainer.appendChild(row);
   updateDisableOptionsInEditor();
+}
+
+function getDragAfterElement(container, y) {
+  const draggableElements = [...container.querySelectorAll(".step:not(.dragging)")];
+  return draggableElements.reduce((closest, child) => {
+    const box = child.getBoundingClientRect();
+    const offset = y - box.top - box.height / 2;
+    if (offset < 0 && offset > closest.offset) {
+      return { offset: offset, element: child };
+    } else {
+      return closest;
+    }
+  }, { offset: Number.NEGATIVE_INFINITY }).element;
 }
 
 function addStep(step = null) {
   const container = document.getElementById("stepsContainer");
   const stepId = step?.id || crypto.randomUUID();
   const stepNumber = step?.stepNumber || (Math.floor(Math.random() * 9000) + 1000);
-
   const div = document.createElement("div");
   div.className = "step";
   div.dataset.stepId = stepId;
   div.dataset.stepNumber = stepNumber;
-
   if (step?.image) {
     stepImages.set(stepId, step.image);
   }
-
   div.innerHTML = `
     <div class="step-title">
-      <strong>Step #${stepNumber} <span class="step-id-tag">ID: ${stepId.substring(0, 8)}</span></strong>
+      <strong>
+        <span class="step-drag-handle" draggable="true" title="גרור לשינוי סדר">⠿</span>
+        Step #${stepNumber} 
+        <span class="step-id-tag">ID: ${stepId.substring(0, 8)}</span>
+      </strong>
       <button class="danger remove">מחק Step</button>
     </div>
-
     <div class="form-group">
       <label>שם ה-Step</label>
       <input class="step-name" type="text" placeholder="לדוגמה: לשתות מים" value="${step ? escapeAttr(step.name) : ""}">
     </div>
-
     <div class="form-group image-upload">
       <label>תמונה ל-Step</label>
       <input class="image-input step-image-input" type="file" accept="image/*">
       <div class="step-image-preview image-preview"></div>
     </div>
-
     <div class="step-grid">
       <div>
         <label>משך בשניות</label>
@@ -1287,7 +1143,6 @@ function addStep(step = null) {
         <input class="frequency" type="number" min="1" placeholder="הכנס מספר ימים" value="${step ? (step.frequency || 1) : 1}">
       </div>
     </div>
-
     <div class="disable-box">
       <div class="disable-box-header">
         <strong>ביטול Steps אחרים לאחר ביצוע:</strong>
@@ -1296,40 +1151,55 @@ function addStep(step = null) {
       <div class="disable-rules-container"></div>
     </div>
   `;
-
   div.querySelector(".remove").addEventListener("click", () => {
     stepImages.delete(stepId);
     div.remove();
   });
 
+  // Drag & Drop
+  const handle = div.querySelector(".step-drag-handle");
+  handle.addEventListener("dragstart", (e) => {
+    e.dataTransfer.setData("text/plain", stepId);
+    e.dataTransfer.effectAllowed = "move";
+    div.classList.add("dragging");
+  });
+  handle.addEventListener("dragend", () => {
+    div.classList.remove("dragging");
+  });
+  div.addEventListener("dragover", (e) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+    const dragging = document.querySelector(".step.dragging");
+    if (!dragging || dragging === div) return;
+    const afterElement = getDragAfterElement(container, e.clientY);
+    if (afterElement == null) {
+      container.appendChild(dragging);
+    } else {
+      container.insertBefore(dragging, afterElement);
+    }
+  });
+
   const rulesContainer = div.querySelector(".disable-rules-container");
   const addRuleBtn = div.querySelector(".btn-add-rule");
-
   addRuleBtn.addEventListener("click", () => {
     addDisableRuleRow(rulesContainer);
   });
-
   let initialRules = step?.disableRules || [];
   if (initialRules.length === 0 && step?.disableTargetId) {
     const fallbackHours = step.disableHours !== undefined ? step.disableHours : ((step.disableDays || 1) * 24);
     initialRules = [{ targetId: step.disableTargetId, hours: fallbackHours }];
   }
-
   initialRules.forEach(rule => {
     addDisableRuleRow(rulesContainer, rule);
   });
-
   const imgInput = div.querySelector(".step-image-input");
   const imgPreview = div.querySelector(".step-image-preview");
-
   function renderLocalPreview() {
     imgPreview.innerHTML = "";
     const imgData = stepImages.get(stepId);
     if (!imgData) return;
-
     const img = document.createElement("img");
     img.src = imgData;
-
     const rmBtn = document.createElement("button");
     rmBtn.className = "remove-image";
     rmBtn.textContent = "🗑 מחק תמונה";
@@ -1338,11 +1208,9 @@ function addStep(step = null) {
       imgInput.value = "";
       renderLocalPreview();
     });
-
     imgPreview.appendChild(img);
     imgPreview.appendChild(rmBtn);
   }
-
   imgInput.addEventListener("change", async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -1354,27 +1222,22 @@ function addStep(step = null) {
       alert("טעינת תמונה נכשלה");
     }
   });
-
   renderLocalPreview();
   container.appendChild(div);
 }
-
 document.getElementById("cancelEditorBtn").addEventListener("click", () => {
   document.getElementById("editorScreen").classList.add("hidden");
   document.getElementById("routineListScreen").style.display = "block";
 });
-
 document.getElementById("saveRoutineBtn").addEventListener("click", async () => {
   const name = document.getElementById("routineName").value.trim();
   if (!name) {
     alert("נא להזין שם לשגרה");
     return;
   }
-
   const selectedDays = Array.from(document.querySelectorAll(".days input:checked")).map(el => Number(el.value));
   const stepElements = document.querySelectorAll("#stepsContainer .step");
   const steps = [];
-
   stepElements.forEach(el => {
     const sId = el.dataset.stepId;
     const sNum = Number(el.dataset.stepNumber);
@@ -1382,10 +1245,8 @@ document.getElementById("saveRoutineBtn").addEventListener("click", async () => 
     const sDuration = Number(el.querySelector(".step-duration").value) || 60;
     const sFreq = Number(el.querySelector(".frequency").value) || 1;
     const sImg = stepImages.get(sId) || "";
-
     const ruleRows = el.querySelectorAll(".disable-rule-row");
     const disableRules = [];
-
     ruleRows.forEach(row => {
       const targetId = row.querySelector(".disable-target-select").value;
       const hours = Number(row.querySelector(".disable-hours-input").value) || 24;
@@ -1393,7 +1254,6 @@ document.getElementById("saveRoutineBtn").addEventListener("click", async () => 
         disableRules.push({ targetId, hours });
       }
     });
-
     steps.push({
       id: sId,
       stepNumber: sNum,
@@ -1404,14 +1264,12 @@ document.getElementById("saveRoutineBtn").addEventListener("click", async () => 
       image: sImg
     });
   });
-
   const routineData = {
     name,
     image: currentRoutineImage,
     days: selectedDays,
     steps
   };
-
   try {
     if (editingRoutineId) {
       const docRef = doc(db, "users", currentUser.uid, "routines", editingRoutineId);
@@ -1428,7 +1286,6 @@ document.getElementById("saveRoutineBtn").addEventListener("click", async () => 
     alert("שגיאה בשמירת השגרה: " + e.message);
   }
 });
-
 async function deleteRoutine(id) {
   if (!confirm("האם למחוק שגרה זו?")) return;
   try {
@@ -1438,39 +1295,31 @@ async function deleteRoutine(id) {
     alert("שגיאה במחיקה: " + e.message);
   }
 }
-
 function startRoutine(routine) {
   activeRoutine = routine;
   activeSteps = getTodaySteps(routine);
-
   if (activeSteps.length === 0) {
     alert("אין Steps פעילים לשגרה זו להיום.");
     return;
   }
-
   activeStepIndex = 0;
   document.getElementById("routineListScreen").style.display = "none";
   document.getElementById("directRoutineScreen").style.display = "none";
   document.getElementById("editorScreen").classList.add("hidden");
   document.getElementById("activeScreen").style.display = "block";
   document.getElementById("activeRoutineName").textContent = routine.name;
-
   runStep();
 }
-
 function runStep() {
   if (timerInterval) clearInterval(timerInterval);
-
   if (activeStepIndex >= activeSteps.length) {
     alert("כל הכבוד! סיימת את השגרה!");
     exitActiveScreen();
     return;
   }
-
   const currentStep = activeSteps[activeStepIndex];
   
   document.getElementById("activeStepName").innerHTML = formatTextWithLinks(currentStep.name);
-
   const activeImg = document.getElementById("activeStepImage");
   if (currentStep.image) {
     activeImg.src = currentStep.image;
@@ -1479,10 +1328,8 @@ function runStep() {
     activeImg.src = "";
     activeImg.classList.add("hidden");
   }
-
   remainingSeconds = currentStep.duration || 60;
   updateTimerDisplay();
-
   timerInterval = setInterval(() => {
     remainingSeconds--;
     updateTimerDisplay();
@@ -1491,16 +1338,13 @@ function runStep() {
     }
   }, 1000);
 }
-
 function updateTimerDisplay() {
   const m = String(Math.floor(remainingSeconds / 60)).padStart(2, '0');
   const s = String(remainingSeconds % 60).padStart(2, '0');
   document.getElementById("timer").textContent = `${m}:${s}`;
 }
-
 async function completeActiveStep() {
   const currentStep = activeSteps[activeStepIndex];
-
   // חישוב ביטול בעקבות ביצוע תקין (הופך ל-disabled לפי התדירות/השעות)
   let rulesToApply = [...(currentStep.disableRules || [])];
   
@@ -1508,18 +1352,15 @@ async function completeActiveStep() {
     const fallbackHours = currentStep.disableHours !== undefined ? currentStep.disableHours : ((currentStep.disableDays || 1) * 24);
     rulesToApply = [{ targetId: currentStep.disableTargetId, hours: fallbackHours }];
   }
-
   // הוספת ביטול עצמי לפי התדירות שהוגדרה ל-Step
   const selfFrequencyHours = (currentStep.frequency || 1) * 24;
   rulesToApply.push({ targetId: currentStep.id, hours: selfFrequencyHours });
-
   if (rulesToApply.length > 0) {
     const now = new Date();
     rulesToApply.forEach(rule => {
       const untilDate = new Date(now.getTime() + (rule.hours * 60 * 60 * 1000));
       disabledStepsMap[rule.targetId] = untilDate.toISOString();
     });
-
     try {
       const docRef = doc(db, "users", currentUser.uid, "meta", "disabledSteps");
       await setDoc(docRef, disabledStepsMap, { merge: true });
@@ -1527,26 +1368,21 @@ async function completeActiveStep() {
       console.error("שגיאה בעדכון ביטול צעד ב-DB:", e);
     }
   }
-
   activeStepIndex++;
   runStep();
 }
-
 function skipActiveStep() {
   // דילוג פשוט: עוברים לצעד הבא בלבד, ללא שמירת השלמה וללא ביטולים
   activeStepIndex++;
   runStep();
 }
-
 function exitActiveScreen() {
   if (timerInterval) clearInterval(timerInterval);
   document.getElementById("activeScreen").style.display = "none";
   document.getElementById("routineListScreen").style.display = "block";
   renderRoutines();
 }
-
 document.getElementById("exitActiveBtn").addEventListener("click", exitActiveScreen);
-
 </script>
 </body>
 </html>
