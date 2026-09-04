@@ -369,6 +369,52 @@
       border-radius: 12px;
       background: #fcfcfc;
     }
+    .activation-box {
+      margin-top: 15px;
+      padding: 14px;
+      border: 1px dashed #aaa;
+      border-radius: 12px;
+      background: #fcfcfc;
+    }
+    .activation-box-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .activation-rule-row {
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+      margin-bottom: 10px;
+      background: #fff;
+      padding: 10px;
+      border: 1px solid #eaeaea;
+      border-radius: 10px;
+    }
+    .activation-rule-row > div {
+      flex: 1;
+    }
+    .activation-rule-row label {
+      font-size: 12px;
+      color: #666;
+      display: block;
+      margin-bottom: 4px;
+    }
+    .activation-box .btn-add-rule {
+      background: #f0f0f3;
+      border: 1px solid #ddd;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+    }
+    .activation-box .btn-remove-rule {
+      padding: 10px 14px;
+      background: #fff;
+      border: 1px solid #ddd;
+      color: #d00;
+      border-radius: 8px;
+    }
     .disable-box-header {
       display: flex;
       justify-content: space-between;
@@ -564,7 +610,8 @@
       .step-grid {
         grid-template-columns: 1fr;
       }
-      .disable-rule-row {
+      .disable-rule-row,
+      .activation-rule-row {
         flex-direction: column;
         align-items: stretch;
       }
@@ -726,7 +773,9 @@ const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
 let currentUser = null;
 let routines = [];
-let disabledStepsMap = {}; 
+let disabledStepsMap = {};
+let activationRulesMap = {};
+let activatedStepsMap = {}; 
 let editingRoutineId = null;
 let activeRoutine = null;
 let activeSteps = [];
@@ -792,6 +841,8 @@ onAuthStateChanged(auth, async (user) => {
     document.getElementById("app").style.display = "block";
     document.getElementById("panelUserInfo").textContent = user.displayName || user.email || "";
     await loadDisabledSteps();
+    await loadActivationRules();
+    await loadActivatedSteps();
     await loadRoutines();
   } else {
     currentUser = null;
@@ -812,6 +863,48 @@ async function loadDisabledSteps() {
     console.error("Error loading disabled steps:", e);
   }
 }
+async function loadActivationRules() {
+  try {
+    const docRef = doc(db, "users", currentUser.uid, "meta", "stepActivationRules");
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      activationRulesMap = docSnap.data();
+    } else {
+      activationRulesMap = {};
+    }
+  } catch (e) {
+    console.error("Error loading activation rules:", e);
+    activationRulesMap = {};
+  }
+}
+
+async function loadActivatedSteps() {
+  try {
+    const docRef = doc(db, "users", currentUser.uid, "meta", "activatedSteps");
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      activatedStepsMap = docSnap.data();
+    } else {
+      activatedStepsMap = {};
+    }
+  } catch (e) {
+    console.error("Error loading activated steps:", e);
+    activatedStepsMap = {};
+  }
+}
+
+function isStepTemporarilyActivated(stepId) {
+  if (!activatedStepsMap[stepId]) return false;
+  const until = new Date(activatedStepsMap[stepId]);
+  return new Date() < until;
+}
+
+function getActivationUntilForDays(days) {
+  const now = new Date();
+  const end = new Date(now.getFullYear(), now.getMonth(), now.getDate() + days);
+  return end.toISOString();
+}
+
 async function loadRoutines() {
   const list = document.getElementById("routineList");
   list.innerHTML = "טוען...";
@@ -838,7 +931,7 @@ function getTodaySteps(routine) {
   const today = new Date().getDay();
   if (routine.days && !routine.days.includes(today)) return [];
   const steps = routine.steps || [];
-  return steps.filter(s => !isStepDisabled(s.id));
+  return steps.filter(s => isStepTemporarilyActivated(s.id) || !isStepDisabled(s.id));
 }
 function renderRoutines() {
   const list = document.getElementById("routineList");
@@ -1025,6 +1118,21 @@ function updateDisableOptionsInEditor() {
     });
   });
 }
+function updateActivationOptionsInEditor() {
+  const allSteps = getAllStepsList();
+  document.querySelectorAll(".activation-target-select").forEach(select => {
+    const currentVal = select.dataset.selectedVal || "";
+    select.innerHTML = '<option value="">-- בחר Step --</option>';
+    allSteps.forEach(s => {
+      const opt = document.createElement("option");
+      opt.value = s.id;
+      opt.textContent = `#${s.stepNumber || '?'} - ${s.name}`;
+      if (s.id === currentVal) opt.selected = true;
+      select.appendChild(opt);
+    });
+  });
+}
+
 function openEditor(routine) {
   document.getElementById("routineListScreen").style.display = "none";
   document.getElementById("directRoutineScreen").style.display = "none";
@@ -1046,10 +1154,12 @@ function openEditor(routine) {
   }
   populateStepReuseLibrary();
   updateDisableOptionsInEditor();
+  updateActivationOptionsInEditor();
 }
 document.getElementById("addStepBtn").addEventListener("click", () => {
   addStep();
   updateDisableOptionsInEditor();
+  updateActivationOptionsInEditor();
 });
 document.getElementById("reuseStepBtn").addEventListener("click", () => {
   const select = document.getElementById("reuseStepSelect");
@@ -1090,6 +1200,30 @@ function addDisableRuleRow(rulesContainer, rule = null) {
   rulesContainer.appendChild(row);
   updateDisableOptionsInEditor();
 }
+function addActivationRuleRow(rulesContainer, rule = null) {
+  const row = document.createElement("div");
+  row.className = "activation-rule-row";
+  row.innerHTML = `
+    <div>
+      <label>Step להפעלה</label>
+      <select class="activation-target-select" data-selected-val="${rule?.targetId || ''}">
+        <option value="">-- בחר Step --</option>
+      </select>
+    </div>
+    <div>
+      <label>משך ההפעלה (בימים)</label>
+      <input class="activation-days-input" type="number" min="1" step="1" placeholder="3" value="${rule?.days || 1}">
+    </div>
+    <button type="button" class="activation-remove-rule btn-remove-rule">✕</button>
+  `;
+  row.querySelector(".activation-remove-rule").addEventListener("click", () => row.remove());
+  const select = row.querySelector(".activation-target-select");
+  select.addEventListener("change", (e) => {
+    select.dataset.selectedVal = e.target.value;
+  });
+  rulesContainer.appendChild(row);
+  updateActivationOptionsInEditor();
+}
 
 function getDragAfterElement(container, y) {
   const draggableElements = [...container.querySelectorAll(".step:not(.dragging)")];
@@ -1103,7 +1237,6 @@ function getDragAfterElement(container, y) {
     }
   }, { offset: Number.NEGATIVE_INFINITY }).element;
 }
-
 function addStep(step = null) {
   const container = document.getElementById("stepsContainer");
   const stepId = step?.id || crypto.randomUUID();
@@ -1150,12 +1283,18 @@ function addStep(step = null) {
       </div>
       <div class="disable-rules-container"></div>
     </div>
+    <div class="activation-box">
+      <div class="activation-box-header">
+        <strong>הפעלת Steps אחרים לאחר ביצוע:</strong>
+        <button type="button" class="btn-add-rule activation-add-rule">+ הוסף כלל הפעלה</button>
+      </div>
+      <div class="activation-rules-container"></div>
+    </div>
   `;
   div.querySelector(".remove").addEventListener("click", () => {
     stepImages.delete(stepId);
     div.remove();
   });
-
   // Drag & Drop
   const handle = div.querySelector(".step-drag-handle");
   handle.addEventListener("dragstart", (e) => {
@@ -1178,7 +1317,6 @@ function addStep(step = null) {
       container.insertBefore(dragging, afterElement);
     }
   });
-
   const rulesContainer = div.querySelector(".disable-rules-container");
   const addRuleBtn = div.querySelector(".btn-add-rule");
   addRuleBtn.addEventListener("click", () => {
@@ -1192,6 +1330,18 @@ function addStep(step = null) {
   initialRules.forEach(rule => {
     addDisableRuleRow(rulesContainer, rule);
   });
+
+  const activationRulesContainer = div.querySelector(".activation-rules-container");
+  const activationAddRuleBtn = div.querySelector(".activation-add-rule");
+  activationAddRuleBtn.addEventListener("click", () => {
+    addActivationRuleRow(activationRulesContainer);
+  });
+
+  const initialActivationRules = activationRulesMap[stepId] || step?.activationRules || [];
+  initialActivationRules.forEach(rule => {
+    addActivationRuleRow(activationRulesContainer, rule);
+  });
+
   const imgInput = div.querySelector(".step-image-input");
   const imgPreview = div.querySelector(".step-image-preview");
   function renderLocalPreview() {
@@ -1254,6 +1404,23 @@ document.getElementById("saveRoutineBtn").addEventListener("click", async () => 
         disableRules.push({ targetId, hours });
       }
     });
+
+    const activationRuleRows = el.querySelectorAll(".activation-rule-row");
+    const activationRules = [];
+    activationRuleRows.forEach(row => {
+      const targetId = row.querySelector(".activation-target-select").value;
+      const days = Number(row.querySelector(".activation-days-input").value) || 1;
+      if (targetId) {
+        activationRules.push({ targetId, days });
+      }
+    });
+
+    if (activationRules.length > 0) {
+      activationRulesMap[sId] = activationRules;
+    } else {
+      delete activationRulesMap[sId];
+    }
+
     steps.push({
       id: sId,
       stepNumber: sNum,
@@ -1261,6 +1428,7 @@ document.getElementById("saveRoutineBtn").addEventListener("click", async () => 
       duration: sDuration,
       frequency: sFreq,
       disableRules,
+      activationRules,
       image: sImg
     });
   });
@@ -1271,6 +1439,9 @@ document.getElementById("saveRoutineBtn").addEventListener("click", async () => 
     steps
   };
   try {
+    const activationRulesRef = doc(db, "users", currentUser.uid, "meta", "stepActivationRules");
+    await setDoc(activationRulesRef, activationRulesMap);
+
     if (editingRoutineId) {
       const docRef = doc(db, "users", currentUser.uid, "routines", editingRoutineId);
       await updateDoc(docRef, routineData);
@@ -1368,6 +1539,29 @@ async function completeActiveStep() {
       console.error("שגיאה בעדכון ביטול צעד ב-DB:", e);
     }
   }
+
+  // הפעלה זמנית של Steps אחרים לפי ימים קלנדריים.
+  // ההפעלה היא גלובלית לפי Step ID ולכן משפיעה על כל Routine שבו ה-Step קיים.
+  const activationRules = activationRulesMap[currentStep.id] || currentStep.activationRules || [];
+  if (activationRules.length > 0) {
+    activationRules.forEach(rule => {
+      if (!rule.targetId) return;
+      const days = Math.max(1, Number(rule.days) || 1);
+      const newUntil = getActivationUntilForDays(days);
+      const existingUntil = activatedStepsMap[rule.targetId];
+      if (!existingUntil || new Date(existingUntil) < new Date(newUntil)) {
+        activatedStepsMap[rule.targetId] = newUntil;
+      }
+    });
+
+    try {
+      const activationDocRef = doc(db, "users", currentUser.uid, "meta", "activatedSteps");
+      await setDoc(activationDocRef, activatedStepsMap, { merge: true });
+    } catch (e) {
+      console.error("שגיאה בעדכון הפעלת Step ב-DB:", e);
+    }
+  }
+
   activeStepIndex++;
   runStep();
 }
