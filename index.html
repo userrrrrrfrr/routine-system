@@ -743,6 +743,188 @@
       margin-top: 10px;
     }
 
+
+    /* VIEW NAVIGATION */
+    .view-switcher {
+      display: flex;
+      gap: 8px;
+      background: white;
+      padding: 6px;
+      border-radius: 14px;
+      margin-bottom: 16px;
+      border: 1px solid #eee;
+    }
+
+    .view-switch-btn {
+      flex: 1;
+      border: 0;
+      background: transparent;
+      padding: 11px 15px;
+      border-radius: 10px;
+      font-weight: 600;
+      color: #777;
+    }
+
+    .view-switch-btn.active {
+      background: #111;
+      color: white;
+    }
+
+    /* CALENDAR */
+    #calendarScreen {
+      display: none;
+    }
+
+    .calendar-card {
+      background: white;
+      border-radius: 20px;
+      padding: 18px;
+      margin-bottom: 20px;
+    }
+
+    .calendar-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .calendar-header h2 {
+      margin: 0;
+      font-size: 22px;
+    }
+
+    .calendar-header-actions {
+      display: flex;
+      gap: 7px;
+    }
+
+    .calendar-nav-btn {
+      border: 1px solid #ddd;
+      background: white;
+      border-radius: 10px;
+      padding: 9px 12px;
+      font-size: 14px;
+    }
+
+    .calendar-months {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .month-calendar {
+      border: 1px solid #eee;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .month-title {
+      padding: 15px;
+      text-align: center;
+      font-size: 18px;
+      font-weight: 700;
+      border-bottom: 1px solid #eee;
+      background: #fafafa;
+    }
+
+    .weekday-row,
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+    }
+
+    .weekday {
+      padding: 9px 3px;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: #888;
+      border-bottom: 1px solid #eee;
+    }
+
+    .calendar-day {
+      min-height: 155px;
+      padding: 7px;
+      border-left: 1px solid #eee;
+      border-bottom: 1px solid #eee;
+      background: white;
+      overflow: hidden;
+    }
+
+    .calendar-day:nth-child(7n) {
+      border-left: 0;
+    }
+
+    .calendar-day.empty-day {
+      background: #fafafa;
+    }
+
+    .calendar-day.today {
+      background: #f1f1f4;
+      box-shadow: inset 0 0 0 2px #111;
+    }
+
+    .day-number {
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .day-routine {
+      border: 1px solid #e6e6e6;
+      border-radius: 9px;
+      padding: 7px;
+      margin-bottom: 6px;
+      background: #fafafa;
+    }
+
+    .day-routine-name {
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 5px;
+      word-break: break-word;
+    }
+
+    .day-step {
+      font-size: 11px;
+      color: #555;
+      line-height: 1.45;
+      padding: 2px 0;
+      word-break: break-word;
+    }
+
+    .day-step.activation {
+      color: #c40000;
+      font-weight: 700;
+    }
+
+    .day-step-number {
+      color: #888;
+      margin-left: 3px;
+    }
+
+    .calendar-empty {
+      color: #aaa;
+      font-size: 11px;
+      padding: 4px 0;
+    }
+
+    .calendar-note {
+      margin-top: 12px;
+      color: #888;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 850px) {
+      .calendar-months {
+        grid-template-columns: 1fr;
+      }
+    }
+
     /* MOBILE */
 
     @media (max-width: 600px) {
@@ -873,6 +1055,17 @@
       <h1>Routine</h1>
     </div>
 
+
+    <!-- VIEW SWITCHER -->
+    <div class="view-switcher">
+      <button id="routinesViewBtn" class="view-switch-btn active">
+        השגרות שלי
+      </button>
+      <button id="calendarViewBtn" class="view-switch-btn">
+        לוח שנה
+      </button>
+    </div>
+
     <!-- ROUTINE LIST -->
 
     <div id="routineListScreen">
@@ -891,6 +1084,29 @@
 
       </div>
 
+    </div>
+
+
+    <!-- CALENDAR -->
+    <div id="calendarScreen">
+      <div class="calendar-card">
+        <div class="calendar-header">
+          <h2>לוח שנה</h2>
+          <div class="calendar-header-actions">
+            <button id="calendarTodayBtn" class="calendar-nav-btn">היום</button>
+            <button id="calendarPrevBtn" class="calendar-nav-btn">‹</button>
+            <button id="calendarNextBtn" class="calendar-nav-btn">›</button>
+          </div>
+        </div>
+
+        <div id="calendarMonths" class="calendar-months"></div>
+
+        <div class="calendar-note">
+          הלוח מציג את ה-Routines לפי ימי הפעילות שלהם ואת ה-Steps שבתוכם.
+          Step שמוגדר כ-0 מוצג כ-Step שמחכה להפעלה על ידי Step אחר.
+          תדירות של Step מוצגת לידו ואינה משנה את לוח ימי ה-Routine.
+        </div>
+      </div>
     </div>
 
     <!-- EDITOR -->
@@ -1165,6 +1381,8 @@ let remainingSeconds = 0;
 let currentRoutineImage = "";
 
 let stepImages = new Map();
+
+let calendarStartDate = new Date();
 
 
 /* HELPERS */
@@ -1638,6 +1856,10 @@ async function loadRoutines() {
     });
 
     renderRoutines();
+
+    if (document.getElementById("calendarScreen").style.display === "block") {
+      renderCalendar();
+    }
 
     openRoutineFromLink();
 
@@ -2146,6 +2368,284 @@ document
     }
   );
 
+
+
+/* CALENDAR */
+
+const hebrewWeekdays = [
+  "א׳", "ב׳", "ג׳", "ד׳", "ה׳", "ו׳", "ש׳"
+];
+
+const hebrewMonths = [
+  "ינואר", "פברואר", "מרץ", "אפריל", "מאי", "יוני",
+  "יולי", "אוגוסט", "ספטמבר", "אוקטובר", "נובמבר", "דצמבר"
+];
+
+function startOfMonth(date) {
+  return new Date(date.getFullYear(), date.getMonth(), 1);
+}
+
+function formatCalendarMonth(date) {
+  return `${hebrewMonths[date.getMonth()]} ${date.getFullYear()}`;
+}
+
+function formatCalendarDay(date) {
+  return `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`;
+}
+
+function getStepsForCalendar(routine) {
+  return (routine.steps || []).slice().sort((a, b) => {
+    return Number(a.stepNumber || 0) - Number(b.stepNumber || 0);
+  });
+}
+
+function getRoutinesForCalendarDay(date) {
+  const dayOfWeek = date.getDay();
+
+  return routines.filter(routine => {
+    if (!routine.days || routine.days.length === 0) {
+      return false;
+    }
+
+    return routine.days.includes(dayOfWeek);
+  });
+}
+
+function renderCalendar() {
+  const container = document.getElementById("calendarMonths");
+
+  if (!container) return;
+
+  container.innerHTML = "";
+
+  const firstMonth = startOfMonth(calendarStartDate);
+  const secondMonth = new Date(
+    firstMonth.getFullYear(),
+    firstMonth.getMonth() + 1,
+    1
+  );
+
+  [firstMonth, secondMonth].forEach(monthDate => {
+    container.appendChild(renderCalendarMonth(monthDate));
+  });
+}
+
+function renderCalendarMonth(monthDate) {
+  const monthWrapper = document.createElement("div");
+  monthWrapper.className = "month-calendar";
+
+  const title = document.createElement("div");
+  title.className = "month-title";
+  title.textContent = formatCalendarMonth(monthDate);
+
+  const weekdays = document.createElement("div");
+  weekdays.className = "weekday-row";
+
+  hebrewWeekdays.forEach(day => {
+    const cell = document.createElement("div");
+    cell.className = "weekday";
+    cell.textContent = day;
+    weekdays.appendChild(cell);
+  });
+
+  const grid = document.createElement("div");
+  grid.className = "calendar-grid";
+
+  const firstDay = new Date(
+    monthDate.getFullYear(),
+    monthDate.getMonth(),
+    1
+  );
+
+  const daysInMonth = new Date(
+    monthDate.getFullYear(),
+    monthDate.getMonth() + 1,
+    0
+  ).getDate();
+
+  /*
+    JavaScript:
+    0 = Sunday ... 6 = Saturday
+
+    בגלל שהממשק בעברית מוצג מימין לשמאל,
+    העמודה הראשונה מבחינתנו היא שבת? לא.
+    אנחנו משאירים את סדר הימים כפי שה-Routine
+    משתמש בו: א׳ עד ש׳, ומסדרים את התאים בהתאם.
+  */
+  const firstColumn = firstDay.getDay();
+
+  for (let i = 0; i < firstColumn; i++) {
+    const empty = document.createElement("div");
+    empty.className = "calendar-day empty-day";
+    grid.appendChild(empty);
+  }
+
+  for (let dayNumber = 1; dayNumber <= daysInMonth; dayNumber++) {
+    const date = new Date(
+      monthDate.getFullYear(),
+      monthDate.getMonth(),
+      dayNumber
+    );
+
+    const dayCell = document.createElement("div");
+    dayCell.className = "calendar-day";
+
+    if (isSameDate(date, new Date())) {
+      dayCell.classList.add("today");
+    }
+
+    const number = document.createElement("div");
+    number.className = "day-number";
+    number.textContent = dayNumber;
+    number.title = formatCalendarDay(date);
+
+    dayCell.appendChild(number);
+
+    const dayRoutines = getRoutinesForCalendarDay(date);
+
+    if (dayRoutines.length === 0) {
+      const emptyText = document.createElement("div");
+      emptyText.className = "calendar-empty";
+      emptyText.textContent = "אין שגרות";
+      dayCell.appendChild(emptyText);
+    } else {
+      dayRoutines.forEach(routine => {
+        const routineBox = document.createElement("div");
+        routineBox.className = "day-routine";
+
+        const routineName = document.createElement("div");
+        routineName.className = "day-routine-name";
+        routineName.textContent = routine.name || "Routine";
+        routineBox.appendChild(routineName);
+
+        const steps = getStepsForCalendar(routine);
+
+        if (steps.length === 0) {
+          const noSteps = document.createElement("div");
+          noSteps.className = "calendar-empty";
+          noSteps.textContent = "אין Steps";
+          routineBox.appendChild(noSteps);
+        } else {
+          steps.forEach((step, index) => {
+            const stepRow = document.createElement("div");
+            stepRow.className = "day-step";
+
+            if (Number(step.frequency) === 0) {
+              stepRow.classList.add("activation");
+            }
+
+            const stepNumber =
+              step.stepNumber || (index + 1);
+
+            const frequencyText =
+              Number(step.frequency) === 0
+                ? " · מופעל על ידי Step אחר"
+                : Number(step.frequency) > 1
+                  ? ` · כל ${step.frequency} ימים`
+                  : "";
+
+            stepRow.innerHTML =
+              `<span class="day-step-number">#${escapeHtml(stepNumber)}</span>` +
+              `${escapeHtml(step.name || "Step ללא שם")}` +
+              `${escapeHtml(frequencyText)}`;
+
+            routineBox.appendChild(stepRow);
+          });
+        }
+
+        dayCell.appendChild(routineBox);
+      });
+    }
+
+    grid.appendChild(dayCell);
+  }
+
+  /*
+    השלמת שורות כדי שכל החודשים יהיו באותו מבנה.
+  */
+  const totalCells = firstColumn + daysInMonth;
+  const remaining = (7 - (totalCells % 7)) % 7;
+
+  for (let i = 0; i < remaining; i++) {
+    const empty = document.createElement("div");
+    empty.className = "calendar-day empty-day";
+    grid.appendChild(empty);
+  }
+
+  monthWrapper.appendChild(title);
+  monthWrapper.appendChild(weekdays);
+  monthWrapper.appendChild(grid);
+
+  return monthWrapper;
+}
+
+function isSameDate(a, b) {
+  return (
+    a.getFullYear() === b.getFullYear() &&
+    a.getMonth() === b.getMonth() &&
+    a.getDate() === b.getDate()
+  );
+}
+
+function showRoutinesView() {
+  document.getElementById("calendarScreen").style.display = "none";
+  document.getElementById("routineListScreen").style.display = "block";
+
+  document.getElementById("routinesViewBtn")
+    .classList.add("active");
+
+  document.getElementById("calendarViewBtn")
+    .classList.remove("active");
+}
+
+function showCalendarView() {
+  document.getElementById("routineListScreen").style.display = "none";
+  document.getElementById("editorScreen").classList.add("hidden");
+  document.getElementById("directRoutineScreen").style.display = "none";
+  document.getElementById("activeScreen").style.display = "none";
+
+  document.getElementById("calendarScreen").style.display = "block";
+
+  document.getElementById("calendarViewBtn")
+    .classList.add("active");
+
+  document.getElementById("routinesViewBtn")
+    .classList.remove("active");
+
+  renderCalendar();
+}
+
+document.getElementById("routinesViewBtn")
+  .addEventListener("click", showRoutinesView);
+
+document.getElementById("calendarViewBtn")
+  .addEventListener("click", showCalendarView);
+
+document.getElementById("calendarPrevBtn")
+  .addEventListener("click", () => {
+    calendarStartDate = new Date(
+      calendarStartDate.getFullYear(),
+      calendarStartDate.getMonth() - 1,
+      1
+    );
+    renderCalendar();
+  });
+
+document.getElementById("calendarNextBtn")
+  .addEventListener("click", () => {
+    calendarStartDate = new Date(
+      calendarStartDate.getFullYear(),
+      calendarStartDate.getMonth() + 1,
+      1
+    );
+    renderCalendar();
+  });
+
+document.getElementById("calendarTodayBtn")
+  .addEventListener("click", () => {
+    calendarStartDate = new Date();
+    renderCalendar();
+  });
 
 /* NEW ROUTINE */
 
@@ -4254,6 +4754,9 @@ function exitActiveScreen() {
   ).style.display =
     "block";
 
+  document.getElementById("calendarScreen").style.display = "none";
+  document.getElementById("routinesViewBtn").classList.add("active");
+  document.getElementById("calendarViewBtn").classList.remove("active");
 
   renderRoutines();
 
