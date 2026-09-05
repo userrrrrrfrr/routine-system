@@ -5,12 +5,971 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Routine</title>
 
-  <style>*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f5f5f7;color:#111}button,input,select{font:inherit}button{cursor:pointer}.hidden{display:none !important}#loginScreen{min-height:100vh;display:flex;align-items:center;justify-content:center}.login-box{width:90%;max-width:400px;background:white;padding:40px 30px;border-radius:24px;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,.08)}.login-box h1{margin:0 0 10px;font-size:36px}.login-box p{color:#666;margin-bottom:30px}.google-btn{width:100%;padding:15px;border:0;border-radius:12px;background:#111;color:white}#app{display:none}.container{width:92%;max-width:900px;margin:auto;padding:12px 0 60px}.user-tab{position:fixed;top:18px;left:0;z-index:1000;background:white;border:1px solid #e5e5e5;border-left:0;border-radius:0 14px 14px 0;padding:9px 12px;box-shadow:0 4px 18px rgba(0,0,0,.08);display:flex;align-items:center;gap:7px;font-size:13px;color:#555;transition:transform .25s ease}.user-tab-icon{font-size:16px}.user-panel{position:fixed;top:0;left:0;width:260px;max-width:80vw;height:100vh;background:white;z-index:1001;box-shadow:8px 0 30px rgba(0,0,0,.12);transform:translateX(-100%);transition:transform .28s ease;padding:25px 20px;display:flex;flex-direction:column}.user-panel.open{transform:translateX(0)}.user-panel-close{width:36px;height:36px;border:0;background:#f5f5f7;border-radius:10px;font-size:20px;margin-bottom:30px}.user-panel-title{font-size:13px;color:#888;margin-bottom:8px}#panelUserInfo{font-size:16px;font-weight:600;word-break:break-word;margin-bottom:30px}.panel-logout{width:100%;padding:13px;border:1px solid #ddd;background:white;border-radius:12px;color:#d00}.user-panel-overlay{position:fixed;inset:0;background:rgba(0,0,0,.18);z-index:1000;display:none}.user-panel-overlay.show{display:block}.main-title{background:white;padding:18px 20px;border-radius:20px;margin-bottom:16px;text-align:center}.main-title h1{margin:0;font-size:30px}.card{background:white;border-radius:20px;padding:22px;margin-bottom:20px}.top-row{display:flex;justify-content:space-between;align-items:center;gap:15px}.top-row h2{margin:0}.primary{background:#111;color:white;border:0;padding:12px 18px;border-radius:10px}.secondary{background:white;border:1px solid #ddd;padding:10px 15px;border-radius:10px}.danger{color:#d00;background:white;border:1px solid #ddd;padding:10px 15px;border-radius:10px}.image-upload{margin-top:10px}.image-upload label{display:block;font-weight:bold;margin-bottom:8px}.image-input{width:100%;padding:10px;border:1px solid #ddd;border-radius:10px;background:white}.image-preview{margin-top:12px;position:relative}.image-preview img{width:100%;max-height:250px;object-fit:cover;border-radius:15px;border:1px solid #eee;display:block}.remove-image{margin-top:8px;padding:8px 12px;border:1px solid #ddd;background:white;border-radius:8px;color:#d00}.routine-image{width:100%;max-height:220px;object-fit:cover;border-radius:15px;margin-bottom:15px;display:block}.direct-routine-image{width:100%;max-height:300px;object-fit:cover;border-radius:18px;margin-bottom:20px}.routine-card{border:1px solid #eee;border-radius:15px;padding:18px;margin-top:12px}.routine-card h3{margin:0 0 7px}.routine-info{color:#777;font-size:14px;margin-bottom:15px;line-height:1.7}.today-info{margin-top:10px;padding:10px;border-radius:10px;background:#f5f5f7;font-size:14px}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.empty{text-align:center;color:#777;padding:35px 10px}.form-group{margin-bottom:20px}.form-group label{display:block;font-weight:bold;margin-bottom:7px}input,select{width:100%;padding:13px;border:1px solid #ddd;border-radius:10px;background:white}.days{display:flex;flex-wrap:wrap;gap:8px}.day input{display:none}.day span{display:block;padding:10px 14px;border:1px solid #ddd;border-radius:10px;cursor:pointer}.day input:checked+span{background:#111;color:white}.step{border:1px solid #eee;border-radius:15px;padding:15px;margin-bottom:12px;background:#fafafa;position:relative;transition:opacity .15s ease,border-color .15s ease,background .15s ease}.step.activation-only{background:#fff0f0;border:2px solid #ffb8b8}.activation-only-label{display:inline-block;margin-right:8px;padding:4px 9px;border-radius:7px;background:#ffd6d6;color:#c40000;font-size:12px;font-weight:600}.step.dragging{opacity:.45;border:2px dashed #111}.step-drag-handle{cursor:grab;padding:4px 10px;background:#e5e5ea;border-radius:6px;font-size:16px;user-select:none;margin-left:8px;display:inline-block;line-height:1}.step-drag-handle:active{cursor:grabbing}.step-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;gap:10px}.step-id-tag{font-size:11px;background:#e5e5ea;padding:3px 8px;border-radius:6px;color:#555;font-weight:normal}.step-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.frequency-wrapper{display:flex;align-items:center;gap:8px}.frequency-wrapper input{flex:1}.frequency-label{min-width:125px;font-size:13px;color:#777;line-height:1.3}.frequency-label.special{color:#c40000;font-weight:bold}.disable-box{margin-top:15px;padding:14px;border:1px dashed #ccc;border-radius:12px;background:#fcfcfc}.activation-box{margin-top:15px;padding:14px;border:1px dashed #aaa;border-radius:12px;background:#fcfcfc}.activation-box-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.activation-rule-row{display:flex;gap:10px;align-items:flex-end;margin-bottom:10px;background:#fff;padding:10px;border:1px solid #eaeaea;border-radius:10px}.activation-rule-row>div{flex:1}.activation-rule-row label{font-size:12px;color:#666;display:block;margin-bottom:4px}.activation-box .btn-add-rule{background:#f0f0f3;border:1px solid #ddd;padding:6px 12px;border-radius:8px;font-size:13px}.activation-box .btn-remove-rule{padding:10px 14px;background:#fff;border:1px solid #ddd;color:#d00;border-radius:8px}.disable-box-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.disable-rule-row{display:flex;gap:10px;align-items:flex-end;margin-bottom:10px;background:#fff;padding:10px;border:1px solid #eaeaea;border-radius:10px}.disable-rule-row>div{flex:1}.disable-rule-row label{font-size:12px;color:#666;display:block;margin-bottom:4px}.btn-add-rule{background:#f0f0f3;border:1px solid #ddd;padding:6px 12px;border-radius:8px;font-size:13px}.btn-remove-rule{padding:10px 14px;background:#fff;border:1px solid #ddd;color:#d00;border-radius:8px}.step-actions-bar{display:flex;gap:10px;margin-bottom:20px;background:#f0f0f3;padding:12px;border-radius:12px;align-items:center}.step-actions-bar select{flex:1}#activeScreen{display:none;min-height:auto;padding:0}.active-box{max-width:480px;margin:0 auto;background:white;border-radius:28px;padding:16px 22px 24px;text-align:center;box-shadow:0 8px 30px rgba(0,0,0,.06)}#activeRoutineName{margin:0 0 8px;font-size:17px;font-weight:600;color:#222;text-align:left;width:100%}.active-step-card{background:#fafafa;border:2px dashed #e0e0e0;border-radius:20px;padding:18px 12px;margin-bottom:12px;cursor:pointer;user-select:none;transition:background-color .15s ease,border-color .15s ease,transform .1s ease}.active-step-card:hover{border-color:#bbb}.active-step-card:active{background-color:#f0f0f3;transform:scale(.99)}.active-step-image{width:100%;max-height:340px;object-fit:contain;border-radius:18px;margin:0 auto 6px;display:block;pointer-events:none}#activeStepName{font-size:42px;font-weight:800;color:#d00;margin:8px 0 8px;line-height:1.15;letter-spacing:-.5px;word-break:break-word}#activeStepName a{color:#007aff;text-decoration:underline;cursor:pointer;position:relative;z-index:10;pointer-events:auto}#timer{font-size:58px;font-weight:700;margin:4px 0 18px;color:#111;pointer-events:none}.tap-hint{font-size:13px;color:#999;margin-bottom:16px}.active-action-buttons{display:flex;gap:10px;margin-top:10px}.skip-btn{flex:1;padding:14px;background:#f0f0f3;border:1px solid #ddd;border-radius:14px;font-size:16px;color:#555}.back-btn{flex:1;padding:14px;background:white;border:1px solid #ddd;border-radius:14px;font-size:16px;color:#333}#directRoutineScreen{display:none}.direct-routine-box{max-width:700px;margin:auto;background:white;border-radius:25px;padding:30px 25px}.direct-routine-box h1{margin-top:0}.direct-step{padding:15px;border:1px solid #eee;border-radius:12px;margin-bottom:10px}.direct-step-image{width:100%;max-height:180px;object-fit:cover;border-radius:12px;margin-top:10px}.view-switcher{display:flex;gap:8px;background:white;padding:6px;border-radius:14px;margin-bottom:16px;border:1px solid #eee}.view-switch-btn{flex:1;border:0;background:transparent;padding:11px 15px;border-radius:10px;font-weight:600;color:#777}.view-switch-btn.active{background:#111;color:white}#calendarScreen{display:none}.calendar-card{background:white;border-radius:20px;padding:20px;margin-bottom:20px}.calendar-header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px;position:sticky;top:0;z-index:5;background:white;padding-bottom:12px;border-bottom:1px solid #eee}.calendar-header h2{margin:0;font-size:24px}.calendar-header-actions{display:flex;gap:8px}.calendar-nav-btn{border:1px solid #ddd;background:white;border-radius:10px;padding:9px 13px;font-size:14px;cursor:pointer}.calendar-months{display:flex;flex-direction:column;gap:28px}.month-calendar{width:100%;border:1px solid #e4e4e4;border-radius:16px;overflow:hidden;background:#fff}.month-title{padding:17px;text-align:center;font-size:21px;font-weight:800;background:#f7f7f8;border-bottom:1px solid #e4e4e4}.weekday-row,.calendar-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));direction:rtl}.weekday{padding:11px 4px;text-align:center;font-size:12px;font-weight:800;color:#777;background:#fafafa;border-left:1px solid #eee;border-bottom:1px solid #eee}.calendar-day{min-height:155px;padding:9px;border-left:1px solid #eee;border-bottom:1px solid #eee;background:white;overflow:hidden;direction:rtl}.calendar-day:nth-child(7n){border-left:0}.calendar-day.empty-day{background:#fafafa}.calendar-day.today{background:#f3f4f6;box-shadow:inset 0 0 0 2px #111}.day-number{display:inline-flex;align-items:center;justify-content:center;min-width:27px;height:27px;padding:0 6px;margin-bottom:7px;border-radius:8px;font-size:13px;font-weight:800}.calendar-day.today .day-number{background:#111;color:white}.day-routine{border:1px solid #dedede;border-radius:10px;padding:8px;margin-bottom:7px;background:#fafafa}.day-routine-name{font-size:12px;font-weight:800;margin-bottom:6px;padding-bottom:5px;border-bottom:1px solid #e8e8e8;word-break:break-word}.day-step{font-size:11px;color:#444;line-height:1.45;padding:3px 0;word-break:break-word}.day-step.activation{color:#c40000;font-weight:800}.day-step-number{color:#888;margin-left:3px;font-weight:700}.calendar-empty{color:#aaa;font-size:11px;padding:4px 0}.calendar-note{margin-top:16px;color:#888;font-size:12px;line-height:1.6;text-align:center}@media (max-width:850px){.calendar-card{padding:12px}.calendar-day{min-height:130px;padding:6px}.day-routine{padding:6px}.day-routine-name{font-size:11px}.day-step{font-size:10px}}@media (max-width:600px){.calendar-header{position:static;flex-direction:column;align-items:stretch}.calendar-header-actions{justify-content:center}.month-title{font-size:18px}.weekday{font-size:10px;padding:9px 2px}.calendar-day{min-height:105px;padding:4px}.day-number{min-width:23px;height:23px;font-size:11px;margin-bottom:4px}.day-routine{padding:5px;margin-bottom:4px}.day-routine-name{font-size:9px;margin-bottom:3px}.day-step{font-size:8px;line-height:1.35;padding:2px 0}.day-step-number{display:inline}}@media (max-width:600px){.container{width:94%;padding-top:10px}.main-title{padding:14px 18px;margin-bottom:12px}.main-title h1{font-size:27px}.step-grid{grid-template-columns:1fr}.disable-rule-row,.activation-rule-row{flex-direction:column;align-items:stretch}#timer{font-size:52px}#activeStepName{font-size:36px}#activeRoutineName{font-size:16px}.active-step-image{max-height:300px}.top-row{align-items:flex-start;flex-direction:column}.user-tab{top:12px;font-size:12px;padding:8px 10px}.active-box{padding-top:12px}.step-actions-bar{flex-direction:column;align-items:stretch}.frequency-wrapper{align-items:stretch;flex-direction:column}.frequency-label{min-width:0}.step-title{align-items:flex-start}}</style>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f5f7;
+      color: #111;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* LOGIN */
+
+    #loginScreen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .login-box {
+      width: 90%;
+      max-width: 400px;
+      background: white;
+      padding: 40px 30px;
+      border-radius: 24px;
+      text-align: center;
+      box-shadow: 0 10px 40px rgba(0,0,0,.08);
+    }
+
+    .login-box h1 {
+      margin: 0 0 10px;
+      font-size: 36px;
+    }
+
+    .login-box p {
+      color: #666;
+      margin-bottom: 30px;
+    }
+
+    .google-btn {
+      width: 100%;
+      padding: 15px;
+      border: 0;
+      border-radius: 12px;
+      background: #111;
+      color: white;
+    }
+
+    /* APP */
+
+    #app {
+      display: none;
+    }
+
+    .container {
+      width: 92%;
+      max-width: 900px;
+      margin: auto;
+      padding: 12px 0 60px;
+    }
+
+    /* USER SIDE PANEL */
+
+    .user-tab {
+      position: fixed;
+      top: 18px;
+      left: 0;
+      z-index: 1000;
+      background: white;
+      border: 1px solid #e5e5e5;
+      border-left: 0;
+      border-radius: 0 14px 14px 0;
+      padding: 9px 12px;
+      box-shadow: 0 4px 18px rgba(0,0,0,.08);
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 13px;
+      color: #555;
+      transition: transform .25s ease;
+    }
+
+    .user-tab-icon {
+      font-size: 16px;
+    }
+
+    .user-panel {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 260px;
+      max-width: 80vw;
+      height: 100vh;
+      background: white;
+      z-index: 1001;
+      box-shadow: 8px 0 30px rgba(0,0,0,.12);
+      transform: translateX(-100%);
+      transition: transform .28s ease;
+      padding: 25px 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .user-panel.open {
+      transform: translateX(0);
+    }
+
+    .user-panel-close {
+      width: 36px;
+      height: 36px;
+      border: 0;
+      background: #f5f5f7;
+      border-radius: 10px;
+      font-size: 20px;
+      margin-bottom: 30px;
+    }
+
+    .user-panel-title {
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 8px;
+    }
+
+    #panelUserInfo {
+      font-size: 16px;
+      font-weight: 600;
+      word-break: break-word;
+      margin-bottom: 30px;
+    }
+
+    .panel-logout {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #ddd;
+      background: white;
+      border-radius: 12px;
+      color: #d00;
+    }
+
+    .user-panel-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.18);
+      z-index: 1000;
+      display: none;
+    }
+
+    .user-panel-overlay.show {
+      display: block;
+    }
+
+    /* MAIN HEADER */
+
+    .main-title {
+      background: white;
+      padding: 18px 20px;
+      border-radius: 20px;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    .main-title h1 {
+      margin: 0;
+      font-size: 30px;
+    }
+
+    /* CARDS */
+
+    .card {
+      background: white;
+      border-radius: 20px;
+      padding: 22px;
+      margin-bottom: 20px;
+    }
+
+    .top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .top-row h2 {
+      margin: 0;
+    }
+
+    .primary {
+      background: #111;
+      color: white;
+      border: 0;
+      padding: 12px 18px;
+      border-radius: 10px;
+    }
+
+    .secondary {
+      background: white;
+      border: 1px solid #ddd;
+      padding: 10px 15px;
+      border-radius: 10px;
+    }
+
+    .danger {
+      color: #d00;
+      background: white;
+      border: 1px solid #ddd;
+      padding: 10px 15px;
+      border-radius: 10px;
+    }
+
+    /* IMAGE UPLOAD */
+
+    .image-upload {
+      margin-top: 10px;
+    }
+
+    .image-upload label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .image-input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      background: white;
+    }
+
+    .image-preview {
+      margin-top: 12px;
+      position: relative;
+    }
+
+    .image-preview img {
+      width: 100%;
+      max-height: 250px;
+      object-fit: cover;
+      border-radius: 15px;
+      border: 1px solid #eee;
+      display: block;
+    }
+
+    .remove-image {
+      margin-top: 8px;
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      background: white;
+      border-radius: 8px;
+      color: #d00;
+    }
+
+    .routine-image {
+      width: 100%;
+      max-height: 220px;
+      object-fit: cover;
+      border-radius: 15px;
+      margin-bottom: 15px;
+      display: block;
+    }
+
+    .direct-routine-image {
+      width: 100%;
+      max-height: 300px;
+      object-fit: cover;
+      border-radius: 18px;
+      margin-bottom: 20px;
+    }
+
+    /* ROUTINES */
+
+    .routine-card {
+      border: 1px solid #eee;
+      border-radius: 15px;
+      padding: 18px;
+      margin-top: 12px;
+    }
+
+    .routine-card h3 {
+      margin: 0 0 7px;
+    }
+
+    .routine-info {
+      color: #777;
+      font-size: 14px;
+      margin-bottom: 15px;
+      line-height: 1.7;
+    }
+
+    .today-info {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 10px;
+      background: #f5f5f7;
+      font-size: 14px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .empty {
+      text-align: center;
+      color: #777;
+      padding: 35px 10px;
+    }
+
+    /* FORM */
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 7px;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      background: white;
+    }
+
+    .days {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .day input {
+      display: none;
+    }
+
+    .day span {
+      display: block;
+      padding: 10px 14px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .day input:checked + span {
+      background: #111;
+      color: white;
+    }
+
+    /* STEPS */
+
+    .step {
+      border: 1px solid #eee;
+      border-radius: 15px;
+      padding: 15px;
+      margin-bottom: 12px;
+      background: #fafafa;
+      position: relative;
+      transition: opacity .15s ease, border-color .15s ease,
+                  background .15s ease;
+    }
+
+    /* SPECIAL STEP: ACTIVATION ONLY */
+
+    .step.activation-only {
+      background: #fff0f0;
+      border: 2px solid #ffb8b8;
+    }
+
+    .activation-only-label {
+      display: inline-block;
+      margin-right: 8px;
+      padding: 4px 9px;
+      border-radius: 7px;
+      background: #ffd6d6;
+      color: #c40000;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .step.dragging {
+      opacity: .45;
+      border: 2px dashed #111;
+    }
+
+    .step-drag-handle {
+      cursor: grab;
+      padding: 4px 10px;
+      background: #e5e5ea;
+      border-radius: 6px;
+      font-size: 16px;
+      user-select: none;
+      margin-left: 8px;
+      display: inline-block;
+      line-height: 1;
+    }
+
+    .step-drag-handle:active {
+      cursor: grabbing;
+    }
+
+    .step-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      gap: 10px;
+    }
+
+    .step-id-tag {
+      font-size: 11px;
+      background: #e5e5ea;
+      padding: 3px 8px;
+      border-radius: 6px;
+      color: #555;
+      font-weight: normal;
+    }
+
+    .step-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .frequency-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .frequency-wrapper input {
+      flex: 1;
+    }
+
+    .frequency-label {
+      min-width: 125px;
+      font-size: 13px;
+      color: #777;
+      line-height: 1.3;
+    }
+
+    .frequency-label.special {
+      color: #c40000;
+      font-weight: bold;
+    }
+
+    .disable-box {
+      margin-top: 15px;
+      padding: 14px;
+      border: 1px dashed #ccc;
+      border-radius: 12px;
+      background: #fcfcfc;
+    }
+
+    .activation-box {
+      margin-top: 15px;
+      padding: 14px;
+      border: 1px dashed #aaa;
+      border-radius: 12px;
+      background: #fcfcfc;
+    }
+
+    .activation-box-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .activation-rule-row {
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+      margin-bottom: 10px;
+      background: #fff;
+      padding: 10px;
+      border: 1px solid #eaeaea;
+      border-radius: 10px;
+    }
+
+    .activation-rule-row > div {
+      flex: 1;
+    }
+
+    .activation-rule-row label {
+      font-size: 12px;
+      color: #666;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .activation-box .btn-add-rule {
+      background: #f0f0f3;
+      border: 1px solid #ddd;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+    }
+
+    .activation-box .btn-remove-rule {
+      padding: 10px 14px;
+      background: #fff;
+      border: 1px solid #ddd;
+      color: #d00;
+      border-radius: 8px;
+    }
+
+    .disable-box-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .disable-rule-row {
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+      margin-bottom: 10px;
+      background: #fff;
+      padding: 10px;
+      border: 1px solid #eaeaea;
+      border-radius: 10px;
+    }
+
+    .disable-rule-row > div {
+      flex: 1;
+    }
+
+    .disable-rule-row label {
+      font-size: 12px;
+      color: #666;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .btn-add-rule {
+      background: #f0f0f3;
+      border: 1px solid #ddd;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+    }
+
+    .btn-remove-rule {
+      padding: 10px 14px;
+      background: #fff;
+      border: 1px solid #ddd;
+      color: #d00;
+      border-radius: 8px;
+    }
+
+    .step-actions-bar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      background: #f0f0f3;
+      padding: 12px;
+      border-radius: 12px;
+      align-items: center;
+    }
+
+    .step-actions-bar select {
+      flex: 1;
+    }
+
+    /* ACTIVE ROUTINE */
+
+    #activeScreen {
+      display: none;
+      min-height: auto;
+      padding: 0;
+    }
+
+    .active-box {
+      max-width: 480px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 28px;
+      padding: 16px 22px 24px;
+      text-align: center;
+      box-shadow: 0 8px 30px rgba(0,0,0,.06);
+    }
+
+    #activeRoutineName {
+      margin: 0 0 8px;
+      font-size: 17px;
+      font-weight: 600;
+      color: #222;
+      text-align: left;
+      width: 100%;
+    }
+
+    .active-step-card {
+      background: #fafafa;
+      border: 2px dashed #e0e0e0;
+      border-radius: 20px;
+      padding: 18px 12px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      user-select: none;
+      transition: background-color .15s ease,
+                  border-color .15s ease,
+                  transform .1s ease;
+    }
+
+    .active-step-card:hover {
+      border-color: #bbb;
+    }
+
+    .active-step-card:active {
+      background-color: #f0f0f3;
+      transform: scale(.99);
+    }
+
+    .active-step-image {
+      width: 100%;
+      max-height: 340px;
+      object-fit: contain;
+      border-radius: 18px;
+      margin: 0 auto 6px;
+      display: block;
+      pointer-events: none;
+    }
+
+    #activeStepName {
+      font-size: 42px;
+      font-weight: 800;
+      color: #d00;
+      margin: 8px 0 8px;
+      line-height: 1.15;
+      letter-spacing: -.5px;
+      word-break: break-word;
+    }
+
+    #activeStepName a {
+      color: #007aff;
+      text-decoration: underline;
+      cursor: pointer;
+      position: relative;
+      z-index: 10;
+      pointer-events: auto;
+    }
+
+    #timer {
+      font-size: 58px;
+      font-weight: 700;
+      margin: 4px 0 18px;
+      color: #111;
+      pointer-events: none;
+    }
+
+    .tap-hint {
+      font-size: 13px;
+      color: #999;
+      margin-bottom: 16px;
+    }
+
+    .active-action-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .skip-btn {
+      flex: 1;
+      padding: 14px;
+      background: #f0f0f3;
+      border: 1px solid #ddd;
+      border-radius: 14px;
+      font-size: 16px;
+      color: #555;
+    }
+
+    .back-btn {
+      flex: 1;
+      padding: 14px;
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 14px;
+      font-size: 16px;
+      color: #333;
+    }
+
+    /* DIRECT ROUTINE */
+
+    #directRoutineScreen {
+      display: none;
+    }
+
+    .direct-routine-box {
+      max-width: 700px;
+      margin: auto;
+      background: white;
+      border-radius: 25px;
+      padding: 30px 25px;
+    }
+
+    .direct-routine-box h1 {
+      margin-top: 0;
+    }
+
+    .direct-step {
+      padding: 15px;
+      border: 1px solid #eee;
+      border-radius: 12px;
+      margin-bottom: 10px;
+    }
+
+    .direct-step-image {
+      width: 100%;
+      max-height: 180px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin-top: 10px;
+    }
+
+    /* MOBILE */
+
+    @media (max-width: 600px) {
+      .container {
+        width: 94%;
+        padding-top: 10px;
+      }
+
+      .main-title {
+        padding: 14px 18px;
+        margin-bottom: 12px;
+      }
+
+      .main-title h1 {
+        font-size: 27px;
+      }
+
+      .step-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .disable-rule-row,
+      .activation-rule-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      #timer {
+        font-size: 52px;
+      }
+
+      #activeStepName {
+        font-size: 36px;
+      }
+
+      #activeRoutineName {
+        font-size: 16px;
+      }
+
+      .active-step-image {
+        max-height: 300px;
+      }
+
+      .top-row {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .user-tab {
+        top: 12px;
+        font-size: 12px;
+        padding: 8px 10px;
+      }
+
+      .active-box {
+        padding-top: 12px;
+      }
+
+      .step-actions-bar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .frequency-wrapper {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .frequency-label {
+        min-width: 0;
+      }
+
+      .step-title {
+        align-items: flex-start;
+      }
+
+      /* CALENDAR MOBILE */
+      .calendar-grid {
+        display: flex;
+        overflow-x: auto;
+        gap: 10px;
+        padding-bottom: 8px;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .calendar-day {
+        min-width: 150px;
+        flex: 0 0 150px;
+        min-height: 160px;
+      }
+    }
+
+    /* CALENDAR */
+
+    .calendar-card {
+      margin-top: 8px;
+    }
+
+    .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      gap: 12px;
+    }
+
+    .calendar-header h2 {
+      margin: 0;
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 10px;
+    }
+
+    .calendar-day {
+      background: #f8f8fa;
+      border: 1px solid #eee;
+      border-radius: 14px;
+      padding: 12px 10px;
+      min-height: 180px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .calendar-day.today {
+      background: #111;
+      color: white;
+      border-color: #111;
+    }
+
+    .calendar-day.today .day-name {
+      color: white;
+    }
+
+    .calendar-day.today .day-routine {
+      background: rgba(255,255,255,0.12);
+      border-color: rgba(255,255,255,0.2);
+    }
+
+    .calendar-day.today .day-step {
+      color: #ddd;
+    }
+
+    .calendar-day.today .day-empty {
+      color: #aaa;
+    }
+
+    .day-name {
+      font-weight: 700;
+      font-size: 15px;
+      text-align: center;
+      color: #333;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #e8e8e8;
+      margin-bottom: 4px;
+    }
+
+    .calendar-day.today .day-name {
+      border-bottom-color: rgba(255,255,255,0.25);
+    }
+
+    .day-routines {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1;
+    }
+
+    .day-routine {
+      background: white;
+      border: 1px solid #eaeaea;
+      border-radius: 10px;
+      padding: 8px 10px;
+    }
+
+    .day-routine-name {
+      font-weight: 600;
+      font-size: 13px;
+      margin-bottom: 4px;
+      line-height: 1.3;
+    }
+
+    .day-steps-list {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .day-step {
+      font-size: 12px;
+      color: #666;
+      line-height: 1.4;
+      padding-right: 6px;
+      position: relative;
+    }
+
+    .day-step::before {
+      content: "•";
+      margin-left: 4px;
+      color: #bbb;
+    }
+
+    .day-empty {
+      font-size: 12px;
+      color: #999;
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .day-steps-count {
+      font-size: 11px;
+      color: #888;
+      margin-top: 2px;
+    }
+
+    .calendar-day.today .day-steps-count {
+      color: #ccc;
+    }
+  </style>
 </head>
 
 <body>
 
-
+<!-- LOGIN -->
 
 <div id="loginScreen">
   <div class="login-box">
@@ -22,11 +981,11 @@
   </div>
 </div>
 
-
+<!-- APP -->
 
 <div id="app">
 
-
+  <!-- USER SIDE PANEL -->
 
   <button id="userTab" class="user-tab">
     <span class="user-tab-icon">☰</span>
@@ -53,24 +1012,13 @@
 
   <div class="container">
 
-
+    <!-- MAIN TITLE -->
 
     <div class="main-title">
       <h1>Routine</h1>
     </div>
 
-
-
-    <div class="view-switcher">
-      <button id="routinesViewBtn" class="view-switch-btn active">
-        השגרות שלי
-      </button>
-      <button id="calendarViewBtn" class="view-switch-btn">
-        לוח שנה
-      </button>
-    </div>
-
-
+    <!-- ROUTINE LIST -->
 
     <div id="routineListScreen">
 
@@ -88,32 +1036,21 @@
 
       </div>
 
-    </div>
+      <!-- CALENDAR -->
 
+      <div class="card calendar-card">
 
-
-    <div id="calendarScreen">
-      <div class="calendar-card">
         <div class="calendar-header">
           <h2>לוח שנה</h2>
-          <div class="calendar-header-actions">
-            <button id="calendarTodayBtn" class="calendar-nav-btn">היום</button>
-            <button id="calendarPrevBtn" class="calendar-nav-btn">‹</button>
-            <button id="calendarNextBtn" class="calendar-nav-btn">›</button>
-          </div>
         </div>
 
-        <div id="calendarMonths" class="calendar-months"></div>
+        <div id="calendarGrid" class="calendar-grid"></div>
 
-        <div class="calendar-note">
-          הלוח מציג את ה-Routines לפי ימי הפעילות שלהם ואת ה-Steps שבתוכם.
-          Step שמוגדר כ-0 מוצג כ-Step שמחכה להפעלה על ידי Step אחר.
-          תדירות של Step מוצגת לידו ואינה משנה את לוח ימי ה-Routine.
-        </div>
       </div>
+
     </div>
 
-
+    <!-- EDITOR -->
 
     <div id="editorScreen" class="hidden">
 
@@ -147,7 +1084,206 @@
             id="routineImageInput"
             class="image-input"
             type="file"
-            accept="image
+            accept="image/*"
+          >
+
+          <div id="routineImagePreview"
+               class="image-preview"></div>
+
+        </div>
+
+        <div class="form-group">
+
+          <label>
+            באילו ימים ה-Routine פעיל?
+          </label>
+
+          <div class="days">
+
+            <label class="day">
+              <input type="checkbox" value="0">
+              <span>א׳</span>
+            </label>
+
+            <label class="day">
+              <input type="checkbox" value="1">
+              <span>ב׳</span>
+            </label>
+
+            <label class="day">
+              <input type="checkbox" value="2">
+              <span>ג׳</span>
+            </label>
+
+            <label class="day">
+              <input type="checkbox" value="3">
+              <span>ד׳</span>
+            </label>
+
+            <label class="day">
+              <input type="checkbox" value="4">
+              <span>ה׳</span>
+            </label>
+
+            <label class="day">
+              <input type="checkbox" value="5">
+              <span>ו׳</span>
+            </label>
+
+            <label class="day">
+              <input type="checkbox" value="6">
+              <span>ש׳</span>
+            </label>
+
+          </div>
+
+        </div>
+
+        <h2>Steps</h2>
+
+        <div id="stepsContainer"></div>
+
+        <div class="step-actions-bar">
+
+          <button id="addStepBtn" class="secondary">
+            + צור Step חדש
+          </button>
+
+          <select id="reuseStepSelect">
+            <option value="">
+              -- בחר Step קיים מתוך הספרייה --
+            </option>
+          </select>
+
+          <button id="reuseStepBtn" class="secondary">
+            שבץ Step נבחר
+          </button>
+
+        </div>
+
+        <br><br>
+
+        <button id="saveRoutineBtn" class="primary">
+          שמור
+        </button>
+
+        <button id="cancelEditorBtn" class="secondary">
+          ביטול
+        </button>
+
+      </div>
+
+    </div>
+
+    <!-- DIRECT ROUTINE -->
+
+    <div id="directRoutineScreen">
+
+      <div class="direct-routine-box">
+
+        <img
+          id="directRoutineImage"
+          class="direct-routine-image hidden"
+          alt=""
+        >
+
+        <h1 id="directRoutineName"></h1>
+
+        <div id="directRoutineSteps"></div>
+
+        <br>
+
+        <button id="directStartBtn" class="primary">
+          התחל Routine
+        </button>
+
+        <button id="directBackBtn" class="secondary">
+          חזרה לשגרות
+        </button>
+
+      </div>
+
+    </div>
+
+    <!-- ACTIVE ROUTINE -->
+
+    <div id="activeScreen">
+
+      <div class="active-box">
+
+        <h1 id="activeRoutineName"></h1>
+
+        <div id="activeStepCard"
+             class="active-step-card">
+
+          <img
+            id="activeStepImage"
+            class="active-step-image hidden"
+            alt=""
+          >
+
+          <div id="activeStepName"></div>
+
+          <div id="timer">
+            00:00
+          </div>
+
+        </div>
+
+        <div class="tap-hint">
+          לחיצה בתוך הריבוע = בוצע
+        </div>
+
+        <div class="active-action-buttons">
+
+          <button id="skipStepBtn"
+                  class="skip-btn">
+            ⏭ דילוג
+          </button>
+
+          <button id="exitActiveBtn"
+                  class="back-btn">
+            יציאה
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script type="module">
+
+import {
+  initializeApp
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs,
+  doc,
+  updateDoc,
+  deleteDoc,
+  getDoc,
+  setDoc
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+
+/* FIREBASE */
 
 const firebaseConfig = {
   apiKey: "AIzaSyCGTJFidIrp_YAuKOg2CCEO-vjFCiakkHo",
@@ -165,7 +1301,7 @@ const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
 
 
-
+/* GLOBAL VARIABLES */
 
 let currentUser = null;
 let routines = [];
@@ -187,10 +1323,8 @@ let currentRoutineImage = "";
 
 let stepImages = new Map();
 
-let calendarStartDate = new Date();
 
-
-
+/* HELPERS */
 
 function escapeHtml(text) {
 
@@ -237,7 +1371,7 @@ function formatTextWithLinks(text) {
 }
 
 
-
+/* USER PANEL */
 
 const userTab =
   document.getElementById("userTab");
@@ -284,7 +1418,7 @@ userPanelOverlay.addEventListener(
 );
 
 
-
+/* LOGIN */
 
 document
   .getElementById("loginBtn")
@@ -311,7 +1445,7 @@ document
   });
 
 
-
+/* LOGOUT */
 
 document
   .getElementById("logoutBtn")
@@ -324,7 +1458,7 @@ document
   });
 
 
-
+/* ACTIVE STEP CLICK */
 
 document
   .getElementById("activeStepCard")
@@ -342,7 +1476,7 @@ document
   });
 
 
-
+/* SKIP */
 
 document
   .getElementById("skipStepBtn")
@@ -354,7 +1488,7 @@ document
   );
 
 
-
+/* AUTH */
 
 onAuthStateChanged(
   auth,
@@ -402,7 +1536,7 @@ onAuthStateChanged(
 );
 
 
-
+/* LOAD DISABLED STEPS */
 
 async function loadDisabledSteps() {
 
@@ -443,7 +1577,7 @@ async function loadDisabledSteps() {
 }
 
 
-
+/* LOAD ACTIVATION RULES */
 
 async function loadActivationRules() {
 
@@ -486,7 +1620,7 @@ async function loadActivationRules() {
 }
 
 
-
+/* LOAD ACTIVATED STEPS */
 
 async function loadActivatedSteps() {
 
@@ -527,7 +1661,7 @@ async function loadActivatedSteps() {
 }
 
 
-
+/* ACTIVATION */
 
 function isStepTemporarilyActivated(stepId) {
 
@@ -561,7 +1695,7 @@ function getActivationUntilForDays(days) {
 }
 
 
-
+/* DISABLED */
 
 function isStepDisabled(stepId) {
 
@@ -579,7 +1713,7 @@ function isStepDisabled(stepId) {
 }
 
 
-
+/* GET TODAY STEPS */
 
 function getTodaySteps(routine) {
 
@@ -598,7 +1732,10 @@ function getTodaySteps(routine) {
 
   return steps.filter(step => {
 
-
+    /*
+      Step עם frequency = 0
+      הוא Step שמחכה להפעלה.
+    */
 
     if (Number(step.frequency) === 0) {
 
@@ -608,7 +1745,9 @@ function getTodaySteps(routine) {
 
     }
 
-
+    /*
+      Step רגיל
+    */
 
     return (
       isStepTemporarilyActivated(step.id) ||
@@ -620,7 +1759,7 @@ function getTodaySteps(routine) {
 }
 
 
-
+/* LOAD ROUTINES */
 
 async function loadRoutines() {
 
@@ -657,10 +1796,6 @@ async function loadRoutines() {
 
     renderRoutines();
 
-    if (document.getElementById("calendarScreen").style.display === "block") {
-      renderCalendar();
-    }
-
     openRoutineFromLink();
 
   } catch (error) {
@@ -680,7 +1815,7 @@ async function loadRoutines() {
 }
 
 
-
+/* RENDER ROUTINES */
 
 function renderRoutines() {
 
@@ -700,6 +1835,8 @@ function renderRoutines() {
         לחץ על "+ Routine חדש".
       </div>
     `;
+
+    renderCalendar();
 
     return;
   }
@@ -799,10 +1936,198 @@ function renderRoutines() {
 
   });
 
+  renderCalendar();
+
 }
 
 
+/* RENDER CALENDAR */
 
+function renderCalendar() {
+
+  const grid =
+    document.getElementById(
+      "calendarGrid"
+    );
+
+  if (!grid) return;
+
+  grid.innerHTML = "";
+
+  const dayNames = [
+    "א׳",
+    "ב׳",
+    "ג׳",
+    "ד׳",
+    "ה׳",
+    "ו׳",
+    "ש׳"
+  ];
+
+  const today =
+    new Date().getDay();
+
+  for (let day = 0; day < 7; day++) {
+
+    const dayCol =
+      document.createElement("div");
+
+    dayCol.className =
+      "calendar-day" +
+      (day === today ? " today" : "");
+
+    const header =
+      document.createElement("div");
+
+    header.className =
+      "day-name";
+
+    header.textContent =
+      dayNames[day] +
+      (day === today ? " · היום" : "");
+
+    dayCol.appendChild(header);
+
+    const routinesForDay =
+      routines.filter(routine => {
+
+        if (
+          !routine.days ||
+          routine.days.length === 0
+        ) {
+          return false;
+        }
+
+        return routine.days.includes(day);
+
+      });
+
+    const routinesWrap =
+      document.createElement("div");
+
+    routinesWrap.className =
+      "day-routines";
+
+    if (routinesForDay.length === 0) {
+
+      const empty =
+        document.createElement("div");
+
+      empty.className =
+        "day-empty";
+
+      empty.textContent =
+        "אין שגרות";
+
+      routinesWrap.appendChild(empty);
+
+    } else {
+
+      routinesForDay.forEach(routine => {
+
+        const rDiv =
+          document.createElement("div");
+
+        rDiv.className =
+          "day-routine";
+
+        const nameEl =
+          document.createElement("div");
+
+        nameEl.className =
+          "day-routine-name";
+
+        nameEl.textContent =
+          routine.name || "ללא שם";
+
+        rDiv.appendChild(nameEl);
+
+        const steps =
+          routine.steps || [];
+
+        /*
+          עבור היום הנוכחי — מציגים רק Steps
+          שבאמת פעילים (כולל לוגיקת ביטול/הפעלה).
+          עבור ימים אחרים — מציגים את כל ה-Steps
+          של השגרה (תצוגה מתוכננת).
+        */
+
+        let stepsToShow = steps;
+
+        if (day === today) {
+
+          stepsToShow =
+            getTodaySteps(routine);
+
+        }
+
+        const countEl =
+          document.createElement("div");
+
+        countEl.className =
+          "day-steps-count";
+
+        countEl.textContent =
+          stepsToShow.length +
+          " Steps" +
+          (
+            day === today &&
+            stepsToShow.length !== steps.length
+              ? " (פעילים היום)"
+              : ""
+          );
+
+        rDiv.appendChild(countEl);
+
+        if (stepsToShow.length > 0) {
+
+          const stepsList =
+            document.createElement("div");
+
+          stepsList.className =
+            "day-steps-list";
+
+          stepsToShow.forEach(step => {
+
+            const sEl =
+              document.createElement("div");
+
+            sEl.className =
+              "day-step";
+
+            const num =
+              step.stepNumber
+                ? `#${step.stepNumber} `
+                : "";
+
+            sEl.textContent =
+              num +
+              (step.name || "Step ללא שם");
+
+            stepsList.appendChild(sEl);
+
+          });
+
+          rDiv.appendChild(stepsList);
+
+        }
+
+        routinesWrap.appendChild(rDiv);
+
+      });
+
+    }
+
+    dayCol.appendChild(routinesWrap);
+
+    grid.appendChild(dayCol);
+
+  }
+
+}
+
+
+/* IMAGE */
 
 function compressImage(file) {
 
@@ -880,7 +2205,7 @@ function compressImage(file) {
 }
 
 
-
+/* ROUTINE IMAGE */
 
 document
   .getElementById("routineImageInput")
@@ -961,7 +2286,7 @@ function showRoutineImagePreview() {
 }
 
 
-
+/* COPY LINK */
 
 async function copyRoutineLink(routineId) {
 
@@ -989,7 +2314,7 @@ async function copyRoutineLink(routineId) {
 }
 
 
-
+/* DIRECT LINK */
 
 function openRoutineFromLink() {
 
@@ -1024,7 +2349,7 @@ function openRoutineFromLink() {
 }
 
 
-
+/* DIRECT ROUTINE */
 
 function showDirectRoutine(routine) {
 
@@ -1142,7 +2467,7 @@ function showDirectRoutine(routine) {
 }
 
 
-
+/* BACK */
 
 document
   .getElementById("directBackBtn")
@@ -1169,294 +2494,7 @@ document
   );
 
 
-
-
-
-const hebrewWeekdays = [
-  "א׳", "ב׳", "ג׳", "ד׳", "ה׳", "ו׳", "ש׳"
-];
-
-const hebrewMonths = [
-  "ינואר", "פברואר", "מרץ", "אפריל", "מאי", "יוני",
-  "יולי", "אוגוסט", "ספטמבר", "אוקטובר", "נובמבר", "דצמבר"
-];
-
-function startOfMonth(date) {
-  return new Date(date.getFullYear(), date.getMonth(), 1);
-}
-
-function formatCalendarMonth(date) {
-  return `${hebrewMonths[date.getMonth()]} ${date.getFullYear()}`;
-}
-
-function formatCalendarDay(date) {
-  return `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`;
-}
-
-function isStepActivatedOnCalendarDate(step, date) {
-  if (Number(step.frequency) !== 0) return true;
-
-  const activatedUntil = activatedStepsMap[step.id];
-  if (!activatedUntil) return false;
-
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  const calendarDate = new Date(date);
-  calendarDate.setHours(23, 59, 59, 999);
-
-  if (calendarDate < today) return false;
-
-  return calendarDate < new Date(activatedUntil);
-}
-
-function getStepsForCalendar(routine, date) {
-  return (routine.steps || []).filter(step => {
-    return isStepActivatedOnCalendarDate(step, date);
-  }).slice().sort((a, b) => {
-    return Number(a.stepNumber || 0) - Number(b.stepNumber || 0);
-  });
-}
-
-function getRoutinesForCalendarDay(date) {
-  const dayOfWeek = date.getDay();
-
-  return routines.filter(routine => {
-    if (!routine.days || routine.days.length === 0) {
-      return false;
-    }
-
-    return routine.days.includes(dayOfWeek);
-  });
-}
-
-function renderCalendar() {
-  const container = document.getElementById("calendarMonths");
-
-  if (!container) return;
-
-  container.innerHTML = "";
-
-  const firstMonth = startOfMonth(calendarStartDate);
-  const secondMonth = new Date(
-    firstMonth.getFullYear(),
-    firstMonth.getMonth() + 1,
-    1
-  );
-
-  [firstMonth, secondMonth].forEach(monthDate => {
-    container.appendChild(renderCalendarMonth(monthDate));
-  });
-}
-
-function renderCalendarMonth(monthDate) {
-  const monthWrapper = document.createElement("div");
-  monthWrapper.className = "month-calendar";
-
-  const title = document.createElement("div");
-  title.className = "month-title";
-  title.textContent = formatCalendarMonth(monthDate);
-
-  const weekdays = document.createElement("div");
-  weekdays.className = "weekday-row";
-
-  hebrewWeekdays.forEach(day => {
-    const cell = document.createElement("div");
-    cell.className = "weekday";
-    cell.textContent = day;
-    weekdays.appendChild(cell);
-  });
-
-  const grid = document.createElement("div");
-  grid.className = "calendar-grid";
-
-  const firstDay = new Date(
-    monthDate.getFullYear(),
-    monthDate.getMonth(),
-    1
-  );
-
-  const daysInMonth = new Date(
-    monthDate.getFullYear(),
-    monthDate.getMonth() + 1,
-    0
-  ).getDate();
-
-
-  const firstColumn = firstDay.getDay();
-
-  for (let i = 0; i < firstColumn; i++) {
-    const empty = document.createElement("div");
-    empty.className = "calendar-day empty-day";
-    grid.appendChild(empty);
-  }
-
-  for (let dayNumber = 1; dayNumber <= daysInMonth; dayNumber++) {
-    const date = new Date(
-      monthDate.getFullYear(),
-      monthDate.getMonth(),
-      dayNumber
-    );
-
-    const dayCell = document.createElement("div");
-    dayCell.className = "calendar-day";
-
-    if (isSameDate(date, new Date())) {
-      dayCell.classList.add("today");
-    }
-
-    const number = document.createElement("div");
-    number.className = "day-number";
-    number.textContent = dayNumber;
-    number.title = formatCalendarDay(date);
-
-    dayCell.appendChild(number);
-
-    const dayRoutines = getRoutinesForCalendarDay(date);
-
-    if (dayRoutines.length === 0) {
-      const emptyText = document.createElement("div");
-      emptyText.className = "calendar-empty";
-      emptyText.textContent = "אין שגרות";
-      dayCell.appendChild(emptyText);
-    } else {
-      dayRoutines.forEach(routine => {
-        const routineBox = document.createElement("div");
-        routineBox.className = "day-routine";
-
-        const routineName = document.createElement("div");
-        routineName.className = "day-routine-name";
-        routineName.textContent = routine.name || "Routine";
-        routineBox.appendChild(routineName);
-
-        const steps = getStepsForCalendar(routine, date);
-
-        if (steps.length === 0) {
-          const noSteps = document.createElement("div");
-          noSteps.className = "calendar-empty";
-          noSteps.textContent = "אין Steps";
-          routineBox.appendChild(noSteps);
-        } else {
-          steps.forEach((step, index) => {
-            const stepRow = document.createElement("div");
-            stepRow.className = "day-step";
-
-            if (Number(step.frequency) === 0) {
-              stepRow.classList.add("activation");
-            }
-
-            const stepNumber =
-              step.stepNumber || (index + 1);
-
-            const frequencyText =
-              Number(step.frequency) === 0
-                ? " · מופעל על ידי Step אחר"
-                : Number(step.frequency) > 1
-                  ? ` · כל ${step.frequency} ימים`
-                  : "";
-
-            stepRow.innerHTML =
-              `<span class="day-step-number">#${escapeHtml(stepNumber)}</span>` +
-              `${escapeHtml(step.name || "Step ללא שם")}` +
-              `${escapeHtml(frequencyText)}`;
-
-            routineBox.appendChild(stepRow);
-          });
-        }
-
-        dayCell.appendChild(routineBox);
-      });
-    }
-
-    grid.appendChild(dayCell);
-  }
-
-
-  const totalCells = firstColumn + daysInMonth;
-  const remaining = (7 - (totalCells % 7)) % 7;
-
-  for (let i = 0; i < remaining; i++) {
-    const empty = document.createElement("div");
-    empty.className = "calendar-day empty-day";
-    grid.appendChild(empty);
-  }
-
-  monthWrapper.appendChild(title);
-  monthWrapper.appendChild(weekdays);
-  monthWrapper.appendChild(grid);
-
-  return monthWrapper;
-}
-
-function isSameDate(a, b) {
-  return (
-    a.getFullYear() === b.getFullYear() &&
-    a.getMonth() === b.getMonth() &&
-    a.getDate() === b.getDate()
-  );
-}
-
-function showRoutinesView() {
-  document.getElementById("calendarScreen").style.display = "none";
-  document.getElementById("routineListScreen").style.display = "block";
-
-  document.getElementById("routinesViewBtn")
-    .classList.add("active");
-
-  document.getElementById("calendarViewBtn")
-    .classList.remove("active");
-}
-
-function showCalendarView() {
-  document.getElementById("routineListScreen").style.display = "none";
-  document.getElementById("editorScreen").classList.add("hidden");
-  document.getElementById("directRoutineScreen").style.display = "none";
-  document.getElementById("activeScreen").style.display = "none";
-
-  document.getElementById("calendarScreen").style.display = "block";
-
-  document.getElementById("calendarViewBtn")
-    .classList.add("active");
-
-  document.getElementById("routinesViewBtn")
-    .classList.remove("active");
-
-  renderCalendar();
-}
-
-document.getElementById("routinesViewBtn")
-  .addEventListener("click", showRoutinesView);
-
-document.getElementById("calendarViewBtn")
-  .addEventListener("click", showCalendarView);
-
-document.getElementById("calendarPrevBtn")
-  .addEventListener("click", () => {
-    calendarStartDate = new Date(
-      calendarStartDate.getFullYear(),
-      calendarStartDate.getMonth() - 1,
-      1
-    );
-    renderCalendar();
-  });
-
-document.getElementById("calendarNextBtn")
-  .addEventListener("click", () => {
-    calendarStartDate = new Date(
-      calendarStartDate.getFullYear(),
-      calendarStartDate.getMonth() + 1,
-      1
-    );
-    renderCalendar();
-  });
-
-document.getElementById("calendarTodayBtn")
-  .addEventListener("click", () => {
-    calendarStartDate = new Date();
-    renderCalendar();
-  });
-
-
+/* NEW ROUTINE */
 
 document
   .getElementById("newRoutineBtn")
@@ -1466,7 +2504,7 @@ document
   );
 
 
-
+/* STEP LIBRARY */
 
 function getAllStepsList() {
 
@@ -1504,7 +2542,7 @@ function getAllStepsList() {
 }
 
 
-
+/* REUSE LIBRARY */
 
 function populateStepReuseLibrary() {
 
@@ -1548,7 +2586,7 @@ function populateStepReuseLibrary() {
 }
 
 
-
+/* DISABLE OPTIONS */
 
 function updateDisableOptionsInEditor() {
 
@@ -1592,7 +2630,7 @@ function updateDisableOptionsInEditor() {
 }
 
 
-
+/* ACTIVATION OPTIONS */
 
 function updateActivationOptionsInEditor() {
 
@@ -1636,7 +2674,7 @@ function updateActivationOptionsInEditor() {
 }
 
 
-
+/* OPEN EDITOR */
 
 function openEditor(routine) {
 
@@ -1729,7 +2767,7 @@ function openEditor(routine) {
 }
 
 
-
+/* ADD STEP */
 
 document
   .getElementById("addStepBtn")
@@ -1747,7 +2785,7 @@ document
   );
 
 
-
+/* REUSE STEP */
 
 document
   .getElementById("reuseStepBtn")
@@ -1794,7 +2832,7 @@ document
   );
 
 
-
+/* DISABLE RULE */
 
 function addDisableRuleRow(
   rulesContainer,
@@ -1886,7 +2924,7 @@ function addDisableRuleRow(
 }
 
 
-
+/* ACTIVATION RULE */
 
 function addActivationRuleRow(
   rulesContainer,
@@ -1979,7 +3017,7 @@ function addActivationRuleRow(
 }
 
 
-
+/* DRAG */
 
 function getDragAfterElement(
   container,
@@ -2032,7 +3070,7 @@ function getDragAfterElement(
 }
 
 
-
+/* ADD STEP */
 
 function addStep(step = null) {
 
@@ -2148,7 +3186,111 @@ function addStep(step = null) {
       <input
         class="image-input step-image-input"
         type="file"
-        accept="image
+        accept="image/*"
+      >
+
+      <div
+        class="step-image-preview image-preview"
+      ></div>
+
+    </div>
+
+
+    <div class="step-grid">
+
+      <div>
+
+        <label>
+          משך בשניות
+        </label>
+
+        <input
+          class="step-duration"
+          type="number"
+          min="1"
+          value="${step ? step.duration : 60}"
+        >
+
+      </div>
+
+
+      <div>
+
+        <label>
+          תדירות
+        </label>
+
+        <div class="frequency-wrapper">
+
+          <input
+            class="frequency"
+            type="number"
+            min="0"
+            placeholder="הכנס מספר ימים"
+            value="${initialFrequency}"
+          >
+
+          <span class="frequency-label">
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="disable-box">
+
+      <div class="disable-box-header">
+
+        <strong>
+          ביטול Steps אחרים לאחר ביצוע:
+        </strong>
+
+        <button
+          type="button"
+          class="btn-add-rule"
+        >
+          + הוסף כלל ביטול
+        </button>
+
+      </div>
+
+      <div
+        class="disable-rules-container"
+      ></div>
+
+    </div>
+
+
+    <div class="activation-box">
+
+      <div class="activation-box-header">
+
+        <strong>
+          הפעלת Steps אחרים לאחר ביצוע:
+        </strong>
+
+        <button
+          type="button"
+          class="btn-add-rule activation-add-rule"
+        >
+          + הוסף כלל הפעלה
+        </button>
+
+      </div>
+
+      <div
+        class="activation-rules-container"
+      ></div>
+
+    </div>
+
+  `;
+
+
+  /* REMOVE */
 
   div
     .querySelector(".remove")
@@ -2166,7 +3308,7 @@ function addStep(step = null) {
     );
 
 
-
+  /* FREQUENCY DISPLAY */
 
   const frequencyInput =
     div.querySelector(
@@ -2193,7 +3335,9 @@ function addStep(step = null) {
 
     if (value === 0) {
 
-
+      /*
+        מצב מיוחד
+      */
 
       div.classList.add(
         "activation-only"
@@ -2212,7 +3356,9 @@ function addStep(step = null) {
 
     } else {
 
-
+      /*
+        מצב רגיל
+      */
 
       div.classList.remove(
         "activation-only"
@@ -2256,7 +3402,7 @@ function addStep(step = null) {
   updateFrequencyDisplay();
 
 
-
+  /* DRAG & DROP */
 
   const handle =
     div.querySelector(
@@ -2343,7 +3489,7 @@ function addStep(step = null) {
   );
 
 
-
+  /* DISABLE RULES */
 
   const rulesContainer =
     div.querySelector(
@@ -2408,7 +3554,7 @@ function addStep(step = null) {
   );
 
 
-
+  /* ACTIVATION RULES */
 
   const activationRulesContainer =
     div.querySelector(
@@ -2451,7 +3597,7 @@ function addStep(step = null) {
   );
 
 
-
+  /* STEP IMAGE */
 
   const imgInput =
     div.querySelector(
@@ -2564,7 +3710,7 @@ function addStep(step = null) {
 }
 
 
-
+/* CANCEL EDITOR */
 
 document
   .getElementById("cancelEditorBtn")
@@ -2584,7 +3730,7 @@ document
   );
 
 
-
+/* SAVE ROUTINE */
 
 document
   .getElementById("saveRoutineBtn")
@@ -2659,7 +3805,11 @@ document
           ) || 60;
 
 
-
+        /*
+          חשוב:
+          כאן לא משתמשים ב- || 1
+          כי 0 הוא ערך חוקי.
+        */
 
         const frequencyRaw =
           el
@@ -2690,7 +3840,7 @@ document
           ) || "";
 
 
-
+        /* DISABLE RULES */
 
         const ruleRows =
           el.querySelectorAll(
@@ -2732,7 +3882,7 @@ document
         });
 
 
-
+        /* ACTIVATION RULES */
 
         const activationRuleRows =
           el.querySelectorAll(
@@ -2800,7 +3950,9 @@ document
 
           duration: sDuration,
 
-
+          /*
+            0 = מופעל על ידי Step אחר
+          */
 
           frequency: sFreq,
 
@@ -2832,7 +3984,7 @@ document
 
       try {
 
-
+        /* SAVE ACTIVATION RULES */
 
         const activationRulesRef =
           doc(
@@ -2852,7 +4004,7 @@ document
   }
 );
 
-
+        /* SAVE ROUTINE */
 
         if (editingRoutineId) {
 
@@ -2918,7 +4070,7 @@ document
   );
 
 
-
+/* DELETE ROUTINE */
 
 async function deleteRoutine(id) {
 
@@ -2957,7 +4109,7 @@ async function deleteRoutine(id) {
 }
 
 
-
+/* START ROUTINE */
 
 function startRoutine(routine) {
 
@@ -3016,7 +4168,7 @@ function startRoutine(routine) {
 }
 
 
-
+/* RUN STEP */
 
 function runStep() {
 
@@ -3117,7 +4269,7 @@ function runStep() {
 }
 
 
-
+/* TIMER */
 
 function updateTimerDisplay() {
 
@@ -3149,7 +4301,7 @@ function updateTimerDisplay() {
 }
 
 
-
+/* COMPLETE STEP */
 
 async function completeActiveStep() {
 
@@ -3175,7 +4327,7 @@ async function completeActiveStep() {
   }
 
 
-
+  /* DISABLE RULES */
 
   let rulesToApply =
     [
@@ -3209,7 +4361,14 @@ async function completeActiveStep() {
   }
 
 
+  /*
+    Step רגיל:
+    מתבטל לפי התדירות שלו.
 
+    Step עם frequency = 0:
+    לא מקבל ביטול עצמי.
+    הוא פשוט נשאר תלוי בהפעלה שלו.
+  */
 
   if (
     Number(currentStep.frequency) > 0
@@ -3234,7 +4393,7 @@ async function completeActiveStep() {
   }
 
 
-
+  /* SAVE DISABLES */
 
   if (
     rulesToApply.length > 0
@@ -3300,7 +4459,7 @@ async function completeActiveStep() {
   }
 
 
-
+  /* ACTIVATION RULES */
 
   const activationRules =
     activationRulesMap[
@@ -3391,7 +4550,7 @@ async function completeActiveStep() {
   }
 
 
-
+  /* NEXT STEP */
 
   activeStepIndex++;
 
@@ -3400,11 +4559,14 @@ async function completeActiveStep() {
 }
 
 
-
+/* SKIP */
 
 function skipActiveStep() {
 
-
+  /*
+    דילוג לא שומר השלמה
+    ולא מפעיל שום כלל.
+  */
 
   activeStepIndex++;
 
@@ -3413,7 +4575,7 @@ function skipActiveStep() {
 }
 
 
-
+/* EXIT */
 
 function exitActiveScreen() {
 
@@ -3439,16 +4601,13 @@ function exitActiveScreen() {
   ).style.display =
     "block";
 
-  document.getElementById("calendarScreen").style.display = "none";
-  document.getElementById("routinesViewBtn").classList.add("active");
-  document.getElementById("calendarViewBtn").classList.remove("active");
 
   renderRoutines();
 
 }
 
 
-
+/* EXIT BUTTON */
 
 document
   .getElementById("exitActiveBtn")
