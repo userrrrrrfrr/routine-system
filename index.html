@@ -1636,6 +1636,9 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
 
+window.__ROUTINE_APP_LOADED = true;
+console.log("Routine app loaded");
+
 
 /* GLOBAL VARIABLES */
 
@@ -4797,8 +4800,7 @@ async function resetRoutine(routine) {
 
   if (
     !confirm(
-      "לאפס את השגרה הזו?
-ה-Steps שלה יופיעו שוב (כאילו עדיין לא בוצעו היום)."
+      "לאפס את השגרה הזו? ה-Steps יופיעו שוב כאילו לא בוצעו היום."
     )
   ) {
     return;
