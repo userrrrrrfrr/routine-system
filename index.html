@@ -178,13 +178,62 @@
       background: white;
       padding: 18px 20px;
       border-radius: 20px;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
       text-align: center;
     }
 
     .main-title h1 {
       margin: 0;
       font-size: 30px;
+    }
+
+    /* MAIN TABS – switch between Routines / Calendar */
+    .main-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      background: white;
+      padding: 8px;
+      border-radius: 16px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.04);
+    }
+
+    .main-tab {
+      flex: 1;
+      padding: 14px 12px;
+      border: 0;
+      border-radius: 12px;
+      background: transparent;
+      color: #666;
+      font-size: 16px;
+      font-weight: 600;
+      transition: background .15s ease, color .15s ease;
+    }
+
+    .main-tab:hover {
+      background: #f5f5f7;
+      color: #222;
+    }
+
+    .main-tab.active {
+      background: #111;
+      color: white;
+    }
+
+    #calendarScreen {
+      display: none;
+    }
+
+    #calendarScreen.visible {
+      display: block;
+    }
+
+    #routinesPanel {
+      display: block;
+    }
+
+    #routinesPanel.hidden-panel {
+      display: none;
     }
 
     /* CARDS */
@@ -838,12 +887,12 @@
 
       /* CALENDAR MOBILE */
       .calendar-day {
-        min-height: 90px;
-        padding: 6px 5px;
+        min-height: 120px;
+        padding: 8px 5px;
       }
 
       .day-date-num {
-        font-size: 13px;
+        font-size: 14px;
       }
 
       .day-routine-name {
@@ -857,12 +906,25 @@
       .calendar-weekday-header {
         font-size: 11px;
       }
+
+      .main-tab {
+        font-size: 15px;
+        padding: 12px 10px;
+      }
+
+      .calendar-grid {
+        gap: 5px;
+      }
+
+      .calendar-weekdays {
+        gap: 5px;
+      }
     }
 
     /* CALENDAR */
 
     .calendar-card {
-      margin-top: 8px;
+      margin-top: 0;
     }
 
     .calendar-header {
@@ -911,33 +973,33 @@
     .calendar-weekdays {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
-      gap: 6px;
-      margin-bottom: 6px;
+      gap: 8px;
+      margin-bottom: 8px;
     }
 
     .calendar-weekday-header {
       text-align: center;
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 600;
       color: #888;
-      padding: 4px 0;
+      padding: 6px 0;
     }
 
     .calendar-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
-      gap: 6px;
+      gap: 8px;
     }
 
     .calendar-day {
       background: #f8f8fa;
       border: 1px solid #eee;
-      border-radius: 12px;
-      padding: 8px 6px;
-      min-height: 110px;
+      border-radius: 14px;
+      padding: 12px 8px;
+      min-height: 150px;
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 6px;
     }
 
     .calendar-day.other-month {
@@ -986,12 +1048,12 @@
 
     .day-date-num {
       font-weight: 700;
-      font-size: 15px;
+      font-size: 17px;
       color: #222;
     }
 
     .day-label {
-      font-size: 10px;
+      font-size: 11px;
       font-weight: 600;
       color: #888;
     }
@@ -1013,9 +1075,9 @@
 
     .day-routine-name {
       font-weight: 600;
-      font-size: 12px;
-      line-height: 1.25;
-      margin-bottom: 2px;
+      font-size: 13px;
+      line-height: 1.3;
+      margin-bottom: 3px;
     }
 
     .day-steps-list {
@@ -1025,9 +1087,9 @@
     }
 
     .day-step {
-      font-size: 11px;
+      font-size: 12px;
       color: #666;
-      line-height: 1.3;
+      line-height: 1.35;
     }
 
     .day-step::before {
@@ -1253,40 +1315,61 @@
       <h1>Routine</h1>
     </div>
 
-    <!-- ROUTINE LIST -->
+    <!-- MAIN TABS -->
+
+    <div id="mainTabs" class="main-tabs">
+      <button type="button" id="tabRoutines" class="main-tab active">
+        השגרות
+      </button>
+      <button type="button" id="tabCalendar" class="main-tab">
+        לוח שנה
+      </button>
+    </div>
+
+    <!-- HOME / LIST SCREEN (wrapper) -->
 
     <div id="routineListScreen">
 
-      <div class="card">
+      <!-- ROUTINES PANEL -->
 
-        <div class="top-row">
-          <h2>השגרות שלי</h2>
+      <div id="routinesPanel">
 
-          <button id="newRoutineBtn" class="primary">
-            + Routine חדש
-          </button>
+        <div class="card">
+
+          <div class="top-row">
+            <h2>השגרות שלי</h2>
+
+            <button id="newRoutineBtn" class="primary">
+              + Routine חדש
+            </button>
+          </div>
+
+          <div id="routineList"></div>
+
         </div>
-
-        <div id="routineList"></div>
 
       </div>
 
-      <!-- CALENDAR -->
+      <!-- CALENDAR PANEL -->
 
-      <div class="card calendar-card">
+      <div id="calendarScreen">
 
-        <div class="calendar-header">
-          <h2>לוח שנה</h2>
+        <div class="card calendar-card">
 
-          <div class="calendar-nav">
-            <button id="calPrevBtn" type="button" title="חודש קודם">‹</button>
-            <span id="calendarMonthLabel" class="calendar-month-label"></span>
-            <button id="calNextBtn" type="button" title="חודש הבא">›</button>
+          <div class="calendar-header">
+            <h2>לוח שנה</h2>
+
+            <div class="calendar-nav">
+              <button id="calPrevBtn" type="button" title="חודש קודם">‹</button>
+              <span id="calendarMonthLabel" class="calendar-month-label"></span>
+              <button id="calNextBtn" type="button" title="חודש הבא">›</button>
+            </div>
           </div>
-        </div>
 
-        <div id="calendarWeekdays" class="calendar-weekdays"></div>
-        <div id="calendarGrid" class="calendar-grid"></div>
+          <div id="calendarWeekdays" class="calendar-weekdays"></div>
+          <div id="calendarGrid" class="calendar-grid"></div>
+
+        </div>
 
       </div>
 
@@ -1674,6 +1757,63 @@ userPanelOverlay.addEventListener(
   "click",
   closeUserPanelFunction
 );
+
+
+
+/* MAIN TABS */
+
+let currentMainTab = "routines";
+
+function switchMainTab(tab) {
+  currentMainTab = tab;
+
+  const tabRoutines = document.getElementById("tabRoutines");
+  const tabCalendar = document.getElementById("tabCalendar");
+  const routinesPanel = document.getElementById("routinesPanel");
+  const calendarScreen = document.getElementById("calendarScreen");
+
+  if (!tabRoutines || !tabCalendar || !routinesPanel || !calendarScreen) {
+    return;
+  }
+
+  if (tab === "calendar") {
+    tabRoutines.classList.remove("active");
+    tabCalendar.classList.add("active");
+    routinesPanel.classList.add("hidden-panel");
+    calendarScreen.classList.add("visible");
+    renderCalendar();
+  } else {
+    tabCalendar.classList.remove("active");
+    tabRoutines.classList.add("active");
+    routinesPanel.classList.remove("hidden-panel");
+    calendarScreen.classList.remove("visible");
+  }
+}
+
+function showHomeUI() {
+  const mainTabs = document.getElementById("mainTabs");
+  if (mainTabs) {
+    mainTabs.style.display = "flex";
+  }
+  document.getElementById("routineListScreen").style.display = "block";
+  switchMainTab(currentMainTab);
+}
+
+function hideHomeUI() {
+  const mainTabs = document.getElementById("mainTabs");
+  if (mainTabs) {
+    mainTabs.style.display = "none";
+  }
+  document.getElementById("routineListScreen").style.display = "none";
+}
+
+document.getElementById("tabRoutines")?.addEventListener("click", () => {
+  switchMainTab("routines");
+});
+
+document.getElementById("tabCalendar")?.addEventListener("click", () => {
+  switchMainTab("calendar");
+});
 
 
 /* LOGIN */
@@ -2891,9 +3031,7 @@ function openRoutineFromLink() {
 
 function showDirectRoutine(routine) {
 
-  document.getElementById(
-    "routineListScreen"
-  ).style.display = "none";
+  hideHomeUI();
 
   document.getElementById(
     "editorScreen"
@@ -3024,9 +3162,7 @@ document
         "directRoutineScreen"
       ).style.display = "none";
 
-      document.getElementById(
-        "routineListScreen"
-      ).style.display = "block";
+      showHomeUI();
 
     }
   );
@@ -3216,9 +3352,7 @@ function updateActivationOptionsInEditor() {
 
 function openEditor(routine) {
 
-  document.getElementById(
-    "routineListScreen"
-  ).style.display = "none";
+  hideHomeUI();
 
   document.getElementById(
     "directRoutineScreen"
@@ -4274,9 +4408,7 @@ document
         "editorScreen"
       ).classList.add("hidden");
 
-      document.getElementById(
-        "routineListScreen"
-      ).style.display = "block";
+      showHomeUI();
 
     }
   );
@@ -4605,10 +4737,7 @@ document
           "hidden"
         );
 
-        document.getElementById(
-          "routineListScreen"
-        ).style.display =
-          "block";
+        showHomeUI();
 
 
         await loadRoutines();
@@ -4695,10 +4824,7 @@ function startRoutine(routine) {
   activeStepIndex = 0;
 
 
-  document.getElementById(
-    "routineListScreen"
-  ).style.display =
-    "none";
+  hideHomeUI();
 
   document.getElementById(
     "directRoutineScreen"
@@ -5155,10 +5281,7 @@ function exitActiveScreen() {
     "none";
 
 
-  document.getElementById(
-    "routineListScreen"
-  ).style.display =
-    "block";
+  showHomeUI();
 
 
   renderRoutines();
