@@ -2332,6 +2332,10 @@ function renderRoutines() {
           התחל
         </button>
 
+        <button class="secondary reset">
+          איפוס
+        </button>
+
         <button class="secondary edit">
           ערוך
         </button>
@@ -2352,6 +2356,13 @@ function renderRoutines() {
       .addEventListener(
         "click",
         () => startRoutine(routine)
+      );
+
+    card
+      .querySelector(".reset")
+      .addEventListener(
+        "click",
+        () => resetRoutine(routine)
       );
 
     card
@@ -4778,6 +4789,76 @@ document
 
     }
   );
+
+
+/* RESET ROUTINE – clear disables for this routine's steps so it can run again today */
+
+async function resetRoutine(routine) {
+
+  if (
+    !confirm(
+      "לאפס את השגרה הזו?
+ה-Steps שלה יופיעו שוב (כאילו עדיין לא בוצעו היום)."
+    )
+  ) {
+    return;
+  }
+
+  const stepIds =
+    (routine.steps || [])
+      .map(s => s.id)
+      .filter(Boolean);
+
+  if (stepIds.length === 0) {
+    alert("אין Steps לאיפוס בשגרה זו.");
+    return;
+  }
+
+  let changed = false;
+
+  stepIds.forEach(id => {
+    if (disabledStepsMap[id]) {
+      delete disabledStepsMap[id];
+      changed = true;
+    }
+  });
+
+  if (!changed) {
+    alert("השגרה כבר במצב מאופס — אין מה לאפס.");
+    renderRoutines();
+    return;
+  }
+
+  try {
+
+    const docRef =
+      doc(
+        db,
+        "users",
+        currentUser.uid,
+        "meta",
+        "disabledSteps"
+      );
+
+    /* overwrite full map so deleted keys are removed */
+    await setDoc(docRef, disabledStepsMap);
+
+    await loadRoutines();
+
+    alert("השגרה אופסה. אפשר להפעיל אותה שוב.");
+
+  } catch (e) {
+
+    console.error(e);
+
+    alert(
+      "שגיאה באיפוס: " +
+      e.message
+    );
+
+  }
+
+}
 
 
 /* DELETE ROUTINE */
