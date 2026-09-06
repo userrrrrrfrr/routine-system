@@ -1043,6 +1043,145 @@
     .calendar-day.today .day-more {
       color: #aaa;
     }
+
+    .calendar-day {
+      cursor: pointer;
+      transition: transform .12s ease, box-shadow .12s ease;
+    }
+
+    .calendar-day:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(0,0,0,.08);
+    }
+
+    .calendar-day.other-month {
+      cursor: default;
+    }
+
+    .calendar-day.other-month:hover {
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* Day detail modal */
+    .day-detail-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.35);
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .day-detail-overlay.show {
+      display: flex;
+    }
+
+    .day-detail-modal {
+      background: white;
+      border-radius: 22px;
+      width: 100%;
+      max-width: 520px;
+      max-height: 85vh;
+      overflow: auto;
+      box-shadow: 0 20px 50px rgba(0,0,0,.18);
+      padding: 22px 20px 26px;
+    }
+
+    .day-detail-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .day-detail-header h2 {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .day-detail-close {
+      width: 36px;
+      height: 36px;
+      border: 0;
+      background: #f5f5f7;
+      border-radius: 10px;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .day-detail-routine {
+      border: 1px solid #eee;
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 12px;
+      background: #fafafa;
+    }
+
+    .day-detail-routine-name {
+      font-weight: 700;
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+
+    .day-detail-step {
+      background: white;
+      border: 1px solid #eaeaea;
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .day-detail-step:last-child {
+      margin-bottom: 0;
+    }
+
+    .day-detail-empty {
+      text-align: center;
+      color: #888;
+      padding: 24px 10px;
+      font-size: 15px;
+    }
+
+    .show-in-calendar-box {
+      margin-top: 14px;
+      padding: 12px 14px;
+      border: 1px solid #e5e5e5;
+      border-radius: 12px;
+      background: #fafafa;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .show-in-calendar-box input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: #111;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+
+    .show-in-calendar-box label {
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      margin: 0;
+      user-select: none;
+    }
+
+    .show-in-calendar-box .hint {
+      font-size: 12px;
+      color: #888;
+      font-weight: normal;
+      display: block;
+      margin-top: 2px;
+    }
   </style>
 </head>
 
@@ -1340,6 +1479,17 @@
 
   </div>
 
+</div>
+
+<!-- DAY DETAIL MODAL -->
+<div id="dayDetailOverlay" class="day-detail-overlay">
+  <div class="day-detail-modal" role="dialog" aria-modal="true">
+    <div class="day-detail-header">
+      <h2 id="dayDetailTitle">יום</h2>
+      <button type="button" id="dayDetailClose" class="day-detail-close" title="סגור">×</button>
+    </div>
+    <div id="dayDetailContent"></div>
+  </div>
 </div>
 
 <script type="module">
@@ -2070,13 +2220,24 @@ function getStepsForCalendarDay(routine, date, today) {
 
   const steps = routine.steps || [];
 
+  /* Only steps explicitly marked to appear in calendar (default: off) */
+  const calendarSteps = steps.filter(
+    step => step.showInCalendar === true
+  );
+
+  if (calendarSteps.length === 0) {
+    return [];
+  }
+
   /* Only for today apply live disable/activation logic */
   if (isSameDate(date, today)) {
-    return getTodaySteps(routine);
+    const todayActive = getTodaySteps(routine);
+    const todayIds = new Set(todayActive.map(s => s.id));
+    return calendarSteps.filter(step => todayIds.has(step.id));
   }
 
   /* Planned view for other days */
-  return steps.filter(step => {
+  return calendarSteps.filter(step => {
     if (Number(step.frequency) === 0) {
       /* activation-only steps: show only if currently activated */
       return isStepTemporarilyActivated(step.id);
@@ -2178,14 +2339,19 @@ function renderCalendar() {
 
     dayCol.appendChild(dateRow);
 
-    /* Routines for this weekday */
+    /* Routines for this weekday – only those with calendar-visible steps */
     const dayOfWeek = cellDate.getDay();
 
     const routinesForDay = routines.filter(routine => {
       if (!routine.days || routine.days.length === 0) {
         return false;
       }
-      return routine.days.includes(dayOfWeek);
+      if (!routine.days.includes(dayOfWeek)) {
+        return false;
+      }
+      const stepsToShow =
+        getStepsForCalendarDay(routine, cellDate, today);
+      return stepsToShow.length > 0;
     });
 
     const routinesWrap = document.createElement("div");
@@ -2263,6 +2429,14 @@ function renderCalendar() {
     }
 
     dayCol.appendChild(routinesWrap);
+
+    /* Click day → full steps view */
+    if (isCurrentMonth) {
+      dayCol.addEventListener("click", () => {
+        openDayDetail(cellDate);
+      });
+    }
+
     grid.appendChild(dayCol);
 
   }
@@ -2287,6 +2461,126 @@ document
       calendarViewDate.getMonth() + 1
     );
     renderCalendar();
+  });
+
+
+/* DAY DETAIL (click on calendar day) */
+
+function formatDayDetailTitle(date) {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+
+  const dayName = HEBREW_DAY_SHORT[date.getDay()];
+  const dateStr =
+    date.getDate() +
+    " " +
+    HEBREW_MONTHS[date.getMonth()] +
+    " " +
+    date.getFullYear();
+
+  let prefix = dayName + " · " + dateStr;
+
+  if (isSameDate(date, today)) {
+    prefix = "היום · " + dateStr;
+  } else if (isSameDate(date, tomorrow)) {
+    prefix = "מחר · " + dateStr;
+  }
+
+  return prefix;
+}
+
+function openDayDetail(date) {
+  const overlay =
+    document.getElementById("dayDetailOverlay");
+  const titleEl =
+    document.getElementById("dayDetailTitle");
+  const contentEl =
+    document.getElementById("dayDetailContent");
+
+  if (!overlay || !titleEl || !contentEl) return;
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  titleEl.textContent = formatDayDetailTitle(date);
+  contentEl.innerHTML = "";
+
+  const dayOfWeek = date.getDay();
+
+  const routinesForDay = routines.filter(routine => {
+    if (!routine.days || routine.days.length === 0) {
+      return false;
+    }
+    return routine.days.includes(dayOfWeek);
+  });
+
+  let anySteps = false;
+
+  routinesForDay.forEach(routine => {
+    const stepsToShow =
+      getStepsForCalendarDay(routine, date, today);
+
+    if (stepsToShow.length === 0) return;
+
+    anySteps = true;
+
+    const rBlock = document.createElement("div");
+    rBlock.className = "day-detail-routine";
+
+    const nameEl = document.createElement("div");
+    nameEl.className = "day-detail-routine-name";
+    nameEl.textContent = routine.name || "ללא שם";
+    rBlock.appendChild(nameEl);
+
+    stepsToShow.forEach((step, index) => {
+      const sEl = document.createElement("div");
+      sEl.className = "day-detail-step";
+      sEl.innerHTML =
+        "<strong>#" +
+        (step.stepNumber || index + 1) +
+        "</strong> · " +
+        formatTextWithLinks(step.name || "Step ללא שם");
+      rBlock.appendChild(sEl);
+    });
+
+    contentEl.appendChild(rBlock);
+  });
+
+  if (!anySteps) {
+    contentEl.innerHTML = `
+      <div class="day-detail-empty">
+        אין Steps להצגה ביום זה
+        <br>
+        <span style="font-size:13px;color:#aaa">
+          (רק Steps שסומנו "הצג בלוח שנה")
+        </span>
+      </div>
+    `;
+  }
+
+  overlay.classList.add("show");
+}
+
+function closeDayDetail() {
+  const overlay =
+    document.getElementById("dayDetailOverlay");
+  if (overlay) {
+    overlay.classList.remove("show");
+  }
+}
+
+document
+  .getElementById("dayDetailClose")
+  ?.addEventListener("click", closeDayDetail);
+
+document
+  .getElementById("dayDetailOverlay")
+  ?.addEventListener("click", (e) => {
+    if (e.target.id === "dayDetailOverlay") {
+      closeDayDetail();
+    }
   });
 
 
@@ -3403,6 +3697,20 @@ function addStep(step = null) {
     </div>
 
 
+    <div class="show-in-calendar-box">
+      <input
+        type="checkbox"
+        class="show-in-calendar"
+        id="showCal_${stepId}"
+        ${step && step.showInCalendar === true ? "checked" : ""}
+      >
+      <label for="showCal_${stepId}">
+        הצג בלוח שנה
+        <span class="hint">ברירת מחדל: כבוי – רק אם מסומן יופיע בלוח</span>
+      </label>
+    </div>
+
+
     <div class="disable-box">
 
       <div class="disable-box-header">
@@ -4103,6 +4411,10 @@ document
         }
 
 
+        const showInCalendar =
+          !!el.querySelector(".show-in-calendar")?.checked;
+
+
         steps.push({
 
           id: sId,
@@ -4123,7 +4435,10 @@ document
 
           activationRules,
 
-          image: sImg
+          image: sImg,
+
+          /* default false – only show in calendar if explicitly enabled */
+          showInCalendar
 
         });
 
