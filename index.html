@@ -2066,14 +2066,11 @@ async function loadActivatedSteps() {
 
 function isStepTemporarilyActivated(stepId) {
 
-  if (!activatedStepsMap[stepId]) {
+  const until = getStepActivationUntilDate(stepId);
+
+  if (!until) {
     return false;
   }
-
-  const until =
-    new Date(
-      activatedStepsMap[stepId]
-    );
 
   return new Date() < until;
 
@@ -2100,14 +2097,11 @@ function getActivationUntilForDays(days) {
 
 function isStepDisabled(stepId) {
 
-  if (!disabledStepsMap[stepId]) {
+  const until = getStepDisableUntilDate(stepId);
+
+  if (!until) {
     return false;
   }
-
-  const until =
-    new Date(
-      disabledStepsMap[stepId]
-    );
 
   return new Date() < until;
 
@@ -2428,7 +2422,6 @@ function isRoutineWaitingActivation(routine) {
   return !routine.days || routine.days.length === 0;
 }
 
-/* End of calendar day (local) */
 function endOfDay(date) {
   const d = new Date(date);
   d.setHours(23, 59, 59, 999);
@@ -2441,34 +2434,54 @@ function startOfDay(date) {
   return d;
 }
 
-/*
-  Step is blocked on a calendar day if its disable-until
-  is still after the end of that day.
-  Completing a step sets until = now + frequency*24h,
-  so being late automatically shifts the next appearance.
-*/
-function isStepDisabledOnDate(stepId, date) {
-  if (!disabledStepsMap[stepId]) {
-    return false;
+/* Parse ISO string / Date / Firestore Timestamp */
+function parseMetaDate(val) {
+  if (!val) return null;
+  if (val instanceof Date) {
+    return isNaN(val.getTime()) ? null : val;
   }
-  const until = new Date(disabledStepsMap[stepId]);
-  return until > endOfDay(date);
+  if (typeof val === "object") {
+    if (typeof val.toDate === "function") {
+      try {
+        return val.toDate();
+      } catch (e) {}
+    }
+    if (typeof val.seconds === "number") {
+      return new Date(val.seconds * 1000);
+    }
+  }
+  const d = new Date(val);
+  return isNaN(d.getTime()) ? null : d;
 }
 
-/*
-  Activation covers a calendar day if until is after
-  the start of that day.
-*/
+function getStepDisableUntilDate(stepId) {
+  return parseMetaDate(disabledStepsMap[stepId]);
+}
+
+function getStepActivationUntilDate(stepId) {
+  return parseMetaDate(activatedStepsMap[stepId]);
+}
+
 function isStepActivatedOnDate(stepId, date) {
-  if (!activatedStepsMap[stepId]) {
-    return false;
-  }
-  const until = new Date(activatedStepsMap[stepId]);
+  const until = getStepActivationUntilDate(stepId);
+  if (!until) return false;
   return until > startOfDay(date);
 }
 
-/* Is this step expected to appear on a given date? */
+/*
+  Expected appearance on a calendar day, from last completion.
+
+  On complete we save: until = now + frequency*24h
+  → next due starts when that window ends.
+  If the user was late, until is based on the real completion
+  time, so the schedule shifts automatically.
+
+  After the first due day, the step is shown again every
+  `frequency` days (on days the routine is active).
+*/
 function isStepDueOnDate(step, date) {
+  const day = startOfDay(date);
+
   if (Number(step.frequency) === 0) {
     return isStepActivatedOnDate(step.id, date);
   }
@@ -2477,12 +2490,37 @@ function isStepDueOnDate(step, date) {
     return true;
   }
 
-  return !isStepDisabledOnDate(step.id, date);
+  const freq = Math.max(1, Number(step.frequency) || 1);
+  const until = getStepDisableUntilDate(step.id);
+
+  /* Never completed → available on every active routine day */
+  if (!until) {
+    return true;
+  }
+
+  /* Still inside the post-completion disable window */
+  if (until > endOfDay(date)) {
+    return false;
+  }
+
+  /*
+    First day the step becomes due again = calendar day of `until`.
+    Then every `freq` days after that.
+  */
+  const firstDue = startOfDay(until);
+  const diffMs = day.getTime() - firstDue.getTime();
+  const diffDays = Math.round(diffMs / 86400000);
+
+  if (diffDays < 0) {
+    return false;
+  }
+
+  return diffDays % freq === 0;
 }
 
 /**
  * Steps for the external calendar grid only.
- * Respects showInCalendar checkbox + frequency/disable schedule.
+ * Respects showInCalendar + frequency schedule from last completion.
  */
 function getStepsForCalendarDay(routine, date, today) {
   const dayOfWeek = date.getDay();
@@ -2505,6 +2543,7 @@ function getStepsForCalendarDay(routine, date, today) {
     return [];
   }
 
+  /* Today: live status (disable/activation right now) */
   if (isSameDate(date, today)) {
     const todayActive = getTodaySteps(routine);
     const todayIds = new Set(todayActive.map(s => s.id));
@@ -2515,8 +2554,7 @@ function getStepsForCalendarDay(routine, date, today) {
 }
 
 /**
- * Steps for the day-detail modal (click on a calendar day).
- * All due steps – not filtered by showInCalendar.
+ * Day-detail modal: all due steps (not only showInCalendar).
  */
 function getStepsForDayDetail(routine, date, today) {
   const dayOfWeek = date.getDay();
