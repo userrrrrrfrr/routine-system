@@ -299,6 +299,23 @@
       margin-top: 12px;
     }
 
+    /* Routine waiting for activation (no days selected) */
+    .routine-card.waiting-activation {
+      background: #fff0f0;
+      border: 2px solid #ffb8b8;
+    }
+
+    .waiting-activation-label {
+      display: inline-block;
+      margin-bottom: 8px;
+      padding: 4px 9px;
+      border-radius: 7px;
+      background: #ffd6d6;
+      color: #c40000;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
     .routine-card h3 {
       margin: 0 0 7px;
     }
@@ -2087,8 +2104,13 @@ function renderRoutines() {
     const card =
       document.createElement("div");
 
+    const waiting =
+      isRoutineWaitingActivation(routine);
+
     card.className =
-      "routine-card";
+      waiting
+        ? "routine-card waiting-activation"
+        : "routine-card";
 
     const todaySteps =
       getTodaySteps(routine);
@@ -2104,9 +2126,33 @@ function renderRoutines() {
         `
         : "";
 
+    const waitingLabelHtml =
+      waiting
+        ? `<span class="waiting-activation-label">ממתין להפעלה</span>`
+        : "";
+
+    const todayInfoHtml =
+      waiting
+        ? `
+          <div class="today-info">
+            ללא ימים נבחרים — השגרה במצב ממתין להפעלה
+          </div>
+        `
+        : `
+          <div class="today-info">
+            להיום:
+            <strong>
+              ${todaySteps.length}
+            </strong>
+            Steps
+          </div>
+        `;
+
     card.innerHTML = `
 
       ${imageHtml}
+
+      ${waitingLabelHtml}
 
       <h3>
         ${escapeHtml(routine.name)}
@@ -2116,13 +2162,7 @@ function renderRoutines() {
         ${routine.steps?.length || 0} Steps
       </div>
 
-      <div class="today-info">
-        להיום:
-        <strong>
-          ${todaySteps.length}
-        </strong>
-        Steps
-      </div>
+      ${todayInfoHtml}
 
       <div class="actions">
 
@@ -2208,11 +2248,20 @@ function getDateLabel(date, today, tomorrow) {
   return "";
 }
 
+function isRoutineWaitingActivation(routine) {
+  return !routine.days || routine.days.length === 0;
+}
+
+/**
+ * Steps for the external calendar grid only.
+ * Respects showInCalendar checkbox.
+ */
 function getStepsForCalendarDay(routine, date, today) {
   const dayOfWeek = date.getDay();
 
   if (
     !routine.days ||
+    routine.days.length === 0 ||
     !routine.days.includes(dayOfWeek)
   ) {
     return [];
@@ -2240,6 +2289,41 @@ function getStepsForCalendarDay(routine, date, today) {
   return calendarSteps.filter(step => {
     if (Number(step.frequency) === 0) {
       /* activation-only steps: show only if currently activated */
+      return isStepTemporarilyActivated(step.id);
+    }
+    return true;
+  });
+}
+
+/**
+ * Steps for the day-detail modal (click on a calendar day).
+ * Shows ALL active/planned steps – not filtered by showInCalendar.
+ */
+function getStepsForDayDetail(routine, date, today) {
+  const dayOfWeek = date.getDay();
+
+  if (
+    !routine.days ||
+    routine.days.length === 0 ||
+    !routine.days.includes(dayOfWeek)
+  ) {
+    return [];
+  }
+
+  const steps = routine.steps || [];
+
+  if (steps.length === 0) {
+    return [];
+  }
+
+  /* Only for today apply live disable/activation logic */
+  if (isSameDate(date, today)) {
+    return getTodaySteps(routine);
+  }
+
+  /* Planned view for other days – all steps that would be scheduled */
+  return steps.filter(step => {
+    if (Number(step.frequency) === 0) {
       return isStepTemporarilyActivated(step.id);
     }
     return true;
@@ -2519,8 +2603,9 @@ function openDayDetail(date) {
   let anySteps = false;
 
   routinesForDay.forEach(routine => {
+    /* Day click shows ALL active steps – not limited by showInCalendar */
     const stepsToShow =
-      getStepsForCalendarDay(routine, date, today);
+      getStepsForDayDetail(routine, date, today);
 
     if (stepsToShow.length === 0) return;
 
@@ -2551,11 +2636,7 @@ function openDayDetail(date) {
   if (!anySteps) {
     contentEl.innerHTML = `
       <div class="day-detail-empty">
-        אין Steps להצגה ביום זה
-        <br>
-        <span style="font-size:13px;color:#aaa">
-          (רק Steps שסומנו "הצג בלוח שנה")
-        </span>
+        אין Steps פעילים ביום זה
       </div>
     `;
   }
