@@ -2428,9 +2428,61 @@ function isRoutineWaitingActivation(routine) {
   return !routine.days || routine.days.length === 0;
 }
 
+/* End of calendar day (local) */
+function endOfDay(date) {
+  const d = new Date(date);
+  d.setHours(23, 59, 59, 999);
+  return d;
+}
+
+function startOfDay(date) {
+  const d = new Date(date);
+  d.setHours(0, 0, 0, 0);
+  return d;
+}
+
+/*
+  Step is blocked on a calendar day if its disable-until
+  is still after the end of that day.
+  Completing a step sets until = now + frequency*24h,
+  so being late automatically shifts the next appearance.
+*/
+function isStepDisabledOnDate(stepId, date) {
+  if (!disabledStepsMap[stepId]) {
+    return false;
+  }
+  const until = new Date(disabledStepsMap[stepId]);
+  return until > endOfDay(date);
+}
+
+/*
+  Activation covers a calendar day if until is after
+  the start of that day.
+*/
+function isStepActivatedOnDate(stepId, date) {
+  if (!activatedStepsMap[stepId]) {
+    return false;
+  }
+  const until = new Date(activatedStepsMap[stepId]);
+  return until > startOfDay(date);
+}
+
+/* Is this step expected to appear on a given date? */
+function isStepDueOnDate(step, date) {
+  if (Number(step.frequency) === 0) {
+    return isStepActivatedOnDate(step.id, date);
+  }
+
+  if (isStepActivatedOnDate(step.id, date)) {
+    return true;
+  }
+
+  return !isStepDisabledOnDate(step.id, date);
+}
+
 /**
  * Steps for the external calendar grid only.
- * Respects showInCalendar checkbox.
+ * Respects showInCalendar checkbox + frequency/disable schedule.
  */
 function getStepsForCalendarDay(routine, date, today) {
   const dayOfWeek = date.getDay();
@@ -2445,7 +2497,6 @@ function getStepsForCalendarDay(routine, date, today) {
 
   const steps = routine.steps || [];
 
-  /* Only steps explicitly marked to appear in calendar (default: off) */
   const calendarSteps = steps.filter(
     step => step.showInCalendar === true
   );
@@ -2454,26 +2505,18 @@ function getStepsForCalendarDay(routine, date, today) {
     return [];
   }
 
-  /* Only for today apply live disable/activation logic */
   if (isSameDate(date, today)) {
     const todayActive = getTodaySteps(routine);
     const todayIds = new Set(todayActive.map(s => s.id));
     return calendarSteps.filter(step => todayIds.has(step.id));
   }
 
-  /* Planned view for other days */
-  return calendarSteps.filter(step => {
-    if (Number(step.frequency) === 0) {
-      /* activation-only steps: show only if currently activated */
-      return isStepTemporarilyActivated(step.id);
-    }
-    return true;
-  });
+  return calendarSteps.filter(step => isStepDueOnDate(step, date));
 }
 
 /**
  * Steps for the day-detail modal (click on a calendar day).
- * Shows ALL active/planned steps – not filtered by showInCalendar.
+ * All due steps – not filtered by showInCalendar.
  */
 function getStepsForDayDetail(routine, date, today) {
   const dayOfWeek = date.getDay();
@@ -2492,18 +2535,11 @@ function getStepsForDayDetail(routine, date, today) {
     return [];
   }
 
-  /* Only for today apply live disable/activation logic */
   if (isSameDate(date, today)) {
     return getTodaySteps(routine);
   }
 
-  /* Planned view for other days – all steps that would be scheduled */
-  return steps.filter(step => {
-    if (Number(step.frequency) === 0) {
-      return isStepTemporarilyActivated(step.id);
-    }
-    return true;
-  });
+  return steps.filter(step => isStepDueOnDate(step, date));
 }
 
 function renderCalendar() {
