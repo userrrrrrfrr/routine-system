@@ -2115,6 +2115,29 @@ function isStepDisabled(stepId) {
 
 function getTodaySteps(routine) {
 
+  const steps =
+    routine.steps || [];
+
+  /*
+    Routine במצב "ממתין להפעלה" (ללא ימים):
+    הפעלה חד-פעמית לפי דרישה.
+    כל ה-Steps הרגילים מופיעים בכל הפעלה,
+    בלי תדירות / ביטול לפי frequency.
+  */
+  if (isRoutineWaitingActivation(routine)) {
+
+    return steps.filter(step => {
+
+      if (Number(step.frequency) === 0) {
+        return isStepTemporarilyActivated(step.id);
+      }
+
+      return true;
+
+    });
+
+  }
+
   const today =
     new Date().getDay();
 
@@ -2124,9 +2147,6 @@ function getTodaySteps(routine) {
   ) {
     return [];
   }
-
-  const steps =
-    routine.steps || [];
 
   return steps.filter(step => {
 
@@ -2275,7 +2295,9 @@ function renderRoutines() {
       waiting
         ? `
           <div class="today-info">
-            ללא ימים נבחרים — השגרה במצב ממתין להפעלה
+            הפעלה חד-פעמית — לחץ "התחל" מתי שתרצה
+            <br>
+            <strong>${todaySteps.length}</strong> Steps בכל הפעלה
           </div>
         `
         : `
@@ -5053,10 +5075,19 @@ async function completeActiveStep() {
     Step עם frequency = 0:
     לא מקבל ביטול עצמי.
     הוא פשוט נשאר תלוי בהפעלה שלו.
+
+    Routine במצב ממתין להפעלה:
+    הפעלה חד-פעמית — בלי ביטול עצמי לפי תדירות,
+    כדי שאפשר יהיה להפעיל מחדש בכל פעם.
   */
 
+  const waitingRoutine =
+    activeRoutine &&
+    isRoutineWaitingActivation(activeRoutine);
+
   if (
-    Number(currentStep.frequency) > 0
+    Number(currentStep.frequency) > 0 &&
+    !waitingRoutine
   ) {
 
     const selfFrequencyHours =
