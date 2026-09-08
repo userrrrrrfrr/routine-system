@@ -1769,6 +1769,20 @@ function getNextDayStart(date = new Date()) {
   return d;
 }
 
+/**
+ * After completing a step with frequency N (logical days),
+ * disable until the start (04:00) of the logical day that is N days later.
+ * frequency=1 → available again from next 04:00.
+ */
+function getDisableUntilForFrequency(frequency, fromDate = new Date()) {
+  const freq = Math.max(1, Number(frequency) || 1);
+  const logicalToday = getLogicalDate(fromDate);
+  const until = new Date(logicalToday);
+  until.setDate(until.getDate() + freq);
+  until.setHours(DAY_START_HOUR, 0, 0, 0);
+  return until;
+}
+
 function formatCountdown(ms) {
   if (ms < 0) ms = 0;
   const totalSec = Math.floor(ms / 1000);
@@ -2623,10 +2637,9 @@ function isStepActivatedOnDate(stepId, date) {
 /*
   Expected appearance on a calendar day, from last completion.
 
-  On complete we save: until = now + frequency*24h
-  → next due starts when that window ends.
-  If the user was late, until is based on the real completion
-  time, so the schedule shifts automatically.
+  On complete we save: until = 04:00 of the logical day
+  that is `frequency` days after the completion day.
+  → next due starts when that window ends (aligned to 04:00).
 
   After the first due day, the step is shown again every
   `frequency` days (on days the routine is active).
@@ -5023,7 +5036,7 @@ async function resetRoutine(routine) {
 
   if (
     !confirm(
-      "לאפס את השגרה הזו? ה-Steps יופיעו שוב כאילו לא בוצעו היום."
+      "לאפס את השגרה להיום?\nכל ה-Steps יופיעו שוב ליום הנוכחי (עד 04:00)."
     )
   ) {
     return;
@@ -5041,6 +5054,11 @@ async function resetRoutine(routine) {
 
   let changed = false;
 
+  /*
+    איפוס ליום הספציפי:
+    מוחק את הביטול של כל ה-Steps של השגרה,
+    כך שהם זמינים שוב להיום הלוגי (עד 04:00 הבא).
+  */
   stepIds.forEach(id => {
     if (disabledStepsMap[id]) {
       delete disabledStepsMap[id];
@@ -5049,7 +5067,7 @@ async function resetRoutine(routine) {
   });
 
   if (!changed) {
-    alert("השגרה כבר במצב מאופס — אין מה לאפס.");
+    alert("השגרה כבר במצב מאופס להיום — אין מה לאפס.");
     renderRoutines();
     return;
   }
@@ -5070,7 +5088,7 @@ async function resetRoutine(routine) {
 
     await loadRoutines();
 
-    alert("השגרה אופסה. אפשר להפעיל אותה שוב.");
+    alert("השגרה אופסה להיום. כל ה-Steps זמינים שוב.");
 
   } catch (e) {
 
@@ -5446,66 +5464,47 @@ async function completeActiveStep() {
     activeRoutine &&
     isRoutineWaitingActivation(activeRoutine);
 
+  const now = new Date();
+
+  /* Self-disable by frequency (aligned to 04:00 logical days) */
   if (
     Number(currentStep.frequency) > 0 &&
     !waitingRoutine
   ) {
+    const untilDate =
+      getDisableUntilForFrequency(
+        currentStep.frequency,
+        now
+      );
 
-    const selfFrequencyHours =
-      Number(
-        currentStep.frequency
-      ) * 24;
-
-
-    rulesToApply.push({
-
-      targetId:
-        currentStep.id,
-
-      hours:
-        selfFrequencyHours
-
-    });
-
+    disabledStepsMap[currentStep.id] =
+      untilDate.toISOString();
   }
 
 
-  /* SAVE DISABLES */
+  /* Explicit disable rules (hours from now) */
+  if (rulesToApply.length > 0) {
+    rulesToApply.forEach(rule => {
+      if (!rule.targetId) return;
 
-  if (
-    rulesToApply.length > 0
-  ) {
+      const untilDate = new Date(
+        now.getTime() +
+        (rule.hours * 60 * 60 * 1000)
+      );
 
-    const now =
-      new Date();
-
-
-    rulesToApply.forEach(
-      rule => {
-
-        const untilDate =
-          new Date(
-            now.getTime() +
-            (
-              rule.hours *
-              60 *
-              60 *
-              1000
-            )
-          );
+      disabledStepsMap[rule.targetId] =
+        untilDate.toISOString();
+    });
+  }
 
 
-        disabledStepsMap[
-          rule.targetId
-        ] =
-          untilDate.toISOString();
+  /* SAVE DISABLES (self + rules) */
+  const hasDisableUpdates =
+    (Number(currentStep.frequency) > 0 && !waitingRoutine) ||
+    rulesToApply.length > 0;
 
-      }
-    );
-
-
+  if (hasDisableUpdates) {
     try {
-
       const docRef =
         doc(
           db,
@@ -5515,7 +5514,6 @@ async function completeActiveStep() {
           "disabledSteps"
         );
 
-
       await setDoc(
         docRef,
         disabledStepsMap,
@@ -5523,16 +5521,12 @@ async function completeActiveStep() {
           merge: true
         }
       );
-
     } catch (e) {
-
       console.error(
         "שגיאה בעדכון ביטול צעד ב-DB:",
         e
       );
-
     }
-
   }
 
 
