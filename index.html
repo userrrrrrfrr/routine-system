@@ -5271,7 +5271,17 @@ function runStep() {
           remainingSeconds <= 0
         ) {
 
-          completeActiveStep();
+          /* Stop at 00:00 – do NOT auto-advance.
+             User must tap the card to mark as done. */
+          remainingSeconds = 0;
+          updateTimerDisplay();
+
+          if (timerInterval) {
+            clearInterval(timerInterval);
+            timerInterval = null;
+          }
+
+          playStepBeep();
 
         }
 
@@ -5279,6 +5289,51 @@ function runStep() {
       1000
     );
 
+}
+
+
+/* Short beep when step timer reaches zero */
+function playStepBeep() {
+  try {
+    const AudioCtx =
+      window.AudioContext ||
+      window.webkitAudioContext;
+
+    if (!AudioCtx) return;
+
+    const ctx = new AudioCtx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    osc.type = "sine";
+    osc.frequency.value = 880; /* A5 – clear short beep */
+
+    gain.gain.setValueAtTime(0.0001, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(
+      0.25,
+      ctx.currentTime + 0.02
+    );
+    gain.gain.exponentialRampToValueAtTime(
+      0.0001,
+      ctx.currentTime + 0.35
+    );
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + 0.4);
+
+    /* Close context after the sound finishes */
+    setTimeout(() => {
+      try {
+        ctx.close();
+      } catch (e) {}
+    }, 500);
+
+  } catch (e) {
+    console.warn("Beep failed:", e);
+  }
 }
 
 
