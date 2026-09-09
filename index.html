@@ -4265,11 +4265,15 @@ function addStep(step = null) {
       <label>
         הפעם הבאה
       </label>
-      <div class="next-due-row" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-        <span class="step-next-due-label" style="font-size:16px;font-weight:700;color:#111;">—</span>
+      <div class="next-due-row" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+        <input
+          type="date"
+          class="step-next-due-input"
+        >
+        <span class="step-next-due-today" style="font-size:14px;font-weight:700;color:#c40000;"></span>
       </div>
       <div style="font-size:12px;color:#888;margin-top:6px;line-height:1.4;">
-        מתי ה-Step אמור להופיע בפעם הקרובה (מתעדכן לפי תדירות וביצועים). אם זה היום — יוצג "היום".
+        מתי ה-Step אמור להופיע בפעם הקרובה. אפשר לערוך ידנית. אם זה היום — יוצג "היום". בלחיצה על שמור יתעדכן לוח הזמנים של ה-Step.
       </div>
     </div>
 
@@ -4450,12 +4454,47 @@ function addStep(step = null) {
   updateFrequencyDisplay();
 
 
-  /* NEXT DUE – nearest day this step will appear ("היום" if today) */
-  const nextDueLabelEl =
-    div.querySelector(".step-next-due-label");
+  /* NEXT DUE – editable nearest day; "היום" when selected/computed is today */
+  const nextDueInput =
+    div.querySelector(".step-next-due-input");
+
+  const nextDueTodayEl =
+    div.querySelector(".step-next-due-today");
+
+  function toDateInputValue(date) {
+    if (!date || isNaN(date.getTime())) return "";
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, "0");
+    const d = String(date.getDate()).padStart(2, "0");
+    return y + "-" + m + "-" + d;
+  }
+
+  function updateNextDueTodayBadge() {
+    if (!nextDueInput || !nextDueTodayEl) return;
+    const val = (nextDueInput.value || "").trim();
+    if (!val) {
+      nextDueTodayEl.textContent = "";
+      return;
+    }
+    const selected = startOfDay(
+      new Date(
+        Number(val.slice(0, 4)),
+        Number(val.slice(5, 7)) - 1,
+        Number(val.slice(8, 10))
+      )
+    );
+    if (
+      !isNaN(selected.getTime()) &&
+      isSameDate(selected, getLogicalDate())
+    ) {
+      nextDueTodayEl.textContent = "היום";
+    } else {
+      nextDueTodayEl.textContent = "";
+    }
+  }
 
   function refreshThisStepNextDue() {
-    if (!nextDueLabelEl) return;
+    if (!nextDueInput) return;
 
     const freqRaw = Number(
       div.querySelector(".frequency")?.value
@@ -4480,16 +4519,23 @@ function addStep(step = null) {
     };
 
     const next = getNextDueDateForStep(mockStep, mockRoutine);
-    const text = formatNextDueLabel(next);
-
-    nextDueLabelEl.textContent = text;
-    nextDueLabelEl.style.color =
-      text === "היום" ? "#c40000" : "#111";
+    nextDueInput.value = toDateInputValue(next);
+    updateNextDueTodayBadge();
   }
 
   frequencyInput.addEventListener(
     "input",
     refreshThisStepNextDue
+  );
+
+  nextDueInput.addEventListener(
+    "input",
+    updateNextDueTodayBadge
+  );
+
+  nextDueInput.addEventListener(
+    "change",
+    updateNextDueTodayBadge
   );
 
   refreshThisStepNextDue();
@@ -5034,6 +5080,18 @@ document
         const showInCalendar =
           !!el.querySelector(".show-in-calendar")?.checked;
 
+        /* Optional manual override of next due date (YYYY-MM-DD) */
+        const nextDueRaw =
+          (
+            el.querySelector(".step-next-due-input")?.value ||
+            ""
+          ).trim();
+
+        const nextDueDate =
+          /^\d{4}-\d{2}-\d{2}$/.test(nextDueRaw)
+            ? nextDueRaw
+            : "";
+
 
         steps.push({
 
@@ -5058,10 +5116,62 @@ document
           image: sImg,
 
           /* default false – only show in calendar if explicitly enabled */
-          showInCalendar
+          showInCalendar,
+
+          /* temporary, used only while saving to adjust disabledStepsMap */
+          _nextDueDate: nextDueDate
 
         });
 
+      });
+
+      /* Apply "הפעם הבאה" overrides → disabledStepsMap */
+      let disabledMapChanged = false;
+
+      steps.forEach(s => {
+        const dueStr = s._nextDueDate;
+        delete s._nextDueDate;
+
+        if (!dueStr || Number(s.frequency) === 0) {
+          return;
+        }
+
+        const parts = dueStr.split("-");
+        const dueDay = startOfDay(
+          new Date(
+            Number(parts[0]),
+            Number(parts[1]) - 1,
+            Number(parts[2])
+          )
+        );
+
+        if (isNaN(dueDay.getTime())) {
+          return;
+        }
+
+        const logicalToday = getLogicalDate();
+
+        /*
+          Next due = dueDay:
+          - today or past → clear disable so step is available
+          - future → set disable-until to start of dueDay
+            so isStepDueOnDate first becomes true on that day
+        */
+        if (
+          isSameDate(dueDay, logicalToday) ||
+          dueDay.getTime() < logicalToday.getTime()
+        ) {
+          if (disabledStepsMap[s.id]) {
+            delete disabledStepsMap[s.id];
+            disabledMapChanged = true;
+          }
+        } else {
+          const iso = dueDay.toISOString();
+          if (disabledStepsMap[s.id] !== iso) {
+            disabledStepsMap[s.id] = iso;
+            disabledMapChanged = true;
+          }
+        }
       });
 
 
@@ -5101,6 +5211,21 @@ document
     merge: true
   }
 );
+
+        /* SAVE DISABLED STEPS (next-due overrides may have cleared keys) */
+        if (disabledMapChanged) {
+          const disabledRef =
+            doc(
+              db,
+              "users",
+              currentUser.uid,
+              "meta",
+              "disabledSteps"
+            );
+
+          /* full overwrite so deleted keys are removed */
+          await setDoc(disabledRef, disabledStepsMap);
+        }
 
         /* SAVE ROUTINE */
 
@@ -5445,7 +5570,7 @@ function runStep() {
 }
 
 
-/* Short beep when step timer reaches zero */
+/* Beep when step timer reaches zero – louder double beep */
 function playStepBeep() {
   try {
     const AudioCtx =
@@ -5455,34 +5580,41 @@ function playStepBeep() {
     if (!AudioCtx) return;
 
     const ctx = new AudioCtx();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
+    const now = ctx.currentTime;
 
-    osc.type = "sine";
-    osc.frequency.value = 880; /* A5 – clear short beep */
+    function tone(start, freq, duration, peak) {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
 
-    gain.gain.setValueAtTime(0.0001, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(
-      0.25,
-      ctx.currentTime + 0.02
-    );
-    gain.gain.exponentialRampToValueAtTime(
-      0.0001,
-      ctx.currentTime + 0.35
-    );
+      osc.type = "square";
+      osc.frequency.value = freq;
 
-    osc.connect(gain);
-    gain.connect(ctx.destination);
+      gain.gain.setValueAtTime(0.0001, start);
+      gain.gain.exponentialRampToValueAtTime(
+        peak,
+        start + 0.015
+      );
+      gain.gain.exponentialRampToValueAtTime(
+        0.0001,
+        start + duration
+      );
 
-    osc.start(ctx.currentTime);
-    osc.stop(ctx.currentTime + 0.4);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
 
-    /* Close context after the sound finishes */
+      osc.start(start);
+      osc.stop(start + duration + 0.02);
+    }
+
+    /* Two stronger beeps – easier to notice */
+    tone(now, 880, 0.22, 0.55);
+    tone(now + 0.28, 988, 0.28, 0.6);
+
     setTimeout(() => {
       try {
         ctx.close();
       } catch (e) {}
-    }, 500);
+    }, 900);
 
   } catch (e) {
     console.warn("Beep failed:", e);
