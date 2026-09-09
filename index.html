@@ -2282,15 +2282,22 @@ function getTodaySteps(routine) {
   const steps =
     routine.steps || [];
 
+  const logicalToday = getLogicalDate();
+
   /*
     Routine במצב "ממתין להפעלה" (ללא ימים):
     הפעלה חד-פעמית לפי דרישה.
     כל ה-Steps הרגילים מופיעים בכל הפעלה,
     בלי תדירות / ביטול לפי frequency.
+    עדיין מכבדים תאריך התחלה.
   */
   if (isRoutineWaitingActivation(routine)) {
 
     return steps.filter(step => {
+
+      if (!hasStepStartedByDate(step, logicalToday)) {
+        return false;
+      }
 
       if (Number(step.frequency) === 0) {
         return isStepTemporarilyActivated(step.id);
@@ -2312,6 +2319,10 @@ function getTodaySteps(routine) {
   }
 
   return steps.filter(step => {
+
+    if (!hasStepStartedByDate(step, logicalToday)) {
+      return false;
+    }
 
     /*
       Step עם frequency = 0
@@ -2644,8 +2655,37 @@ function isStepActivatedOnDate(stepId, date) {
   After the first due day, the step is shown again every
   `frequency` days (on days the routine is active).
 */
+/**
+ * Parse step.startDate (YYYY-MM-DD) → start of that calendar day, or null.
+ */
+function getStepStartDate(step) {
+  if (!step || !step.startDate) return null;
+  const raw = String(step.startDate).trim();
+  if (!raw) return null;
+  /* Prefer YYYY-MM-DD to avoid timezone shifts */
+  const m = raw.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (m) {
+    const d = new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+    return isNaN(d.getTime()) ? null : startOfDay(d);
+  }
+  const d = new Date(raw);
+  return isNaN(d.getTime()) ? null : startOfDay(d);
+}
+
+/** True if the step is allowed to appear on this date (startDate has arrived or is unset). */
+function hasStepStartedByDate(step, date) {
+  const start = getStepStartDate(step);
+  if (!start) return true;
+  return startOfDay(date) >= start;
+}
+
 function isStepDueOnDate(step, date) {
   const day = startOfDay(date);
+
+  /* Not yet reached the defined start date */
+  if (!hasStepStartedByDate(step, date)) {
+    return false;
+  }
 
   if (Number(step.frequency) === 0) {
     return isStepActivatedOnDate(step.id, date);
@@ -2658,7 +2698,7 @@ function isStepDueOnDate(step, date) {
   const freq = Math.max(1, Number(step.frequency) || 1);
   const until = getStepDisableUntilDate(step.id);
 
-  /* Never completed → available on every active routine day */
+  /* Never completed → available on every active routine day (from startDate onward) */
   if (!until) {
     return true;
   }
@@ -4184,6 +4224,24 @@ function addStep(step = null) {
     </div>
 
 
+    <div class="form-group step-start-date-group">
+      <label>
+        תאריך התחלה (ממנו מתחילה התדירות)
+      </label>
+      <div class="start-date-row" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+        <input
+          type="date"
+          class="step-start-date"
+          value="${step && step.startDate ? escapeAttr(String(step.startDate).slice(0, 10)) : ""}"
+        >
+        <span class="start-date-today-label" style="font-size:14px;font-weight:600;color:#c40000;"></span>
+      </div>
+      <div style="font-size:12px;color:#888;margin-top:6px;line-height:1.4;">
+        ריק = זמין מיד. מהתאריך שנבחר והלאה תחול התדירות (לא יופיע לפני).
+      </div>
+    </div>
+
+
     <div class="show-in-calendar-box">
       <input
         type="checkbox"
@@ -4358,6 +4416,55 @@ function addStep(step = null) {
   );
 
   updateFrequencyDisplay();
+
+
+  /* START DATE – show "היום" when selected date is logical today */
+  const startDateInput =
+    div.querySelector(".step-start-date");
+
+  const startDateTodayLabel =
+    div.querySelector(".start-date-today-label");
+
+  function updateStartDateTodayLabel() {
+    if (!startDateInput || !startDateTodayLabel) return;
+
+    const val = (startDateInput.value || "").trim();
+
+    if (!val) {
+      startDateTodayLabel.textContent = "";
+      return;
+    }
+
+    const logicalToday = getLogicalDate();
+    const selected = startOfDay(
+      new Date(
+        Number(val.slice(0, 4)),
+        Number(val.slice(5, 7)) - 1,
+        Number(val.slice(8, 10))
+      )
+    );
+
+    if (
+      !isNaN(selected.getTime()) &&
+      isSameDate(selected, logicalToday)
+    ) {
+      startDateTodayLabel.textContent = "היום";
+    } else {
+      startDateTodayLabel.textContent = "";
+    }
+  }
+
+  startDateInput.addEventListener(
+    "input",
+    updateStartDateTodayLabel
+  );
+
+  startDateInput.addEventListener(
+    "change",
+    updateStartDateTodayLabel
+  );
+
+  updateStartDateTodayLabel();
 
 
   /* DRAG & DROP */
@@ -4899,6 +5006,18 @@ document
         const showInCalendar =
           !!el.querySelector(".show-in-calendar")?.checked;
 
+        const startDateRaw =
+          (
+            el.querySelector(".step-start-date")?.value ||
+            ""
+          ).trim();
+
+        /* Keep only YYYY-MM-DD; empty = no start restriction */
+        const startDate =
+          /^\d{4}-\d{2}-\d{2}$/.test(startDateRaw)
+            ? startDateRaw
+            : "";
+
 
         steps.push({
 
@@ -4923,7 +5042,10 @@ document
           image: sImg,
 
           /* default false – only show in calendar if explicitly enabled */
-          showInCalendar
+          showInCalendar,
+
+          /* From this date the frequency cycle may begin (empty = available immediately) */
+          startDate
 
         });
 
