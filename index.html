@@ -2282,22 +2282,15 @@ function getTodaySteps(routine) {
   const steps =
     routine.steps || [];
 
-  const logicalToday = getLogicalDate();
-
   /*
     Routine במצב "ממתין להפעלה" (ללא ימים):
     הפעלה חד-פעמית לפי דרישה.
     כל ה-Steps הרגילים מופיעים בכל הפעלה,
     בלי תדירות / ביטול לפי frequency.
-    עדיין מכבדים תאריך התחלה.
   */
   if (isRoutineWaitingActivation(routine)) {
 
     return steps.filter(step => {
-
-      if (!hasStepStartedByDate(step, logicalToday)) {
-        return false;
-      }
 
       if (Number(step.frequency) === 0) {
         return isStepTemporarilyActivated(step.id);
@@ -2319,10 +2312,6 @@ function getTodaySteps(routine) {
   }
 
   return steps.filter(step => {
-
-    if (!hasStepStartedByDate(step, logicalToday)) {
-      return false;
-    }
 
     /*
       Step עם frequency = 0
@@ -2655,37 +2644,8 @@ function isStepActivatedOnDate(stepId, date) {
   After the first due day, the step is shown again every
   `frequency` days (on days the routine is active).
 */
-/**
- * Parse step.startDate (YYYY-MM-DD) → start of that calendar day, or null.
- */
-function getStepStartDate(step) {
-  if (!step || !step.startDate) return null;
-  const raw = String(step.startDate).trim();
-  if (!raw) return null;
-  /* Prefer YYYY-MM-DD to avoid timezone shifts */
-  const m = raw.match(/^(\d{4})-(\d{2})-(\d{2})/);
-  if (m) {
-    const d = new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
-    return isNaN(d.getTime()) ? null : startOfDay(d);
-  }
-  const d = new Date(raw);
-  return isNaN(d.getTime()) ? null : startOfDay(d);
-}
-
-/** True if the step is allowed to appear on this date (startDate has arrived or is unset). */
-function hasStepStartedByDate(step, date) {
-  const start = getStepStartDate(step);
-  if (!start) return true;
-  return startOfDay(date) >= start;
-}
-
 function isStepDueOnDate(step, date) {
   const day = startOfDay(date);
-
-  /* Not yet reached the defined start date */
-  if (!hasStepStartedByDate(step, date)) {
-    return false;
-  }
 
   if (Number(step.frequency) === 0) {
     return isStepActivatedOnDate(step.id, date);
@@ -2698,7 +2658,7 @@ function isStepDueOnDate(step, date) {
   const freq = Math.max(1, Number(step.frequency) || 1);
   const until = getStepDisableUntilDate(step.id);
 
-  /* Never completed → available on every active routine day (from startDate onward) */
+  /* Never completed → available on every active routine day */
   if (!until) {
     return true;
   }
@@ -2721,6 +2681,71 @@ function isStepDueOnDate(step, date) {
   }
 
   return diffDays % freq === 0;
+}
+
+/**
+ * Next calendar day (from logical today, inclusive) when this step is due
+ * on an active day of the routine. Returns Date or null.
+ */
+function getNextDueDateForStep(step, routine) {
+  if (!step) return null;
+
+  const today = getLogicalDate();
+
+  /* frequency 0: only while temporarily activated */
+  if (Number(step.frequency) === 0) {
+    if (isStepTemporarilyActivated(step.id)) {
+      return today;
+    }
+    return null;
+  }
+
+  /* Waiting-activation routine: available whenever started */
+  if (isRoutineWaitingActivation(routine)) {
+    return today;
+  }
+
+  const days = routine && routine.days ? routine.days : [];
+  if (!days.length) {
+    return null;
+  }
+
+  /* Scan up to ~2 years of days */
+  for (let i = 0; i < 800; i++) {
+    const d = new Date(today);
+    d.setDate(d.getDate() + i);
+    const dayStart = startOfDay(d);
+
+    if (!days.includes(dayStart.getDay())) {
+      continue;
+    }
+
+    if (isStepDueOnDate(step, dayStart)) {
+      return dayStart;
+    }
+  }
+
+  return null;
+}
+
+/** Human label for next due: "היום" / "מחר" / "א׳ · 12 ספטמבר" */
+function formatNextDueLabel(date) {
+  if (!date) return "—";
+
+  const today = getLogicalDate();
+  const tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+
+  if (isSameDate(date, today)) {
+    return "היום";
+  }
+  if (isSameDate(date, tomorrow)) {
+    return "מחר";
+  }
+
+  const dayName = HEBREW_DAY_SHORT[date.getDay()];
+  const monthName = HEBREW_MONTHS[date.getMonth()];
+  return dayName + " · " + date.getDate() + " " + monthName;
 }
 
 /**
@@ -3719,6 +3744,18 @@ function openEditor(routine) {
             )
           : false;
 
+      /* When routine days change, refresh "הפעם הבאה" on every step */
+      checkbox.onchange = () => {
+        document
+          .querySelectorAll("#stepsContainer .step")
+          .forEach(stepEl => {
+            const freqInput = stepEl.querySelector(".frequency");
+            if (freqInput) {
+              freqInput.dispatchEvent(new Event("input"));
+            }
+          });
+      };
+
     });
 
   stepImages =
@@ -4224,20 +4261,15 @@ function addStep(step = null) {
     </div>
 
 
-    <div class="form-group step-start-date-group">
+    <div class="form-group step-next-due-group">
       <label>
-        תאריך התחלה (ממנו מתחילה התדירות)
+        הפעם הבאה
       </label>
-      <div class="start-date-row" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
-        <input
-          type="date"
-          class="step-start-date"
-          value="${step && step.startDate ? escapeAttr(String(step.startDate).slice(0, 10)) : ""}"
-        >
-        <span class="start-date-today-label" style="font-size:14px;font-weight:600;color:#c40000;"></span>
+      <div class="next-due-row" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+        <span class="step-next-due-label" style="font-size:16px;font-weight:700;color:#111;">—</span>
       </div>
       <div style="font-size:12px;color:#888;margin-top:6px;line-height:1.4;">
-        ריק = זמין מיד. מהתאריך שנבחר והלאה תחול התדירות (לא יופיע לפני).
+        מתי ה-Step אמור להופיע בפעם הקרובה (מתעדכן לפי תדירות וביצועים). אם זה היום — יוצג "היום".
       </div>
     </div>
 
@@ -4418,53 +4450,49 @@ function addStep(step = null) {
   updateFrequencyDisplay();
 
 
-  /* START DATE – show "היום" when selected date is logical today */
-  const startDateInput =
-    div.querySelector(".step-start-date");
+  /* NEXT DUE – nearest day this step will appear ("היום" if today) */
+  const nextDueLabelEl =
+    div.querySelector(".step-next-due-label");
 
-  const startDateTodayLabel =
-    div.querySelector(".start-date-today-label");
+  function refreshThisStepNextDue() {
+    if (!nextDueLabelEl) return;
 
-  function updateStartDateTodayLabel() {
-    if (!startDateInput || !startDateTodayLabel) return;
-
-    const val = (startDateInput.value || "").trim();
-
-    if (!val) {
-      startDateTodayLabel.textContent = "";
-      return;
-    }
-
-    const logicalToday = getLogicalDate();
-    const selected = startOfDay(
-      new Date(
-        Number(val.slice(0, 4)),
-        Number(val.slice(5, 7)) - 1,
-        Number(val.slice(8, 10))
-      )
+    const freqRaw = Number(
+      div.querySelector(".frequency")?.value
     );
+    const freqVal =
+      Number.isFinite(freqRaw) && freqRaw >= 0
+        ? freqRaw
+        : 1;
 
-    if (
-      !isNaN(selected.getTime()) &&
-      isSameDate(selected, logicalToday)
-    ) {
-      startDateTodayLabel.textContent = "היום";
-    } else {
-      startDateTodayLabel.textContent = "";
-    }
+    const mockStep = {
+      id: stepId,
+      frequency: freqVal
+    };
+
+    const selectedDays = Array.from(
+      document.querySelectorAll(".days input:checked")
+    ).map(el => Number(el.value));
+
+    const mockRoutine = {
+      days: selectedDays,
+      steps: []
+    };
+
+    const next = getNextDueDateForStep(mockStep, mockRoutine);
+    const text = formatNextDueLabel(next);
+
+    nextDueLabelEl.textContent = text;
+    nextDueLabelEl.style.color =
+      text === "היום" ? "#c40000" : "#111";
   }
 
-  startDateInput.addEventListener(
+  frequencyInput.addEventListener(
     "input",
-    updateStartDateTodayLabel
+    refreshThisStepNextDue
   );
 
-  startDateInput.addEventListener(
-    "change",
-    updateStartDateTodayLabel
-  );
-
-  updateStartDateTodayLabel();
+  refreshThisStepNextDue();
 
 
   /* DRAG & DROP */
@@ -5006,18 +5034,6 @@ document
         const showInCalendar =
           !!el.querySelector(".show-in-calendar")?.checked;
 
-        const startDateRaw =
-          (
-            el.querySelector(".step-start-date")?.value ||
-            ""
-          ).trim();
-
-        /* Keep only YYYY-MM-DD; empty = no start restriction */
-        const startDate =
-          /^\d{4}-\d{2}-\d{2}$/.test(startDateRaw)
-            ? startDateRaw
-            : "";
-
 
         steps.push({
 
@@ -5042,10 +5058,7 @@ document
           image: sImg,
 
           /* default false – only show in calendar if explicitly enabled */
-          showInCalendar,
-
-          /* From this date the frequency cycle may begin (empty = available immediately) */
-          startDate
+          showInCalendar
 
         });
 
