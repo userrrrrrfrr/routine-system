@@ -2658,21 +2658,24 @@ function isStepDueOnDate(step, date) {
   const freq = Math.max(1, Number(step.frequency) || 1);
   const until = getStepDisableUntilDate(step.id);
 
-  /* Never completed → available on every active routine day */
-  if (!until) {
-    return true;
-  }
-
-  /* Still inside the post-completion disable window */
-  if (until > endOfDay(date)) {
-    return false;
-  }
-
   /*
-    First day the step becomes due again = calendar day of `until`.
-    Then every `freq` days after that.
+    Anchor (first due):
+    - After completion / manual "הפעם הבאה": calendar day of `until`
+    - Never completed: logical today → then every `freq` days
+      (so the calendar does NOT show the step on every routine day)
   */
-  const firstDue = startOfDay(until);
+  let firstDue;
+
+  if (until) {
+    /* Still inside the post-completion disable window */
+    if (until > endOfDay(date)) {
+      return false;
+    }
+    firstDue = startOfDay(until);
+  } else {
+    firstDue = getLogicalDate();
+  }
+
   const diffMs = day.getTime() - firstDue.getTime();
   const diffDays = Math.round(diffMs / 86400000);
 
