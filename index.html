@@ -189,7 +189,7 @@
       font-size: 16px;
       font-weight: 600;
       word-break: break-word;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
     }
 
     .panel-logout {
@@ -199,6 +199,17 @@
       background: white;
       border-radius: 12px;
       color: #d00;
+      margin-top: 12px;
+    }
+
+    .panel-enable-notifications {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #ddd;
+      background: white;
+      border-radius: 12px;
+      color: #111;
+      margin-top: 8px;
     }
 
     .user-panel-overlay {
@@ -1422,6 +1433,10 @@
 
     <div id="panelUserInfo"></div>
 
+    <button id="enableNotificationsBtn" class="panel-enable-notifications">
+      הפעל התראות
+    </button>
+
     <button id="logoutBtn" class="panel-logout">
       התנתק
     </button>
@@ -2083,6 +2098,22 @@ document
 
     closeUserPanelFunction();
 
+  });
+
+
+/* ENABLE NOTIFICATIONS BUTTON */
+
+document
+  .getElementById("enableNotificationsBtn")
+  ?.addEventListener("click", async () => {
+    const granted = await ensureNotificationPermission();
+    if (granted) {
+      alert("התראות הופעלו בהצלחה");
+    } else if (Notification.permission === "denied") {
+      alert("ההרשאה נחסמה.\nלכי להגדרות → Safari → האתר → התראות והפעיל.");
+    } else {
+      alert("לא ניתנה הרשאה להתראות");
+    }
   });
 
 
@@ -5475,10 +5506,10 @@ async function deleteRoutine(id) {
 
 /* START ROUTINE */
 
-function startRoutine(routine) {
+async function startRoutine(routine) {
 
   /* Ask once for lock-screen / system notifications when a step ends */
-  ensureNotificationPermission();
+  await ensureNotificationPermission();
 
   activeRoutine =
     routine;
@@ -5633,8 +5664,6 @@ function runStep() {
             timerInterval = null;
           }
 
-          playStepBeep();
-
           const finishedStep =
             activeSteps[activeStepIndex];
           notifyStepFinished(finishedStep);
@@ -5652,6 +5681,10 @@ function runStep() {
 
 let stepTimerFinished = false;
 let activeNotification = null;
+let stepReminderInterval = null;
+
+/* Repeat reminder every 1 minute until the step is completed */
+const STEP_REMINDER_MS = 60 * 1000;
 
 async function ensureNotificationPermission() {
   if (!("Notification" in window)) {
@@ -5672,8 +5705,16 @@ async function ensureNotificationPermission() {
   }
 }
 
+function stopStepReminders() {
+  if (stepReminderInterval) {
+    clearInterval(stepReminderInterval);
+    stepReminderInterval = null;
+  }
+}
+
 function hideStepFinishedPanel() {
   stepTimerFinished = false;
+  stopStepReminders();
   const panel = document.getElementById("stepFinishedPanel");
   if (panel) {
     panel.classList.remove("show");
@@ -5694,29 +5735,38 @@ function showStepFinishedPanel() {
   }
 }
 
-function notifyStepFinished(step) {
-  showStepFinishedPanel();
+function fireStepFinishedNotification(step, isReminder) {
+  if (!("Notification" in window)) return;
+  if (Notification.permission !== "granted") return;
 
-  if (!("Notification" in window)) {
-    return;
-  }
-  if (Notification.permission !== "granted") {
-    return;
+  const currentName = (step && step.name) ? String(step.name) : "Step";
+  const routineName = (activeRoutine && activeRoutine.name) ? String(activeRoutine.name) : "Routine";
+
+  // שם ה-Step הבא
+  let nextStepName = null;
+  if (activeSteps && activeStepIndex + 1 < activeSteps.length) {
+    const next = activeSteps[activeStepIndex + 1];
+    if (next && next.name) nextStepName = String(next.name);
   }
 
-  const name = (step && step.name) ? String(step.name) : "Step";
-  const routineName =
-    (activeRoutine && activeRoutine.name)
-      ? String(activeRoutine.name)
-      : "Routine";
+  const title = isReminder
+    ? "תזכורת — " + routineName
+    : "הזמן נגמר — " + routineName;
+
+  let body = "סיימת: " + currentName;
+  if (nextStepName) {
+    body += "\n→ הבא: " + nextStepName;
+  } else {
+    body += "\n→ זה היה ה-Step האחרון";
+  }
 
   try {
     if (activeNotification) {
       try { activeNotification.close(); } catch (e) {}
     }
 
-    const n = new Notification("הזמן נגמר — " + routineName, {
-      body: name + "\nלחץ כדי להמשיך ל-Step הבא, או בחר באפליקציה.",
+    const n = new Notification(title, {
+      body: body,
       tag: "routine-step-finished",
       renotify: true,
       requireInteraction: true,
@@ -5725,19 +5775,43 @@ function notifyStepFinished(step) {
 
     activeNotification = n;
 
+    // רק פותח את האפליקציה – לא מעביר אוטומטית את ה-Step
     n.onclick = () => {
       try {
         window.focus();
       } catch (e) {}
       n.close();
       activeNotification = null;
-      if (stepTimerFinished) {
-        completeActiveStep();
-      }
     };
+
   } catch (e) {
     console.warn("Notification failed:", e);
   }
+}
+
+function notifyStepFinished(step) {
+  showStepFinishedPanel();
+  fireStepFinishedNotification(step, false);
+  playStepBeep();
+
+  /* Keep reminding every 1 minute until this step is completed
+     (or user exits / skips). Continues for each step until the
+     whole routine is finished. */
+  stopStepReminders();
+  stepReminderInterval = setInterval(() => {
+    if (!stepTimerFinished) {
+      stopStepReminders();
+      return;
+    }
+    /* Still waiting on this step */
+    const current =
+      activeSteps && activeSteps[activeStepIndex]
+        ? activeSteps[activeStepIndex]
+        : step;
+    fireStepFinishedNotification(current, true);
+    playStepBeep();
+    showStepFinishedPanel();
+  }, STEP_REMINDER_MS);
 }
 
 /* Beep when step timer reaches zero – louder double beep */
