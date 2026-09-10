@@ -797,6 +797,60 @@
       margin-top: 10px;
     }
 
+    /* Shown when step timer reaches 00:00 */
+    .step-finished-panel {
+      display: none;
+      margin-top: 14px;
+      padding: 16px 14px;
+      border-radius: 16px;
+      background: #fff5f5;
+      border: 2px solid #ffb8b8;
+      text-align: center;
+    }
+
+    .step-finished-panel.show {
+      display: block;
+    }
+
+    .step-finished-panel .finished-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #c40000;
+      margin-bottom: 6px;
+    }
+
+    .step-finished-panel .finished-hint {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 14px;
+    }
+
+    .step-finished-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .step-finished-actions .continue-btn {
+      flex: 1;
+      padding: 14px;
+      background: #111;
+      color: white;
+      border: 0;
+      border-radius: 14px;
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .step-finished-actions .wait-btn {
+      flex: 1;
+      padding: 14px;
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 14px;
+      font-size: 15px;
+      color: #555;
+    }
+
     .skip-btn {
       flex: 1;
       padding: 14px;
@@ -1623,6 +1677,19 @@
 
         <div class="tap-hint">
           לחיצה בתוך הריבוע = בוצע
+        </div>
+
+        <div id="stepFinishedPanel" class="step-finished-panel">
+          <div class="finished-title">הזמן ל-Step הזה נגמר</div>
+          <div class="finished-hint">רוצה לסמן כבוצע ולהמשיך ל-Step הבא?</div>
+          <div class="step-finished-actions">
+            <button type="button" id="continueNextStepBtn" class="continue-btn">
+              ✓ המשך ל-Step הבא
+            </button>
+            <button type="button" id="waitOnStepBtn" class="wait-btn">
+              עוד רגע
+            </button>
+          </div>
         </div>
 
         <div class="active-action-buttons">
@@ -5410,6 +5477,9 @@ async function deleteRoutine(id) {
 
 function startRoutine(routine) {
 
+  /* Ask once for lock-screen / system notifications when a step ends */
+  ensureNotificationPermission();
+
   activeRoutine =
     routine;
 
@@ -5465,6 +5535,8 @@ function startRoutine(routine) {
 /* RUN STEP */
 
 function runStep() {
+
+  hideStepFinishedPanel();
 
   if (timerInterval) {
 
@@ -5552,8 +5624,7 @@ function runStep() {
           remainingSeconds <= 0
         ) {
 
-          /* Stop at 00:00 – do NOT auto-advance.
-             User must tap the card to mark as done. */
+          /* Stop at 00:00 – notify user, let them choose to continue */
           remainingSeconds = 0;
           updateTimerDisplay();
 
@@ -5564,6 +5635,10 @@ function runStep() {
 
           playStepBeep();
 
+          const finishedStep =
+            activeSteps[activeStepIndex];
+          notifyStepFinished(finishedStep);
+
         }
 
       },
@@ -5572,6 +5647,98 @@ function runStep() {
 
 }
 
+
+/* ---- Notifications when step timer ends ---- */
+
+let stepTimerFinished = false;
+let activeNotification = null;
+
+async function ensureNotificationPermission() {
+  if (!("Notification" in window)) {
+    return false;
+  }
+  if (Notification.permission === "granted") {
+    return true;
+  }
+  if (Notification.permission === "denied") {
+    return false;
+  }
+  try {
+    const result = await Notification.requestPermission();
+    return result === "granted";
+  } catch (e) {
+    console.warn("Notification permission error:", e);
+    return false;
+  }
+}
+
+function hideStepFinishedPanel() {
+  stepTimerFinished = false;
+  const panel = document.getElementById("stepFinishedPanel");
+  if (panel) {
+    panel.classList.remove("show");
+  }
+  if (activeNotification) {
+    try {
+      activeNotification.close();
+    } catch (e) {}
+    activeNotification = null;
+  }
+}
+
+function showStepFinishedPanel() {
+  stepTimerFinished = true;
+  const panel = document.getElementById("stepFinishedPanel");
+  if (panel) {
+    panel.classList.add("show");
+  }
+}
+
+function notifyStepFinished(step) {
+  showStepFinishedPanel();
+
+  if (!("Notification" in window)) {
+    return;
+  }
+  if (Notification.permission !== "granted") {
+    return;
+  }
+
+  const name = (step && step.name) ? String(step.name) : "Step";
+  const routineName =
+    (activeRoutine && activeRoutine.name)
+      ? String(activeRoutine.name)
+      : "Routine";
+
+  try {
+    if (activeNotification) {
+      try { activeNotification.close(); } catch (e) {}
+    }
+
+    const n = new Notification("הזמן נגמר — " + routineName, {
+      body: name + "\nלחץ כדי להמשיך ל-Step הבא, או בחר באפליקציה.",
+      tag: "routine-step-finished",
+      renotify: true,
+      requireInteraction: true,
+      silent: false
+    });
+
+    activeNotification = n;
+
+    n.onclick = () => {
+      try {
+        window.focus();
+      } catch (e) {}
+      n.close();
+      activeNotification = null;
+      if (stepTimerFinished) {
+        completeActiveStep();
+      }
+    };
+  } catch (e) {
+    console.warn("Notification failed:", e);
+  }
+}
 
 /* Beep when step timer reaches zero – louder double beep */
 function playStepBeep() {
@@ -5920,6 +6087,8 @@ function skipActiveStep() {
 
 function exitActiveScreen() {
 
+  hideStepFinishedPanel();
+
   if (timerInterval) {
 
     clearInterval(
@@ -5953,6 +6122,29 @@ document
     "click",
     exitActiveScreen
   );
+
+document
+  .getElementById("continueNextStepBtn")
+  ?.addEventListener("click", () => {
+    if (stepTimerFinished) {
+      completeActiveStep();
+    }
+  });
+
+document
+  .getElementById("waitOnStepBtn")
+  ?.addEventListener("click", () => {
+    /* Stay on this step – only hide the panel, keep timer at 00:00 */
+    const panel = document.getElementById("stepFinishedPanel");
+    if (panel) {
+      panel.classList.remove("show");
+    }
+    if (activeNotification) {
+      try { activeNotification.close(); } catch (e) {}
+      activeNotification = null;
+    }
+    /* stepTimerFinished stays true so a later tap / notification can still complete */
+  });
 
 </script>
 
