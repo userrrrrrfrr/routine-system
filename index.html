@@ -2208,22 +2208,25 @@ function updateActiveEta() {
     return;
   }
 
+  /* זמן מתוכנן שנשאר (אם ה-step על 0/איחור – רק שאר ה-steps) */
   const plannedRemaining = getEstimatedRemainingSeconds();
-  const currentOver = getCurrentStepOvertimeSeconds();
-  /* ETA remaining = planned remaining of unfinished work.
-     If current is overtime, remaining is just future steps;
-     wall-clock finish is now + remaining + 0 for current. */
-  const etaRemaining = plannedRemaining;
 
-  valueEl.textContent = formatDurationSeconds(etaRemaining);
+  /* שעת סיום משוערת = עכשיו + הזמן המתוכנן שנשאר */
+  const finishMs = Date.now() + plannedRemaining * 1000;
+  const finishDate = new Date(finishMs);
+  const hh = String(finishDate.getHours()).padStart(2, "0");
+  const mm = String(finishDate.getMinutes()).padStart(2, "0");
+  valueEl.textContent = hh + ":" + mm;
 
   const parts = [];
+
   if (routineStartTime) {
     const elapsed = (Date.now() - routineStartTime.getTime()) / 1000;
     parts.push("עברו " + formatDurationHebrew(elapsed));
   }
 
   const pastOver = getAccumulatedOverrunSeconds();
+  const currentOver = getCurrentStepOvertimeSeconds();
   if (pastOver > 0 || currentOver > 0) {
     const totalOver = pastOver + currentOver;
     parts.push(
@@ -2238,6 +2241,12 @@ function updateActiveEta() {
     0
   );
   parts.push("מתוכנן כולל: " + formatDurationHebrew(totalPlannedAll));
+
+  if (plannedRemaining > 0) {
+    parts.push("נותרו ~" + formatDurationHebrew(plannedRemaining));
+  } else if (currentOver > 0) {
+    parts.push("באיחור על ה-Step הנוכחי");
+  }
 
   detailEl.innerHTML = parts.join(" · ");
 }
