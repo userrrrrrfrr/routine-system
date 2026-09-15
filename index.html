@@ -1832,61 +1832,12 @@
 
   <div class="active-box">
 
-    <h1 id="activeRoutineName"></h1>
+        <h1 id="activeRoutineName"></h1>
 
-    function updateActiveEta() {
-  const valueEl = document.getElementById("activeEtaValue");
-  const detailEl = document.getElementById("activeEtaDetail");
-  if (!valueEl || !detailEl) return;
-
-  if (!activeRoutine || !activeSteps || activeSteps.length === 0) {
-    valueEl.textContent = "--:--";
-    detailEl.textContent = "";
-    return;
-  }
-
-  /* זמן מתוכנן שנשאר (אם ה-step הנוכחי באיחור – 0 עליו + שאר ה-steps) */
-  const plannedRemaining = getEstimatedRemainingSeconds();
-
-  /* שעת סיום משוערת = עכשיו + הזמן המתוכנן שנשאר */
-  const finishMs = Date.now() + plannedRemaining * 1000;
-  const finishDate = new Date(finishMs);
-  const hh = String(finishDate.getHours()).padStart(2, "0");
-  const mm = String(finishDate.getMinutes()).padStart(2, "0");
-  valueEl.textContent = hh + ":" + mm;
-
-  const parts = [];
-
-  if (routineStartTime) {
-    const elapsed = (Date.now() - routineStartTime.getTime()) / 1000;
-    parts.push("עברו " + formatDurationHebrew(elapsed));
-  }
-
-  const pastOver = getAccumulatedOverrunSeconds();
-  const currentOver = getCurrentStepOvertimeSeconds();
-  if (pastOver > 0 || currentOver > 0) {
-    const totalOver = pastOver + currentOver;
-    parts.push(
-      '<span class="eta-overtime">איחור מצטבר: ' +
-      formatDurationHebrew(totalOver) +
-      "</span>"
-    );
-  }
-
-  const totalPlannedAll = activeSteps.reduce(
-    (s, st) => s + (Number(st.duration) || 60),
-    0
-  );
-  parts.push("מתוכנן כולל: " + formatDurationHebrew(totalPlannedAll));
-
-  if (plannedRemaining > 0) {
-    parts.push("נותרו ~" + formatDurationHebrew(plannedRemaining));
-  } else if (currentOver > 0) {
-    parts.push("באיחור על ה-Step הנוכחי");
-  }
-
-  detailEl.innerHTML = parts.join(" · ");
-}
+    <div id="activeEta" class="active-eta">
+      סיום משוער: <strong id="activeEtaValue">--:--</strong>
+      <div id="activeEtaDetail" style="font-size:12px;color:#888;margin-top:4px;"></div>
+    </div>
 
     <div id="activeStepCard"
          class="active-step-card">
