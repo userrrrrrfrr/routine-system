@@ -2197,58 +2197,186 @@ function getAccumulatedOverrunSeconds() {
   return sum;
 }
 
-function updateActiveEta() {
-  const valueEl = document.getElementById("activeEtaValue");
-  const detailEl = document.getElementById("activeEtaDetail");
-  if (!valueEl || !detailEl) return;
+function renderRoutines() {
 
-  if (!activeRoutine || !activeSteps || activeSteps.length === 0) {
-    valueEl.textContent = "--:--";
-    detailEl.textContent = "";
+  const list =
+    document.getElementById(
+      "routineList"
+    );
+
+  list.innerHTML = "";
+
+  if (routines.length === 0) {
+
+    list.innerHTML = `
+      <div class="empty">
+        עדיין אין לך שגרות.
+        <br>
+        לחץ על "+ Routine חדש".
+      </div>
+    `;
+
+    renderCalendar();
+
     return;
   }
 
-  /* זמן מתוכנן שנשאר (אם ה-step על 0/איחור – רק שאר ה-steps) */
-  const plannedRemaining = getEstimatedRemainingSeconds();
+  routines.forEach(routine => {
 
-  /* שעת סיום משוערת = עכשיו + הזמן המתוכנן שנשאר */
-  const finishMs = Date.now() + plannedRemaining * 1000;
-  const finishDate = new Date(finishMs);
-  const hh = String(finishDate.getHours()).padStart(2, "0");
-  const mm = String(finishDate.getMinutes()).padStart(2, "0");
-  valueEl.textContent = hh + ":" + mm;
+    const card =
+      document.createElement("div");
 
-  const parts = [];
+    const waiting =
+      isRoutineWaitingActivation(routine);
 
-  if (routineStartTime) {
-    const elapsed = (Date.now() - routineStartTime.getTime()) / 1000;
-    parts.push("עברו " + formatDurationHebrew(elapsed));
-  }
+    card.className =
+      waiting
+        ? "routine-card waiting-activation"
+        : "routine-card";
 
-  const pastOver = getAccumulatedOverrunSeconds();
-  const currentOver = getCurrentStepOvertimeSeconds();
-  if (pastOver > 0 || currentOver > 0) {
-    const totalOver = pastOver + currentOver;
-    parts.push(
-      '<span class="eta-overtime">איחור מצטבר: ' +
-      formatDurationHebrew(totalOver) +
-      "</span>"
+    const todaySteps =
+      getTodaySteps(routine);
+
+    /* משך מתוכנן להיום לפי ה-Steps הפעילים */
+    const plannedSecondsToday = todaySteps.reduce(
+      (sum, s) => sum + (Number(s.duration) || 60),
+      0
     );
-  }
+    const plannedDurationText =
+      todaySteps.length > 0
+        ? formatDurationHebrew(plannedSecondsToday)
+        : "—";
 
-  const totalPlannedAll = activeSteps.reduce(
-    (s, st) => s + (Number(st.duration) || 60),
-    0
-  );
-  parts.push("מתוכנן כולל: " + formatDurationHebrew(totalPlannedAll));
+    const imageHtml =
+      routine.image
+        ? `
+          <img
+            class="routine-image"
+            src="${routine.image}"
+            alt=""
+          >
+        `
+        : "";
 
-  if (plannedRemaining > 0) {
-    parts.push("נותרו ~" + formatDurationHebrew(plannedRemaining));
-  } else if (currentOver > 0) {
-    parts.push("באיחור על ה-Step הנוכחי");
-  }
+    const waitingLabelHtml =
+      waiting
+        ? `<span class="waiting-activation-label">ממתין להפעלה</span>`
+        : "";
 
-  detailEl.innerHTML = parts.join(" · ");
+    const todayInfoHtml =
+      waiting
+        ? `
+          <div class="today-info">
+            הפעלה חד-פעמית — לחץ "התחל" מתי שתרצה
+            <br>
+            <strong>${todaySteps.length}</strong> Steps בכל הפעלה
+            · משך משוער: <strong>${plannedDurationText}</strong>
+          </div>
+        `
+        : `
+          <div class="today-info">
+            להיום:
+            <strong>
+              ${todaySteps.length}
+            </strong>
+            Steps
+            · משך משוער: <strong>${plannedDurationText}</strong>
+          </div>
+        `;
+
+    card.innerHTML = `
+
+      ${imageHtml}
+
+      ${waitingLabelHtml}
+
+      <h3>
+        ${escapeHtml(routine.name)}
+      </h3>
+
+      <div class="routine-info">
+        ${routine.steps?.length || 0} Steps
+      </div>
+
+      ${todayInfoHtml}
+
+      <div class="actions">
+
+        <button class="primary start">
+          התחל
+        </button>
+
+        <button class="secondary reset">
+          איפוס
+        </button>
+
+        <button class="secondary edit">
+          ערוך
+        </button>
+
+        <button class="secondary share">
+          🔗 העתק קישור
+        </button>
+
+        <button class="history-btn history">
+          ⏱ דיווח זמנים
+        </button>
+
+        <button class="danger delete">
+          מחק
+        </button>
+
+      </div>
+    `;
+
+    card
+      .querySelector(".start")
+      .addEventListener(
+        "click",
+        () => startRoutine(routine)
+      );
+
+    card
+      .querySelector(".reset")
+      .addEventListener(
+        "click",
+        () => resetRoutine(routine)
+      );
+
+    card
+      .querySelector(".edit")
+      .addEventListener(
+        "click",
+        () => openEditor(routine)
+      );
+
+    card
+      .querySelector(".share")
+      .addEventListener(
+        "click",
+        () => copyRoutineLink(routine.id)
+      );
+
+    card
+      .querySelector(".history")
+      .addEventListener(
+        "click",
+        () => showRoutineHistory(routine)
+      );
+
+    card
+      .querySelector(".delete")
+      .addEventListener(
+        "click",
+        () => deleteRoutine(routine.id)
+      );
+
+    list.appendChild(card);
+
+  });
+
+  renderCalendar();
+
 }
 
 function startEtaUpdates() {
