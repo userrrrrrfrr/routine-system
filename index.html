@@ -1,3 +1,72 @@
+Skip to main content
+Ctrl+J
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+routine-fixed.html
+
+
+
+Files
 <!DOCTYPE html>
 
 <html lang="he" dir="rtl">
@@ -2197,6 +2266,58 @@ function getAccumulatedOverrunSeconds() {
   return sum;
 }
 
+function updateActiveEta() {
+  const valueEl = document.getElementById("activeEtaValue");
+  const detailEl = document.getElementById("activeEtaDetail");
+  if (!valueEl || !detailEl) return;
+
+  if (!activeRoutine || !activeSteps || activeSteps.length === 0) {
+    valueEl.textContent = "--:--";
+    detailEl.textContent = "";
+    return;
+  }
+
+  const plannedRemaining = getEstimatedRemainingSeconds();
+
+  const finishMs = Date.now() + plannedRemaining * 1000;
+  const finishDate = new Date(finishMs);
+  const hh = String(finishDate.getHours()).padStart(2, "0");
+  const mm = String(finishDate.getMinutes()).padStart(2, "0");
+  valueEl.textContent = hh + ":" + mm;
+
+  const parts = [];
+
+  if (routineStartTime) {
+    const elapsed = (Date.now() - routineStartTime.getTime()) / 1000;
+    parts.push("עברו " + formatDurationHebrew(elapsed));
+  }
+
+  const pastOver = getAccumulatedOverrunSeconds();
+  const currentOver = getCurrentStepOvertimeSeconds();
+  if (pastOver > 0 || currentOver > 0) {
+    const totalOver = pastOver + currentOver;
+    parts.push(
+      '<span class="eta-overtime">איחור מצטבר: ' +
+      formatDurationHebrew(totalOver) +
+      "</span>"
+    );
+  }
+
+  const totalPlannedAll = activeSteps.reduce(
+    (s, st) => s + (Number(st.duration) || 60),
+    0
+  );
+  parts.push("מתוכנן כולל: " + formatDurationHebrew(totalPlannedAll));
+
+  if (plannedRemaining > 0) {
+    parts.push("נותרו ~" + formatDurationHebrew(plannedRemaining));
+  } else if (currentOver > 0) {
+    parts.push("באיחור על ה-Step הנוכחי");
+  }
+
+  detailEl.innerHTML = parts.join(" · ");
+}
+
 function renderRoutines() {
 
   const list =
@@ -3046,179 +3167,6 @@ async function loadRoutines() {
     `;
 
   }
-
-}
-
-
-/* RENDER ROUTINES */
-
-function renderRoutines() {
-
-  const list =
-    document.getElementById(
-      "routineList"
-    );
-
-  list.innerHTML = "";
-
-  if (routines.length === 0) {
-
-    list.innerHTML = `
-      <div class="empty">
-        עדיין אין לך שגרות.
-        <br>
-        לחץ על "+ Routine חדש".
-      </div>
-    `;
-
-    renderCalendar();
-
-    return;
-  }
-
-  routines.forEach(routine => {
-
-    const card =
-      document.createElement("div");
-
-    const waiting =
-      isRoutineWaitingActivation(routine);
-
-    card.className =
-      waiting
-        ? "routine-card waiting-activation"
-        : "routine-card";
-
-    const todaySteps =
-      getTodaySteps(routine);
-
-    const imageHtml =
-      routine.image
-        ? `
-          <img
-            class="routine-image"
-            src="${routine.image}"
-            alt=""
-          >
-        `
-        : "";
-
-    const waitingLabelHtml =
-      waiting
-        ? `<span class="waiting-activation-label">ממתין להפעלה</span>`
-        : "";
-
-    const todayInfoHtml =
-      waiting
-        ? `
-          <div class="today-info">
-            הפעלה חד-פעמית — לחץ "התחל" מתי שתרצה
-            <br>
-            <strong>${todaySteps.length}</strong> Steps בכל הפעלה
-          </div>
-        `
-        : `
-          <div class="today-info">
-            להיום:
-            <strong>
-              ${todaySteps.length}
-            </strong>
-            Steps
-          </div>
-        `;
-
-    card.innerHTML = `
-
-      ${imageHtml}
-
-      ${waitingLabelHtml}
-
-      <h3>
-        ${escapeHtml(routine.name)}
-      </h3>
-
-      <div class="routine-info">
-        ${routine.steps?.length || 0} Steps
-      </div>
-
-      ${todayInfoHtml}
-
-      <div class="actions">
-
-        <button class="primary start">
-          התחל
-        </button>
-
-        <button class="secondary reset">
-          איפוס
-        </button>
-
-        <button class="secondary edit">
-          ערוך
-        </button>
-
-        <button class="secondary share">
-          🔗 העתק קישור
-        </button>
-
-        <button class="history-btn history">
-          ⏱ דיווח זמנים
-        </button>
-
-        <button class="danger delete">
-          מחק
-        </button>
-
-      </div>
-    `;
-
-    card
-      .querySelector(".start")
-      .addEventListener(
-        "click",
-        () => startRoutine(routine)
-      );
-
-    card
-      .querySelector(".reset")
-      .addEventListener(
-        "click",
-        () => resetRoutine(routine)
-      );
-
-    card
-      .querySelector(".edit")
-      .addEventListener(
-        "click",
-        () => openEditor(routine)
-      );
-
-    card
-      .querySelector(".share")
-      .addEventListener(
-        "click",
-        () => copyRoutineLink(routine.id)
-      );
-
-    card
-      .querySelector(".history")
-      .addEventListener(
-        "click",
-        () => showRoutineHistory(routine)
-      );
-
-    card
-      .querySelector(".delete")
-      .addEventListener(
-        "click",
-        () => deleteRoutine(routine.id)
-      );
-
-    list.appendChild(card);
-
-  });
-
-  renderCalendar();
 
 }
 
@@ -7098,3 +7046,4 @@ document
 
 </body>
 </html>
+Hebrew Routine Timer with Right Turn - Grok
