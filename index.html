@@ -1,5 +1,5 @@
+```
 <!DOCTYPE html>
-
 <html lang="he" dir="rtl">
 <head>
   <meta charset="UTF-8">
@@ -809,163 +809,6 @@
       margin-top: 10px;
     }
 
-    /* ETA during active routine */
-    .active-eta {
-      margin: 8px 0 4px;
-      padding: 10px 14px;
-      background: #f0f0f3;
-      border-radius: 12px;
-      font-size: 14px;
-      color: #444;
-      text-align: center;
-      line-height: 1.45;
-    }
-
-    .active-eta strong {
-      color: #111;
-      font-variant-numeric: tabular-nums;
-    }
-
-    .active-eta .eta-overtime {
-      color: #c40000;
-      font-weight: 600;
-    }
-
-    /* Back to previous step */
-    .prev-step-btn {
-      flex: 1;
-      padding: 14px;
-      background: white;
-      border: 1px solid #ddd;
-      border-radius: 14px;
-      font-size: 16px;
-      color: #333;
-    }
-
-    .prev-step-btn:disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
-    }
-
-    /* End-of-run report modal */
-    .run-report-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,.4);
-      z-index: 3000;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
-    }
-
-    .run-report-overlay.show {
-      display: flex;
-    }
-
-    .run-report-modal {
-      background: white;
-      border-radius: 22px;
-      width: 100%;
-      max-width: 520px;
-      max-height: 88vh;
-      overflow: auto;
-      box-shadow: 0 20px 50px rgba(0,0,0,.2);
-      padding: 22px 20px 26px;
-      text-align: right;
-    }
-
-    .run-report-modal h2 {
-      margin: 0 0 6px;
-      font-size: 20px;
-    }
-
-    .run-report-summary {
-      background: #f5f5f7;
-      border-radius: 12px;
-      padding: 12px 14px;
-      margin: 12px 0 16px;
-      font-size: 14px;
-      line-height: 1.55;
-    }
-
-    .run-report-summary .over {
-      color: #c40000;
-      font-weight: 700;
-    }
-
-    .run-report-summary .under {
-      color: #0a7;
-      font-weight: 600;
-    }
-
-    .run-report-step {
-      border: 1px solid #eee;
-      border-radius: 12px;
-      padding: 10px 12px;
-      margin-bottom: 8px;
-      font-size: 14px;
-      background: #fafafa;
-    }
-
-    .run-report-step .over {
-      color: #c40000;
-      font-weight: 600;
-    }
-
-    .run-report-step .under {
-      color: #0a7;
-    }
-
-    .run-report-close {
-      width: 100%;
-      margin-top: 16px;
-      padding: 14px;
-      background: #111;
-      color: white;
-      border: 0;
-      border-radius: 14px;
-      font-size: 16px;
-      font-weight: 600;
-    }
-
-    /* History button on routine card */
-    .history-btn {
-      background: white;
-      border: 1px solid #ddd;
-      padding: 10px 15px;
-      border-radius: 10px;
-      color: #333;
-    }
-
-    .history-empty {
-      text-align: center;
-      color: #888;
-      padding: 20px 10px;
-      font-size: 15px;
-    }
-
-    .history-run-block {
-      border: 1px solid #eee;
-      border-radius: 14px;
-      padding: 12px;
-      margin-bottom: 12px;
-      background: #fafafa;
-    }
-
-    .history-run-header {
-      font-weight: 700;
-      font-size: 15px;
-      margin-bottom: 8px;
-    }
-
-    .history-run-meta {
-      font-size: 13px;
-      color: #666;
-      margin-bottom: 8px;
-      line-height: 1.45;
-    }
-
     /* Shown when step timer reaches 00:00 */
     .step-finished-panel {
       display: none;
@@ -1544,7 +1387,6 @@
       margin-top: 2px;
     }
   </style>
-
 </head>
 
 <body>
@@ -1573,7 +1415,6 @@
   </button>
 
   <!-- Countdown until next logical day (04:00) -->
-
   <div id="dayTimer" class="day-timer" title="יום חדש מתחיל ב־04:00">
     <span class="day-timer-label">היום הבא בעוד</span>
     <span id="dayTimerValue" class="day-timer-value">--:--:--</span>
@@ -1587,376 +1428,321 @@
       ×
     </button>
 
-<div class="user-panel-title">
-  מחובר כ:
-</div>
+    <div class="user-panel-title">
+      מחובר כ:
+    </div>
 
-<div id="panelUserInfo"></div>
+    <div id="panelUserInfo"></div>
 
-<button id="enableNotificationsBtn" class="panel-enable-notifications">
-  הפעל התראות
-</button>
+    <button id="enableNotificationsBtn" class="panel-enable-notifications">
+      הפעל התראות
+    </button>
 
-<div class="user-panel-title" style="margin-top:22px;">
-  ActivitySmith (Live Activity)
-</div>
-<input
-  id="activitySmithApiKey"
-  type="password"
-  placeholder="ask_6Ig7WdoNo2Bd8F9v5X4nSkYm8b7fx3PrIs8nQ_TAv44"
-  style="width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;margin-top:6px;font-size:13px;"
-  autocomplete="off"
->
-<button id="saveActivitySmithKeyBtn" class="panel-enable-notifications" style="margin-top:8px;">
-  שמור API Key
-</button>
-<div id="activitySmithKeyStatus" style="font-size:12px;color:#888;margin-top:6px;line-height:1.4;"></div>
-
-<button id="logoutBtn" class="panel-logout">
-  התנתק
-</button>
-
+    <button id="logoutBtn" class="panel-logout">
+      התנתק
+    </button>
   </div>
 
   <div class="container">
 
-<!-- MAIN TITLE -->
+    <!-- MAIN TITLE -->
 
-<div class="main-title">
-  <h1>Routine</h1>
-</div>
-
-<!-- MAIN TABS -->
-
-<div id="mainTabs" class="main-tabs">
-  <button type="button" id="tabRoutines" class="main-tab active">
-    השגרות
-  </button>
-  <button type="button" id="tabCalendar" class="main-tab">
-    לוח שנה
-  </button>
-</div>
-
-<!-- HOME / LIST SCREEN (wrapper) -->
-
-<div id="routineListScreen">
-
-  <!-- ROUTINES PANEL -->
-
-  <div id="routinesPanel">
-
-    <div class="card">
-
-      <div class="top-row">
-        <h2>השגרות שלי</h2>
-
-        <button id="newRoutineBtn" class="primary">
-          + Routine חדש
-        </button>
-      </div>
-
-      <div id="routineList"></div>
-
+    <div class="main-title">
+      <h1>Routine</h1>
     </div>
 
-  </div>
+    <!-- MAIN TABS -->
 
-  <!-- CALENDAR PANEL -->
+    <div id="mainTabs" class="main-tabs">
+      <button type="button" id="tabRoutines" class="main-tab active">
+        השגרות
+      </button>
+      <button type="button" id="tabCalendar" class="main-tab">
+        לוח שנה
+      </button>
+    </div>
 
-  <div id="calendarScreen">
+    <!-- HOME / LIST SCREEN (wrapper) -->
 
-    <div class="card calendar-card">
+    <div id="routineListScreen">
 
-      <div class="calendar-header">
-        <h2>לוח שנה</h2>
+      <!-- ROUTINES PANEL -->
 
-        <div class="calendar-nav">
-          <button id="calPrevBtn" type="button" title="חודש קודם">‹</button>
-          <span id="calendarMonthLabel" class="calendar-month-label"></span>
-          <button id="calNextBtn" type="button" title="חודש הבא">›</button>
+      <div id="routinesPanel">
+
+        <div class="card">
+
+          <div class="top-row">
+            <h2>השגרות שלי</h2>
+
+            <button id="newRoutineBtn" class="primary">
+              + Routine חדש
+            </button>
+          </div>
+
+          <div id="routineList"></div>
+
         </div>
+
       </div>
 
-      <div id="calendarWeekdays" class="calendar-weekdays"></div>
-      <div id="calendarGrid" class="calendar-grid"></div>
+      <!-- CALENDAR PANEL -->
 
-    </div>
+      <div id="calendarScreen">
 
-  </div>
+        <div class="card calendar-card">
 
-</div>
+          <div class="calendar-header">
+            <h2>לוח שנה</h2>
 
-<!-- EDITOR -->
+            <div class="calendar-nav">
+              <button id="calPrevBtn" type="button" title="חודש קודם">‹</button>
+              <span id="calendarMonthLabel" class="calendar-month-label"></span>
+              <button id="calNextBtn" type="button" title="חודש הבא">›</button>
+            </div>
+          </div>
 
-<div id="editorScreen" class="hidden">
+          <div id="calendarWeekdays" class="calendar-weekdays"></div>
+          <div id="calendarGrid" class="calendar-grid"></div>
 
-  <div class="card">
-
-    <h2 id="editorTitle">
-      Routine חדש
-    </h2>
-
-    <div class="form-group">
-
-      <label>
-        שם ה-Routine
-      </label>
-
-      <input
-        id="routineName"
-        type="text"
-        placeholder="לדוגמה: בוקר"
-      >
-
-    </div>
-
-    <div class="form-group image-upload">
-
-      <label>
-        תמונה ל-Routine
-      </label>
-
-      <input
-        id="routineImageInput"
-        class="image-input"
-        type="file"
-        accept="image/*"
-      >
-
-      <div id="routineImagePreview"
-           class="image-preview"></div>
-
-    </div>
-
-    <div class="form-group">
-
-      <label>
-        באילו ימים ה-Routine פעיל?
-      </label>
-
-      <div class="days">
-
-        <label class="day">
-          <input type="checkbox" value="0">
-          <span>א׳</span>
-        </label>
-
-        <label class="day">
-          <input type="checkbox" value="1">
-          <span>ב׳</span>
-        </label>
-
-        <label class="day">
-          <input type="checkbox" value="2">
-          <span>ג׳</span>
-        </label>
-
-        <label class="day">
-          <input type="checkbox" value="3">
-          <span>ד׳</span>
-        </label>
-
-        <label class="day">
-          <input type="checkbox" value="4">
-          <span>ה׳</span>
-        </label>
-
-        <label class="day">
-          <input type="checkbox" value="5">
-          <span>ו׳</span>
-        </label>
-
-        <label class="day">
-          <input type="checkbox" value="6">
-          <span>ש׳</span>
-        </label>
+        </div>
 
       </div>
 
     </div>
 
-    <div class="form-group">
-      <label>
-        שעת התחלה של ה-Routine
-      </label>
-      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
-        <input
-          id="routineStartTime"
-          type="time"
-          style="width:auto;min-width:120px;"
-          value=""
+    <!-- EDITOR -->
+
+    <div id="editorScreen" class="hidden">
+
+      <div class="card">
+
+        <h2 id="editorTitle">
+          Routine חדש
+        </h2>
+
+        <div class="form-group">
+
+          <label>
+            שם ה-Routine
+          </label>
+
+          <input
+            id="routineName"
+            type="text"
+            placeholder="לדוגמה: בוקר"
+          >
+
+        </div>
+
+        <div class="form-group image-upload">
+
+          <label>
+            תמונה ל-Routine
+          </label>
+
+          <input
+            id="routineImageInput"
+            class="image-input"
+            type="file"
+            accept="image/*"
+          >
+
+          <div id="routineImagePreview"
+               class="image-preview"></div>
+
+        </div>
+
+        <div class="form-group">
+
+          <label>
+            באילו ימים ה-Routine פעיל?
+          </label>
+
+          <div class="days">
+
+            <label class="day">
+              <input type="checkbox" value="0">
+              <span>א׳</span>
+            </label>
+
+            <label class="day">
+              <input type="checkbox" value="1">
+              <span>ב׳</span>
+            </label>
+
+            <label class="day">
+              <input type="checkbox" value="2">
+              <span>ג׳</span>
+            </label>
+
+            <label class="day">
+              <input type="checkbox" value="3">
+              <span>ד׳</span>
+            </label>
+
+            <label class="day">
+              <input type="checkbox" value="4">
+              <span>ה׳</span>
+            </label>
+
+            <label class="day">
+              <input type="checkbox" value="5">
+              <span>ו׳</span>
+            </label>
+
+            <label class="day">
+              <input type="checkbox" value="6">
+              <span>ש׳</span>
+            </label>
+
+          </div>
+
+        </div>
+
+        <div class="form-group">
+          <label for="routineStartTime">שעת התחלה של ה-Routine</label>
+          <input
+            id="routineStartTime"
+            type="time"
+            value=""
+          >
+          <div style="margin-top:6px;color:#888;font-size:12px;line-height:1.5;">
+            ההתראה תישלח בשעה הזו רק בימים שסומנו למעלה.
+          </div>
+        </div>
+
+        <h2>Steps</h2>
+
+        <div id="stepsContainer"></div>
+
+        <div class="step-actions-bar">
+
+          <button id="addStepBtn" class="secondary">
+            + צור Step חדש
+          </button>
+
+          <select id="reuseStepSelect">
+            <option value="">
+              -- בחר Step קיים מתוך הספרייה --
+            </option>
+          </select>
+
+          <button id="reuseStepBtn" class="secondary">
+            שבץ Step נבחר
+          </button>
+
+        </div>
+
+        <br><br>
+
+        <button id="saveRoutineBtn" class="primary">
+          שמור
+        </button>
+
+        <button id="cancelEditorBtn" class="secondary">
+          ביטול
+        </button>
+
+      </div>
+
+    </div>
+
+    <!-- DIRECT ROUTINE -->
+
+    <div id="directRoutineScreen">
+
+      <div class="direct-routine-box">
+
+        <img
+          id="directRoutineImage"
+          class="direct-routine-image hidden"
+          alt=""
         >
-        <select id="routineTimezone" style="width:auto;min-width:180px;">
-          <option value="Asia/Jerusalem">ישראל (Asia/Jerusalem)</option>
-          <option value="Europe/London">לונדון (Europe/London)</option>
-          <option value="America/New_York">ניו יורק (America/New_York)</option>
-          <option value="America/Los_Angeles">לוס אנג'לס (America/Los_Angeles)</option>
-          <option value="Europe/Paris">פריז (Europe/Paris)</option>
-          <option value="Asia/Dubai">דובאי (Asia/Dubai)</option>
-          <option value="UTC">UTC</option>
-        </select>
+
+        <h1 id="directRoutineName"></h1>
+
+        <div id="directRoutineSteps"></div>
+
+        <br>
+
+        <button id="directStartBtn" class="primary">
+          התחל Routine
+        </button>
+
+        <button id="directBackBtn" class="secondary">
+          חזרה לשגרות
+        </button>
+
       </div>
-      <div style="font-size:12px;color:#888;margin-top:6px;line-height:1.4;">
-        השעה שבה ה-Routine אמור להתחיל (בימים שנבחרו למעלה). אם האתר פתוח – תקבל התראה ותוכל להתחיל. להתראות כשהאתר סגור נדרש חיבור ל-Pushcut / שירות חיצוני.
-      </div>
-    </div>
-
-    <h2>Steps</h2>
-
-    <div id="stepsContainer"></div>
-
-    <div class="step-actions-bar">
-
-      <button id="addStepBtn" class="secondary">
-        + צור Step חדש
-      </button>
-
-      <select id="reuseStepSelect">
-        <option value="">
-          -- בחר Step קיים מתוך הספרייה --
-        </option>
-      </select>
-
-      <button id="reuseStepBtn" class="secondary">
-        שבץ Step נבחר
-      </button>
 
     </div>
 
-    <br><br>
+    <!-- ACTIVE ROUTINE -->
 
-    <button id="saveRoutineBtn" class="primary">
-      שמור
-    </button>
+    <div id="activeScreen">
 
-    <button id="cancelEditorBtn" class="secondary">
-      ביטול
-    </button>
-
-  </div>
-
-</div>
-
-<!-- DIRECT ROUTINE -->
-
-<div id="directRoutineScreen">
-
-  <div class="direct-routine-box">
-
-    <img
-      id="directRoutineImage"
-      class="direct-routine-image hidden"
-      alt=""
-    >
-
-    <h1 id="directRoutineName"></h1>
-
-    <div id="directRoutineSteps"></div>
-
-    <br>
-
-    <button id="directStartBtn" class="primary">
-      התחל Routine
-    </button>
-
-    <button id="directBackBtn" class="secondary">
-      חזרה לשגרות
-    </button>
-
-  </div>
-
-</div>
-
-<!-- ACTIVE ROUTINE -->
-
-<div id="activeScreen">
-
-  <div class="active-box">
+      <div class="active-box">
 
         <h1 id="activeRoutineName"></h1>
 
-    <div id="activeEta" class="active-eta">
-      סיום משוער: <strong id="activeEtaValue">--:--</strong>
-      <div id="activeEtaDetail" style="font-size:12px;color:#888;margin-top:4px;"></div>
-    </div>
+        <div id="activeStepCard"
+             class="active-step-card">
 
-    <div id="activeStepCard"
-         class="active-step-card">
+          <img
+            id="activeStepImage"
+            class="active-step-image hidden"
+            alt=""
+          >
 
-      <img
-        id="activeStepImage"
-        class="active-step-image hidden"
-        alt=""
-      >
+          <div id="activeStepName"></div>
 
-      <div id="activeStepName"></div>
+          <div id="timer">
+            00:00
+          </div>
 
-      <div id="timer">
-        00:00
+        </div>
+
+        <div class="tap-hint">
+          לחיצה בתוך הריבוע = בוצע
+        </div>
+
+        <div id="stepFinishedPanel" class="step-finished-panel">
+          <div class="finished-title">הזמן ל-Step הזה נגמר</div>
+          <div class="finished-hint">רוצה לסמן כבוצע ולהמשיך ל-Step הבא?</div>
+          <div class="step-finished-actions">
+            <button type="button" id="continueNextStepBtn" class="continue-btn">
+              ✓ המשך ל-Step הבא
+            </button>
+            <button type="button" id="waitOnStepBtn" class="wait-btn">
+              עוד רגע
+            </button>
+          </div>
+        </div>
+
+        <div class="active-action-buttons">
+
+          <button id="skipStepBtn"
+                  class="skip-btn">
+            ⏭ דילוג
+          </button>
+
+          <button id="exitActiveBtn"
+                  class="back-btn">
+            יציאה
+          </button>
+
+        </div>
+
       </div>
 
     </div>
-
-    <div class="tap-hint">
-      לחיצה בתוך הריבוע = בוצע
-    </div>
-
-    <div id="stepFinishedPanel" class="step-finished-panel">
-      <div class="finished-title">הזמן ל-Step הזה נגמר</div>
-      <div class="finished-hint">רוצה לסמן כבוצע ולהמשיך ל-Step הבא?</div>
-      <div class="step-finished-actions">
-        <button type="button" id="continueNextStepBtn" class="continue-btn">
-          ✓ המשך ל-Step הבא
-        </button>
-        <button type="button" id="waitOnStepBtn" class="wait-btn">
-          עוד רגע
-        </button>
-      </div>
-    </div>
-
-    <div class="active-action-buttons">
-
-      <button id="skipStepBtn"
-              class="skip-btn">
-        ⏭ דילוג
-      </button>
-
-      <button id="prevStepBtn"
-              class="prev-step-btn"
-              type="button">
-        ◀ חזרה
-      </button>
-
-      <button id="exitActiveBtn"
-              class="back-btn">
-        יציאה
-      </button>
-
-    </div>
-
-  </div>
-
-</div>
-
-<!-- RUN REPORT / HISTORY MODAL -->
-
-<div id="runReportOverlay" class="run-report-overlay">
-  <div class="run-report-modal" role="dialog" aria-modal="true">
-    <div class="day-detail-header">
-      <h2 id="runReportTitle">דיווח זמנים</h2>
-      <button type="button" id="runReportCloseX" class="day-detail-close" title="סגור">×</button>
-    </div>
-    <div id="runReportContent"></div>
-    <button type="button" id="runReportCloseBtn" class="run-report-close">סגור</button>
-  </div>
-</div>
 
   </div>
 
 </div>
 
 <!-- DAY DETAIL MODAL -->
-
 <div id="dayDetailOverlay" class="day-detail-overlay">
   <div class="day-detail-modal" role="dialog" aria-modal="true">
     <div class="day-detail-header">
@@ -2044,14 +1830,6 @@ let stepImages = new Map();
 
 /* Day boundary: logical day starts at 04:00 (not midnight) */
 const DAY_START_HOUR = 4;
-
-/* Active-run timing & undo */
-let routineStartTime = null;          /* Date when current run started */
-let currentStepStartTime = null;      /* Date when current step timer started */
-let runStepRecords = [];              /* completed/skipped records for this run */
-let completionSnapshots = [];         /* undo stack: state before each complete */
-let etaUpdateInterval = null;
-let routineRunsHistory = [];          /* loaded from Firestore, last ~2 weeks */
 
 
 /* HELPERS */
@@ -2145,423 +1923,6 @@ function startDayTimer() {
   }
   updateDayTimer();
   dayTimerInterval = setInterval(updateDayTimer, 1000);
-}
-
-/* ---- Duration / ETA helpers ---- */
-
-function formatDurationSeconds(totalSec) {
-  if (!Number.isFinite(totalSec) || totalSec < 0) totalSec = 0;
-  totalSec = Math.round(totalSec);
-  const h = Math.floor(totalSec / 3600);
-  const m = Math.floor((totalSec % 3600) / 60);
-  const s = totalSec % 60;
-  if (h > 0) {
-    return (
-      String(h).padStart(2, "0") +
-      ":" +
-      String(m).padStart(2, "0") +
-      ":" +
-      String(s).padStart(2, "0")
-    );
-  }
-  return (
-    String(m).padStart(2, "0") +
-    ":" +
-    String(s).padStart(2, "0")
-  );
-}
-
-function formatDurationHebrew(totalSec) {
-  if (!Number.isFinite(totalSec)) totalSec = 0;
-  const abs = Math.abs(Math.round(totalSec));
-  const h = Math.floor(abs / 3600);
-  const m = Math.floor((abs % 3600) / 60);
-  const s = abs % 60;
-  const parts = [];
-  if (h > 0) parts.push(h + " שע׳");
-  if (m > 0) parts.push(m + " דק׳");
-  if (s > 0 || parts.length === 0) parts.push(s + " שנ׳");
-  return parts.join(" ");
-}
-
-/**
- * Planned remaining = current remainingSeconds (or 0 if overtime)
- * + sum of future steps' planned durations.
- * Actual ETA accounts for overtime on current step.
- */
-function getEstimatedRemainingSeconds() {
-  if (!activeSteps || activeSteps.length === 0) return 0;
-
-  let remaining = 0;
-
-  /* Current step */
-  if (activeStepIndex < activeSteps.length) {
-    if (remainingSeconds > 0) {
-      remaining += remainingSeconds;
-    }
-    /* if remainingSeconds <= 0 we are overtime – no remaining planned on current */
-  }
-
-  /* Future steps (not yet started) */
-  for (let i = activeStepIndex + 1; i < activeSteps.length; i++) {
-    const d = Number(activeSteps[i].duration) || 60;
-    remaining += d;
-  }
-
-  return remaining;
-}
-
-/**
- * Overtime so far on the current step (seconds past planned).
- */
-function getCurrentStepOvertimeSeconds() {
-  if (!currentStepStartTime || activeStepIndex >= activeSteps.length) {
-    return 0;
-  }
-  const step = activeSteps[activeStepIndex];
-  const planned = Number(step.duration) || 60;
-  const elapsed = (Date.now() - currentStepStartTime.getTime()) / 1000;
-  return Math.max(0, elapsed - planned);
-}
-
-/**
- * Total delay accumulated from already completed steps in this run
- * (actual - planned, only positive overruns).
- */
-function getAccumulatedOverrunSeconds() {
-  let sum = 0;
-  runStepRecords.forEach(r => {
-    if (r.skipped) return;
-    const over = (r.actualSeconds || 0) - (r.plannedSeconds || 0);
-    if (over > 0) sum += over;
-  });
-  return sum;
-}
-
-function updateActiveEta() {
-  const valueEl = document.getElementById("activeEtaValue");
-  const detailEl = document.getElementById("activeEtaDetail");
-  if (!valueEl || !detailEl) return;
-
-  if (!activeRoutine || !activeSteps || activeSteps.length === 0) {
-    valueEl.textContent = "--:--";
-    detailEl.textContent = "";
-    return;
-  }
-
-  const plannedRemaining = getEstimatedRemainingSeconds();
-
-  const finishMs = Date.now() + plannedRemaining * 1000;
-  const finishDate = new Date(finishMs);
-  const hh = String(finishDate.getHours()).padStart(2, "0");
-  const mm = String(finishDate.getMinutes()).padStart(2, "0");
-  valueEl.textContent = hh + ":" + mm;
-
-  const parts = [];
-
-  if (routineStartTime) {
-    const elapsed = (Date.now() - routineStartTime.getTime()) / 1000;
-    parts.push("עברו " + formatDurationHebrew(elapsed));
-  }
-
-  const pastOver = getAccumulatedOverrunSeconds();
-  const currentOver = getCurrentStepOvertimeSeconds();
-  if (pastOver > 0 || currentOver > 0) {
-    const totalOver = pastOver + currentOver;
-    parts.push(
-      '<span class="eta-overtime">איחור מצטבר: ' +
-      formatDurationHebrew(totalOver) +
-      "</span>"
-    );
-  }
-
-  const totalPlannedAll = activeSteps.reduce(
-    (s, st) => s + (Number(st.duration) || 60),
-    0
-  );
-  parts.push("מתוכנן כולל: " + formatDurationHebrew(totalPlannedAll));
-
-  if (plannedRemaining > 0) {
-    parts.push("נותרו ~" + formatDurationHebrew(plannedRemaining));
-  } else if (currentOver > 0) {
-    parts.push("באיחור על ה-Step הנוכחי");
-  }
-
-  detailEl.innerHTML = parts.join(" · ");
-}
-
-function renderRoutines() {
-
-  const list =
-    document.getElementById(
-      "routineList"
-    );
-
-  list.innerHTML = "";
-
-  if (routines.length === 0) {
-
-    list.innerHTML = `
-      <div class="empty">
-        עדיין אין לך שגרות.
-        <br>
-        לחץ על "+ Routine חדש".
-      </div>
-    `;
-
-    renderCalendar();
-
-    return;
-  }
-
-  routines.forEach(routine => {
-
-    const card =
-      document.createElement("div");
-
-    const waiting =
-      isRoutineWaitingActivation(routine);
-
-    card.className =
-      waiting
-        ? "routine-card waiting-activation"
-        : "routine-card";
-
-    const todaySteps =
-      getTodaySteps(routine);
-
-    /* משך מתוכנן להיום לפי ה-Steps הפעילים */
-    const plannedSecondsToday = todaySteps.reduce(
-      (sum, s) => sum + (Number(s.duration) || 60),
-      0
-    );
-    const plannedDurationText =
-      todaySteps.length > 0
-        ? formatDurationHebrew(plannedSecondsToday)
-        : "—";
-
-    const imageHtml =
-      routine.image
-        ? `
-          <img
-            class="routine-image"
-            src="${routine.image}"
-            alt=""
-          >
-        `
-        : "";
-
-    const waitingLabelHtml =
-      waiting
-        ? `<span class="waiting-activation-label">ממתין להפעלה</span>`
-        : "";
-
-    const todayInfoHtml =
-      waiting
-        ? `
-          <div class="today-info">
-            הפעלה חד-פעמית — לחץ "התחל" מתי שתרצה
-            <br>
-            <strong>${todaySteps.length}</strong> Steps בכל הפעלה
-            · משך משוער: <strong>${plannedDurationText}</strong>
-          </div>
-        `
-        : `
-          <div class="today-info">
-            להיום:
-            <strong>
-              ${todaySteps.length}
-            </strong>
-            Steps
-            · משך משוער: <strong>${plannedDurationText}</strong>
-          </div>
-        `;
-
-    card.innerHTML = `
-
-      ${imageHtml}
-
-      ${waitingLabelHtml}
-
-      <h3>
-        ${escapeHtml(routine.name)}
-      </h3>
-
-      <div class="routine-info">
-        ${routine.steps?.length || 0} Steps
-        ${routine.startTime
-          ? `<br>⏰ שעת התחלה: <strong>${escapeHtml(routine.startTime)}</strong>
-             (${escapeHtml(routine.timezone || "Asia/Jerusalem")})`
-          : ""}
-      </div>
-
-      ${todayInfoHtml}
-
-      <div class="actions">
-
-        <button class="primary start">
-          התחל
-        </button>
-
-        <button class="secondary reset">
-          איפוס
-        </button>
-
-        <button class="secondary edit">
-          ערוך
-        </button>
-
-        <button class="secondary share">
-          🔗 העתק קישור
-        </button>
-
-        <button class="history-btn history">
-          ⏱ דיווח זמנים
-        </button>
-
-        <button class="danger delete">
-          מחק
-        </button>
-
-      </div>
-    `;
-
-    card
-      .querySelector(".start")
-      .addEventListener(
-        "click",
-        () => startRoutine(routine)
-      );
-
-    card
-      .querySelector(".reset")
-      .addEventListener(
-        "click",
-        () => resetRoutine(routine)
-      );
-
-    card
-      .querySelector(".edit")
-      .addEventListener(
-        "click",
-        () => openEditor(routine)
-      );
-
-    card
-      .querySelector(".share")
-      .addEventListener(
-        "click",
-        () => copyRoutineLink(routine.id)
-      );
-
-    card
-      .querySelector(".history")
-      .addEventListener(
-        "click",
-        () => showRoutineHistory(routine)
-      );
-
-    card
-      .querySelector(".delete")
-      .addEventListener(
-        "click",
-        () => deleteRoutine(routine.id)
-      );
-
-    list.appendChild(card);
-
-  });
-
-  renderCalendar();
-
-}
-
-function startEtaUpdates() {
-  stopEtaUpdates();
-  updateActiveEta();
-  etaUpdateInterval = setInterval(updateActiveEta, 1000);
-}
-
-function stopEtaUpdates() {
-  if (etaUpdateInterval) {
-    clearInterval(etaUpdateInterval);
-    etaUpdateInterval = null;
-  }
-}
-
-/* ---- Run history (2 weeks) ---- */
-
-const HISTORY_DAYS = 14;
-
-async function loadRoutineRunsHistory() {
-  if (!currentUser) {
-    routineRunsHistory = [];
-    return;
-  }
-  try {
-    const docRef = doc(
-      db,
-      "users",
-      currentUser.uid,
-      "meta",
-      "routineRuns"
-    );
-    const snap = await getDoc(docRef);
-    if (snap.exists()) {
-      const data = snap.data();
-      const runs = Array.isArray(data.runs) ? data.runs : [];
-      const cutoff = Date.now() - HISTORY_DAYS * 24 * 60 * 60 * 1000;
-      routineRunsHistory = runs.filter(r => {
-        const t = r.finishedAt ? new Date(r.finishedAt).getTime() : 0;
-        return t >= cutoff;
-      });
-    } else {
-      routineRunsHistory = [];
-    }
-  } catch (e) {
-    console.error("Error loading routine runs history:", e);
-    routineRunsHistory = [];
-  }
-}
-
-async function saveRoutineRun(runRecord) {
-  if (!currentUser || !runRecord) return;
-
-  routineRunsHistory.push(runRecord);
-
-  const cutoff = Date.now() - HISTORY_DAYS * 24 * 60 * 60 * 1000;
-  routineRunsHistory = routineRunsHistory.filter(r => {
-    const t = r.finishedAt ? new Date(r.finishedAt).getTime() : 0;
-    return t >= cutoff;
-  });
-
-  /* Cap size to avoid huge docs */
-  if (routineRunsHistory.length > 80) {
-    routineRunsHistory = routineRunsHistory.slice(-80);
-  }
-
-  try {
-    const docRef = doc(
-      db,
-      "users",
-      currentUser.uid,
-      "meta",
-      "routineRuns"
-    );
-    await setDoc(docRef, { runs: routineRunsHistory });
-  } catch (e) {
-    console.error("Error saving routine run:", e);
-  }
-}
-
-function getHistoryForRoutine(routineId) {
-  return routineRunsHistory
-    .filter(r => r.routineId === routineId)
-    .sort((a, b) => {
-      const ta = new Date(a.finishedAt || 0).getTime();
-      const tb = new Date(b.finishedAt || 0).getTime();
-      return tb - ta;
-    });
 }
 
 function escapeHtml(text) {
@@ -2768,12 +2129,6 @@ document
     }
   });
 
-document
-  .getElementById("saveActivitySmithKeyBtn")
-  ?.addEventListener("click", () => {
-    saveActivitySmithKey();
-  });
-
 
 /* ACTIVE STEP CLICK */
 
@@ -2833,13 +2188,16 @@ onAuthStateChanged(
       await loadDisabledSteps();
       await loadActivationRules();
       await loadActivatedSteps();
-      await loadRoutineRunsHistory();
-      await loadActivitySmithKey();
       await loadRoutines();
 
       startDayTimer();
 
     } else {
+
+      if (routineScheduleInterval) {
+        clearInterval(routineScheduleInterval);
+        routineScheduleInterval = null;
+      }
 
       currentUser = null;
 
@@ -3150,6 +2508,169 @@ async function loadRoutines() {
     `;
 
   }
+
+}
+
+
+/* RENDER ROUTINES */
+
+function renderRoutines() {
+
+  const list =
+    document.getElementById(
+      "routineList"
+    );
+
+  list.innerHTML = "";
+
+  if (routines.length === 0) {
+
+    list.innerHTML = `
+      <div class="empty">
+        עדיין אין לך שגרות.
+        <br>
+        לחץ על "+ Routine חדש".
+      </div>
+    `;
+
+    renderCalendar();
+
+    return;
+  }
+
+  routines.forEach(routine => {
+
+    const card =
+      document.createElement("div");
+
+    const waiting =
+      isRoutineWaitingActivation(routine);
+
+    card.className =
+      waiting
+        ? "routine-card waiting-activation"
+        : "routine-card";
+
+    const todaySteps =
+      getTodaySteps(routine);
+
+    const imageHtml =
+      routine.image
+        ? `
+          <img
+            class="routine-image"
+            src="${routine.image}"
+            alt=""
+          >
+        `
+        : "";
+
+    const waitingLabelHtml =
+      waiting
+        ? `<span class="waiting-activation-label">ממתין להפעלה</span>`
+        : "";
+
+    const todayInfoHtml =
+      waiting
+        ? `
+          <div class="today-info">
+            הפעלה חד-פעמית — לחץ "התחל" מתי שתרצה
+            <br>
+            <strong>${todaySteps.length}</strong> Steps בכל הפעלה
+          </div>
+        `
+        : `
+          <div class="today-info">
+            להיום:
+            <strong>
+              ${todaySteps.length}
+            </strong>
+            Steps
+          </div>
+        `;
+
+    card.innerHTML = `
+
+      ${imageHtml}
+
+      ${waitingLabelHtml}
+
+      <h3>
+        ${escapeHtml(routine.name)}
+      </h3>
+
+      <div class="routine-info">
+        ${routine.steps?.length || 0} Steps
+        ${routine.startTime ? ` · ⏰ ${escapeHtml(routine.startTime)}` : ""}
+      </div>
+
+      ${todayInfoHtml}
+
+      <div class="actions">
+
+        <button class="primary start">
+          התחל
+        </button>
+
+        <button class="secondary reset">
+          איפוס
+        </button>
+
+        <button class="secondary edit">
+          ערוך
+        </button>
+
+        <button class="secondary share">
+          🔗 העתק קישור
+        </button>
+
+        <button class="danger delete">
+          מחק
+        </button>
+
+      </div>
+    `;
+
+    card
+      .querySelector(".start")
+      .addEventListener(
+        "click",
+        () => startRoutine(routine)
+      );
+
+    card
+      .querySelector(".reset")
+      .addEventListener(
+        "click",
+        () => resetRoutine(routine)
+      );
+
+    card
+      .querySelector(".edit")
+      .addEventListener(
+        "click",
+        () => openEditor(routine)
+      );
+
+    card
+      .querySelector(".share")
+      .addEventListener(
+        "click",
+        () => copyRoutineLink(routine.id)
+      );
+
+    card
+      .querySelector(".delete")
+      .addEventListener(
+        "click",
+        () => deleteRoutine(routine.id)
+      );
+
+    list.appendChild(card);
+
+  });
+
+  renderCalendar();
 
 }
 
@@ -4317,6 +3838,11 @@ function openEditor(routine) {
       ? routine.name
       : "";
 
+  const routineStartTimeInput = document.getElementById("routineStartTime");
+  if (routineStartTimeInput) {
+    routineStartTimeInput.value = routine?.startTime || "";
+  }
+
   currentRoutineImage =
     routine?.image || "";
 
@@ -4325,25 +3851,6 @@ function openEditor(routine) {
   ).value = "";
 
   showRoutineImagePreview();
-
-  /* Start time + timezone */
-  const startTimeInput = document.getElementById("routineStartTime");
-  const timezoneSelect = document.getElementById("routineTimezone");
-  if (startTimeInput) {
-    startTimeInput.value = routine?.startTime || "";
-  }
-  if (timezoneSelect) {
-    const tz = routine?.timezone || "Asia/Jerusalem";
-    timezoneSelect.value = tz;
-    /* If saved timezone is not in the list, add it temporarily */
-    if (![...timezoneSelect.options].some(o => o.value === tz)) {
-      const opt = document.createElement("option");
-      opt.value = tz;
-      opt.textContent = tz;
-      timezoneSelect.appendChild(opt);
-      timezoneSelect.value = tz;
-    }
-  }
 
   document
     .querySelectorAll(
@@ -5519,6 +5026,8 @@ document
           el => Number(el.value)
         );
 
+      const startTime =
+        document.getElementById("routineStartTime")?.value || "";
 
       const stepElements =
         document.querySelectorAll(
@@ -5793,11 +5302,6 @@ document
       });
 
 
-      const startTimeVal =
-        (document.getElementById("routineStartTime")?.value || "").trim();
-      const timezoneVal =
-        document.getElementById("routineTimezone")?.value || "Asia/Jerusalem";
-
       const routineData = {
 
         name,
@@ -5808,9 +5312,7 @@ document
         days:
           selectedDays,
 
-        startTime: startTimeVal || null,
-
-        timezone: timezoneVal,
+        startTime,
 
         steps
 
@@ -6030,46 +5532,156 @@ async function deleteRoutine(id) {
 }
 
 
+/* =========================
+   ROUTINE SCHEDULE / START NOTIFICATION
+   ========================= */
+const ROUTINE_SCHEDULE_CHECK_MS = 5000;
+const ROUTINE_SCHEDULE_STORAGE_KEY = "routine_schedule_last_run";
+let routineScheduleInterval = null;
+
+function getTodayDayNumber() {
+  return new Date().getDay();
+}
+
+function isRoutineScheduledToday(routine) {
+  return !!(routine && Array.isArray(routine.days) && routine.days.includes(getLogicalDayOfWeek()));
+}
+
+function getRoutineScheduleKey(routine, date = new Date()) {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
+  return `${routine.id}_${y}-${m}-${d}`;
+}
+
+function getScheduleStore() {
+  try {
+    return JSON.parse(localStorage.getItem(ROUTINE_SCHEDULE_STORAGE_KEY) || "{}");
+  } catch (e) {
+    return {};
+  }
+}
+
+function markRoutineScheduled(routine) {
+  const store = getScheduleStore();
+  store[getRoutineScheduleKey(routine)] = true;
+  try {
+    localStorage.setItem(ROUTINE_SCHEDULE_STORAGE_KEY, JSON.stringify(store));
+  } catch (e) {}
+}
+
+function wasRoutineScheduledToday(routine) {
+  return !!getScheduleStore()[getRoutineScheduleKey(routine)];
+}
+
+function fireRoutineStartNotification(routine) {
+  if (!("Notification" in window) || Notification.permission !== "granted") return;
+  try {
+    const n = new Notification("Routine התחיל", {
+      body: `הגיע הזמן ל-${routine.name || "Routine"}`,
+      tag: `routine-start-${routine.id}`,
+      renotify: true,
+      requireInteraction: true
+    });
+    n.onclick = () => {
+      try { window.focus(); } catch (e) {}
+      try { n.close(); } catch (e) {}
+    };
+  } catch (e) {
+    console.warn("Routine start notification failed:", e);
+  }
+}
+
+async function checkRoutineSchedules() {
+  if (!currentUser || !Array.isArray(routines) || routines.length === 0) return;
+
+  const now = new Date();
+  const currentTime = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+
+  for (const routine of routines) {
+    if (!routine.startTime || !isRoutineScheduledToday(routine)) continue;
+    if (routine.startTime !== currentTime) continue;
+    if (wasRoutineScheduledToday(routine)) continue;
+
+    markRoutineScheduled(routine);
+    await ensureNotificationPermission();
+    /* Start the routine automatically when there are active steps.
+       If another routine is already running, the start notification still fires. */
+    if (!activeRoutine) {
+      const todaySteps = getTodaySteps(routine);
+      if (todaySteps.length > 0) {
+        await startRoutine(routine, { scheduled: true });
+      }
+    }
+  }
+}
+
+function startRoutineScheduleWatcher() {
+  if (routineScheduleInterval) clearInterval(routineScheduleInterval);
+  routineScheduleInterval = setInterval(checkRoutineSchedules, ROUTINE_SCHEDULE_CHECK_MS);
+  checkRoutineSchedules();
+}
+
 /* START ROUTINE */
 
-async function startRoutine(routine) {
+async function startRoutine(routine, options = {}) {
 
   /* Ask once for lock-screen / system notifications when a step ends */
   await ensureNotificationPermission();
 
-  activeRoutine = routine;
-
-  activeSteps = getTodaySteps(routine);
-
-  if (activeSteps.length === 0) {
-    alert("אין Steps פעילים לשגרה זו להיום.");
-    return;
+  if (options.scheduled) {
+    fireRoutineStartNotification(routine);
   }
 
+  activeRoutine =
+    routine;
+
+  activeSteps =
+    getTodaySteps(routine);
+
+
+  if (
+    activeSteps.length === 0
+  ) {
+
+    alert(
+      "אין Steps פעילים לשגרה זו להיום."
+    );
+
+    return;
+
+  }
+
+
   activeStepIndex = 0;
-  routineStartTime = new Date();
-  currentStepStartTime = null;
-  runStepRecords = [];
-  completionSnapshots = [];
+
 
   hideHomeUI();
 
-  document.getElementById("directRoutineScreen").style.display = "none";
-  document.getElementById("editorScreen").classList.add("hidden");
-  document.getElementById("activeScreen").style.display = "block";
-  document.getElementById("activeRoutineName").textContent = routine.name;
+  document.getElementById(
+    "directRoutineScreen"
+  ).style.display =
+    "none";
 
-  updatePrevStepButton();
-  startEtaUpdates();
+  document.getElementById(
+    "editorScreen"
+  ).classList.add(
+    "hidden"
+  );
 
-  /* Live Activity stream key for this run */
-  currentLiveActivityKey =
-    "routine-" +
-    (routine.id || "active") +
-    "-" +
-    Date.now();
+  document.getElementById(
+    "activeScreen"
+  ).style.display =
+    "block";
+
+  document.getElementById(
+    "activeRoutineName"
+  ).textContent =
+    routine.name;
+
 
   runStep();
+
 }
 
 
@@ -6080,270 +5692,112 @@ function runStep() {
   hideStepFinishedPanel();
 
   if (timerInterval) {
-    clearInterval(timerInterval);
-    timerInterval = null;
+
+    clearInterval(
+      timerInterval
+    );
+
   }
 
-  if (activeStepIndex >= activeSteps.length) {
-    finishRoutineWithReport();
+
+  if (
+    activeStepIndex >=
+    activeSteps.length
+  ) {
+
+    alert(
+      "כל הכבוד! סיימת את השגרה!"
+    );
+
+    exitActiveScreen();
+
     return;
+
   }
 
-  const currentStep = activeSteps[activeStepIndex];
 
-  document.getElementById("activeStepName").innerHTML =
-    formatTextWithLinks(currentStep.name);
+  const currentStep =
+    activeSteps[
+      activeStepIndex
+    ];
 
-  const activeImg = document.getElementById("activeStepImage");
+
+  document.getElementById(
+    "activeStepName"
+  ).innerHTML =
+    formatTextWithLinks(
+      currentStep.name
+    );
+
+
+  const activeImg =
+    document.getElementById(
+      "activeStepImage"
+    );
+
 
   if (currentStep.image) {
-    activeImg.src = currentStep.image;
-    activeImg.classList.remove("hidden");
+
+    activeImg.src =
+      currentStep.image;
+
+    activeImg.classList.remove(
+      "hidden"
+    );
+
   } else {
+
     activeImg.src = "";
-    activeImg.classList.add("hidden");
+
+    activeImg.classList.add(
+      "hidden"
+    );
+
   }
 
-  remainingSeconds = currentStep.duration || 60;
-  currentStepStartTime = new Date();
+
+  remainingSeconds =
+    currentStep.duration ||
+    60;
+
 
   updateTimerDisplay();
-  updatePrevStepButton();
-  updateActiveEta();
-
-  /* Update Live Activity for this step */
-  activitySmithUpdateLiveActivity({ overdue: false });
-
-  timerInterval = setInterval(() => {
-    remainingSeconds--;
-    updateTimerDisplay();
-    updateActiveEta();
-
-    if (remainingSeconds <= 0) {
-      remainingSeconds = 0;
-      updateTimerDisplay();
-
-      if (timerInterval) {
-        clearInterval(timerInterval);
-        timerInterval = null;
-      }
-
-      const finishedStep = activeSteps[activeStepIndex];
-      notifyStepFinished(finishedStep);
-    }
-  }, 1000);
-}
-
-function updatePrevStepButton() {
-  const btn = document.getElementById("prevStepBtn");
-  if (!btn) return;
-  btn.disabled = activeStepIndex <= 0;
-}
 
 
-/* ---- ActivitySmith Live Activities ---- */
+  timerInterval =
+    setInterval(
+      () => {
 
-let activitySmithApiKey = "";
-let currentLiveActivityKey = null; /* stream_key for active routine */
+        remainingSeconds--;
 
-const ACTIVITYSMITH_BASE = "https://activitysmith.com/api";
+        updateTimerDisplay();
 
-async function loadActivitySmithKey() {
-  if (!currentUser) {
-    activitySmithApiKey = "";
-    return;
-  }
-  try {
-    const docRef = doc(
-      db,
-      "users",
-      currentUser.uid,
-      "meta",
-      "activitySmith"
-    );
-    const snap = await getDoc(docRef);
-    if (snap.exists() && snap.data().apiKey) {
-      activitySmithApiKey = String(snap.data().apiKey).trim();
-    } else {
-      activitySmithApiKey = "";
-    }
-  } catch (e) {
-    console.warn("loadActivitySmithKey:", e);
-    activitySmithApiKey = "";
-  }
-  updateActivitySmithKeyUI();
-}
 
-function updateActivitySmithKeyUI() {
-  const input = document.getElementById("activitySmithApiKey");
-  const status = document.getElementById("activitySmithKeyStatus");
-  if (input && activitySmithApiKey) {
-    /* show masked value */
-    input.value = activitySmithApiKey;
-    input.placeholder = "ask_...";
-  }
-  if (status) {
-    status.textContent = activitySmithApiKey
-      ? "✓ מפתח נשמר — Live Activity יופעל בתחילת Routine"
-      : "הדבק API Key מ-activitysmith.com/app/keys";
-    status.style.color = activitySmithApiKey ? "#0a7" : "#888";
-  }
-}
+        if (
+          remainingSeconds <= 0
+        ) {
 
-async function saveActivitySmithKey() {
-  const input = document.getElementById("activitySmithApiKey");
-  if (!input || !currentUser) return;
+          /* Stop at 00:00 – notify user, let them choose to continue */
+          remainingSeconds = 0;
+          updateTimerDisplay();
 
-  const key = (input.value || "").trim();
-  if (key && !key.startsWith("ask_")) {
-    alert("מפתח ActivitySmith בדרך כלל מתחיל ב-ask_");
-    return;
-  }
-
-  activitySmithApiKey = key;
-
-  try {
-    const docRef = doc(
-      db,
-      "users",
-      currentUser.uid,
-      "meta",
-      "activitySmith"
-    );
-    if (key) {
-      await setDoc(docRef, { apiKey: key }, { merge: true });
-    } else {
-      await setDoc(docRef, { apiKey: "" }, { merge: true });
-    }
-    updateActivitySmithKeyUI();
-    alert(key ? "API Key נשמר בהצלחה" : "API Key נמחק");
-  } catch (e) {
-    console.error(e);
-    alert("שגיאה בשמירת המפתח: " + e.message);
-  }
-}
-
-/**
- * Start or update Live Activity for the current routine step.
- * Uses segmented_progress (steps) — ideal for Routines.
- */
-async function activitySmithUpdateLiveActivity(options = {}) {
-  if (!activitySmithApiKey) return;
-
-  if (!activeRoutine || !activeSteps || activeSteps.length === 0) return;
-
-  const streamKey =
-    currentLiveActivityKey ||
-    ("routine-" + (activeRoutine.id || "active"));
-
-  currentLiveActivityKey = streamKey;
-
-  const step = activeSteps[activeStepIndex];
-  const stepName = step ? String(step.name || "Step") : "Step";
-  const total = activeSteps.length;
-  const current = Math.min(activeStepIndex + 1, total);
-  const isOverdue = !!options.overdue || (remainingSeconds <= 0 && stepTimerFinished);
-
-  const content_state = {
-    type: "segmented_progress",
-    title: String(activeRoutine.name || "Routine"),
-    subtitle: isOverdue
-      ? "⏰ באיחור: " + stepName
-      : "Step " + current + "/" + total + " · " + stepName,
-    number_of_steps: total,
-    current_step: current,
-    color: isOverdue ? "red" : "blue"
-  };
-
-  try {
-    const res = await fetch(
-      ACTIVITYSMITH_BASE +
-        "/live-activity/stream/" +
-        encodeURIComponent(streamKey),
-      {
-        method: "PUT",
-        headers: {
-          Authorization: "Bearer " + activitySmithApiKey,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ content_state })
-      }
-    );
-
-    if (!res.ok) {
-      const text = await res.text().catch(() => "");
-      console.warn("ActivitySmith update failed:", res.status, text);
-    }
-  } catch (e) {
-    console.warn("ActivitySmith network error:", e);
-  }
-}
-
-/** End the Live Activity when routine finishes or user exits */
-async function activitySmithEndLiveActivity(finalTitle) {
-  if (!activitySmithApiKey || !currentLiveActivityKey) {
-    currentLiveActivityKey = null;
-    return;
-  }
-
-  const streamKey = currentLiveActivityKey;
-  currentLiveActivityKey = null;
-
-  try {
-    await fetch(
-      ACTIVITYSMITH_BASE +
-        "/live-activity/stream/" +
-        encodeURIComponent(streamKey),
-      {
-        method: "DELETE",
-        headers: {
-          Authorization: "Bearer " + activitySmithApiKey,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          content_state: {
-            type: "segmented_progress",
-            title: finalTitle || "Routine הסתיים",
-            subtitle: "✓ הושלם",
-            number_of_steps: 1,
-            current_step: 1,
-            color: "green",
-            auto_dismiss_minutes: 1
+          if (timerInterval) {
+            clearInterval(timerInterval);
+            timerInterval = null;
           }
-        })
-      }
-    );
-  } catch (e) {
-    console.warn("ActivitySmith end error:", e);
-  }
-}
 
-/** Optional: also send a push when step is overdue (stronger alert) */
-async function activitySmithPushReminder(step) {
-  if (!activitySmithApiKey) return;
+          const finishedStep =
+            activeSteps[activeStepIndex];
+          notifyStepFinished(finishedStep);
 
-  const stepName = step && step.name ? String(step.name) : "Step";
-  const routineName =
-    activeRoutine && activeRoutine.name
-      ? String(activeRoutine.name)
-      : "Routine";
+        }
 
-  try {
-    await fetch(ACTIVITYSMITH_BASE + "/push-notification", {
-      method: "POST",
-      headers: {
-        Authorization: "Bearer " + activitySmithApiKey,
-        "Content-Type": "application/json"
       },
-      body: JSON.stringify({
-        title: "⏰ תזכורת — " + routineName,
-        message: "לא סיימת בזמן: " + stepName + " (תזכורת כל 1.5 דק׳)"
-      })
-    });
-  } catch (e) {
-    console.warn("ActivitySmith push error:", e);
-  }
+      1000
+    );
+
 }
+
 
 /* ---- Notifications when step timer ends ---- */
 
@@ -6418,16 +5872,15 @@ function fireStepFinishedNotification(step, isReminder) {
   }
 
   const title = isReminder
-    ? "⏰ תזכורת — " + routineName
-    : "⏰ הזמן נגמר — " + routineName;
+    ? "תזכורת — " + routineName
+    : "הזמן נגמר — " + routineName;
 
-  let body = "לא סיימת בזמן: " + currentName;
+  let body = isReminder
+    ? "עדיין לא ביצעת את ה-Step: " + currentName
+    : "הזמן שהוגדר ל-Step נגמר: " + currentName;
   if (nextStepName) {
-    body += "\n→ הבא: " + nextStepName;
-  } else {
-    body += "\n→ זה היה ה-Step האחרון";
+    body += "\n→ הבא אחרי ביצוע: " + nextStepName;
   }
-  body += "\n(תזכורת כל 1.5 דקות עד שתסמן בוצע)";
 
   try {
     if (activeNotification) {
@@ -6463,17 +5916,16 @@ function notifyStepFinished(step) {
   fireStepFinishedNotification(step, false);
   playStepBeep();
 
-  /* Live Activity → overdue state + push reminder */
-  activitySmithUpdateLiveActivity({ overdue: true });
-  activitySmithPushReminder(step);
-
-  /* Keep reminding every 1.5 minutes until this step is completed */
+  /* Keep reminding every 1.5 minutes until this step is completed
+     (or user exits / skips). Continues for each step until the
+     whole routine is finished. */
   stopStepReminders();
   stepReminderInterval = setInterval(() => {
     if (!stepTimerFinished) {
       stopStepReminders();
       return;
     }
+    /* Still waiting on this step */
     const current =
       activeSteps && activeSteps[activeStepIndex]
         ? activeSteps[activeStepIndex]
@@ -6481,8 +5933,6 @@ function notifyStepFinished(step) {
     fireStepFinishedNotification(current, true);
     playStepBeep();
     showStepFinishedPanel();
-    activitySmithUpdateLiveActivity({ overdue: true });
-    activitySmithPushReminder(current);
   }, STEP_REMINDER_MS);
 }
 
@@ -6575,629 +6025,257 @@ function updateTimerDisplay() {
 async function completeActiveStep() {
 
   if (timerInterval) {
-    clearInterval(timerInterval);
+
+    clearInterval(
+      timerInterval
+    );
+
     timerInterval = null;
+
   }
 
-  hideStepFinishedPanel();
 
-  const currentStep = activeSteps[activeStepIndex];
+  const currentStep =
+    activeSteps[
+      activeStepIndex
+    ];
+
 
   if (!currentStep) {
     return;
   }
 
-  /* Record actual time for this step */
-  const plannedSeconds = Number(currentStep.duration) || 60;
-  let actualSeconds = plannedSeconds;
-  if (currentStepStartTime) {
-    actualSeconds = Math.max(
-      1,
-      Math.round((Date.now() - currentStepStartTime.getTime()) / 1000)
-    );
-  }
-
-  /* Snapshot for undo (back to this step) */
-  const snapshot = {
-    stepIndex: activeStepIndex,
-    stepId: currentStep.id,
-    disabledBefore: JSON.parse(JSON.stringify(disabledStepsMap)),
-    activatedBefore: JSON.parse(JSON.stringify(activatedStepsMap)),
-    recordIndex: runStepRecords.length
-  };
-  completionSnapshots.push(snapshot);
-
-  runStepRecords.push({
-    stepId: currentStep.id,
-    stepNumber: currentStep.stepNumber,
-    name: currentStep.name || "Step",
-    plannedSeconds,
-    actualSeconds,
-    skipped: false
-  });
 
   /* DISABLE RULES */
 
-  let rulesToApply = [...(currentStep.disableRules || [])];
+  let rulesToApply =
+    [
+      ...(currentStep.disableRules || [])
+    ];
 
-  if (rulesToApply.length === 0 && currentStep.disableTargetId) {
+
+  if (
+    rulesToApply.length === 0 &&
+    currentStep.disableTargetId
+  ) {
+
     const fallbackHours =
       currentStep.disableHours !== undefined
         ? currentStep.disableHours
-        : (currentStep.disableDays || 1) * 24;
+        : (
+            (currentStep.disableDays || 1) *
+            24
+          );
+
 
     rulesToApply = [
       {
-        targetId: currentStep.disableTargetId,
-        hours: fallbackHours
+        targetId:
+          currentStep.disableTargetId,
+        hours:
+          fallbackHours
       }
     ];
+
   }
 
+
+  /*
+    Step רגיל:
+    מתבטל לפי התדירות שלו.
+
+    Step עם frequency = 0:
+    לא מקבל ביטול עצמי.
+    הוא פשוט נשאר תלוי בהפעלה שלו.
+
+    Routine במצב ממתין להפעלה:
+    הפעלה חד-פעמית — בלי ביטול עצמי לפי תדירות,
+    כדי שאפשר יהיה להפעיל מחדש בכל פעם.
+  */
+
   const waitingRoutine =
-    activeRoutine && isRoutineWaitingActivation(activeRoutine);
+    activeRoutine &&
+    isRoutineWaitingActivation(activeRoutine);
 
   const now = new Date();
 
   /* Self-disable by frequency (aligned to 04:00 logical days) */
-  if (Number(currentStep.frequency) > 0 && !waitingRoutine) {
-    const untilDate = getDisableUntilForFrequency(
-      currentStep.frequency,
-      now
-    );
-    disabledStepsMap[currentStep.id] = untilDate.toISOString();
+  if (
+    Number(currentStep.frequency) > 0 &&
+    !waitingRoutine
+  ) {
+    const untilDate =
+      getDisableUntilForFrequency(
+        currentStep.frequency,
+        now
+      );
+
+    disabledStepsMap[currentStep.id] =
+      untilDate.toISOString();
   }
+
 
   /* Explicit disable rules (hours from now) */
   if (rulesToApply.length > 0) {
     rulesToApply.forEach(rule => {
       if (!rule.targetId) return;
+
       const untilDate = new Date(
-        now.getTime() + rule.hours * 60 * 60 * 1000
+        now.getTime() +
+        (rule.hours * 60 * 60 * 1000)
       );
-      disabledStepsMap[rule.targetId] = untilDate.toISOString();
+
+      disabledStepsMap[rule.targetId] =
+        untilDate.toISOString();
     });
   }
 
+
+  /* SAVE DISABLES (self + rules) */
   const hasDisableUpdates =
     (Number(currentStep.frequency) > 0 && !waitingRoutine) ||
     rulesToApply.length > 0;
 
   if (hasDisableUpdates) {
     try {
-      const docRef = doc(
-        db,
-        "users",
-        currentUser.uid,
-        "meta",
-        "disabledSteps"
+      const docRef =
+        doc(
+          db,
+          "users",
+          currentUser.uid,
+          "meta",
+          "disabledSteps"
+        );
+
+      await setDoc(
+        docRef,
+        disabledStepsMap,
+        {
+          merge: true
+        }
       );
-      await setDoc(docRef, disabledStepsMap, { merge: true });
     } catch (e) {
-      console.error("שגיאה בעדכון ביטול צעד ב-DB:", e);
+      console.error(
+        "שגיאה בעדכון ביטול צעד ב-DB:",
+        e
+      );
     }
   }
+
 
   /* ACTIVATION RULES */
 
   const activationRules =
-    activationRulesMap[currentStep.id] ||
+    activationRulesMap[
+      currentStep.id
+    ] ||
     currentStep.activationRules ||
     [];
 
-  if (activationRules.length > 0) {
-    activationRules.forEach(rule => {
-      if (!rule.targetId) return;
 
-      const days = Math.max(1, Number(rule.days) || 1);
-      const newUntil = getActivationUntilForDays(days);
-      const existingUntil = activatedStepsMap[rule.targetId];
+  if (
+    activationRules.length > 0
+  ) {
 
-      if (
-        !existingUntil ||
-        new Date(existingUntil) < new Date(newUntil)
-      ) {
-        activatedStepsMap[rule.targetId] = newUntil;
+    activationRules.forEach(
+      rule => {
+
+        if (!rule.targetId) {
+          return;
+        }
+
+
+        const days =
+          Math.max(
+            1,
+            Number(rule.days) || 1
+          );
+
+
+        const newUntil =
+          getActivationUntilForDays(
+            days
+          );
+
+
+        const existingUntil =
+          activatedStepsMap[
+            rule.targetId
+          ];
+
+
+        if (
+          !existingUntil ||
+          new Date(existingUntil) <
+          new Date(newUntil)
+        ) {
+
+          activatedStepsMap[
+            rule.targetId
+          ] =
+            newUntil;
+
+        }
+
       }
-    });
+    );
+
 
     try {
-      const activationDocRef = doc(
-        db,
-        "users",
-        currentUser.uid,
-        "meta",
-        "activatedSteps"
+
+      const activationDocRef =
+        doc(
+          db,
+          "users",
+          currentUser.uid,
+          "meta",
+          "activatedSteps"
+        );
+
+
+      await setDoc(
+        activationDocRef,
+        activatedStepsMap,
+        {
+          merge: true
+        }
       );
-      await setDoc(activationDocRef, activatedStepsMap, {
-        merge: true
-      });
+
+
     } catch (e) {
-      console.error("שגיאה בעדכון הפעלת Step ב-DB:", e);
+
+      console.error(
+        "שגיאה בעדכון הפעלת Step ב-DB:",
+        e
+      );
+
     }
+
   }
 
+
   /* NEXT STEP */
+
   activeStepIndex++;
+
   runStep();
+
 }
 
 
 /* SKIP */
 
 function skipActiveStep() {
+
   /*
     דילוג לא שומר השלמה
     ולא מפעיל שום כלל.
   */
 
-  if (timerInterval) {
-    clearInterval(timerInterval);
-    timerInterval = null;
-  }
-
-  hideStepFinishedPanel();
-
-  const currentStep = activeSteps[activeStepIndex];
-  if (currentStep) {
-    const plannedSeconds = Number(currentStep.duration) || 60;
-    runStepRecords.push({
-      stepId: currentStep.id,
-      stepNumber: currentStep.stepNumber,
-      name: currentStep.name || "Step",
-      plannedSeconds,
-      actualSeconds: 0,
-      skipped: true
-    });
-    /* Snapshot so back can remove this skip record */
-    completionSnapshots.push({
-      stepIndex: activeStepIndex,
-      stepId: currentStep.id,
-      disabledBefore: JSON.parse(JSON.stringify(disabledStepsMap)),
-      activatedBefore: JSON.parse(JSON.stringify(activatedStepsMap)),
-      recordIndex: runStepRecords.length - 1,
-      wasSkip: true
-    });
-  }
-
   activeStepIndex++;
-  runStep();
-}
-
-
-/* BACK TO PREVIOUS STEP – undo completion of the step we return to */
-
-async function goToPreviousStep() {
-  if (activeStepIndex <= 0) return;
-
-  if (timerInterval) {
-    clearInterval(timerInterval);
-    timerInterval = null;
-  }
-
-  hideStepFinishedPanel();
-
-  /*
-    We are currently on step N (maybe not yet completed).
-    Going back means: return to step N-1 and cancel that it was completed.
-  */
-  const snapshot = completionSnapshots.pop();
-
-  if (snapshot) {
-    /* Restore maps from before that completion */
-    disabledStepsMap = snapshot.disabledBefore || {};
-    activatedStepsMap = snapshot.activatedBefore || {};
-
-    /* Remove the record for that step from this run */
-    if (
-      typeof snapshot.recordIndex === "number" &&
-      snapshot.recordIndex >= 0 &&
-      snapshot.recordIndex < runStepRecords.length
-    ) {
-      runStepRecords.splice(snapshot.recordIndex);
-    } else if (runStepRecords.length > 0) {
-      runStepRecords.pop();
-    }
-
-    /* Persist restored maps */
-    try {
-      const disabledRef = doc(
-        db,
-        "users",
-        currentUser.uid,
-        "meta",
-        "disabledSteps"
-      );
-      await setDoc(disabledRef, disabledStepsMap);
-
-      const activatedRef = doc(
-        db,
-        "users",
-        currentUser.uid,
-        "meta",
-        "activatedSteps"
-      );
-      await setDoc(activatedRef, activatedStepsMap);
-    } catch (e) {
-      console.error("שגיאה בביטול השלמת Step:", e);
-    }
-
-    activeStepIndex = snapshot.stepIndex;
-  } else {
-    /* No snapshot (e.g. first step without prior complete) – just go back */
-    activeStepIndex = Math.max(0, activeStepIndex - 1);
-  }
 
   runStep();
-}
 
-
-/* FINISH ROUTINE – show time report & save history */
-
-async function finishRoutineWithReport() {
-  stopEtaUpdates();
-  hideStepFinishedPanel();
-
-  if (timerInterval) {
-    clearInterval(timerInterval);
-    timerInterval = null;
-  }
-
-  /* Close Live Activity */
-  await activitySmithEndLiveActivity(
-    (activeRoutine && activeRoutine.name
-      ? activeRoutine.name
-      : "Routine") + " — ✓ הושלם"
-  );
-
-  const finishedAt = new Date();
-  const startedAt = routineStartTime || finishedAt;
-
-  const stepsReport = runStepRecords.map(r => ({
-    stepId: r.stepId,
-    stepNumber: r.stepNumber,
-    name: r.name,
-    plannedSeconds: r.plannedSeconds,
-    actualSeconds: r.actualSeconds,
-    skipped: !!r.skipped,
-    overrunSeconds: r.skipped
-      ? 0
-      : Math.max(0, (r.actualSeconds || 0) - (r.plannedSeconds || 0)),
-    underrunSeconds: r.skipped
-      ? 0
-      : Math.max(0, (r.plannedSeconds || 0) - (r.actualSeconds || 0))
-  }));
-
-  const totalPlanned = stepsReport
-    .filter(s => !s.skipped)
-    .reduce((s, r) => s + (r.plannedSeconds || 0), 0);
-
-  const totalActual = stepsReport
-    .filter(s => !s.skipped)
-    .reduce((s, r) => s + (r.actualSeconds || 0), 0);
-
-  const totalOverrun = Math.max(0, totalActual - totalPlanned);
-  const wallClockSeconds = Math.round(
-    (finishedAt.getTime() - startedAt.getTime()) / 1000
-  );
-
-  const runRecord = {
-    routineId: activeRoutine ? activeRoutine.id : "",
-    routineName: activeRoutine ? activeRoutine.name : "",
-    startedAt: startedAt.toISOString(),
-    finishedAt: finishedAt.toISOString(),
-    steps: stepsReport,
-    totalPlanned,
-    totalActual,
-    totalOverrun,
-    wallClockSeconds
-  };
-
-  await saveRoutineRun(runRecord);
-
-  showRunReportModal(runRecord, true);
-}
-
-
-function showRunReportModal(runRecord, isJustFinished) {
-  const overlay = document.getElementById("runReportOverlay");
-  const titleEl = document.getElementById("runReportTitle");
-  const contentEl = document.getElementById("runReportContent");
-  if (!overlay || !titleEl || !contentEl) return;
-
-  titleEl.textContent = isJustFinished
-    ? "סיימת! דיווח זמנים"
-    : "דיווח זמנים";
-
-  const diff = (runRecord.totalActual || 0) - (runRecord.totalPlanned || 0);
-  let summaryClass = "";
-  let summaryDiffText = "";
-  if (diff > 0) {
-    summaryClass = "over";
-    summaryDiffText = "איחור כולל: " + formatDurationHebrew(diff);
-  } else if (diff < 0) {
-    summaryClass = "under";
-    summaryDiffText = "חסכת: " + formatDurationHebrew(-diff);
-  } else {
-    summaryDiffText = "בדיוק לפי התכנון";
-  }
-
-  const started = runRecord.startedAt
-    ? new Date(runRecord.startedAt)
-    : null;
-  const finished = runRecord.finishedAt
-    ? new Date(runRecord.finishedAt)
-    : null;
-
-  let dateLine = "";
-  if (finished) {
-    dateLine =
-      finished.getDate() +
-      " " +
-      HEBREW_MONTHS[finished.getMonth()] +
-      " " +
-      finished.getFullYear() +
-      " · " +
-      String(finished.getHours()).padStart(2, "0") +
-      ":" +
-      String(finished.getMinutes()).padStart(2, "0");
-  }
-
-  let html = "";
-
-  if (runRecord.routineName) {
-    html +=
-      "<div style=\"font-size:15px;font-weight:600;margin-bottom:8px;\">" +
-      escapeHtml(runRecord.routineName) +
-      "</div>";
-  }
-
-  if (dateLine) {
-    html +=
-      "<div style=\"font-size:13px;color:#666;margin-bottom:10px;\">" +
-      escapeHtml(dateLine) +
-      "</div>";
-  }
-
-  html +=
-    '<div class="run-report-summary">' +
-    "מתוכנן: <strong>" +
-    formatDurationHebrew(runRecord.totalPlanned || 0) +
-    "</strong><br>" +
-    "בפועל: <strong>" +
-    formatDurationHebrew(runRecord.totalActual || 0) +
-    "</strong><br>" +
-    "שעון קיר: <strong>" +
-    formatDurationHebrew(runRecord.wallClockSeconds || 0) +
-    "</strong><br>" +
-    '<span class="' +
-    summaryClass +
-    '">' +
-    summaryDiffText +
-    "</span>" +
-    "</div>";
-
-  const steps = runRecord.steps || [];
-  if (steps.length === 0) {
-    html += '<div class="history-empty">אין פירוט Steps</div>';
-  } else {
-    steps.forEach((s, i) => {
-      let line = "";
-      if (s.skipped) {
-        line =
-          "<strong>#" +
-          (s.stepNumber || i + 1) +
-          "</strong> · " +
-          escapeHtml(s.name || "Step") +
-          " — <em>דולג</em>";
-      } else {
-        const over = (s.actualSeconds || 0) - (s.plannedSeconds || 0);
-        let overHtml = "";
-        if (over > 0) {
-          overHtml =
-            ' <span class="over">(+ ' +
-            formatDurationHebrew(over) +
-            ")</span>";
-        } else if (over < 0) {
-          overHtml =
-            ' <span class="under">(- ' +
-            formatDurationHebrew(-over) +
-            ")</span>";
-        }
-        line =
-          "<strong>#" +
-          (s.stepNumber || i + 1) +
-          "</strong> · " +
-          escapeHtml(s.name || "Step") +
-          "<br>" +
-          "מתוכנן " +
-          formatDurationHebrew(s.plannedSeconds || 0) +
-          " → בפועל " +
-          formatDurationHebrew(s.actualSeconds || 0) +
-          overHtml;
-      }
-      html += '<div class="run-report-step">' + line + "</div>";
-    });
-  }
-
-  contentEl.innerHTML = html;
-  overlay.classList.add("show");
-
-  /* When closing after finish, also leave active screen */
-  overlay.dataset.afterFinish = isJustFinished ? "1" : "0";
-}
-
-
-function closeRunReportModal() {
-  const overlay = document.getElementById("runReportOverlay");
-  if (!overlay) return;
-  const afterFinish = overlay.dataset.afterFinish === "1";
-  overlay.classList.remove("show");
-  overlay.dataset.afterFinish = "0";
-
-  if (afterFinish) {
-    document.getElementById("activeScreen").style.display = "none";
-    activeRoutine = null;
-    activeSteps = [];
-    activeStepIndex = 0;
-    runStepRecords = [];
-    completionSnapshots = [];
-    routineStartTime = null;
-    currentStepStartTime = null;
-    stopEtaUpdates();
-    showHomeUI();
-    renderRoutines();
-  }
-}
-
-
-function showRoutineHistory(routine) {
-  const runs = getHistoryForRoutine(routine.id);
-  const overlay = document.getElementById("runReportOverlay");
-  const titleEl = document.getElementById("runReportTitle");
-  const contentEl = document.getElementById("runReportContent");
-  if (!overlay || !titleEl || !contentEl) return;
-
-  titleEl.textContent =
-    "דיווח זמנים — " + (routine.name || "Routine") + " (שבועיים)";
-
-  if (runs.length === 0) {
-    contentEl.innerHTML =
-      '<div class="history-empty">אין דיווחים ב־14 הימים האחרונים לשגרה זו.<br>השלם שגרה כדי לראות כאן פירוט זמנים וחריגות.</div>';
-    overlay.dataset.afterFinish = "0";
-    overlay.classList.add("show");
-    return;
-  }
-
-  let html = "";
-
-  /* Aggregate summary */
-  let sumPlanned = 0;
-  let sumActual = 0;
-  let runCount = 0;
-  runs.forEach(r => {
-    sumPlanned += r.totalPlanned || 0;
-    sumActual += r.totalActual || 0;
-    runCount++;
-  });
-  const avgDiff =
-    runCount > 0 ? Math.round((sumActual - sumPlanned) / runCount) : 0;
-
-  html +=
-    '<div class="run-report-summary">' +
-    runCount +
-    " הרצות ב־14 הימים האחרונים<br>" +
-    "ממוצע מתוכנן: " +
-    formatDurationHebrew(runCount ? Math.round(sumPlanned / runCount) : 0) +
-    "<br>" +
-    "ממוצע בפועל: " +
-    formatDurationHebrew(runCount ? Math.round(sumActual / runCount) : 0) +
-    "<br>";
-
-  if (avgDiff > 0) {
-    html +=
-      '<span class="over">ממוצע איחור: ' +
-      formatDurationHebrew(avgDiff) +
-      "</span>";
-  } else if (avgDiff < 0) {
-    html +=
-      '<span class="under">ממוצע חיסכון: ' +
-      formatDurationHebrew(-avgDiff) +
-      "</span>";
-  } else {
-    html += "בממוצע בדיוק לפי התכנון";
-  }
-  html += "</div>";
-
-  runs.forEach(r => {
-    const finished = r.finishedAt ? new Date(r.finishedAt) : null;
-    let dateStr = "—";
-    if (finished && !isNaN(finished.getTime())) {
-      dateStr =
-        HEBREW_DAY_SHORT[finished.getDay()] +
-        " · " +
-        finished.getDate() +
-        " " +
-        HEBREW_MONTHS[finished.getMonth()] +
-        " · " +
-        String(finished.getHours()).padStart(2, "0") +
-        ":" +
-        String(finished.getMinutes()).padStart(2, "0");
-    }
-
-    const diff = (r.totalActual || 0) - (r.totalPlanned || 0);
-    let diffHtml = "";
-    if (diff > 0) {
-      diffHtml =
-        '<span class="over">איחור ' +
-        formatDurationHebrew(diff) +
-        "</span>";
-    } else if (diff < 0) {
-      diffHtml =
-        '<span class="under">חיסכון ' +
-        formatDurationHebrew(-diff) +
-        "</span>";
-    } else {
-      diffHtml = "בדיוק";
-    }
-
-    html += '<div class="history-run-block">';
-    html +=
-      '<div class="history-run-header">' +
-      escapeHtml(dateStr) +
-      "</div>";
-    html +=
-      '<div class="history-run-meta">' +
-      "מתוכנן " +
-      formatDurationHebrew(r.totalPlanned || 0) +
-      " → בפועל " +
-      formatDurationHebrew(r.totalActual || 0) +
-      " · " +
-      diffHtml +
-      "</div>";
-
-    (r.steps || []).forEach((s, i) => {
-      if (s.skipped) {
-        html +=
-          '<div class="run-report-step"><strong>#' +
-          (s.stepNumber || i + 1) +
-          "</strong> · " +
-          escapeHtml(s.name || "Step") +
-          " — דולג</div>";
-      } else {
-        const over = (s.actualSeconds || 0) - (s.plannedSeconds || 0);
-        let overHtml = "";
-        if (over > 0) {
-          overHtml =
-            ' <span class="over">(+ ' +
-            formatDurationHebrew(over) +
-            ")</span>";
-        } else if (over < 0) {
-          overHtml =
-            ' <span class="under">(- ' +
-            formatDurationHebrew(-over) +
-            ")</span>";
-        }
-        html +=
-          '<div class="run-report-step"><strong>#' +
-          (s.stepNumber || i + 1) +
-          "</strong> · " +
-          escapeHtml(s.name || "Step") +
-          " — " +
-          formatDurationHebrew(s.plannedSeconds || 0) +
-          " → " +
-          formatDurationHebrew(s.actualSeconds || 0) +
-          overHtml +
-          "</div>";
-      }
-    });
-
-    html += "</div>";
-  });
-
-  contentEl.innerHTML = html;
-  overlay.dataset.afterFinish = "0";
-  overlay.classList.add("show");
 }
 
 
@@ -7206,42 +6284,40 @@ function showRoutineHistory(routine) {
 function exitActiveScreen() {
 
   hideStepFinishedPanel();
-  stopEtaUpdates();
 
   if (timerInterval) {
-    clearInterval(timerInterval);
+
+    clearInterval(
+      timerInterval
+    );
+
     timerInterval = null;
+
   }
 
-  /* Close Live Activity if user exits mid-run */
-  activitySmithEndLiveActivity("Routine — יצאת");
 
-  document.getElementById("activeScreen").style.display = "none";
+  document.getElementById(
+    "activeScreen"
+  ).style.display =
+    "none";
 
-  activeRoutine = null;
-  activeSteps = [];
-  activeStepIndex = 0;
-  runStepRecords = [];
-  completionSnapshots = [];
-  routineStartTime = null;
-  currentStepStartTime = null;
 
   showHomeUI();
+
+
   renderRoutines();
+
 }
 
 
-/* EXIT / BACK / REPORT BUTTONS */
+/* EXIT BUTTON */
 
 document
   .getElementById("exitActiveBtn")
-  .addEventListener("click", exitActiveScreen);
-
-document
-  .getElementById("prevStepBtn")
-  ?.addEventListener("click", () => {
-    goToPreviousStep();
-  });
+  .addEventListener(
+    "click",
+    exitActiveScreen
+  );
 
 document
   .getElementById("continueNextStepBtn")
@@ -7254,32 +6330,16 @@ document
 document
   .getElementById("waitOnStepBtn")
   ?.addEventListener("click", () => {
+    /* Stay on this step – only hide the panel, keep timer at 00:00 */
     const panel = document.getElementById("stepFinishedPanel");
     if (panel) {
       panel.classList.remove("show");
     }
     if (activeNotification) {
-      try {
-        activeNotification.close();
-      } catch (e) {}
+      try { activeNotification.close(); } catch (e) {}
       activeNotification = null;
     }
-  });
-
-document
-  .getElementById("runReportCloseBtn")
-  ?.addEventListener("click", closeRunReportModal);
-
-document
-  .getElementById("runReportCloseX")
-  ?.addEventListener("click", closeRunReportModal);
-
-document
-  .getElementById("runReportOverlay")
-  ?.addEventListener("click", e => {
-    if (e.target.id === "runReportOverlay") {
-      closeRunReportModal();
-    }
+    /* stepTimerFinished stays true so a later tap / notification can still complete */
   });
 
 </script>
