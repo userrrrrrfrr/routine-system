@@ -1597,6 +1597,21 @@
   הפעל התראות
 </button>
 
+<div class="user-panel-title" style="margin-top:22px;">
+  ActivitySmith (Live Activity)
+</div>
+<input
+  id="activitySmithApiKey"
+  type="password"
+  placeholder="ask_... הדבק כאן API Key"
+  style="width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;margin-top:6px;font-size:13px;"
+  autocomplete="off"
+>
+<button id="saveActivitySmithKeyBtn" class="panel-enable-notifications" style="margin-top:8px;">
+  שמור API Key
+</button>
+<div id="activitySmithKeyStatus" style="font-size:12px;color:#888;margin-top:6px;line-height:1.4;"></div>
+
 <button id="logoutBtn" class="panel-logout">
   התנתק
 </button>
@@ -1758,6 +1773,32 @@
 
       </div>
 
+    </div>
+
+    <div class="form-group">
+      <label>
+        שעת התחלה של ה-Routine
+      </label>
+      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+        <input
+          id="routineStartTime"
+          type="time"
+          style="width:auto;min-width:120px;"
+          value=""
+        >
+        <select id="routineTimezone" style="width:auto;min-width:180px;">
+          <option value="Asia/Jerusalem">ישראל (Asia/Jerusalem)</option>
+          <option value="Europe/London">לונדון (Europe/London)</option>
+          <option value="America/New_York">ניו יורק (America/New_York)</option>
+          <option value="America/Los_Angeles">לוס אנג'לס (America/Los_Angeles)</option>
+          <option value="Europe/Paris">פריז (Europe/Paris)</option>
+          <option value="Asia/Dubai">דובאי (Asia/Dubai)</option>
+          <option value="UTC">UTC</option>
+        </select>
+      </div>
+      <div style="font-size:12px;color:#888;margin-top:6px;line-height:1.4;">
+        השעה שבה ה-Routine אמור להתחיל (בימים שנבחרו למעלה). אם האתר פתוח – תקבל התראה ותוכל להתחיל. להתראות כשהאתר סגור נדרש חיבור ל-Pushcut / שירות חיצוני.
+      </div>
     </div>
 
     <h2>Steps</h2>
@@ -2348,6 +2389,10 @@ function renderRoutines() {
 
       <div class="routine-info">
         ${routine.steps?.length || 0} Steps
+        ${routine.startTime
+          ? `<br>⏰ שעת התחלה: <strong>${escapeHtml(routine.startTime)}</strong>
+             (${escapeHtml(routine.timezone || "Asia/Jerusalem")})`
+          : ""}
       </div>
 
       ${todayInfoHtml}
@@ -2723,6 +2768,12 @@ document
     }
   });
 
+document
+  .getElementById("saveActivitySmithKeyBtn")
+  ?.addEventListener("click", () => {
+    saveActivitySmithKey();
+  });
+
 
 /* ACTIVE STEP CLICK */
 
@@ -2783,6 +2834,7 @@ onAuthStateChanged(
       await loadActivationRules();
       await loadActivatedSteps();
       await loadRoutineRunsHistory();
+      await loadActivitySmithKey();
       await loadRoutines();
 
       startDayTimer();
@@ -4274,6 +4326,25 @@ function openEditor(routine) {
 
   showRoutineImagePreview();
 
+  /* Start time + timezone */
+  const startTimeInput = document.getElementById("routineStartTime");
+  const timezoneSelect = document.getElementById("routineTimezone");
+  if (startTimeInput) {
+    startTimeInput.value = routine?.startTime || "";
+  }
+  if (timezoneSelect) {
+    const tz = routine?.timezone || "Asia/Jerusalem";
+    timezoneSelect.value = tz;
+    /* If saved timezone is not in the list, add it temporarily */
+    if (![...timezoneSelect.options].some(o => o.value === tz)) {
+      const opt = document.createElement("option");
+      opt.value = tz;
+      opt.textContent = tz;
+      timezoneSelect.appendChild(opt);
+      timezoneSelect.value = tz;
+    }
+  }
+
   document
     .querySelectorAll(
       ".days input"
@@ -5722,6 +5793,11 @@ document
       });
 
 
+      const startTimeVal =
+        (document.getElementById("routineStartTime")?.value || "").trim();
+      const timezoneVal =
+        document.getElementById("routineTimezone")?.value || "Asia/Jerusalem";
+
       const routineData = {
 
         name,
@@ -5731,6 +5807,10 @@ document
 
         days:
           selectedDays,
+
+        startTime: startTimeVal || null,
+
+        timezone: timezoneVal,
 
         steps
 
@@ -5981,6 +6061,14 @@ async function startRoutine(routine) {
 
   updatePrevStepButton();
   startEtaUpdates();
+
+  /* Live Activity stream key for this run */
+  currentLiveActivityKey =
+    "routine-" +
+    (routine.id || "active") +
+    "-" +
+    Date.now();
+
   runStep();
 }
 
@@ -6023,6 +6111,9 @@ function runStep() {
   updatePrevStepButton();
   updateActiveEta();
 
+  /* Update Live Activity for this step */
+  activitySmithUpdateLiveActivity({ overdue: false });
+
   timerInterval = setInterval(() => {
     remainingSeconds--;
     updateTimerDisplay();
@@ -6050,14 +6141,218 @@ function updatePrevStepButton() {
 }
 
 
+/* ---- ActivitySmith Live Activities ---- */
+
+let activitySmithApiKey = "";
+let currentLiveActivityKey = null; /* stream_key for active routine */
+
+const ACTIVITYSMITH_BASE = "https://activitysmith.com/api";
+
+async function loadActivitySmithKey() {
+  if (!currentUser) {
+    activitySmithApiKey = "";
+    return;
+  }
+  try {
+    const docRef = doc(
+      db,
+      "users",
+      currentUser.uid,
+      "meta",
+      "activitySmith"
+    );
+    const snap = await getDoc(docRef);
+    if (snap.exists() && snap.data().apiKey) {
+      activitySmithApiKey = String(snap.data().apiKey).trim();
+    } else {
+      activitySmithApiKey = "";
+    }
+  } catch (e) {
+    console.warn("loadActivitySmithKey:", e);
+    activitySmithApiKey = "";
+  }
+  updateActivitySmithKeyUI();
+}
+
+function updateActivitySmithKeyUI() {
+  const input = document.getElementById("activitySmithApiKey");
+  const status = document.getElementById("activitySmithKeyStatus");
+  if (input && activitySmithApiKey) {
+    /* show masked value */
+    input.value = activitySmithApiKey;
+    input.placeholder = "ask_...";
+  }
+  if (status) {
+    status.textContent = activitySmithApiKey
+      ? "✓ מפתח נשמר — Live Activity יופעל בתחילת Routine"
+      : "הדבק API Key מ-activitysmith.com/app/keys";
+    status.style.color = activitySmithApiKey ? "#0a7" : "#888";
+  }
+}
+
+async function saveActivitySmithKey() {
+  const input = document.getElementById("activitySmithApiKey");
+  if (!input || !currentUser) return;
+
+  const key = (input.value || "").trim();
+  if (key && !key.startsWith("ask_")) {
+    alert("מפתח ActivitySmith בדרך כלל מתחיל ב-ask_");
+    return;
+  }
+
+  activitySmithApiKey = key;
+
+  try {
+    const docRef = doc(
+      db,
+      "users",
+      currentUser.uid,
+      "meta",
+      "activitySmith"
+    );
+    if (key) {
+      await setDoc(docRef, { apiKey: key }, { merge: true });
+    } else {
+      await setDoc(docRef, { apiKey: "" }, { merge: true });
+    }
+    updateActivitySmithKeyUI();
+    alert(key ? "API Key נשמר בהצלחה" : "API Key נמחק");
+  } catch (e) {
+    console.error(e);
+    alert("שגיאה בשמירת המפתח: " + e.message);
+  }
+}
+
+/**
+ * Start or update Live Activity for the current routine step.
+ * Uses segmented_progress (steps) — ideal for Routines.
+ */
+async function activitySmithUpdateLiveActivity(options = {}) {
+  if (!activitySmithApiKey) return;
+
+  if (!activeRoutine || !activeSteps || activeSteps.length === 0) return;
+
+  const streamKey =
+    currentLiveActivityKey ||
+    ("routine-" + (activeRoutine.id || "active"));
+
+  currentLiveActivityKey = streamKey;
+
+  const step = activeSteps[activeStepIndex];
+  const stepName = step ? String(step.name || "Step") : "Step";
+  const total = activeSteps.length;
+  const current = Math.min(activeStepIndex + 1, total);
+  const isOverdue = !!options.overdue || (remainingSeconds <= 0 && stepTimerFinished);
+
+  const content_state = {
+    type: "segmented_progress",
+    title: String(activeRoutine.name || "Routine"),
+    subtitle: isOverdue
+      ? "⏰ באיחור: " + stepName
+      : "Step " + current + "/" + total + " · " + stepName,
+    number_of_steps: total,
+    current_step: current,
+    color: isOverdue ? "red" : "blue"
+  };
+
+  try {
+    const res = await fetch(
+      ACTIVITYSMITH_BASE +
+        "/live-activity/stream/" +
+        encodeURIComponent(streamKey),
+      {
+        method: "PUT",
+        headers: {
+          Authorization: "Bearer " + activitySmithApiKey,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ content_state })
+      }
+    );
+
+    if (!res.ok) {
+      const text = await res.text().catch(() => "");
+      console.warn("ActivitySmith update failed:", res.status, text);
+    }
+  } catch (e) {
+    console.warn("ActivitySmith network error:", e);
+  }
+}
+
+/** End the Live Activity when routine finishes or user exits */
+async function activitySmithEndLiveActivity(finalTitle) {
+  if (!activitySmithApiKey || !currentLiveActivityKey) {
+    currentLiveActivityKey = null;
+    return;
+  }
+
+  const streamKey = currentLiveActivityKey;
+  currentLiveActivityKey = null;
+
+  try {
+    await fetch(
+      ACTIVITYSMITH_BASE +
+        "/live-activity/stream/" +
+        encodeURIComponent(streamKey),
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: "Bearer " + activitySmithApiKey,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          content_state: {
+            type: "segmented_progress",
+            title: finalTitle || "Routine הסתיים",
+            subtitle: "✓ הושלם",
+            number_of_steps: 1,
+            current_step: 1,
+            color: "green",
+            auto_dismiss_minutes: 1
+          }
+        })
+      }
+    );
+  } catch (e) {
+    console.warn("ActivitySmith end error:", e);
+  }
+}
+
+/** Optional: also send a push when step is overdue (stronger alert) */
+async function activitySmithPushReminder(step) {
+  if (!activitySmithApiKey) return;
+
+  const stepName = step && step.name ? String(step.name) : "Step";
+  const routineName =
+    activeRoutine && activeRoutine.name
+      ? String(activeRoutine.name)
+      : "Routine";
+
+  try {
+    await fetch(ACTIVITYSMITH_BASE + "/push-notification", {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + activitySmithApiKey,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        title: "⏰ תזכורת — " + routineName,
+        message: "לא סיימת בזמן: " + stepName + " (תזכורת כל 1.5 דק׳)"
+      })
+    });
+  } catch (e) {
+    console.warn("ActivitySmith push error:", e);
+  }
+}
+
 /* ---- Notifications when step timer ends ---- */
 
 let stepTimerFinished = false;
 let activeNotification = null;
 let stepReminderInterval = null;
 
-/* Repeat reminder every 1 minute until the step is completed */
-const STEP_REMINDER_MS = 60 * 1000;
+/* Repeat reminder every 1.5 minutes until the step is completed */
+const STEP_REMINDER_MS = 90 * 1000;
 
 async function ensureNotificationPermission() {
   if (!("Notification" in window)) {
@@ -6123,15 +6418,16 @@ function fireStepFinishedNotification(step, isReminder) {
   }
 
   const title = isReminder
-    ? "תזכורת — " + routineName
-    : "הזמן נגמר — " + routineName;
+    ? "⏰ תזכורת — " + routineName
+    : "⏰ הזמן נגמר — " + routineName;
 
-  let body = "סיימת: " + currentName;
+  let body = "לא סיימת בזמן: " + currentName;
   if (nextStepName) {
     body += "\n→ הבא: " + nextStepName;
   } else {
     body += "\n→ זה היה ה-Step האחרון";
   }
+  body += "\n(תזכורת כל 1.5 דקות עד שתסמן בוצע)";
 
   try {
     if (activeNotification) {
@@ -6167,16 +6463,17 @@ function notifyStepFinished(step) {
   fireStepFinishedNotification(step, false);
   playStepBeep();
 
-  /* Keep reminding every 1 minute until this step is completed
-     (or user exits / skips). Continues for each step until the
-     whole routine is finished. */
+  /* Live Activity → overdue state + push reminder */
+  activitySmithUpdateLiveActivity({ overdue: true });
+  activitySmithPushReminder(step);
+
+  /* Keep reminding every 1.5 minutes until this step is completed */
   stopStepReminders();
   stepReminderInterval = setInterval(() => {
     if (!stepTimerFinished) {
       stopStepReminders();
       return;
     }
-    /* Still waiting on this step */
     const current =
       activeSteps && activeSteps[activeStepIndex]
         ? activeSteps[activeStepIndex]
@@ -6184,6 +6481,8 @@ function notifyStepFinished(step) {
     fireStepFinishedNotification(current, true);
     playStepBeep();
     showStepFinishedPanel();
+    activitySmithUpdateLiveActivity({ overdue: true });
+    activitySmithPushReminder(current);
   }, STEP_REMINDER_MS);
 }
 
@@ -6543,6 +6842,13 @@ async function finishRoutineWithReport() {
     clearInterval(timerInterval);
     timerInterval = null;
   }
+
+  /* Close Live Activity */
+  await activitySmithEndLiveActivity(
+    (activeRoutine && activeRoutine.name
+      ? activeRoutine.name
+      : "Routine") + " — ✓ הושלם"
+  );
 
   const finishedAt = new Date();
   const startedAt = routineStartTime || finishedAt;
@@ -6906,6 +7212,9 @@ function exitActiveScreen() {
     clearInterval(timerInterval);
     timerInterval = null;
   }
+
+  /* Close Live Activity if user exits mid-run */
+  activitySmithEndLiveActivity("Routine — יצאת");
 
   document.getElementById("activeScreen").style.display = "none";
 
