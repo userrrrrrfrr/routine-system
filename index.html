@@ -37,7 +37,6 @@
     .panel-logout { width: 100%; padding: 13px; border: 1px solid #ddd; background: white; border-radius: 12px; color: #d00; margin-top: 12px; }
     .panel-enable-notifications { width: 100%; padding: 13px; border: 1px solid #ddd; background: white; border-radius: 12px; color: #111; margin-top: 8px; }
 
-    /* TELEGRAM / BARK */
     .telegram-section { margin-top: 18px; padding-top: 14px; border-top: 1px solid #eee; }
     .telegram-title { font-size: 13px; color: #888; margin-bottom: 8px; font-weight: 600; }
     .telegram-section input { width: 100%; margin-bottom: 6px; padding: 10px 12px; border: 1px solid #ddd; border-radius: 10px; font-size: 13px; background: white; box-sizing: border-box; }
@@ -242,7 +241,6 @@
 
 <body>
 
-<!-- LOGIN -->
 <div id="loginScreen">
   <div class="login-box">
     <h1>Routine</h1>
@@ -251,7 +249,6 @@
   </div>
 </div>
 
-<!-- APP -->
 <div id="app">
 
   <button id="userTab" class="user-tab">
@@ -269,22 +266,12 @@
 
   <div id="userPanel" class="user-panel">
     <button id="closeUserPanel" class="user-panel-close">×</button>
-
     <div class="user-panel-title">מחובר כ:</div>
     <div id="panelUserInfo"></div>
 
     <button id="enableNotificationsBtn" class="panel-enable-notifications">
       הפעל התראות דפדפן
     </button>
-
-    <div class="telegram-section">
-      <div class="telegram-title">התראות טלגרם</div>
-      <input id="tgBotToken" type="text" placeholder="Bot Token">
-      <input id="tgChatId" type="text" placeholder="Chat ID">
-      <button id="tgSaveBtn" class="panel-enable-notifications" style="margin-top:4px;">שמור טלגרם</button>
-      <button id="tgTestBtn" class="panel-enable-notifications" style="margin-top:6px;">שלח בדיקה לטלגרם</button>
-      <div id="tgStatus" class="tg-status"></div>
-    </div>
 
     <div class="telegram-section">
       <div class="telegram-title">התראות Bark (מסך נעילה)</div>
@@ -333,7 +320,6 @@
       </div>
     </div>
 
-    <!-- EDITOR -->
     <div id="editorScreen" class="hidden">
       <div class="card">
         <h2 id="editorTitle">Routine חדש</h2>
@@ -364,16 +350,17 @@
 
         <div class="form-group">
           <label for="routineStartTime">שעת התחלה של ה-Routine</label>
-          <div class="form-group">
-  <label for="routineStartTime">שעת התחלה של ה-Routine</label>
-  <input id="routineStartTime" type="time" value="">
-  <div style="margin-top:6px;color:#888;font-size:12px;line-height:1.5;">
-    ההתראה תישלח בשעה הזו רק בימים שסומנו למעלה.
-  </div>
-</div>
           <input id="routineStartTime" type="time" value="">
           <div style="margin-top:6px;color:#888;font-size:12px;line-height:1.5;">
             ההתראה תישלח בשעה הזו רק בימים שסומנו למעלה.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="routineNotificationUrl">קישור שייפתח בלחיצה על ההתראה</label>
+          <input id="routineNotificationUrl" type="url" placeholder="https://example.com/my-page">
+          <div style="margin-top:6px;color:#888;font-size:12px;line-height:1.5;">
+            השאר ריק כדי להשתמש בקישור האוטומטי לשגרה באתר. מלא קישור משלך — ייפתח בלחיצה על ההתראה.
           </div>
         </div>
 
@@ -394,7 +381,6 @@
       </div>
     </div>
 
-    <!-- DIRECT ROUTINE -->
     <div id="directRoutineScreen">
       <div class="direct-routine-box">
         <img id="directRoutineImage" class="direct-routine-image hidden" alt="">
@@ -406,7 +392,6 @@
       </div>
     </div>
 
-    <!-- ACTIVE ROUTINE -->
     <div id="activeScreen">
       <div class="active-box">
         <h1 id="activeRoutineName"></h1>
@@ -436,7 +421,6 @@
   </div>
 </div>
 
-<!-- DAY DETAIL MODAL -->
 <div id="dayDetailOverlay" class="day-detail-overlay">
   <div class="day-detail-modal" role="dialog" aria-modal="true">
     <div class="day-detail-header">
@@ -566,7 +550,6 @@ function formatTextWithLinks(text) {
   return escaped.replace(urlRegex, (url) => `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`);
 }
 
-/* USER PANEL */
 const userTab = document.getElementById("userTab");
 const userPanel = document.getElementById("userPanel");
 const userPanelOverlay = document.getElementById("userPanelOverlay");
@@ -586,7 +569,6 @@ userTab.addEventListener("click", openUserPanel);
 closeUserPanel.addEventListener("click", closeUserPanelFunction);
 userPanelOverlay.addEventListener("click", closeUserPanelFunction);
 
-/* MAIN TABS */
 let currentMainTab = "routines";
 
 function switchMainTab(tab) {
@@ -626,7 +608,6 @@ function hideHomeUI() {
 document.getElementById("tabRoutines")?.addEventListener("click", () => { switchMainTab("routines"); });
 document.getElementById("tabCalendar")?.addEventListener("click", () => { switchMainTab("calendar"); });
 
-/* LOGIN */
 document.getElementById("loginBtn").addEventListener("click", async () => {
   try {
     await signInWithPopup(auth, provider);
@@ -636,13 +617,11 @@ document.getElementById("loginBtn").addEventListener("click", async () => {
   }
 });
 
-/* LOGOUT */
 document.getElementById("logoutBtn").addEventListener("click", async () => {
   await signOut(auth);
   closeUserPanelFunction();
 });
 
-/* ENABLE BROWSER NOTIFICATIONS */
 document.getElementById("enableNotificationsBtn")?.addEventListener("click", async () => {
   const granted = await ensureNotificationPermission();
   if (granted) {
@@ -652,55 +631,6 @@ document.getElementById("enableNotificationsBtn")?.addEventListener("click", asy
   } else {
     alert("לא ניתנה הרשאה להתראות");
   }
-});
-
-/* ============ TELEGRAM ============ */
-let telegramConfig = { botToken: "", chatId: "" };
-
-async function loadTelegramConfig() {
-  if (!currentUser) return;
-  try {
-    const snap = await getDoc(doc(db, "users", currentUser.uid, "meta", "telegram"));
-    if (snap.exists()) {
-      const d = snap.data();
-      telegramConfig.botToken = d.botToken || "";
-      telegramConfig.chatId = d.chatId || "";
-      document.getElementById("tgBotToken").value = telegramConfig.botToken;
-      document.getElementById("tgChatId").value = telegramConfig.chatId;
-      if (telegramConfig.botToken && telegramConfig.chatId) {
-        const s = document.getElementById("tgStatus");
-        s.textContent = "✓ מחובר לטלגרם";
-        s.className = "tg-status ok";
-      }
-    }
-  } catch (e) { console.warn("loadTelegramConfig failed:", e); }
-}
-
-document.getElementById("tgSaveBtn")?.addEventListener("click", async () => {
-  if (!currentUser) return;
-  const botToken = document.getElementById("tgBotToken").value.trim();
-  const chatId = document.getElementById("tgChatId").value.trim();
-  if (!botToken || !chatId) { alert("מלא גם Bot Token וגם Chat ID"); return; }
-  try {
-    await setDoc(doc(db, "users", currentUser.uid, "meta", "telegram"), { botToken, chatId, updatedAt: Date.now() }, { merge: true });
-    telegramConfig = { botToken, chatId };
-    const s = document.getElementById("tgStatus");
-    s.textContent = "✓ נשמר";
-    s.className = "tg-status ok";
-    alert("החיבור לטלגרם נשמר");
-  } catch (e) { alert("שגיאה בשמירה: " + e.message); }
-});
-
-document.getElementById("tgTestBtn")?.addEventListener("click", async () => {
-  if (!telegramConfig.botToken || !telegramConfig.chatId) { alert("קודם שמור Bot Token ו-Chat ID"); return; }
-  try {
-    const res = await fetch(`https://api.telegram.org/bot${telegramConfig.botToken}/sendMessage`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ chat_id: telegramConfig.chatId, text: "🔔 בדיקת חיבור מהאתר הצליחה" })
-    });
-    alert(res.ok ? "ההודעה נשלחה ✓ בדוק בטלגרם" : "השליחה נכשלה — בדוק את הטוקן וה-Chat ID");
-  } catch (e) { alert("שגיאה: " + e.message); }
 });
 
 /* ============ BARK ============ */
@@ -753,6 +683,13 @@ async function startServerReminder(step) {
   if (!currentUser || !activeRoutine) return;
   const effectiveBarkUrl = barkUrl || (document.getElementById("barkUrlInput")?.value || "").trim();
   if (!effectiveBarkUrl) return;
+
+  /* בנה קישור ייחודי לשגרה הזו */
+  const baseUrl = window.location.origin + window.location.pathname;
+  const routineUrl = activeRoutine.notificationUrl
+    ? activeRoutine.notificationUrl
+    : baseUrl + "?routine=" + encodeURIComponent(activeRoutine.id);
+
   try {
     await fetch(`${WORKER_URL}/start`, {
       method: "POST",
@@ -760,7 +697,8 @@ async function startServerReminder(step) {
       body: JSON.stringify({
         routineName: activeRoutine.name || "",
         stepName: step.name || "",
-        barkUrl: effectiveBarkUrl
+        barkUrl: effectiveBarkUrl,
+        routineUrl: routineUrl
       })
     });
   } catch (e) { console.warn("startServerReminder failed:", e); }
@@ -776,13 +714,11 @@ async function stopServerReminder() {
   } catch (e) { console.warn("stopServerReminder failed:", e); }
 }
 
-/* ACTIVE STEP CLICK */
 document.getElementById("activeStepCard").addEventListener("click", (e) => {
   if (e.target.tagName === 'A' || e.target.closest('a')) { return; }
   completeActiveStep();
 });
 
-/* SKIP */
 document.getElementById("skipStepBtn").addEventListener("click", () => { skipActiveStep(); });
 
 /* AUTH */
@@ -797,7 +733,6 @@ onAuthStateChanged(auth, async (user) => {
     await loadActivationRules();
     await loadActivatedSteps();
     await loadRoutines();
-    await loadTelegramConfig();
     await loadBarkConfig();
 
     startDayTimer();
@@ -810,7 +745,6 @@ onAuthStateChanged(auth, async (user) => {
   }
 });
 
-/* LOAD DATA */
 async function loadDisabledSteps() {
   try {
     const docRef = doc(db, "users", currentUser.uid, "meta", "disabledSteps");
@@ -835,7 +769,6 @@ async function loadActivatedSteps() {
   } catch (e) { console.error("Error loading activated steps:", e); }
 }
 
-/* ACTIVATION */
 function isStepTemporarilyActivated(stepId) {
   const until = getStepActivationUntilDate(stepId);
   if (!until) return false;
@@ -854,7 +787,6 @@ function isStepDisabled(stepId) {
   return new Date() < until;
 }
 
-/* GET TODAY STEPS */
 function getTodaySteps(routine) {
   const steps = routine.steps || [];
   if (isRoutineWaitingActivation(routine)) {
@@ -871,7 +803,6 @@ function getTodaySteps(routine) {
   });
 }
 
-/* LOAD ROUTINES */
 async function loadRoutines() {
   const list = document.getElementById("routineList");
   list.innerHTML = "טוען...";
@@ -888,7 +819,6 @@ async function loadRoutines() {
   }
 }
 
-/* RENDER ROUTINES */
 function renderRoutines() {
   const list = document.getElementById("routineList");
   list.innerHTML = "";
@@ -936,7 +866,6 @@ function renderRoutines() {
   renderCalendar();
 }
 
-/* CALENDAR */
 const HEBREW_MONTHS = ["ינואר", "פברואר", "מרץ", "אפריל", "מאי", "יוני", "יולי", "אוגוסט", "ספטמבר", "אוקטובר", "נובמבר", "דצמבר"];
 const HEBREW_DAY_SHORT = ["א׳", "ב׳", "ג׳", "ד׳", "ה׳", "ו׳", "ש׳"];
 
@@ -1011,18 +940,6 @@ function getNextDueDateForStep(step, routine) {
     if (isStepDueOnDate(step, dayStart)) { return dayStart; }
   }
   return null;
-}
-
-function formatNextDueLabel(date) {
-  if (!date) return "—";
-  const today = getLogicalDate();
-  const tomorrow = new Date(today);
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  if (isSameDate(date, today)) return "היום";
-  if (isSameDate(date, tomorrow)) return "מחר";
-  const dayName = HEBREW_DAY_SHORT[date.getDay()];
-  const monthName = HEBREW_MONTHS[date.getMonth()];
-  return dayName + " · " + date.getDate() + " " + monthName;
 }
 
 function getStepsForCalendarDay(routine, date, today) {
@@ -1180,7 +1097,6 @@ document.getElementById("calNextBtn")?.addEventListener("click", () => {
   renderCalendar();
 });
 
-/* DAY DETAIL */
 function formatDayDetailTitle(date) {
   const today = getLogicalDate();
   const tomorrow = new Date(today);
@@ -1246,7 +1162,6 @@ document.getElementById("dayDetailOverlay")?.addEventListener("click", (e) => {
   if (e.target.id === "dayDetailOverlay") { closeDayDetail(); }
 });
 
-/* IMAGE */
 function compressImage(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -1302,7 +1217,6 @@ function showRoutineImagePreview() {
   preview.appendChild(remove);
 }
 
-/* COPY LINK */
 async function copyRoutineLink(routineId) {
   const url = window.location.origin + window.location.pathname + "?routine=" + encodeURIComponent(routineId);
   try {
@@ -1311,14 +1225,18 @@ async function copyRoutineLink(routineId) {
   } catch (error) { prompt("העתק את הקישור:", url); }
 }
 
-/* DIRECT LINK */
-function openRoutineFromLink() {
+async function openRoutineFromLink() {
   const params = new URLSearchParams(window.location.search);
   const routineId = params.get("routine");
   if (!routineId) { return; }
   const routine = routines.find(item => item.id === routineId);
   if (!routine) { alert("ה-Routine לא נמצא בחשבון הזה."); return; }
-  showDirectRoutine(routine);
+
+  window.history.replaceState({}, "", window.location.origin + window.location.pathname);
+
+  if (activeRoutine) { return; }
+
+  await startRoutine(routine);
 }
 
 function showDirectRoutine(routine) {
@@ -1363,7 +1281,6 @@ document.getElementById("directBackBtn").addEventListener("click", () => {
 
 document.getElementById("newRoutineBtn").addEventListener("click", () => openEditor(null));
 
-/* STEP LIBRARY */
 function getAllStepsList() {
   const list = [];
   const map = new Map();
@@ -1433,6 +1350,9 @@ function openEditor(routine) {
 
   const routineStartTimeInput = document.getElementById("routineStartTime");
   if (routineStartTimeInput) { routineStartTimeInput.value = routine?.startTime || ""; }
+
+  const routineNotifUrlInput = document.getElementById("routineNotificationUrl");
+  if (routineNotifUrlInput) { routineNotifUrlInput.value = routine?.notificationUrl || ""; }
 
   currentRoutineImage = routine?.image || "";
   document.getElementById("routineImageInput").value = "";
@@ -1766,13 +1686,13 @@ document.getElementById("cancelEditorBtn").addEventListener("click", () => {
   showHomeUI();
 });
 
-/* SAVE ROUTINE */
 document.getElementById("saveRoutineBtn").addEventListener("click", async () => {
   const name = document.getElementById("routineName").value.trim();
   if (!name) { alert("נא להזין שם לשגרה"); return; }
 
   const selectedDays = Array.from(document.querySelectorAll(".days input:checked")).map(el => Number(el.value));
   const startTime = document.getElementById("routineStartTime")?.value || "";
+  const notificationUrl = document.getElementById("routineNotificationUrl")?.value.trim() || "";
   const stepElements = document.querySelectorAll("#stepsContainer .step");
   const steps = [];
 
@@ -1840,7 +1760,7 @@ document.getElementById("saveRoutineBtn").addEventListener("click", async () => 
     }
   });
 
-  const routineData = { name, image: currentRoutineImage, days: selectedDays, startTime, steps };
+  const routineData = { name, image: currentRoutineImage, days: selectedDays, startTime, notificationUrl, steps };
 
   try {
     const activationRulesRef = doc(db, "users", currentUser.uid, "meta", "stepActivationRules");
@@ -1868,7 +1788,6 @@ document.getElementById("saveRoutineBtn").addEventListener("click", async () => 
   }
 });
 
-/* RESET ROUTINE */
 async function resetRoutine(routine) {
   if (!confirm("לאפס את השגרה להיום?\nכל ה-Steps יופיעו שוב ליום הנוכחי (עד 04:00).")) { return; }
   const stepIds = (routine.steps || []).map(s => s.id).filter(Boolean);
@@ -1884,7 +1803,6 @@ async function resetRoutine(routine) {
   } catch (e) { console.error(e); alert("שגיאה באיפוס: " + e.message); }
 }
 
-/* DELETE ROUTINE */
 async function deleteRoutine(id) {
   if (!confirm("האם למחוק שגרה זו?")) { return; }
   try {
@@ -1893,9 +1811,6 @@ async function deleteRoutine(id) {
   } catch (e) { alert("שגיאה במחיקה: " + e.message); }
 }
 
-/* =========================
-   ROUTINE SCHEDULE
-   ========================= */
 const ROUTINE_SCHEDULE_CHECK_MS = 5000;
 const ROUTINE_SCHEDULE_STORAGE_KEY = "routine_schedule_last_run";
 let routineScheduleInterval = null;
@@ -1963,7 +1878,6 @@ function startRoutineScheduleWatcher() {
   checkRoutineSchedules();
 }
 
-/* START ROUTINE */
 async function startRoutine(routine, options = {}) {
   await ensureNotificationPermission();
   if (options.scheduled) { fireRoutineStartNotification(routine); }
@@ -1979,7 +1893,6 @@ async function startRoutine(routine, options = {}) {
   runStep();
 }
 
-/* RUN STEP */
 function runStep() {
   hideStepFinishedPanel();
   if (timerInterval) { clearInterval(timerInterval); }
@@ -2016,7 +1929,6 @@ function runStep() {
   }, 1000);
 }
 
-/* Notifications when step timer ends */
 let stepTimerFinished = false;
 let activeNotification = null;
 let stepReminderInterval = null;
@@ -2134,7 +2046,6 @@ function updateTimerDisplay() {
   document.getElementById("timer").textContent = `${m}:${s}`;
 }
 
-/* COMPLETE STEP */
 async function completeActiveStep() {
   if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
   const currentStep = activeSteps[activeStepIndex];
