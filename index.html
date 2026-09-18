@@ -1,4 +1,3 @@
-```
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
@@ -7,1414 +6,259 @@
   <title>Routine</title>
 
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f5f5f7;
-      color: #111;
-    }
-
-    button,
-    input,
-    select {
-      font: inherit;
-    }
-
-    button {
-      cursor: pointer;
-    }
-
-    .hidden {
-      display: none !important;
-    }
-
-    /* LOGIN */
-
-    #loginScreen {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .login-box {
-      width: 90%;
-      max-width: 400px;
-      background: white;
-      padding: 40px 30px;
-      border-radius: 24px;
-      text-align: center;
-      box-shadow: 0 10px 40px rgba(0,0,0,.08);
-    }
-
-    .login-box h1 {
-      margin: 0 0 10px;
-      font-size: 36px;
-    }
-
-    .login-box p {
-      color: #666;
-      margin-bottom: 30px;
-    }
-
-    .google-btn {
-      width: 100%;
-      padding: 15px;
-      border: 0;
-      border-radius: 12px;
-      background: #111;
-      color: white;
-    }
-
-    /* APP */
-
-    #app {
-      display: none;
-    }
-
-    .container {
-      width: 92%;
-      max-width: 900px;
-      margin: auto;
-      padding: 12px 0 60px;
-    }
-
-    /* USER SIDE PANEL */
-
-    .user-tab {
-      position: fixed;
-      top: 18px;
-      left: 0;
-      z-index: 1000;
-      background: white;
-      border: 1px solid #e5e5e5;
-      border-left: 0;
-      border-radius: 0 14px 14px 0;
-      padding: 9px 12px;
-      box-shadow: 0 4px 18px rgba(0,0,0,.08);
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      font-size: 13px;
-      color: #555;
-      transition: transform .25s ease;
-    }
-
-    .user-tab-icon {
-      font-size: 16px;
-    }
-
-    /* Countdown until next logical day (04:00) */
-    .day-timer {
-      position: fixed;
-      top: 18px;
-      right: 0;
-      z-index: 1000;
-      background: white;
-      border: 1px solid #e5e5e5;
-      border-right: 0;
-      border-radius: 14px 0 0 14px;
-      padding: 9px 14px;
-      box-shadow: 0 4px 18px rgba(0,0,0,.08);
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 2px;
-      font-size: 12px;
-      color: #555;
-      min-width: 110px;
-      text-align: left;
-    }
-
-    .day-timer-label {
-      font-size: 11px;
-      color: #888;
-      font-weight: 500;
-    }
-
-    .day-timer-value {
-      font-size: 16px;
-      font-weight: 700;
-      color: #111;
-      font-variant-numeric: tabular-nums;
-      letter-spacing: 0.5px;
-    }
-
-    .day-timer-hint {
-      font-size: 10px;
-      color: #aaa;
-    }
-
-    .user-panel {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 260px;
-      max-width: 80vw;
-      height: 100vh;
-      background: white;
-      z-index: 1001;
-      box-shadow: 8px 0 30px rgba(0,0,0,.12);
-      transform: translateX(-100%);
-      transition: transform .28s ease;
-      padding: 25px 20px;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .user-panel.open {
-      transform: translateX(0);
-    }
-
-    .user-panel-close {
-      width: 36px;
-      height: 36px;
-      border: 0;
-      background: #f5f5f7;
-      border-radius: 10px;
-      font-size: 20px;
-      margin-bottom: 30px;
-    }
-
-    .user-panel-title {
-      font-size: 13px;
-      color: #888;
-      margin-bottom: 8px;
-    }
-
-    #panelUserInfo {
-      font-size: 16px;
-      font-weight: 600;
-      word-break: break-word;
-      margin-bottom: 20px;
-    }
-
-    .panel-logout {
-      width: 100%;
-      padding: 13px;
-      border: 1px solid #ddd;
-      background: white;
-      border-radius: 12px;
-      color: #d00;
-      margin-top: 12px;
-    }
-
-    .panel-enable-notifications {
-      width: 100%;
-      padding: 13px;
-      border: 1px solid #ddd;
-      background: white;
-      border-radius: 12px;
-      color: #111;
-      margin-top: 8px;
-    }
-
-    .user-panel-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,.18);
-      z-index: 1000;
-      display: none;
-    }
-
-    .user-panel-overlay.show {
-      display: block;
-    }
-
-    /* MAIN HEADER */
-
-    .main-title {
-      background: white;
-      padding: 18px 20px;
-      border-radius: 20px;
-      margin-bottom: 12px;
-      text-align: center;
-    }
-
-    .main-title h1 {
-      margin: 0;
-      font-size: 30px;
-    }
-
-    /* MAIN TABS – switch between Routines / Calendar */
-    .main-tabs {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 16px;
-      background: white;
-      padding: 8px;
-      border-radius: 16px;
-      box-shadow: 0 2px 12px rgba(0,0,0,.04);
-    }
-
-    .main-tab {
-      flex: 1;
-      padding: 14px 12px;
-      border: 0;
-      border-radius: 12px;
-      background: transparent;
-      color: #666;
-      font-size: 16px;
-      font-weight: 600;
-      transition: background .15s ease, color .15s ease;
-    }
-
-    .main-tab:hover {
-      background: #f5f5f7;
-      color: #222;
-    }
-
-    .main-tab.active {
-      background: #111;
-      color: white;
-    }
-
-    #calendarScreen {
-      display: none;
-    }
-
-    #calendarScreen.visible {
-      display: block;
-    }
-
-    #routinesPanel {
-      display: block;
-    }
-
-    #routinesPanel.hidden-panel {
-      display: none;
-    }
-
-    /* CARDS */
-
-    .card {
-      background: white;
-      border-radius: 20px;
-      padding: 22px;
-      margin-bottom: 20px;
-    }
-
-    .top-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 15px;
-    }
-
-    .top-row h2 {
-      margin: 0;
-    }
-
-    .primary {
-      background: #111;
-      color: white;
-      border: 0;
-      padding: 12px 18px;
-      border-radius: 10px;
-    }
-
-    .secondary {
-      background: white;
-      border: 1px solid #ddd;
-      padding: 10px 15px;
-      border-radius: 10px;
-    }
-
-    .danger {
-      color: #d00;
-      background: white;
-      border: 1px solid #ddd;
-      padding: 10px 15px;
-      border-radius: 10px;
-    }
-
-    /* IMAGE UPLOAD */
-
-    .image-upload {
-      margin-top: 10px;
-    }
-
-    .image-upload label {
-      display: block;
-      font-weight: bold;
-      margin-bottom: 8px;
-    }
-
-    .image-input {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      background: white;
-    }
-
-    .image-preview {
-      margin-top: 12px;
-      position: relative;
-    }
-
-    .image-preview img {
-      width: 100%;
-      max-height: 250px;
-      object-fit: cover;
-      border-radius: 15px;
-      border: 1px solid #eee;
-      display: block;
-    }
-
-    .remove-image {
-      margin-top: 8px;
-      padding: 8px 12px;
-      border: 1px solid #ddd;
-      background: white;
-      border-radius: 8px;
-      color: #d00;
-    }
-
-    .routine-image {
-      width: 100%;
-      max-height: 220px;
-      object-fit: cover;
-      border-radius: 15px;
-      margin-bottom: 15px;
-      display: block;
-    }
-
-    .direct-routine-image {
-      width: 100%;
-      max-height: 300px;
-      object-fit: cover;
-      border-radius: 18px;
-      margin-bottom: 20px;
-    }
-
-    /* ROUTINES */
-
-    .routine-card {
-      border: 1px solid #eee;
-      border-radius: 15px;
-      padding: 18px;
-      margin-top: 12px;
-    }
-
-    /* Routine waiting for activation (no days selected) */
-    .routine-card.waiting-activation {
-      background: #fff0f0;
-      border: 2px solid #ffb8b8;
-    }
-
-    .waiting-activation-label {
-      display: inline-block;
-      margin-bottom: 8px;
-      padding: 4px 9px;
-      border-radius: 7px;
-      background: #ffd6d6;
-      color: #c40000;
-      font-size: 12px;
-      font-weight: 600;
-    }
-
-    .routine-card h3 {
-      margin: 0 0 7px;
-    }
-
-    .routine-info {
-      color: #777;
-      font-size: 14px;
-      margin-bottom: 15px;
-      line-height: 1.7;
-    }
-
-    .today-info {
-      margin-top: 10px;
-      padding: 10px;
-      border-radius: 10px;
-      background: #f5f5f7;
-      font-size: 14px;
-    }
-
-    .actions {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-top: 12px;
-    }
-
-    .empty {
-      text-align: center;
-      color: #777;
-      padding: 35px 10px;
-    }
-
-    /* FORM */
-
-    .form-group {
-      margin-bottom: 20px;
-    }
-
-    .form-group label {
-      display: block;
-      font-weight: bold;
-      margin-bottom: 7px;
-    }
-
-    input,
-    select {
-      width: 100%;
-      padding: 13px;
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      background: white;
-    }
-
-    .days {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .day input {
-      display: none;
-    }
-
-    .day span {
-      display: block;
-      padding: 10px 14px;
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      cursor: pointer;
-    }
-
-    .day input:checked + span {
-      background: #111;
-      color: white;
-    }
-
-    /* STEPS */
-
-    .step {
-      border: 1px solid #eee;
-      border-radius: 15px;
-      padding: 15px;
-      margin-bottom: 12px;
-      background: #fafafa;
-      position: relative;
-      transition: opacity .15s ease, border-color .15s ease,
-                  background .15s ease;
-    }
-
-    /* SPECIAL STEP: ACTIVATION ONLY */
-
-    .step.activation-only {
-      background: #fff0f0;
-      border: 2px solid #ffb8b8;
-    }
-
-    .activation-only-label {
-      display: inline-block;
-      margin-right: 8px;
-      padding: 4px 9px;
-      border-radius: 7px;
-      background: #ffd6d6;
-      color: #c40000;
-      font-size: 12px;
-      font-weight: 600;
-    }
-
-    .step.dragging {
-      opacity: .45;
-      border: 2px dashed #111;
-    }
-
-    .step-drag-handle {
-      cursor: grab;
-      padding: 4px 10px;
-      background: #e5e5ea;
-      border-radius: 6px;
-      font-size: 16px;
-      user-select: none;
-      margin-left: 8px;
-      display: inline-block;
-      line-height: 1;
-    }
-
-    .step-drag-handle:active {
-      cursor: grabbing;
-    }
-
-    .step-title {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 15px;
-      gap: 10px;
-    }
-
-    .step-id-tag {
-      font-size: 11px;
-      background: #e5e5ea;
-      padding: 3px 8px;
-      border-radius: 6px;
-      color: #555;
-      font-weight: normal;
-    }
-
-    .step-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-
-    .frequency-wrapper {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .frequency-wrapper input {
-      flex: 1;
-    }
-
-    .frequency-label {
-      min-width: 125px;
-      font-size: 13px;
-      color: #777;
-      line-height: 1.3;
-    }
-
-    .frequency-label.special {
-      color: #c40000;
-      font-weight: bold;
-    }
-
-    .disable-box {
-      margin-top: 15px;
-      padding: 14px;
-      border: 1px dashed #ccc;
-      border-radius: 12px;
-      background: #fcfcfc;
-    }
-
-    .activation-box {
-      margin-top: 15px;
-      padding: 14px;
-      border: 1px dashed #aaa;
-      border-radius: 12px;
-      background: #fcfcfc;
-    }
-
-    .activation-box-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
-    }
-
-    .activation-rule-row {
-      display: flex;
-      gap: 10px;
-      align-items: flex-end;
-      margin-bottom: 10px;
-      background: #fff;
-      padding: 10px;
-      border: 1px solid #eaeaea;
-      border-radius: 10px;
-    }
-
-    .activation-rule-row > div {
-      flex: 1;
-    }
-
-    .activation-rule-row label {
-      font-size: 12px;
-      color: #666;
-      display: block;
-      margin-bottom: 4px;
-    }
-
-    .activation-box .btn-add-rule {
-      background: #f0f0f3;
-      border: 1px solid #ddd;
-      padding: 6px 12px;
-      border-radius: 8px;
-      font-size: 13px;
-    }
-
-    .activation-box .btn-remove-rule {
-      padding: 10px 14px;
-      background: #fff;
-      border: 1px solid #ddd;
-      color: #d00;
-      border-radius: 8px;
-    }
-
-    .disable-box-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
-    }
-
-    .disable-rule-row {
-      display: flex;
-      gap: 10px;
-      align-items: flex-end;
-      margin-bottom: 10px;
-      background: #fff;
-      padding: 10px;
-      border: 1px solid #eaeaea;
-      border-radius: 10px;
-    }
-
-    .disable-rule-row > div {
-      flex: 1;
-    }
-
-    .disable-rule-row label {
-      font-size: 12px;
-      color: #666;
-      display: block;
-      margin-bottom: 4px;
-    }
-
-    .btn-add-rule {
-      background: #f0f0f3;
-      border: 1px solid #ddd;
-      padding: 6px 12px;
-      border-radius: 8px;
-      font-size: 13px;
-    }
-
-    .btn-remove-rule {
-      padding: 10px 14px;
-      background: #fff;
-      border: 1px solid #ddd;
-      color: #d00;
-      border-radius: 8px;
-    }
-
-    .step-actions-bar {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 20px;
-      background: #f0f0f3;
-      padding: 12px;
-      border-radius: 12px;
-      align-items: center;
-    }
-
-    .step-actions-bar select {
-      flex: 1;
-    }
-
-    /* ACTIVE ROUTINE */
-
-    #activeScreen {
-      display: none;
-      min-height: auto;
-      padding: 0;
-    }
-
-    .active-box {
-      max-width: 480px;
-      margin: 0 auto;
-      background: white;
-      border-radius: 28px;
-      padding: 16px 22px 24px;
-      text-align: center;
-      box-shadow: 0 8px 30px rgba(0,0,0,.06);
-    }
-
-    #activeRoutineName {
-      margin: 0 0 8px;
-      font-size: 17px;
-      font-weight: 600;
-      color: #222;
-      text-align: left;
-      width: 100%;
-    }
-
-    .active-step-card {
-      background: #fafafa;
-      border: 2px dashed #e0e0e0;
-      border-radius: 20px;
-      padding: 18px 12px;
-      margin-bottom: 12px;
-      cursor: pointer;
-      user-select: none;
-      transition: background-color .15s ease,
-                  border-color .15s ease,
-                  transform .1s ease;
-    }
-
-    .active-step-card:hover {
-      border-color: #bbb;
-    }
-
-    .active-step-card:active {
-      background-color: #f0f0f3;
-      transform: scale(.99);
-    }
-
-    .active-step-image {
-      width: 100%;
-      max-height: 340px;
-      object-fit: contain;
-      border-radius: 18px;
-      margin: 0 auto 6px;
-      display: block;
-      pointer-events: none;
-    }
-
-    #activeStepName {
-      font-size: 42px;
-      font-weight: 800;
-      color: #d00;
-      margin: 8px 0 8px;
-      line-height: 1.15;
-      letter-spacing: -.5px;
-      word-break: break-word;
-    }
-
-    #activeStepName a {
-      color: #007aff;
-      text-decoration: underline;
-      cursor: pointer;
-      position: relative;
-      z-index: 10;
-      pointer-events: auto;
-    }
-
-    #timer {
-      font-size: 58px;
-      font-weight: 700;
-      margin: 4px 0 18px;
-      color: #111;
-      pointer-events: none;
-    }
-
-    .tap-hint {
-      font-size: 13px;
-      color: #999;
-      margin-bottom: 16px;
-    }
-
-    .active-action-buttons {
-      display: flex;
-      gap: 10px;
-      margin-top: 10px;
-    }
-
-    /* Shown when step timer reaches 00:00 */
-    .step-finished-panel {
-      display: none;
-      margin-top: 14px;
-      padding: 16px 14px;
-      border-radius: 16px;
-      background: #fff5f5;
-      border: 2px solid #ffb8b8;
-      text-align: center;
-    }
-
-    .step-finished-panel.show {
-      display: block;
-    }
-
-    .step-finished-panel .finished-title {
-      font-size: 16px;
-      font-weight: 700;
-      color: #c40000;
-      margin-bottom: 6px;
-    }
-
-    .step-finished-panel .finished-hint {
-      font-size: 13px;
-      color: #666;
-      margin-bottom: 14px;
-    }
-
-    .step-finished-actions {
-      display: flex;
-      gap: 10px;
-    }
-
-    .step-finished-actions .continue-btn {
-      flex: 1;
-      padding: 14px;
-      background: #111;
-      color: white;
-      border: 0;
-      border-radius: 14px;
-      font-size: 16px;
-      font-weight: 600;
-    }
-
-    .step-finished-actions .wait-btn {
-      flex: 1;
-      padding: 14px;
-      background: white;
-      border: 1px solid #ddd;
-      border-radius: 14px;
-      font-size: 15px;
-      color: #555;
-    }
-
-    .skip-btn {
-      flex: 1;
-      padding: 14px;
-      background: #f0f0f3;
-      border: 1px solid #ddd;
-      border-radius: 14px;
-      font-size: 16px;
-      color: #555;
-    }
-
-    .back-btn {
-      flex: 1;
-      padding: 14px;
-      background: white;
-      border: 1px solid #ddd;
-      border-radius: 14px;
-      font-size: 16px;
-      color: #333;
-    }
-
-    /* DIRECT ROUTINE */
-
-    #directRoutineScreen {
-      display: none;
-    }
-
-    .direct-routine-box {
-      max-width: 700px;
-      margin: auto;
-      background: white;
-      border-radius: 25px;
-      padding: 30px 25px;
-    }
-
-    .direct-routine-box h1 {
-      margin-top: 0;
-    }
-
-    .direct-step {
-      padding: 15px;
-      border: 1px solid #eee;
-      border-radius: 12px;
-      margin-bottom: 10px;
-    }
-
-    .direct-step-image {
-      width: 100%;
-      max-height: 180px;
-      object-fit: cover;
-      border-radius: 12px;
-      margin-top: 10px;
-    }
-
-    /* MOBILE */
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: Arial, sans-serif; background: #f5f5f7; color: #111; }
+    button, input, select { font: inherit; }
+    button { cursor: pointer; }
+    .hidden { display: none !important; }
+
+    #loginScreen { min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+    .login-box { width: 90%; max-width: 400px; background: white; padding: 40px 30px; border-radius: 24px; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,.08); }
+    .login-box h1 { margin: 0 0 10px; font-size: 36px; }
+    .login-box p { color: #666; margin-bottom: 30px; }
+    .google-btn { width: 100%; padding: 15px; border: 0; border-radius: 12px; background: #111; color: white; }
+
+    #app { display: none; }
+    .container { width: 92%; max-width: 900px; margin: auto; padding: 12px 0 60px; }
+
+    .user-tab { position: fixed; top: 18px; left: 0; z-index: 1000; background: white; border: 1px solid #e5e5e5; border-left: 0; border-radius: 0 14px 14px 0; padding: 9px 12px; box-shadow: 0 4px 18px rgba(0,0,0,.08); display: flex; align-items: center; gap: 7px; font-size: 13px; color: #555; transition: transform .25s ease; }
+    .user-tab-icon { font-size: 16px; }
+
+    .day-timer { position: fixed; top: 18px; right: 0; z-index: 1000; background: white; border: 1px solid #e5e5e5; border-right: 0; border-radius: 14px 0 0 14px; padding: 9px 14px; box-shadow: 0 4px 18px rgba(0,0,0,.08); display: flex; flex-direction: column; align-items: flex-end; gap: 2px; font-size: 12px; color: #555; min-width: 110px; text-align: left; }
+    .day-timer-label { font-size: 11px; color: #888; font-weight: 500; }
+    .day-timer-value { font-size: 16px; font-weight: 700; color: #111; font-variant-numeric: tabular-nums; letter-spacing: 0.5px; }
+    .day-timer-hint { font-size: 10px; color: #aaa; }
+
+    .user-panel { position: fixed; top: 0; left: 0; width: 260px; max-width: 80vw; height: 100vh; background: white; z-index: 1001; box-shadow: 8px 0 30px rgba(0,0,0,.12); transform: translateX(-100%); transition: transform .28s ease; padding: 25px 20px; display: flex; flex-direction: column; overflow-y: auto; }
+    .user-panel.open { transform: translateX(0); }
+    .user-panel-close { width: 36px; height: 36px; border: 0; background: #f5f5f7; border-radius: 10px; font-size: 20px; margin-bottom: 30px; }
+    .user-panel-title { font-size: 13px; color: #888; margin-bottom: 8px; }
+    #panelUserInfo { font-size: 16px; font-weight: 600; word-break: break-word; margin-bottom: 20px; }
+    .panel-logout { width: 100%; padding: 13px; border: 1px solid #ddd; background: white; border-radius: 12px; color: #d00; margin-top: 12px; }
+    .panel-enable-notifications { width: 100%; padding: 13px; border: 1px solid #ddd; background: white; border-radius: 12px; color: #111; margin-top: 8px; }
+
+    /* TELEGRAM / BARK */
+    .telegram-section { margin-top: 18px; padding-top: 14px; border-top: 1px solid #eee; }
+    .telegram-title { font-size: 13px; color: #888; margin-bottom: 8px; font-weight: 600; }
+    .telegram-section input { width: 100%; margin-bottom: 6px; padding: 10px 12px; border: 1px solid #ddd; border-radius: 10px; font-size: 13px; background: white; box-sizing: border-box; }
+    .telegram-section .tg-status { margin-top: 8px; font-size: 12px; color: #888; min-height: 16px; }
+    .telegram-section .tg-status.ok { color: #0a8f0a; font-weight: 600; }
+    .telegram-section .tg-status.err { color: #d00; }
+
+    .user-panel-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.18); z-index: 1000; display: none; }
+    .user-panel-overlay.show { display: block; }
+
+    .main-title { background: white; padding: 18px 20px; border-radius: 20px; margin-bottom: 12px; text-align: center; }
+    .main-title h1 { margin: 0; font-size: 30px; }
+
+    .main-tabs { display: flex; gap: 8px; margin-bottom: 16px; background: white; padding: 8px; border-radius: 16px; box-shadow: 0 2px 12px rgba(0,0,0,.04); }
+    .main-tab { flex: 1; padding: 14px 12px; border: 0; border-radius: 12px; background: transparent; color: #666; font-size: 16px; font-weight: 600; transition: background .15s ease, color .15s ease; }
+    .main-tab:hover { background: #f5f5f7; color: #222; }
+    .main-tab.active { background: #111; color: white; }
+
+    #calendarScreen { display: none; }
+    #calendarScreen.visible { display: block; }
+    #routinesPanel { display: block; }
+    #routinesPanel.hidden-panel { display: none; }
+
+    .card { background: white; border-radius: 20px; padding: 22px; margin-bottom: 20px; }
+    .top-row { display: flex; justify-content: space-between; align-items: center; gap: 15px; }
+    .top-row h2 { margin: 0; }
+
+    .primary { background: #111; color: white; border: 0; padding: 12px 18px; border-radius: 10px; }
+    .secondary { background: white; border: 1px solid #ddd; padding: 10px 15px; border-radius: 10px; }
+    .danger { color: #d00; background: white; border: 1px solid #ddd; padding: 10px 15px; border-radius: 10px; }
+
+    .image-upload { margin-top: 10px; }
+    .image-upload label { display: block; font-weight: bold; margin-bottom: 8px; }
+    .image-input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 10px; background: white; }
+    .image-preview { margin-top: 12px; position: relative; }
+    .image-preview img { width: 100%; max-height: 250px; object-fit: cover; border-radius: 15px; border: 1px solid #eee; display: block; }
+    .remove-image { margin-top: 8px; padding: 8px 12px; border: 1px solid #ddd; background: white; border-radius: 8px; color: #d00; }
+    .routine-image { width: 100%; max-height: 220px; object-fit: cover; border-radius: 15px; margin-bottom: 15px; display: block; }
+    .direct-routine-image { width: 100%; max-height: 300px; object-fit: cover; border-radius: 18px; margin-bottom: 20px; }
+
+    .routine-card { border: 1px solid #eee; border-radius: 15px; padding: 18px; margin-top: 12px; }
+    .routine-card.waiting-activation { background: #fff0f0; border: 2px solid #ffb8b8; }
+    .waiting-activation-label { display: inline-block; margin-bottom: 8px; padding: 4px 9px; border-radius: 7px; background: #ffd6d6; color: #c40000; font-size: 12px; font-weight: 600; }
+    .routine-card h3 { margin: 0 0 7px; }
+    .routine-info { color: #777; font-size: 14px; margin-bottom: 15px; line-height: 1.7; }
+    .today-info { margin-top: 10px; padding: 10px; border-radius: 10px; background: #f5f5f7; font-size: 14px; }
+    .actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+    .empty { text-align: center; color: #777; padding: 35px 10px; }
+
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; font-weight: bold; margin-bottom: 7px; }
+    input, select { width: 100%; padding: 13px; border: 1px solid #ddd; border-radius: 10px; background: white; }
+
+    .days { display: flex; flex-wrap: wrap; gap: 8px; }
+    .day input { display: none; }
+    .day span { display: block; padding: 10px 14px; border: 1px solid #ddd; border-radius: 10px; cursor: pointer; }
+    .day input:checked + span { background: #111; color: white; }
+
+    .step { border: 1px solid #eee; border-radius: 15px; padding: 15px; margin-bottom: 12px; background: #fafafa; position: relative; transition: opacity .15s ease, border-color .15s ease, background .15s ease; }
+    .step.activation-only { background: #fff0f0; border: 2px solid #ffb8b8; }
+    .activation-only-label { display: inline-block; margin-right: 8px; padding: 4px 9px; border-radius: 7px; background: #ffd6d6; color: #c40000; font-size: 12px; font-weight: 600; }
+    .step.dragging { opacity: .45; border: 2px dashed #111; }
+    .step-drag-handle { cursor: grab; padding: 4px 10px; background: #e5e5ea; border-radius: 6px; font-size: 16px; user-select: none; margin-left: 8px; display: inline-block; line-height: 1; }
+    .step-drag-handle:active { cursor: grabbing; }
+    .step-title { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; gap: 10px; }
+    .step-id-tag { font-size: 11px; background: #e5e5ea; padding: 3px 8px; border-radius: 6px; color: #555; font-weight: normal; }
+    .step-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .frequency-wrapper { display: flex; align-items: center; gap: 8px; }
+    .frequency-wrapper input { flex: 1; }
+    .frequency-label { min-width: 125px; font-size: 13px; color: #777; line-height: 1.3; }
+    .frequency-label.special { color: #c40000; font-weight: bold; }
+    .disable-box { margin-top: 15px; padding: 14px; border: 1px dashed #ccc; border-radius: 12px; background: #fcfcfc; }
+    .activation-box { margin-top: 15px; padding: 14px; border: 1px dashed #aaa; border-radius: 12px; background: #fcfcfc; }
+    .activation-box-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .activation-rule-row { display: flex; gap: 10px; align-items: flex-end; margin-bottom: 10px; background: #fff; padding: 10px; border: 1px solid #eaeaea; border-radius: 10px; }
+    .activation-rule-row > div { flex: 1; }
+    .activation-rule-row label { font-size: 12px; color: #666; display: block; margin-bottom: 4px; }
+    .activation-box .btn-add-rule { background: #f0f0f3; border: 1px solid #ddd; padding: 6px 12px; border-radius: 8px; font-size: 13px; }
+    .activation-box .btn-remove-rule { padding: 10px 14px; background: #fff; border: 1px solid #ddd; color: #d00; border-radius: 8px; }
+    .disable-box-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .disable-rule-row { display: flex; gap: 10px; align-items: flex-end; margin-bottom: 10px; background: #fff; padding: 10px; border: 1px solid #eaeaea; border-radius: 10px; }
+    .disable-rule-row > div { flex: 1; }
+    .disable-rule-row label { font-size: 12px; color: #666; display: block; margin-bottom: 4px; }
+    .btn-add-rule { background: #f0f0f3; border: 1px solid #ddd; padding: 6px 12px; border-radius: 8px; font-size: 13px; }
+    .btn-remove-rule { padding: 10px 14px; background: #fff; border: 1px solid #ddd; color: #d00; border-radius: 8px; }
+    .step-actions-bar { display: flex; gap: 10px; margin-bottom: 20px; background: #f0f0f3; padding: 12px; border-radius: 12px; align-items: center; }
+    .step-actions-bar select { flex: 1; }
+
+    #activeScreen { display: none; min-height: auto; padding: 0; }
+    .active-box { max-width: 480px; margin: 0 auto; background: white; border-radius: 28px; padding: 16px 22px 24px; text-align: center; box-shadow: 0 8px 30px rgba(0,0,0,.06); }
+    #activeRoutineName { margin: 0 0 8px; font-size: 17px; font-weight: 600; color: #222; text-align: left; width: 100%; }
+    .active-step-card { background: #fafafa; border: 2px dashed #e0e0e0; border-radius: 20px; padding: 18px 12px; margin-bottom: 12px; cursor: pointer; user-select: none; transition: background-color .15s ease, border-color .15s ease, transform .1s ease; }
+    .active-step-card:hover { border-color: #bbb; }
+    .active-step-card:active { background-color: #f0f0f3; transform: scale(.99); }
+    .active-step-image { width: 100%; max-height: 340px; object-fit: contain; border-radius: 18px; margin: 0 auto 6px; display: block; pointer-events: none; }
+    #activeStepName { font-size: 42px; font-weight: 800; color: #d00; margin: 8px 0 8px; line-height: 1.15; letter-spacing: -.5px; word-break: break-word; }
+    #activeStepName a { color: #007aff; text-decoration: underline; cursor: pointer; position: relative; z-index: 10; pointer-events: auto; }
+    #timer { font-size: 58px; font-weight: 700; margin: 4px 0 18px; color: #111; pointer-events: none; }
+    .tap-hint { font-size: 13px; color: #999; margin-bottom: 16px; }
+    .active-action-buttons { display: flex; gap: 10px; margin-top: 10px; }
+    .step-finished-panel { display: none; margin-top: 14px; padding: 16px 14px; border-radius: 16px; background: #fff5f5; border: 2px solid #ffb8b8; text-align: center; }
+    .step-finished-panel.show { display: block; }
+    .step-finished-panel .finished-title { font-size: 16px; font-weight: 700; color: #c40000; margin-bottom: 6px; }
+    .step-finished-panel .finished-hint { font-size: 13px; color: #666; margin-bottom: 14px; }
+    .step-finished-actions { display: flex; gap: 10px; }
+    .step-finished-actions .continue-btn { flex: 1; padding: 14px; background: #111; color: white; border: 0; border-radius: 14px; font-size: 16px; font-weight: 600; }
+    .step-finished-actions .wait-btn { flex: 1; padding: 14px; background: white; border: 1px solid #ddd; border-radius: 14px; font-size: 15px; color: #555; }
+    .skip-btn { flex: 1; padding: 14px; background: #f0f0f3; border: 1px solid #ddd; border-radius: 14px; font-size: 16px; color: #555; }
+    .back-btn { flex: 1; padding: 14px; background: white; border: 1px solid #ddd; border-radius: 14px; font-size: 16px; color: #333; }
+
+    #directRoutineScreen { display: none; }
+    .direct-routine-box { max-width: 700px; margin: auto; background: white; border-radius: 25px; padding: 30px 25px; }
+    .direct-routine-box h1 { margin-top: 0; }
+    .direct-step { padding: 15px; border: 1px solid #eee; border-radius: 12px; margin-bottom: 10px; }
+    .direct-step-image { width: 100%; max-height: 180px; object-fit: cover; border-radius: 12px; margin-top: 10px; }
 
     @media (max-width: 600px) {
-      .container {
-        width: 94%;
-        padding-top: 10px;
-      }
-
-      .main-title {
-        padding: 14px 18px;
-        margin-bottom: 12px;
-      }
-
-      .main-title h1 {
-        font-size: 27px;
-      }
-
-      .step-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .disable-rule-row,
-      .activation-rule-row {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      #timer {
-        font-size: 52px;
-      }
-
-      #activeStepName {
-        font-size: 36px;
-      }
-
-      #activeRoutineName {
-        font-size: 16px;
-      }
-
-      .active-step-image {
-        max-height: 300px;
-      }
-
-      .top-row {
-        align-items: flex-start;
-        flex-direction: column;
-      }
-
-      .user-tab {
-        top: 12px;
-        font-size: 12px;
-        padding: 8px 10px;
-      }
-
-      .day-timer {
-        top: 12px;
-        padding: 7px 10px;
-        min-width: 90px;
-      }
-
-      .day-timer-value {
-        font-size: 14px;
-      }
-
-      .day-timer-label {
-        font-size: 10px;
-      }
-
-      .day-timer-hint {
-        font-size: 9px;
-      }
-
-      .active-box {
-        padding-top: 12px;
-      }
-
-      .step-actions-bar {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      .frequency-wrapper {
-        align-items: stretch;
-        flex-direction: column;
-      }
-
-      .frequency-label {
-        min-width: 0;
-      }
-
-      .step-title {
-        align-items: flex-start;
-      }
-
-      /* CALENDAR MOBILE */
-      .calendar-day {
-        min-height: 120px;
-        padding: 8px 5px;
-      }
-
-      .day-date-num {
-        font-size: 14px;
-      }
-
-      .day-routine-name {
-        font-size: 11px;
-      }
-
-      .day-step {
-        font-size: 10px;
-      }
-
-      .calendar-weekday-header {
-        font-size: 11px;
-      }
-
-      .main-tab {
-        font-size: 15px;
-        padding: 12px 10px;
-      }
-
-      .calendar-grid {
-        gap: 5px;
-      }
-
-      .calendar-weekdays {
-        gap: 5px;
-      }
+      .container { width: 94%; padding-top: 10px; }
+      .main-title { padding: 14px 18px; margin-bottom: 12px; }
+      .main-title h1 { font-size: 27px; }
+      .step-grid { grid-template-columns: 1fr; }
+      .disable-rule-row, .activation-rule-row { flex-direction: column; align-items: stretch; }
+      #timer { font-size: 52px; }
+      #activeStepName { font-size: 36px; }
+      #activeRoutineName { font-size: 16px; }
+      .active-step-image { max-height: 300px; }
+      .top-row { align-items: flex-start; flex-direction: column; }
+      .user-tab { top: 12px; font-size: 12px; padding: 8px 10px; }
+      .day-timer { top: 12px; padding: 7px 10px; min-width: 90px; }
+      .day-timer-value { font-size: 14px; }
+      .day-timer-label { font-size: 10px; }
+      .day-timer-hint { font-size: 9px; }
+      .active-box { padding-top: 12px; }
+      .step-actions-bar { flex-direction: column; align-items: stretch; }
+      .frequency-wrapper { align-items: stretch; flex-direction: column; }
+      .frequency-label { min-width: 0; }
+      .step-title { align-items: flex-start; }
+      .calendar-day { min-height: 120px; padding: 8px 5px; }
+      .day-date-num { font-size: 14px; }
+      .day-routine-name { font-size: 11px; }
+      .day-step { font-size: 10px; }
+      .calendar-weekday-header { font-size: 11px; }
+      .main-tab { font-size: 15px; padding: 12px 10px; }
+      .calendar-grid { gap: 5px; }
+      .calendar-weekdays { gap: 5px; }
     }
 
-    /* CALENDAR */
+    .calendar-card { margin-top: 0; }
+    .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; gap: 12px; flex-wrap: wrap; }
+    .calendar-header h2 { margin: 0; }
+    .calendar-nav { display: flex; align-items: center; gap: 10px; }
+    .calendar-nav button { width: 36px; height: 36px; border: 1px solid #ddd; background: white; border-radius: 10px; font-size: 16px; display: flex; align-items: center; justify-content: center; padding: 0; }
+    .calendar-nav button:hover { background: #f5f5f7; }
+    .calendar-month-label { font-weight: 700; font-size: 16px; min-width: 130px; text-align: center; }
+    .calendar-weekdays { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; margin-bottom: 8px; }
+    .calendar-weekday-header { text-align: center; font-size: 13px; font-weight: 600; color: #888; padding: 6px 0; }
+    .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
+    .calendar-day { background: #f8f8fa; border: 1px solid #eee; border-radius: 14px; padding: 12px 8px; min-height: 150px; display: flex; flex-direction: column; gap: 6px; cursor: pointer; transition: transform .12s ease, box-shadow .12s ease; }
+    .calendar-day.other-month { opacity: 0.38; background: #fafafa; cursor: default; }
+    .calendar-day.other-month:hover { transform: none; box-shadow: none; }
+    .calendar-day:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(0,0,0,.08); }
+    .calendar-day.today { background: #111; color: white; border-color: #111; }
+    .calendar-day.today .day-date-num { color: white; }
+    .calendar-day.today .day-label { color: #ccc; }
+    .calendar-day.today .day-routine { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.2); }
+    .calendar-day.today .day-step { color: #ddd; }
+    .calendar-day.today .day-empty { color: #999; }
+    .calendar-day.tomorrow { border-color: #111; box-shadow: 0 0 0 1px #111; }
+    .day-date-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 2px; }
+    .day-date-num { font-weight: 700; font-size: 17px; color: #222; }
+    .day-label { font-size: 11px; font-weight: 600; color: #888; }
+    .day-routines { display: flex; flex-direction: column; gap: 4px; flex: 1; overflow: hidden; }
+    .day-routine { background: white; border: 1px solid #eaeaea; border-radius: 8px; padding: 5px 6px; }
+    .day-routine-name { font-weight: 600; font-size: 13px; line-height: 1.3; margin-bottom: 3px; }
+    .day-steps-list { display: flex; flex-direction: column; gap: 1px; }
+    .day-step { font-size: 12px; color: #666; line-height: 1.35; }
+    .day-step::before { content: "• "; color: #bbb; }
+    .day-empty { font-size: 11px; color: #bbb; text-align: center; margin-top: 8px; }
+    .day-steps-count { font-size: 10px; color: #999; }
+    .calendar-day.today .day-steps-count { color: #bbb; }
+    .day-more { font-size: 10px; color: #888; margin-top: 2px; }
+    .calendar-day.today .day-more { color: #aaa; }
 
-    .calendar-card {
-      margin-top: 0;
-    }
+    .day-detail-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.35); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 16px; }
+    .day-detail-overlay.show { display: flex; }
+    .day-detail-modal { background: white; border-radius: 22px; width: 100%; max-width: 520px; max-height: 85vh; overflow: auto; box-shadow: 0 20px 50px rgba(0,0,0,.18); padding: 22px 20px 26px; }
+    .day-detail-header { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 18px; }
+    .day-detail-header h2 { margin: 0; font-size: 20px; }
+    .day-detail-close { width: 36px; height: 36px; border: 0; background: #f5f5f7; border-radius: 10px; font-size: 20px; flex-shrink: 0; }
+    .day-detail-routine { border: 1px solid #eee; border-radius: 14px; padding: 14px; margin-bottom: 12px; background: #fafafa; }
+    .day-detail-routine-name { font-weight: 700; font-size: 16px; margin-bottom: 10px; }
+    .day-detail-step { background: white; border: 1px solid #eaeaea; border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; font-size: 14px; line-height: 1.4; }
+    .day-detail-step:last-child { margin-bottom: 0; }
+    .day-detail-empty { text-align: center; color: #888; padding: 24px 10px; font-size: 15px; }
 
-    .calendar-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 16px;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .calendar-header h2 {
-      margin: 0;
-    }
-
-    .calendar-nav {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .calendar-nav button {
-      width: 36px;
-      height: 36px;
-      border: 1px solid #ddd;
-      background: white;
-      border-radius: 10px;
-      font-size: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0;
-    }
-
-    .calendar-nav button:hover {
-      background: #f5f5f7;
-    }
-
-    .calendar-month-label {
-      font-weight: 700;
-      font-size: 16px;
-      min-width: 130px;
-      text-align: center;
-    }
-
-    .calendar-weekdays {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 8px;
-      margin-bottom: 8px;
-    }
-
-    .calendar-weekday-header {
-      text-align: center;
-      font-size: 13px;
-      font-weight: 600;
-      color: #888;
-      padding: 6px 0;
-    }
-
-    .calendar-grid {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 8px;
-    }
-
-    .calendar-day {
-      background: #f8f8fa;
-      border: 1px solid #eee;
-      border-radius: 14px;
-      padding: 12px 8px;
-      min-height: 150px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .calendar-day.other-month {
-      opacity: 0.38;
-      background: #fafafa;
-    }
-
-    .calendar-day.today {
-      background: #111;
-      color: white;
-      border-color: #111;
-    }
-
-    .calendar-day.today .day-date-num {
-      color: white;
-    }
-
-    .calendar-day.today .day-label {
-      color: #ccc;
-    }
-
-    .calendar-day.today .day-routine {
-      background: rgba(255,255,255,0.12);
-      border-color: rgba(255,255,255,0.2);
-    }
-
-    .calendar-day.today .day-step {
-      color: #ddd;
-    }
-
-    .calendar-day.today .day-empty {
-      color: #999;
-    }
-
-    .calendar-day.tomorrow {
-      border-color: #111;
-      box-shadow: 0 0 0 1px #111;
-    }
-
-    .day-date-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      margin-bottom: 2px;
-    }
-
-    .day-date-num {
-      font-weight: 700;
-      font-size: 17px;
-      color: #222;
-    }
-
-    .day-label {
-      font-size: 11px;
-      font-weight: 600;
-      color: #888;
-    }
-
-    .day-routines {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      flex: 1;
-      overflow: hidden;
-    }
-
-    .day-routine {
-      background: white;
-      border: 1px solid #eaeaea;
-      border-radius: 8px;
-      padding: 5px 6px;
-    }
-
-    .day-routine-name {
-      font-weight: 600;
-      font-size: 13px;
-      line-height: 1.3;
-      margin-bottom: 3px;
-    }
-
-    .day-steps-list {
-      display: flex;
-      flex-direction: column;
-      gap: 1px;
-    }
-
-    .day-step {
-      font-size: 12px;
-      color: #666;
-      line-height: 1.35;
-    }
-
-    .day-step::before {
-      content: "• ";
-      color: #bbb;
-    }
-
-    .day-empty {
-      font-size: 11px;
-      color: #bbb;
-      text-align: center;
-      margin-top: 8px;
-    }
-
-    .day-steps-count {
-      font-size: 10px;
-      color: #999;
-    }
-
-    .calendar-day.today .day-steps-count {
-      color: #bbb;
-    }
-
-    .day-more {
-      font-size: 10px;
-      color: #888;
-      margin-top: 2px;
-    }
-
-    .calendar-day.today .day-more {
-      color: #aaa;
-    }
-
-    .calendar-day {
-      cursor: pointer;
-      transition: transform .12s ease, box-shadow .12s ease;
-    }
-
-    .calendar-day:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 14px rgba(0,0,0,.08);
-    }
-
-    .calendar-day.other-month {
-      cursor: default;
-    }
-
-    .calendar-day.other-month:hover {
-      transform: none;
-      box-shadow: none;
-    }
-
-    /* Day detail modal */
-    .day-detail-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,.35);
-      z-index: 2000;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
-    }
-
-    .day-detail-overlay.show {
-      display: flex;
-    }
-
-    .day-detail-modal {
-      background: white;
-      border-radius: 22px;
-      width: 100%;
-      max-width: 520px;
-      max-height: 85vh;
-      overflow: auto;
-      box-shadow: 0 20px 50px rgba(0,0,0,.18);
-      padding: 22px 20px 26px;
-    }
-
-    .day-detail-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 18px;
-    }
-
-    .day-detail-header h2 {
-      margin: 0;
-      font-size: 20px;
-    }
-
-    .day-detail-close {
-      width: 36px;
-      height: 36px;
-      border: 0;
-      background: #f5f5f7;
-      border-radius: 10px;
-      font-size: 20px;
-      flex-shrink: 0;
-    }
-
-    .day-detail-routine {
-      border: 1px solid #eee;
-      border-radius: 14px;
-      padding: 14px;
-      margin-bottom: 12px;
-      background: #fafafa;
-    }
-
-    .day-detail-routine-name {
-      font-weight: 700;
-      font-size: 16px;
-      margin-bottom: 10px;
-    }
-
-    .day-detail-step {
-      background: white;
-      border: 1px solid #eaeaea;
-      border-radius: 10px;
-      padding: 10px 12px;
-      margin-bottom: 8px;
-      font-size: 14px;
-      line-height: 1.4;
-    }
-
-    .day-detail-step:last-child {
-      margin-bottom: 0;
-    }
-
-    .day-detail-empty {
-      text-align: center;
-      color: #888;
-      padding: 24px 10px;
-      font-size: 15px;
-    }
-
-    .show-in-calendar-box {
-      margin-top: 14px;
-      padding: 12px 14px;
-      border: 1px solid #e5e5e5;
-      border-radius: 12px;
-      background: #fafafa;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .show-in-calendar-box input[type="checkbox"] {
-      width: 18px;
-      height: 18px;
-      accent-color: #111;
-      flex-shrink: 0;
-      cursor: pointer;
-    }
-
-    .show-in-calendar-box label {
-      font-weight: 600;
-      font-size: 14px;
-      cursor: pointer;
-      margin: 0;
-      user-select: none;
-    }
-
-    .show-in-calendar-box .hint {
-      font-size: 12px;
-      color: #888;
-      font-weight: normal;
-      display: block;
-      margin-top: 2px;
-    }
+    .show-in-calendar-box { margin-top: 14px; padding: 12px 14px; border: 1px solid #e5e5e5; border-radius: 12px; background: #fafafa; display: flex; align-items: center; gap: 10px; }
+    .show-in-calendar-box input[type="checkbox"] { width: 18px; height: 18px; accent-color: #111; flex-shrink: 0; cursor: pointer; }
+    .show-in-calendar-box label { font-weight: 600; font-size: 14px; cursor: pointer; margin: 0; user-select: none; }
+    .show-in-calendar-box .hint { font-size: 12px; color: #888; font-weight: normal; display: block; margin-top: 2px; }
   </style>
 </head>
 
 <body>
 
 <!-- LOGIN -->
-
 <div id="loginScreen">
   <div class="login-box">
     <h1>Routine</h1>
     <p>התחבר כדי להיכנס למערכת שלך</p>
-    <button id="loginBtn" class="google-btn">
-      כניסה עם Google
-    </button>
+    <button id="loginBtn" class="google-btn">כניסה עם Google</button>
   </div>
 </div>
 
 <!-- APP -->
-
 <div id="app">
-
-  <!-- USER SIDE PANEL -->
 
   <button id="userTab" class="user-tab">
     <span class="user-tab-icon">☰</span>
     <span>משתמש</span>
   </button>
 
-  <!-- Countdown until next logical day (04:00) -->
   <div id="dayTimer" class="day-timer" title="יום חדש מתחיל ב־04:00">
     <span class="day-timer-label">היום הבא בעוד</span>
     <span id="dayTimerValue" class="day-timer-value">--:--:--</span>
@@ -1424,322 +268,165 @@
   <div id="userPanelOverlay" class="user-panel-overlay"></div>
 
   <div id="userPanel" class="user-panel">
-    <button id="closeUserPanel" class="user-panel-close">
-      ×
-    </button>
+    <button id="closeUserPanel" class="user-panel-close">×</button>
 
-    <div class="user-panel-title">
-      מחובר כ:
-    </div>
-
+    <div class="user-panel-title">מחובר כ:</div>
     <div id="panelUserInfo"></div>
 
     <button id="enableNotificationsBtn" class="panel-enable-notifications">
-      הפעל התראות
+      הפעל התראות דפדפן
     </button>
 
-    <button id="logoutBtn" class="panel-logout">
-      התנתק
-    </button>
+    <div class="telegram-section">
+      <div class="telegram-title">התראות טלגרם</div>
+      <input id="tgBotToken" type="text" placeholder="Bot Token">
+      <input id="tgChatId" type="text" placeholder="Chat ID">
+      <button id="tgSaveBtn" class="panel-enable-notifications" style="margin-top:4px;">שמור טלגרם</button>
+      <button id="tgTestBtn" class="panel-enable-notifications" style="margin-top:6px;">שלח בדיקה לטלגרם</button>
+      <div id="tgStatus" class="tg-status"></div>
+    </div>
+
+    <div class="telegram-section">
+      <div class="telegram-title">התראות Bark (מסך נעילה)</div>
+      <input id="barkUrlInput" type="text" placeholder="https://api.day.app/YOUR_KEY">
+      <button id="barkSaveBtn" class="panel-enable-notifications" style="margin-top:4px;">שמור Bark</button>
+      <button id="barkTestBtn" class="panel-enable-notifications" style="margin-top:6px;">שלח בדיקה ל-Bark</button>
+      <div id="barkStatus" class="tg-status"></div>
+    </div>
+
+    <button id="logoutBtn" class="panel-logout">התנתק</button>
   </div>
 
   <div class="container">
 
-    <!-- MAIN TITLE -->
-
-    <div class="main-title">
-      <h1>Routine</h1>
-    </div>
-
-    <!-- MAIN TABS -->
+    <div class="main-title"><h1>Routine</h1></div>
 
     <div id="mainTabs" class="main-tabs">
-      <button type="button" id="tabRoutines" class="main-tab active">
-        השגרות
-      </button>
-      <button type="button" id="tabCalendar" class="main-tab">
-        לוח שנה
-      </button>
+      <button type="button" id="tabRoutines" class="main-tab active">השגרות</button>
+      <button type="button" id="tabCalendar" class="main-tab">לוח שנה</button>
     </div>
 
-    <!-- HOME / LIST SCREEN (wrapper) -->
-
     <div id="routineListScreen">
-
-      <!-- ROUTINES PANEL -->
-
       <div id="routinesPanel">
-
         <div class="card">
-
           <div class="top-row">
             <h2>השגרות שלי</h2>
-
-            <button id="newRoutineBtn" class="primary">
-              + Routine חדש
-            </button>
+            <button id="newRoutineBtn" class="primary">+ Routine חדש</button>
           </div>
-
           <div id="routineList"></div>
-
         </div>
-
       </div>
 
-      <!-- CALENDAR PANEL -->
-
       <div id="calendarScreen">
-
         <div class="card calendar-card">
-
           <div class="calendar-header">
             <h2>לוח שנה</h2>
-
             <div class="calendar-nav">
               <button id="calPrevBtn" type="button" title="חודש קודם">‹</button>
               <span id="calendarMonthLabel" class="calendar-month-label"></span>
               <button id="calNextBtn" type="button" title="חודש הבא">›</button>
             </div>
           </div>
-
           <div id="calendarWeekdays" class="calendar-weekdays"></div>
           <div id="calendarGrid" class="calendar-grid"></div>
-
         </div>
-
       </div>
-
     </div>
 
     <!-- EDITOR -->
-
     <div id="editorScreen" class="hidden">
-
       <div class="card">
-
-        <h2 id="editorTitle">
-          Routine חדש
-        </h2>
+        <h2 id="editorTitle">Routine חדש</h2>
 
         <div class="form-group">
-
-          <label>
-            שם ה-Routine
-          </label>
-
-          <input
-            id="routineName"
-            type="text"
-            placeholder="לדוגמה: בוקר"
-          >
-
+          <label>שם ה-Routine</label>
+          <input id="routineName" type="text" placeholder="לדוגמה: בוקר">
         </div>
 
         <div class="form-group image-upload">
-
-          <label>
-            תמונה ל-Routine
-          </label>
-
-          <input
-            id="routineImageInput"
-            class="image-input"
-            type="file"
-            accept="image/*"
-          >
-
-          <div id="routineImagePreview"
-               class="image-preview"></div>
-
+          <label>תמונה ל-Routine</label>
+          <input id="routineImageInput" class="image-input" type="file" accept="image/*">
+          <div id="routineImagePreview" class="image-preview"></div>
         </div>
 
         <div class="form-group">
-
-          <label>
-            באילו ימים ה-Routine פעיל?
-          </label>
-
+          <label>באילו ימים ה-Routine פעיל?</label>
           <div class="days">
-
-            <label class="day">
-              <input type="checkbox" value="0">
-              <span>א׳</span>
-            </label>
-
-            <label class="day">
-              <input type="checkbox" value="1">
-              <span>ב׳</span>
-            </label>
-
-            <label class="day">
-              <input type="checkbox" value="2">
-              <span>ג׳</span>
-            </label>
-
-            <label class="day">
-              <input type="checkbox" value="3">
-              <span>ד׳</span>
-            </label>
-
-            <label class="day">
-              <input type="checkbox" value="4">
-              <span>ה׳</span>
-            </label>
-
-            <label class="day">
-              <input type="checkbox" value="5">
-              <span>ו׳</span>
-            </label>
-
-            <label class="day">
-              <input type="checkbox" value="6">
-              <span>ש׳</span>
-            </label>
-
+            <label class="day"><input type="checkbox" value="0"><span>א׳</span></label>
+            <label class="day"><input type="checkbox" value="1"><span>ב׳</span></label>
+            <label class="day"><input type="checkbox" value="2"><span>ג׳</span></label>
+            <label class="day"><input type="checkbox" value="3"><span>ד׳</span></label>
+            <label class="day"><input type="checkbox" value="4"><span>ה׳</span></label>
+            <label class="day"><input type="checkbox" value="5"><span>ו׳</span></label>
+            <label class="day"><input type="checkbox" value="6"><span>ש׳</span></label>
           </div>
-
         </div>
 
         <div class="form-group">
           <label for="routineStartTime">שעת התחלה של ה-Routine</label>
-          <input
-            id="routineStartTime"
-            type="time"
-            value=""
-          >
+          <input id="routineStartTime" type="time" value="">
           <div style="margin-top:6px;color:#888;font-size:12px;line-height:1.5;">
             ההתראה תישלח בשעה הזו רק בימים שסומנו למעלה.
           </div>
         </div>
 
         <h2>Steps</h2>
-
         <div id="stepsContainer"></div>
 
         <div class="step-actions-bar">
-
-          <button id="addStepBtn" class="secondary">
-            + צור Step חדש
-          </button>
-
+          <button id="addStepBtn" class="secondary">+ צור Step חדש</button>
           <select id="reuseStepSelect">
-            <option value="">
-              -- בחר Step קיים מתוך הספרייה --
-            </option>
+            <option value="">-- בחר Step קיים מתוך הספרייה --</option>
           </select>
-
-          <button id="reuseStepBtn" class="secondary">
-            שבץ Step נבחר
-          </button>
-
+          <button id="reuseStepBtn" class="secondary">שבץ Step נבחר</button>
         </div>
 
         <br><br>
-
-        <button id="saveRoutineBtn" class="primary">
-          שמור
-        </button>
-
-        <button id="cancelEditorBtn" class="secondary">
-          ביטול
-        </button>
-
+        <button id="saveRoutineBtn" class="primary">שמור</button>
+        <button id="cancelEditorBtn" class="secondary">ביטול</button>
       </div>
-
     </div>
 
     <!-- DIRECT ROUTINE -->
-
     <div id="directRoutineScreen">
-
       <div class="direct-routine-box">
-
-        <img
-          id="directRoutineImage"
-          class="direct-routine-image hidden"
-          alt=""
-        >
-
+        <img id="directRoutineImage" class="direct-routine-image hidden" alt="">
         <h1 id="directRoutineName"></h1>
-
         <div id="directRoutineSteps"></div>
-
         <br>
-
-        <button id="directStartBtn" class="primary">
-          התחל Routine
-        </button>
-
-        <button id="directBackBtn" class="secondary">
-          חזרה לשגרות
-        </button>
-
+        <button id="directStartBtn" class="primary">התחל Routine</button>
+        <button id="directBackBtn" class="secondary">חזרה לשגרות</button>
       </div>
-
     </div>
 
     <!-- ACTIVE ROUTINE -->
-
     <div id="activeScreen">
-
       <div class="active-box">
-
         <h1 id="activeRoutineName"></h1>
-
-        <div id="activeStepCard"
-             class="active-step-card">
-
-          <img
-            id="activeStepImage"
-            class="active-step-image hidden"
-            alt=""
-          >
-
+        <div id="activeStepCard" class="active-step-card">
+          <img id="activeStepImage" class="active-step-image hidden" alt="">
           <div id="activeStepName"></div>
-
-          <div id="timer">
-            00:00
-          </div>
-
+          <div id="timer">00:00</div>
         </div>
-
-        <div class="tap-hint">
-          לחיצה בתוך הריבוע = בוצע
-        </div>
+        <div class="tap-hint">לחיצה בתוך הריבוע = בוצע</div>
 
         <div id="stepFinishedPanel" class="step-finished-panel">
           <div class="finished-title">הזמן ל-Step הזה נגמר</div>
           <div class="finished-hint">רוצה לסמן כבוצע ולהמשיך ל-Step הבא?</div>
           <div class="step-finished-actions">
-            <button type="button" id="continueNextStepBtn" class="continue-btn">
-              ✓ המשך ל-Step הבא
-            </button>
-            <button type="button" id="waitOnStepBtn" class="wait-btn">
-              עוד רגע
-            </button>
+            <button type="button" id="continueNextStepBtn" class="continue-btn">✓ המשך ל-Step הבא</button>
+            <button type="button" id="waitOnStepBtn" class="wait-btn">עוד רגע</button>
           </div>
         </div>
 
         <div class="active-action-buttons">
-
-          <button id="skipStepBtn"
-                  class="skip-btn">
-            ⏭ דילוג
-          </button>
-
-          <button id="exitActiveBtn"
-                  class="back-btn">
-            יציאה
-          </button>
-
+          <button id="skipStepBtn" class="skip-btn">⏭ דילוג</button>
+          <button id="exitActiveBtn" class="back-btn">יציאה</button>
         </div>
-
       </div>
-
     </div>
 
   </div>
-
 </div>
 
 <!-- DAY DETAIL MODAL -->
@@ -1755,32 +442,9 @@
 
 <script type="module">
 
-import {
-  initializeApp
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-
-import {
-  getAuth,
-  GoogleAuthProvider,
-  signInWithPopup,
-  signOut,
-  onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
-
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  getDocs,
-  doc,
-  updateDoc,
-  deleteDoc,
-  getDoc,
-  setDoc
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-
-
-/* FIREBASE */
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCGTJFidIrp_YAuKOg2CCEO-vjFCiakkHo",
@@ -1800,75 +464,43 @@ const provider = new GoogleAuthProvider();
 window.__ROUTINE_APP_LOADED = true;
 console.log("Routine app loaded");
 
-
-/* GLOBAL VARIABLES */
-
 let currentUser = null;
 let routines = [];
-
 let disabledStepsMap = {};
 let activationRulesMap = {};
 let activatedStepsMap = {};
-
 let editingRoutineId = null;
-
-/* Calendar view month (first day of displayed month) */
 let calendarViewDate = new Date();
 calendarViewDate.setDate(1);
 calendarViewDate.setHours(0, 0, 0, 0);
-
 let activeRoutine = null;
 let activeSteps = [];
 let activeStepIndex = 0;
-
 let timerInterval = null;
 let remainingSeconds = 0;
-
 let currentRoutineImage = "";
-
 let stepImages = new Map();
 
-/* Day boundary: logical day starts at 04:00 (not midnight) */
 const DAY_START_HOUR = 4;
 
-
-/* HELPERS */
-
-/**
- * Returns the Date representing the start of the *logical* day
- * for a given moment. Before 04:00 counts as the previous calendar day.
- */
 function getLogicalDate(date = new Date()) {
   const d = new Date(date.getTime());
-  if (d.getHours() < DAY_START_HOUR) {
-    d.setDate(d.getDate() - 1);
-  }
+  if (d.getHours() < DAY_START_HOUR) { d.setDate(d.getDate() - 1); }
   d.setHours(0, 0, 0, 0);
   return d;
 }
 
-/** Day-of-week (0=Sunday … 6=Saturday) according to the 04:00 boundary */
 function getLogicalDayOfWeek(date = new Date()) {
   return getLogicalDate(date).getDay();
 }
 
-/**
- * Next moment when a new logical day begins (next 04:00).
- */
 function getNextDayStart(date = new Date()) {
   const d = new Date(date.getTime());
   d.setHours(DAY_START_HOUR, 0, 0, 0);
-  if (date.getTime() >= d.getTime()) {
-    d.setDate(d.getDate() + 1);
-  }
+  if (date.getTime() >= d.getTime()) { d.setDate(d.getDate() + 1); }
   return d;
 }
 
-/**
- * After completing a step with frequency N (logical days),
- * disable until the start (04:00) of the logical day that is N days later.
- * frequency=1 → available again from next 04:00.
- */
 function getDisableUntilForFrequency(frequency, fromDate = new Date()) {
   const freq = Math.max(1, Number(frequency) || 1);
   const logicalToday = getLogicalDate(fromDate);
@@ -1884,13 +516,7 @@ function formatCountdown(ms) {
   const h = Math.floor(totalSec / 3600);
   const m = Math.floor((totalSec % 3600) / 60);
   const s = totalSec % 60;
-  return (
-    String(h).padStart(2, "0") +
-    ":" +
-    String(m).padStart(2, "0") +
-    ":" +
-    String(s).padStart(2, "0")
-  );
+  return String(h).padStart(2, "0") + ":" + String(m).padStart(2, "0") + ":" + String(s).padStart(2, "0");
 }
 
 let dayTimerInterval = null;
@@ -1899,141 +525,70 @@ let lastLogicalDayKey = null;
 function updateDayTimer() {
   const el = document.getElementById("dayTimerValue");
   if (!el) return;
-
   const now = new Date();
   const next = getNextDayStart(now);
   const remaining = next.getTime() - now.getTime();
   el.textContent = formatCountdown(remaining);
-
-  /* When the logical day rolls over, refresh routines & calendar */
   const logicalKey = getLogicalDate(now).toDateString();
   if (lastLogicalDayKey === null) {
     lastLogicalDayKey = logicalKey;
   } else if (logicalKey !== lastLogicalDayKey) {
     lastLogicalDayKey = logicalKey;
-    if (currentUser) {
-      loadRoutines();
-    }
+    if (currentUser) { loadRoutines(); }
   }
 }
 
 function startDayTimer() {
-  if (dayTimerInterval) {
-    clearInterval(dayTimerInterval);
-  }
+  if (dayTimerInterval) { clearInterval(dayTimerInterval); }
   updateDayTimer();
   dayTimerInterval = setInterval(updateDayTimer, 1000);
 }
 
 function escapeHtml(text) {
-
-  return String(text || '')
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
-
+  return String(text || '').replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }
-
 
 function escapeAttr(text) {
-
-  return String(text || '')
-    .replace(/"/g, "&quot;");
-
+  return String(text || '').replace(/"/g, "&quot;");
 }
-
 
 function formatTextWithLinks(text) {
-
   if (!text) return '';
-
   const urlRegex = /(https?:\/\/[^\s]+)/g;
-
   const escaped = escapeHtml(text);
-
-  return escaped.replace(
-    urlRegex,
-    (url) => {
-
-      return `
-        <a
-          href="${url}"
-          target="_blank"
-          rel="noopener noreferrer"
-        >${url}</a>
-      `;
-
-    }
-  );
-
+  return escaped.replace(urlRegex, (url) => `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`);
 }
-
 
 /* USER PANEL */
-
-const userTab =
-  document.getElementById("userTab");
-
-const userPanel =
-  document.getElementById("userPanel");
-
-const userPanelOverlay =
-  document.getElementById("userPanelOverlay");
-
-const closeUserPanel =
-  document.getElementById("closeUserPanel");
-
+const userTab = document.getElementById("userTab");
+const userPanel = document.getElementById("userPanel");
+const userPanelOverlay = document.getElementById("userPanelOverlay");
+const closeUserPanel = document.getElementById("closeUserPanel");
 
 function openUserPanel() {
-
   userPanel.classList.add("open");
   userPanelOverlay.classList.add("show");
-
 }
-
 
 function closeUserPanelFunction() {
-
   userPanel.classList.remove("open");
   userPanelOverlay.classList.remove("show");
-
 }
 
-
-userTab.addEventListener(
-  "click",
-  openUserPanel
-);
-
-closeUserPanel.addEventListener(
-  "click",
-  closeUserPanelFunction
-);
-
-userPanelOverlay.addEventListener(
-  "click",
-  closeUserPanelFunction
-);
-
-
+userTab.addEventListener("click", openUserPanel);
+closeUserPanel.addEventListener("click", closeUserPanelFunction);
+userPanelOverlay.addEventListener("click", closeUserPanelFunction);
 
 /* MAIN TABS */
-
 let currentMainTab = "routines";
 
 function switchMainTab(tab) {
   currentMainTab = tab;
-
   const tabRoutines = document.getElementById("tabRoutines");
   const tabCalendar = document.getElementById("tabCalendar");
   const routinesPanel = document.getElementById("routinesPanel");
   const calendarScreen = document.getElementById("calendarScreen");
-
-  if (!tabRoutines || !tabCalendar || !routinesPanel || !calendarScreen) {
-    return;
-  }
-
+  if (!tabRoutines || !tabCalendar || !routinesPanel || !calendarScreen) { return; }
   if (tab === "calendar") {
     tabRoutines.classList.remove("active");
     tabCalendar.classList.add("active");
@@ -2050,649 +605,336 @@ function switchMainTab(tab) {
 
 function showHomeUI() {
   const mainTabs = document.getElementById("mainTabs");
-  if (mainTabs) {
-    mainTabs.style.display = "flex";
-  }
+  if (mainTabs) { mainTabs.style.display = "flex"; }
   document.getElementById("routineListScreen").style.display = "block";
   switchMainTab(currentMainTab);
 }
 
 function hideHomeUI() {
   const mainTabs = document.getElementById("mainTabs");
-  if (mainTabs) {
-    mainTabs.style.display = "none";
-  }
+  if (mainTabs) { mainTabs.style.display = "none"; }
   document.getElementById("routineListScreen").style.display = "none";
 }
 
-document.getElementById("tabRoutines")?.addEventListener("click", () => {
-  switchMainTab("routines");
-});
-
-document.getElementById("tabCalendar")?.addEventListener("click", () => {
-  switchMainTab("calendar");
-});
-
+document.getElementById("tabRoutines")?.addEventListener("click", () => { switchMainTab("routines"); });
+document.getElementById("tabCalendar")?.addEventListener("click", () => { switchMainTab("calendar"); });
 
 /* LOGIN */
-
-document
-  .getElementById("loginBtn")
-  .addEventListener("click", async () => {
-
-    try {
-
-      await signInWithPopup(
-        auth,
-        provider
-      );
-
-    } catch (error) {
-
-      console.error(error);
-
-      alert(
-        "ההתחברות נכשלה:\n\n" +
-        error.message
-      );
-
-    }
-
-  });
-
+document.getElementById("loginBtn").addEventListener("click", async () => {
+  try {
+    await signInWithPopup(auth, provider);
+  } catch (error) {
+    console.error(error);
+    alert("ההתחברות נכשלה:\n\n" + error.message);
+  }
+});
 
 /* LOGOUT */
+document.getElementById("logoutBtn").addEventListener("click", async () => {
+  await signOut(auth);
+  closeUserPanelFunction();
+});
 
-document
-  .getElementById("logoutBtn")
-  .addEventListener("click", async () => {
+/* ENABLE BROWSER NOTIFICATIONS */
+document.getElementById("enableNotificationsBtn")?.addEventListener("click", async () => {
+  const granted = await ensureNotificationPermission();
+  if (granted) {
+    alert("התראות דפדפן הופעלו בהצלחה");
+  } else if (Notification.permission === "denied") {
+    alert("ההרשאה נחסמה.\nלכי להגדרות → Safari → האתר → התראות והפעל.");
+  } else {
+    alert("לא ניתנה הרשאה להתראות");
+  }
+});
 
-    await signOut(auth);
+/* ============ TELEGRAM ============ */
+let telegramConfig = { botToken: "", chatId: "" };
 
-    closeUserPanelFunction();
-
-  });
-
-
-/* ENABLE NOTIFICATIONS BUTTON */
-
-document
-  .getElementById("enableNotificationsBtn")
-  ?.addEventListener("click", async () => {
-    const granted = await ensureNotificationPermission();
-    if (granted) {
-      alert("התראות הופעלו בהצלחה");
-    } else if (Notification.permission === "denied") {
-      alert("ההרשאה נחסמה.\nלכי להגדרות → Safari → האתר → התראות והפעיל.");
-    } else {
-      alert("לא ניתנה הרשאה להתראות");
+async function loadTelegramConfig() {
+  if (!currentUser) return;
+  try {
+    const snap = await getDoc(doc(db, "users", currentUser.uid, "meta", "telegram"));
+    if (snap.exists()) {
+      const d = snap.data();
+      telegramConfig.botToken = d.botToken || "";
+      telegramConfig.chatId = d.chatId || "";
+      document.getElementById("tgBotToken").value = telegramConfig.botToken;
+      document.getElementById("tgChatId").value = telegramConfig.chatId;
+      if (telegramConfig.botToken && telegramConfig.chatId) {
+        const s = document.getElementById("tgStatus");
+        s.textContent = "✓ מחובר לטלגרם";
+        s.className = "tg-status ok";
+      }
     }
-  });
+  } catch (e) { console.warn("loadTelegramConfig failed:", e); }
+}
 
+document.getElementById("tgSaveBtn")?.addEventListener("click", async () => {
+  if (!currentUser) return;
+  const botToken = document.getElementById("tgBotToken").value.trim();
+  const chatId = document.getElementById("tgChatId").value.trim();
+  if (!botToken || !chatId) { alert("מלא גם Bot Token וגם Chat ID"); return; }
+  try {
+    await setDoc(doc(db, "users", currentUser.uid, "meta", "telegram"), { botToken, chatId, updatedAt: Date.now() }, { merge: true });
+    telegramConfig = { botToken, chatId };
+    const s = document.getElementById("tgStatus");
+    s.textContent = "✓ נשמר";
+    s.className = "tg-status ok";
+    alert("החיבור לטלגרם נשמר");
+  } catch (e) { alert("שגיאה בשמירה: " + e.message); }
+});
+
+document.getElementById("tgTestBtn")?.addEventListener("click", async () => {
+  if (!telegramConfig.botToken || !telegramConfig.chatId) { alert("קודם שמור Bot Token ו-Chat ID"); return; }
+  try {
+    const res = await fetch(`https://api.telegram.org/bot${telegramConfig.botToken}/sendMessage`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ chat_id: telegramConfig.chatId, text: "🔔 בדיקת חיבור מהאתר הצליחה" })
+    });
+    alert(res.ok ? "ההודעה נשלחה ✓ בדוק בטלגרם" : "השליחה נכשלה — בדוק את הטוקן וה-Chat ID");
+  } catch (e) { alert("שגיאה: " + e.message); }
+});
+
+/* ============ BARK ============ */
+let barkUrl = "";
+const WORKER_URL = "https://routine-reminder.privatelyemail.workers.dev";
+
+async function loadBarkConfig() {
+  if (!currentUser) return;
+  try {
+    const snap = await getDoc(doc(db, "users", currentUser.uid, "meta", "bark"));
+    if (snap.exists()) {
+      barkUrl = snap.data().barkUrl || "";
+      document.getElementById("barkUrlInput").value = barkUrl;
+      if (barkUrl) {
+        const s = document.getElementById("barkStatus");
+        s.textContent = "✓ מחובר ל-Bark";
+        s.className = "tg-status ok";
+      }
+    }
+  } catch (e) { console.warn("loadBarkConfig failed:", e); }
+}
+
+document.getElementById("barkSaveBtn")?.addEventListener("click", async () => {
+  if (!currentUser) return;
+  const url = document.getElementById("barkUrlInput").value.trim();
+  if (!url || !/^https?:\/\//.test(url)) { alert("הזן URL תקין של Bark (מתחיל ב-https://)"); return; }
+  try {
+    await setDoc(doc(db, "users", currentUser.uid, "meta", "bark"), { barkUrl: url, updatedAt: Date.now() }, { merge: true });
+    barkUrl = url;
+    const s = document.getElementById("barkStatus");
+    s.textContent = "✓ נשמר";
+    s.className = "tg-status ok";
+    alert("ה-Bark URL נשמר");
+  } catch (e) { alert("שגיאה בשמירה: " + e.message); }
+});
+
+document.getElementById("barkTestBtn")?.addEventListener("click", async () => {
+  const url = document.getElementById("barkUrlInput").value.trim() || barkUrl;
+  if (!url) { alert("קודם שמור Bark URL"); return; }
+  try {
+    const cleanUrl = url.replace(/\/$/, "");
+    const testUrl = `${cleanUrl}/${encodeURIComponent("בדיקת Bark")}/${encodeURIComponent("החיבור עובד ✓")}?level=critical&sound=alarm&call=1`;
+    const res = await fetch(testUrl, { method: "GET" });
+    alert(res.ok ? "ההתראה נשלחה ✓ בדוק במסך הנעילה" : "השליחה נכשלה — בדוק את ה-URL");
+  } catch (e) { alert("שגיאה: " + e.message); }
+});
+
+/* ============ SERVER REMINDER (Worker) ============ */
+async function startServerReminder(step) {
+  if (!currentUser || !activeRoutine) return;
+  const effectiveBarkUrl = barkUrl || (document.getElementById("barkUrlInput")?.value || "").trim();
+  if (!effectiveBarkUrl) return;
+  try {
+    await fetch(`${WORKER_URL}/start`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        routineName: activeRoutine.name || "",
+        stepName: step.name || "",
+        barkUrl: effectiveBarkUrl
+      })
+    });
+  } catch (e) { console.warn("startServerReminder failed:", e); }
+}
+
+async function stopServerReminder() {
+  if (!currentUser) return;
+  try {
+    await fetch(`${WORKER_URL}/stop`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" }
+    });
+  } catch (e) { console.warn("stopServerReminder failed:", e); }
+}
 
 /* ACTIVE STEP CLICK */
-
-document
-  .getElementById("activeStepCard")
-  .addEventListener("click", (e) => {
-
-    if (
-      e.target.tagName === 'A' ||
-      e.target.closest('a')
-    ) {
-      return;
-    }
-
-    completeActiveStep();
-
-  });
-
+document.getElementById("activeStepCard").addEventListener("click", (e) => {
+  if (e.target.tagName === 'A' || e.target.closest('a')) { return; }
+  completeActiveStep();
+});
 
 /* SKIP */
-
-document
-  .getElementById("skipStepBtn")
-  .addEventListener(
-    "click",
-    () => {
-      skipActiveStep();
-    }
-  );
-
+document.getElementById("skipStepBtn").addEventListener("click", () => { skipActiveStep(); });
 
 /* AUTH */
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    currentUser = user;
+    document.getElementById("loginScreen").style.display = "none";
+    document.getElementById("app").style.display = "block";
+    document.getElementById("panelUserInfo").textContent = user.displayName || user.email || "";
 
-onAuthStateChanged(
-  auth,
-  async (user) => {
+    await loadDisabledSteps();
+    await loadActivationRules();
+    await loadActivatedSteps();
+    await loadRoutines();
+    await loadTelegramConfig();
+    await loadBarkConfig();
 
-    if (user) {
-
-      currentUser = user;
-
-      document.getElementById(
-        "loginScreen"
-      ).style.display = "none";
-
-      document.getElementById(
-        "app"
-      ).style.display = "block";
-
-      document.getElementById(
-        "panelUserInfo"
-      ).textContent =
-        user.displayName ||
-        user.email ||
-        "";
-
-      await loadDisabledSteps();
-      await loadActivationRules();
-      await loadActivatedSteps();
-      await loadRoutines();
-
-      startDayTimer();
-
-    } else {
-
-      if (routineScheduleInterval) {
-        clearInterval(routineScheduleInterval);
-        routineScheduleInterval = null;
-      }
-
-      currentUser = null;
-
-      document.getElementById(
-        "loginScreen"
-      ).style.display = "flex";
-
-      document.getElementById(
-        "app"
-      ).style.display = "none";
-
-      if (dayTimerInterval) {
-        clearInterval(dayTimerInterval);
-        dayTimerInterval = null;
-      }
-
-    }
-
+    startDayTimer();
+  } else {
+    if (routineScheduleInterval) { clearInterval(routineScheduleInterval); routineScheduleInterval = null; }
+    currentUser = null;
+    document.getElementById("loginScreen").style.display = "flex";
+    document.getElementById("app").style.display = "none";
+    if (dayTimerInterval) { clearInterval(dayTimerInterval); dayTimerInterval = null; }
   }
-);
+});
 
-
-/* LOAD DISABLED STEPS */
-
+/* LOAD DATA */
 async function loadDisabledSteps() {
-
   try {
-
-    const docRef =
-      doc(
-        db,
-        "users",
-        currentUser.uid,
-        "meta",
-        "disabledSteps"
-      );
-
-    const docSnap =
-      await getDoc(docRef);
-
-    if (docSnap.exists()) {
-
-      disabledStepsMap =
-        docSnap.data();
-
-    } else {
-
-      disabledStepsMap = {};
-
-    }
-
-  } catch (e) {
-
-    console.error(
-      "Error loading disabled steps:",
-      e
-    );
-
-  }
-
+    const docRef = doc(db, "users", currentUser.uid, "meta", "disabledSteps");
+    const docSnap = await getDoc(docRef);
+    disabledStepsMap = docSnap.exists() ? docSnap.data() : {};
+  } catch (e) { console.error("Error loading disabled steps:", e); }
 }
-
-
-/* LOAD ACTIVATION RULES */
 
 async function loadActivationRules() {
-
   try {
-
-    const docRef =
-      doc(
-        db,
-        "users",
-        currentUser.uid,
-        "meta",
-        "stepActivationRules"
-      );
-
-    const docSnap =
-      await getDoc(docRef);
-
-    if (docSnap.exists()) {
-
-      activationRulesMap =
-        docSnap.data();
-
-    } else {
-
-      activationRulesMap = {};
-
-    }
-
-  } catch (e) {
-
-    console.error(
-      "Error loading activation rules:",
-      e
-    );
-
-    activationRulesMap = {};
-
-  }
-
+    const docRef = doc(db, "users", currentUser.uid, "meta", "stepActivationRules");
+    const docSnap = await getDoc(docRef);
+    activationRulesMap = docSnap.exists() ? docSnap.data() : {};
+  } catch (e) { console.error("Error loading activation rules:", e); activationRulesMap = {}; }
 }
-
-
-/* LOAD ACTIVATED STEPS */
 
 async function loadActivatedSteps() {
-
   try {
-
-    const docRef =
-      doc(
-        db,
-        "users",
-        currentUser.uid,
-        "meta",
-        "activatedSteps"
-      );
-
-    const docSnap =
-      await getDoc(docRef);
-
-    if (docSnap.exists()) {
-
-      activatedStepsMap =
-        docSnap.data();
-
-    } else {
-
-      activatedStepsMap = {};
-
-    }
-
-  } catch (e) {
-
-    console.error(
-      "Error loading activated steps:",
-      e
-    );
-
-  }
-
+    const docRef = doc(db, "users", currentUser.uid, "meta", "activatedSteps");
+    const docSnap = await getDoc(docRef);
+    activatedStepsMap = docSnap.exists() ? docSnap.data() : {};
+  } catch (e) { console.error("Error loading activated steps:", e); }
 }
-
 
 /* ACTIVATION */
-
 function isStepTemporarilyActivated(stepId) {
-
   const until = getStepActivationUntilDate(stepId);
-
-  if (!until) {
-    return false;
-  }
-
+  if (!until) return false;
   return new Date() < until;
-
 }
-
 
 function getActivationUntilForDays(days) {
-
   const now = new Date();
-
-  const end =
-    new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      now.getDate() + days
-    );
-
+  const end = new Date(now.getFullYear(), now.getMonth(), now.getDate() + days);
   return end.toISOString();
-
 }
-
-
-/* DISABLED */
 
 function isStepDisabled(stepId) {
-
   const until = getStepDisableUntilDate(stepId);
-
-  if (!until) {
-    return false;
-  }
-
+  if (!until) return false;
   return new Date() < until;
-
 }
-
 
 /* GET TODAY STEPS */
-
 function getTodaySteps(routine) {
-
-  const steps =
-    routine.steps || [];
-
-  /*
-    Routine במצב "ממתין להפעלה" (ללא ימים):
-    הפעלה חד-פעמית לפי דרישה.
-    כל ה-Steps הרגילים מופיעים בכל הפעלה,
-    בלי תדירות / ביטול לפי frequency.
-  */
+  const steps = routine.steps || [];
   if (isRoutineWaitingActivation(routine)) {
-
     return steps.filter(step => {
-
-      if (Number(step.frequency) === 0) {
-        return isStepTemporarilyActivated(step.id);
-      }
-
+      if (Number(step.frequency) === 0) { return isStepTemporarilyActivated(step.id); }
       return true;
-
     });
-
   }
-
   const today = getLogicalDayOfWeek();
-
-  if (
-    routine.days &&
-    !routine.days.includes(today)
-  ) {
-    return [];
-  }
-
+  if (routine.days && !routine.days.includes(today)) { return []; }
   return steps.filter(step => {
-
-    /*
-      Step עם frequency = 0
-      הוא Step שמחכה להפעלה.
-    */
-
-    if (Number(step.frequency) === 0) {
-
-      return isStepTemporarilyActivated(
-        step.id
-      );
-
-    }
-
-    /*
-      Step רגיל
-    */
-
-    return (
-      isStepTemporarilyActivated(step.id) ||
-      !isStepDisabled(step.id)
-    );
-
+    if (Number(step.frequency) === 0) { return isStepTemporarilyActivated(step.id); }
+    return isStepTemporarilyActivated(step.id) || !isStepDisabled(step.id);
   });
-
 }
-
 
 /* LOAD ROUTINES */
-
 async function loadRoutines() {
-
-  const list =
-    document.getElementById(
-      "routineList"
-    );
-
+  const list = document.getElementById("routineList");
   list.innerHTML = "טוען...";
-
   try {
-
-    const ref =
-      collection(
-        db,
-        "users",
-        currentUser.uid,
-        "routines"
-      );
-
-    const snapshot =
-      await getDocs(ref);
-
+    const ref = collection(db, "users", currentUser.uid, "routines");
+    const snapshot = await getDocs(ref);
     routines = [];
-
-    snapshot.forEach(item => {
-
-      routines.push({
-        id: item.id,
-        ...item.data()
-      });
-
-    });
-
+    snapshot.forEach(item => { routines.push({ id: item.id, ...item.data() }); });
     renderRoutines();
-
     openRoutineFromLink();
-
   } catch (error) {
-
     console.error(error);
-
-    list.innerHTML = `
-      <div class="empty">
-        לא ניתן לטעון את השגרות.
-        <br><br>
-        ${escapeHtml(error.message)}
-      </div>
-    `;
-
+    list.innerHTML = `<div class="empty">לא ניתן לטעון את השגרות.<br><br>${escapeHtml(error.message)}</div>`;
   }
-
 }
 
-
 /* RENDER ROUTINES */
-
 function renderRoutines() {
-
-  const list =
-    document.getElementById(
-      "routineList"
-    );
-
+  const list = document.getElementById("routineList");
   list.innerHTML = "";
-
   if (routines.length === 0) {
-
-    list.innerHTML = `
-      <div class="empty">
-        עדיין אין לך שגרות.
-        <br>
-        לחץ על "+ Routine חדש".
-      </div>
-    `;
-
+    list.innerHTML = `<div class="empty">עדיין אין לך שגרות.<br>לחץ על "+ Routine חדש".</div>`;
     renderCalendar();
-
     return;
   }
-
   routines.forEach(routine => {
-
-    const card =
-      document.createElement("div");
-
-    const waiting =
-      isRoutineWaitingActivation(routine);
-
-    card.className =
-      waiting
-        ? "routine-card waiting-activation"
-        : "routine-card";
-
-    const todaySteps =
-      getTodaySteps(routine);
-
-    const imageHtml =
-      routine.image
-        ? `
-          <img
-            class="routine-image"
-            src="${routine.image}"
-            alt=""
-          >
-        `
-        : "";
-
-    const waitingLabelHtml =
-      waiting
-        ? `<span class="waiting-activation-label">ממתין להפעלה</span>`
-        : "";
-
-    const todayInfoHtml =
-      waiting
-        ? `
-          <div class="today-info">
-            הפעלה חד-פעמית — לחץ "התחל" מתי שתרצה
-            <br>
-            <strong>${todaySteps.length}</strong> Steps בכל הפעלה
-          </div>
-        `
-        : `
-          <div class="today-info">
-            להיום:
-            <strong>
-              ${todaySteps.length}
-            </strong>
-            Steps
-          </div>
-        `;
+    const card = document.createElement("div");
+    const waiting = isRoutineWaitingActivation(routine);
+    card.className = waiting ? "routine-card waiting-activation" : "routine-card";
+    const todaySteps = getTodaySteps(routine);
+    const imageHtml = routine.image ? `<img class="routine-image" src="${routine.image}" alt="">` : "";
+    const waitingLabelHtml = waiting ? `<span class="waiting-activation-label">ממתין להפעלה</span>` : "";
+    const todayInfoHtml = waiting
+      ? `<div class="today-info">הפעלה חד-פעמית — לחץ "התחל" מתי שתרצה<br><strong>${todaySteps.length}</strong> Steps בכל הפעלה</div>`
+      : `<div class="today-info">להיום: <strong>${todaySteps.length}</strong> Steps</div>`;
 
     card.innerHTML = `
-
       ${imageHtml}
-
       ${waitingLabelHtml}
-
-      <h3>
-        ${escapeHtml(routine.name)}
-      </h3>
-
+      <h3>${escapeHtml(routine.name)}</h3>
       <div class="routine-info">
         ${routine.steps?.length || 0} Steps
         ${routine.startTime ? ` · ⏰ ${escapeHtml(routine.startTime)}` : ""}
       </div>
-
       ${todayInfoHtml}
-
       <div class="actions">
-
-        <button class="primary start">
-          התחל
-        </button>
-
-        <button class="secondary reset">
-          איפוס
-        </button>
-
-        <button class="secondary edit">
-          ערוך
-        </button>
-
-        <button class="secondary share">
-          🔗 העתק קישור
-        </button>
-
-        <button class="danger delete">
-          מחק
-        </button>
-
+        <button class="primary start">התחל</button>
+        <button class="secondary reset">איפוס</button>
+        <button class="secondary edit">ערוך</button>
+        <button class="secondary share">🔗 העתק קישור</button>
+        <button class="danger delete">מחק</button>
       </div>
     `;
 
-    card
-      .querySelector(".start")
-      .addEventListener(
-        "click",
-        () => startRoutine(routine)
-      );
-
-    card
-      .querySelector(".reset")
-      .addEventListener(
-        "click",
-        () => resetRoutine(routine)
-      );
-
-    card
-      .querySelector(".edit")
-      .addEventListener(
-        "click",
-        () => openEditor(routine)
-      );
-
-    card
-      .querySelector(".share")
-      .addEventListener(
-        "click",
-        () => copyRoutineLink(routine.id)
-      );
-
-    card
-      .querySelector(".delete")
-      .addEventListener(
-        "click",
-        () => deleteRoutine(routine.id)
-      );
-
+    card.querySelector(".start").addEventListener("click", () => startRoutine(routine));
+    card.querySelector(".reset").addEventListener("click", () => resetRoutine(routine));
+    card.querySelector(".edit").addEventListener("click", () => openEditor(routine));
+    card.querySelector(".share").addEventListener("click", () => copyRoutineLink(routine.id));
+    card.querySelector(".delete").addEventListener("click", () => deleteRoutine(routine.id));
     list.appendChild(card);
-
   });
-
   renderCalendar();
-
 }
 
-
-/* RENDER CALENDAR */
-
-const HEBREW_MONTHS = [
-  "ינואר", "פברואר", "מרץ", "אפריל",
-  "מאי", "יוני", "יולי", "אוגוסט",
-  "ספטמבר", "אוקטובר", "נובמבר", "דצמבר"
-];
-
-const HEBREW_DAY_SHORT = [
-  "א׳", "ב׳", "ג׳", "ד׳", "ה׳", "ו׳", "ש׳"
-];
+/* CALENDAR */
+const HEBREW_MONTHS = ["ינואר", "פברואר", "מרץ", "אפריל", "מאי", "יוני", "יולי", "אוגוסט", "ספטמבר", "אוקטובר", "נובמבר", "דצמבר"];
+const HEBREW_DAY_SHORT = ["א׳", "ב׳", "ג׳", "ד׳", "ה׳", "ו׳", "ש׳"];
 
 function isSameDate(a, b) {
-  return (
-    a.getFullYear() === b.getFullYear() &&
-    a.getMonth() === b.getMonth() &&
-    a.getDate() === b.getDate()
-  );
+  return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
 }
 
 function getDateLabel(date, today, tomorrow) {
@@ -2705,45 +947,22 @@ function isRoutineWaitingActivation(routine) {
   return !routine.days || routine.days.length === 0;
 }
 
-function endOfDay(date) {
-  const d = new Date(date);
-  d.setHours(23, 59, 59, 999);
-  return d;
-}
+function endOfDay(date) { const d = new Date(date); d.setHours(23, 59, 59, 999); return d; }
+function startOfDay(date) { const d = new Date(date); d.setHours(0, 0, 0, 0); return d; }
 
-function startOfDay(date) {
-  const d = new Date(date);
-  d.setHours(0, 0, 0, 0);
-  return d;
-}
-
-/* Parse ISO string / Date / Firestore Timestamp */
 function parseMetaDate(val) {
   if (!val) return null;
-  if (val instanceof Date) {
-    return isNaN(val.getTime()) ? null : val;
-  }
+  if (val instanceof Date) { return isNaN(val.getTime()) ? null : val; }
   if (typeof val === "object") {
-    if (typeof val.toDate === "function") {
-      try {
-        return val.toDate();
-      } catch (e) {}
-    }
-    if (typeof val.seconds === "number") {
-      return new Date(val.seconds * 1000);
-    }
+    if (typeof val.toDate === "function") { try { return val.toDate(); } catch (e) {} }
+    if (typeof val.seconds === "number") { return new Date(val.seconds * 1000); }
   }
   const d = new Date(val);
   return isNaN(d.getTime()) ? null : d;
 }
 
-function getStepDisableUntilDate(stepId) {
-  return parseMetaDate(disabledStepsMap[stepId]);
-}
-
-function getStepActivationUntilDate(stepId) {
-  return parseMetaDate(activatedStepsMap[stepId]);
-}
+function getStepDisableUntilDate(stepId) { return parseMetaDate(disabledStepsMap[stepId]); }
+function getStepActivationUntilDate(stepId) { return parseMetaDate(activatedStepsMap[stepId]); }
 
 function isStepActivatedOnDate(stepId, date) {
   const until = getStepActivationUntilDate(stepId);
@@ -2751,207 +970,88 @@ function isStepActivatedOnDate(stepId, date) {
   return until > startOfDay(date);
 }
 
-/*
-  Expected appearance on a calendar day, from last completion.
-
-  On complete we save: until = 04:00 of the logical day
-  that is `frequency` days after the completion day.
-  → next due starts when that window ends (aligned to 04:00).
-
-  After the first due day, the step is shown again every
-  `frequency` days (on days the routine is active).
-*/
 function isStepDueOnDate(step, date) {
   const day = startOfDay(date);
-
-  if (Number(step.frequency) === 0) {
-    return isStepActivatedOnDate(step.id, date);
-  }
-
-  if (isStepActivatedOnDate(step.id, date)) {
-    return true;
-  }
-
+  if (Number(step.frequency) === 0) { return isStepActivatedOnDate(step.id, date); }
+  if (isStepActivatedOnDate(step.id, date)) { return true; }
   const freq = Math.max(1, Number(step.frequency) || 1);
   const until = getStepDisableUntilDate(step.id);
-
-  /*
-    Anchor (first due):
-    - After completion / manual "הפעם הבאה": calendar day of `until`
-    - Never completed: logical today → then every `freq` days
-      (so the calendar does NOT show the step on every routine day)
-  */
   let firstDue;
-
   if (until) {
-    /* Still inside the post-completion disable window */
-    if (until > endOfDay(date)) {
-      return false;
-    }
+    if (until > endOfDay(date)) { return false; }
     firstDue = startOfDay(until);
   } else {
     firstDue = getLogicalDate();
   }
-
   const diffMs = day.getTime() - firstDue.getTime();
   const diffDays = Math.round(diffMs / 86400000);
-
-  if (diffDays < 0) {
-    return false;
-  }
-
+  if (diffDays < 0) { return false; }
   return diffDays % freq === 0;
 }
 
-/**
- * Next calendar day (from logical today, inclusive) when this step is due
- * on an active day of the routine. Returns Date or null.
- */
 function getNextDueDateForStep(step, routine) {
   if (!step) return null;
-
   const today = getLogicalDate();
-
-  /* frequency 0: only while temporarily activated */
-  if (Number(step.frequency) === 0) {
-    if (isStepTemporarilyActivated(step.id)) {
-      return today;
-    }
-    return null;
-  }
-
-  /* Waiting-activation routine: available whenever started */
-  if (isRoutineWaitingActivation(routine)) {
-    return today;
-  }
-
+  if (Number(step.frequency) === 0) { return isStepTemporarilyActivated(step.id) ? today : null; }
+  if (isRoutineWaitingActivation(routine)) { return today; }
   const days = routine && routine.days ? routine.days : [];
-  if (!days.length) {
-    return null;
-  }
-
-  /* Scan up to ~2 years of days */
+  if (!days.length) { return null; }
   for (let i = 0; i < 800; i++) {
     const d = new Date(today);
     d.setDate(d.getDate() + i);
     const dayStart = startOfDay(d);
-
-    if (!days.includes(dayStart.getDay())) {
-      continue;
-    }
-
-    if (isStepDueOnDate(step, dayStart)) {
-      return dayStart;
-    }
+    if (!days.includes(dayStart.getDay())) { continue; }
+    if (isStepDueOnDate(step, dayStart)) { return dayStart; }
   }
-
   return null;
 }
 
-/** Human label for next due: "היום" / "מחר" / "א׳ · 12 ספטמבר" */
 function formatNextDueLabel(date) {
   if (!date) return "—";
-
   const today = getLogicalDate();
   const tomorrow = new Date(today);
   tomorrow.setDate(tomorrow.getDate() + 1);
-
-  if (isSameDate(date, today)) {
-    return "היום";
-  }
-  if (isSameDate(date, tomorrow)) {
-    return "מחר";
-  }
-
+  if (isSameDate(date, today)) return "היום";
+  if (isSameDate(date, tomorrow)) return "מחר";
   const dayName = HEBREW_DAY_SHORT[date.getDay()];
   const monthName = HEBREW_MONTHS[date.getMonth()];
   return dayName + " · " + date.getDate() + " " + monthName;
 }
 
-/**
- * Steps for the external calendar grid only.
- * Respects showInCalendar + frequency schedule from last completion.
- */
 function getStepsForCalendarDay(routine, date, today) {
   const dayOfWeek = date.getDay();
-
-  if (
-    !routine.days ||
-    routine.days.length === 0 ||
-    !routine.days.includes(dayOfWeek)
-  ) {
-    return [];
-  }
-
+  if (!routine.days || routine.days.length === 0 || !routine.days.includes(dayOfWeek)) { return []; }
   const steps = routine.steps || [];
-
-  const calendarSteps = steps.filter(
-    step => step.showInCalendar === true
-  );
-
-  if (calendarSteps.length === 0) {
-    return [];
-  }
-
-  /* Today: live status (disable/activation right now) */
+  const calendarSteps = steps.filter(step => step.showInCalendar === true);
+  if (calendarSteps.length === 0) { return []; }
   if (isSameDate(date, today)) {
     const todayActive = getTodaySteps(routine);
     const todayIds = new Set(todayActive.map(s => s.id));
     return calendarSteps.filter(step => todayIds.has(step.id));
   }
-
   return calendarSteps.filter(step => isStepDueOnDate(step, date));
 }
 
-/**
- * Day-detail modal: all due steps (not only showInCalendar).
- */
 function getStepsForDayDetail(routine, date, today) {
   const dayOfWeek = date.getDay();
-
-  if (
-    !routine.days ||
-    routine.days.length === 0 ||
-    !routine.days.includes(dayOfWeek)
-  ) {
-    return [];
-  }
-
+  if (!routine.days || routine.days.length === 0 || !routine.days.includes(dayOfWeek)) { return []; }
   const steps = routine.steps || [];
-
-  if (steps.length === 0) {
-    return [];
-  }
-
-  if (isSameDate(date, today)) {
-    return getTodaySteps(routine);
-  }
-
+  if (steps.length === 0) { return []; }
+  if (isSameDate(date, today)) { return getTodaySteps(routine); }
   return steps.filter(step => isStepDueOnDate(step, date));
 }
 
 function renderCalendar() {
-
-  const grid =
-    document.getElementById("calendarGrid");
-
-  const weekdaysEl =
-    document.getElementById("calendarWeekdays");
-
-  const labelEl =
-    document.getElementById("calendarMonthLabel");
-
+  const grid = document.getElementById("calendarGrid");
+  const weekdaysEl = document.getElementById("calendarWeekdays");
+  const labelEl = document.getElementById("calendarMonthLabel");
   if (!grid || !weekdaysEl || !labelEl) return;
 
   const year = calendarViewDate.getFullYear();
   const month = calendarViewDate.getMonth();
+  labelEl.textContent = HEBREW_MONTHS[month] + " " + year;
 
-  labelEl.textContent =
-    HEBREW_MONTHS[month] + " " + year;
-
-  /* Weekday headers */
   weekdaysEl.innerHTML = "";
-
   HEBREW_DAY_SHORT.forEach(name => {
     const el = document.createElement("div");
     el.className = "calendar-weekday-header";
@@ -2961,79 +1061,46 @@ function renderCalendar() {
 
   grid.innerHTML = "";
 
-  /* Logical today / tomorrow based on 04:00 boundary */
   const today = getLogicalDate();
   const tomorrow = new Date(today);
   tomorrow.setDate(tomorrow.getDate() + 1);
 
-  /* First day of month and how many days */
   const firstDay = new Date(year, month, 1);
-  const daysInMonth =
-    new Date(year, month + 1, 0).getDate();
-
-  /* Start from Sunday of the week that contains the 1st */
-  const startOffset = firstDay.getDay(); /* 0 = Sunday */
-
-  const totalCells =
-    Math.ceil((startOffset + daysInMonth) / 7) * 7;
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const startOffset = firstDay.getDay();
+  const totalCells = Math.ceil((startOffset + daysInMonth) / 7) * 7;
 
   for (let i = 0; i < totalCells; i++) {
-
     const dayNum = i - startOffset + 1;
     const cellDate = new Date(year, month, dayNum);
-
-    const isCurrentMonth =
-      cellDate.getMonth() === month;
-
+    const isCurrentMonth = cellDate.getMonth() === month;
     const dayCol = document.createElement("div");
-
     let classes = "calendar-day";
-
-    if (!isCurrentMonth) {
-      classes += " other-month";
-    }
-
-    if (isSameDate(cellDate, today)) {
-      classes += " today";
-    } else if (isSameDate(cellDate, tomorrow)) {
-      classes += " tomorrow";
-    }
-
+    if (!isCurrentMonth) { classes += " other-month"; }
+    if (isSameDate(cellDate, today)) { classes += " today"; }
+    else if (isSameDate(cellDate, tomorrow)) { classes += " tomorrow"; }
     dayCol.className = classes;
 
-    /* Date number + label */
     const dateRow = document.createElement("div");
     dateRow.className = "day-date-row";
-
     const numEl = document.createElement("div");
     numEl.className = "day-date-num";
     numEl.textContent = cellDate.getDate();
-
     const label = getDateLabel(cellDate, today, tomorrow);
-
     dateRow.appendChild(numEl);
-
     if (label) {
       const labelEl2 = document.createElement("div");
       labelEl2.className = "day-label";
       labelEl2.textContent = label;
       dateRow.appendChild(labelEl2);
     }
-
     dayCol.appendChild(dateRow);
 
-    /* Routines for this weekday – only those with calendar-visible steps */
     const dayOfWeek = cellDate.getDay();
-
     const routinesForDay = routines.filter(routine => {
-      if (!routine.days || routine.days.length === 0) {
-        return false;
-      }
-      if (!routine.days.includes(dayOfWeek)) {
-        return false;
-      }
-      const stepsToShow =
-        getStepsForCalendarDay(routine, cellDate, today);
+      if (!routine.days || routine.days.length === 0) { return false; }
+      if (!routine.days.includes(dayOfWeek)) { return false; }
+      const stepsToShow = getStepsForCalendarDay(routine, cellDate, today);
       return stepsToShow.length > 0;
     });
 
@@ -3048,169 +1115,100 @@ function renderCalendar() {
         routinesWrap.appendChild(empty);
       }
     } else {
-
-      /* Limit visible routines to keep cells tidy */
       const maxRoutines = 3;
-
       routinesForDay.slice(0, maxRoutines).forEach(routine => {
-
         const rDiv = document.createElement("div");
         rDiv.className = "day-routine";
-
         const nameEl = document.createElement("div");
         nameEl.className = "day-routine-name";
         nameEl.textContent = routine.name || "ללא שם";
         rDiv.appendChild(nameEl);
 
-        const stepsToShow =
-          getStepsForCalendarDay(routine, cellDate, today);
-
+        const stepsToShow = getStepsForCalendarDay(routine, cellDate, today);
         const countEl = document.createElement("div");
         countEl.className = "day-steps-count";
-        countEl.textContent =
-          stepsToShow.length + " Steps";
+        countEl.textContent = stepsToShow.length + " Steps";
         rDiv.appendChild(countEl);
 
         if (stepsToShow.length > 0) {
           const stepsList = document.createElement("div");
           stepsList.className = "day-steps-list";
-
-          /* Show up to 4 steps to keep clean */
           stepsToShow.slice(0, 4).forEach(step => {
             const sEl = document.createElement("div");
             sEl.className = "day-step";
-            sEl.textContent =
-              (step.name || "Step ללא שם");
+            sEl.textContent = (step.name || "Step ללא שם");
             stepsList.appendChild(sEl);
           });
-
           if (stepsToShow.length > 4) {
             const more = document.createElement("div");
             more.className = "day-more";
-            more.textContent =
-              "+" + (stepsToShow.length - 4) + " נוספים";
+            more.textContent = "+" + (stepsToShow.length - 4) + " נוספים";
             stepsList.appendChild(more);
           }
-
           rDiv.appendChild(stepsList);
         }
-
         routinesWrap.appendChild(rDiv);
-
       });
-
       if (routinesForDay.length > maxRoutines) {
         const moreR = document.createElement("div");
         moreR.className = "day-more";
-        moreR.textContent =
-          "+" +
-          (routinesForDay.length - maxRoutines) +
-          " שגרות נוספות";
+        moreR.textContent = "+" + (routinesForDay.length - maxRoutines) + " שגרות נוספות";
         routinesWrap.appendChild(moreR);
       }
-
     }
 
     dayCol.appendChild(routinesWrap);
-
-    /* Click day → full steps view */
-    if (isCurrentMonth) {
-      dayCol.addEventListener("click", () => {
-        openDayDetail(cellDate);
-      });
-    }
-
+    if (isCurrentMonth) { dayCol.addEventListener("click", () => { openDayDetail(cellDate); }); }
     grid.appendChild(dayCol);
-
   }
-
 }
 
-/* Calendar navigation */
+document.getElementById("calPrevBtn")?.addEventListener("click", () => {
+  calendarViewDate.setMonth(calendarViewDate.getMonth() - 1);
+  renderCalendar();
+});
 
-document
-  .getElementById("calPrevBtn")
-  ?.addEventListener("click", () => {
-    calendarViewDate.setMonth(
-      calendarViewDate.getMonth() - 1
-    );
-    renderCalendar();
-  });
+document.getElementById("calNextBtn")?.addEventListener("click", () => {
+  calendarViewDate.setMonth(calendarViewDate.getMonth() + 1);
+  renderCalendar();
+});
 
-document
-  .getElementById("calNextBtn")
-  ?.addEventListener("click", () => {
-    calendarViewDate.setMonth(
-      calendarViewDate.getMonth() + 1
-    );
-    renderCalendar();
-  });
-
-
-/* DAY DETAIL (click on calendar day) */
-
+/* DAY DETAIL */
 function formatDayDetailTitle(date) {
   const today = getLogicalDate();
   const tomorrow = new Date(today);
   tomorrow.setDate(tomorrow.getDate() + 1);
-
   const dayName = HEBREW_DAY_SHORT[date.getDay()];
-  const dateStr =
-    date.getDate() +
-    " " +
-    HEBREW_MONTHS[date.getMonth()] +
-    " " +
-    date.getFullYear();
-
+  const dateStr = date.getDate() + " " + HEBREW_MONTHS[date.getMonth()] + " " + date.getFullYear();
   let prefix = dayName + " · " + dateStr;
-
-  if (isSameDate(date, today)) {
-    prefix = "היום · " + dateStr;
-  } else if (isSameDate(date, tomorrow)) {
-    prefix = "מחר · " + dateStr;
-  }
-
+  if (isSameDate(date, today)) { prefix = "היום · " + dateStr; }
+  else if (isSameDate(date, tomorrow)) { prefix = "מחר · " + dateStr; }
   return prefix;
 }
 
 function openDayDetail(date) {
-  const overlay =
-    document.getElementById("dayDetailOverlay");
-  const titleEl =
-    document.getElementById("dayDetailTitle");
-  const contentEl =
-    document.getElementById("dayDetailContent");
-
+  const overlay = document.getElementById("dayDetailOverlay");
+  const titleEl = document.getElementById("dayDetailTitle");
+  const contentEl = document.getElementById("dayDetailContent");
   if (!overlay || !titleEl || !contentEl) return;
 
   const today = getLogicalDate();
-
   titleEl.textContent = formatDayDetailTitle(date);
   contentEl.innerHTML = "";
-
   const dayOfWeek = date.getDay();
-
   const routinesForDay = routines.filter(routine => {
-    if (!routine.days || routine.days.length === 0) {
-      return false;
-    }
+    if (!routine.days || routine.days.length === 0) { return false; }
     return routine.days.includes(dayOfWeek);
   });
 
   let anySteps = false;
-
   routinesForDay.forEach(routine => {
-    /* Day click shows ALL active steps – not limited by showInCalendar */
-    const stepsToShow =
-      getStepsForDayDetail(routine, date, today);
-
+    const stepsToShow = getStepsForDayDetail(routine, date, today);
     if (stepsToShow.length === 0) return;
-
     anySteps = true;
 
     const rBlock = document.createElement("div");
     rBlock.className = "day-detail-routine";
-
     const nameEl = document.createElement("div");
     nameEl.className = "day-detail-routine-name";
     nameEl.textContent = routine.name || "ללא שם";
@@ -3219,1372 +1217,435 @@ function openDayDetail(date) {
     stepsToShow.forEach((step, index) => {
       const sEl = document.createElement("div");
       sEl.className = "day-detail-step";
-      sEl.innerHTML =
-        "<strong>#" +
-        (step.stepNumber || index + 1) +
-        "</strong> · " +
-        formatTextWithLinks(step.name || "Step ללא שם");
+      sEl.innerHTML = "<strong>#" + (step.stepNumber || index + 1) + "</strong> · " + formatTextWithLinks(step.name || "Step ללא שם");
       rBlock.appendChild(sEl);
     });
-
     contentEl.appendChild(rBlock);
   });
 
   if (!anySteps) {
-    contentEl.innerHTML = `
-      <div class="day-detail-empty">
-        אין Steps פעילים ביום זה
-      </div>
-    `;
+    contentEl.innerHTML = `<div class="day-detail-empty">אין Steps פעילים ביום זה</div>`;
   }
-
   overlay.classList.add("show");
 }
 
 function closeDayDetail() {
-  const overlay =
-    document.getElementById("dayDetailOverlay");
-  if (overlay) {
-    overlay.classList.remove("show");
-  }
+  const overlay = document.getElementById("dayDetailOverlay");
+  if (overlay) { overlay.classList.remove("show"); }
 }
 
-document
-  .getElementById("dayDetailClose")
-  ?.addEventListener("click", closeDayDetail);
-
-document
-  .getElementById("dayDetailOverlay")
-  ?.addEventListener("click", (e) => {
-    if (e.target.id === "dayDetailOverlay") {
-      closeDayDetail();
-    }
-  });
-
+document.getElementById("dayDetailClose")?.addEventListener("click", closeDayDetail);
+document.getElementById("dayDetailOverlay")?.addEventListener("click", (e) => {
+  if (e.target.id === "dayDetailOverlay") { closeDayDetail(); }
+});
 
 /* IMAGE */
-
 function compressImage(file) {
-
   return new Promise((resolve, reject) => {
-
-    const reader =
-      new FileReader();
-
+    const reader = new FileReader();
     reader.onload = event => {
-
-      const img =
-        new Image();
-
+      const img = new Image();
       img.onload = () => {
-
         const maxWidth = 600;
-
         let width = img.width;
         let height = img.height;
-
         if (width > maxWidth) {
-
-          height =
-            Math.round(
-              height *
-              maxWidth /
-              width
-            );
-
+          height = Math.round(height * maxWidth / width);
           width = maxWidth;
-
         }
-
-        const canvas =
-          document.createElement(
-            "canvas"
-          );
-
+        const canvas = document.createElement("canvas");
         canvas.width = width;
         canvas.height = height;
-
-        const ctx =
-          canvas.getContext("2d");
-
-        ctx.drawImage(
-          img,
-          0,
-          0,
-          width,
-          height
-        );
-
-        resolve(
-          canvas.toDataURL(
-            "image/jpeg",
-            0.4
-          )
-        );
-
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, width, height);
+        resolve(canvas.toDataURL("image/jpeg", 0.4));
       };
-
       img.onerror = reject;
-
-      img.src =
-        event.target.result;
-
+      img.src = event.target.result;
     };
-
     reader.onerror = reject;
-
     reader.readAsDataURL(file);
-
   });
-
 }
 
-
-/* ROUTINE IMAGE */
-
-document
-  .getElementById("routineImageInput")
-  .addEventListener(
-    "change",
-    async event => {
-
-      const file =
-        event.target.files[0];
-
-      if (!file) return;
-
-      try {
-
-        currentRoutineImage =
-          await compressImage(file);
-
-        showRoutineImagePreview();
-
-      } catch (error) {
-
-        alert(
-          "לא ניתן לקרוא את התמונה."
-        );
-
-      }
-
-    }
-  );
-
+document.getElementById("routineImageInput").addEventListener("change", async event => {
+  const file = event.target.files[0];
+  if (!file) return;
+  try {
+    currentRoutineImage = await compressImage(file);
+    showRoutineImagePreview();
+  } catch (error) { alert("לא ניתן לקרוא את התמונה."); }
+});
 
 function showRoutineImagePreview() {
-
-  const preview =
-    document.getElementById(
-      "routineImagePreview"
-    );
-
+  const preview = document.getElementById("routineImagePreview");
   preview.innerHTML = "";
-
-  if (!currentRoutineImage) {
-    return;
-  }
-
-  const img =
-    document.createElement("img");
-
-  img.src =
-    currentRoutineImage;
-
-  const remove =
-    document.createElement("button");
-
-  remove.className =
-    "remove-image";
-
-  remove.textContent =
-    "🗑 מחק תמונה";
-
-  remove.addEventListener(
-    "click",
-    () => {
-
-      currentRoutineImage = "";
-
-      document.getElementById(
-        "routineImageInput"
-      ).value = "";
-
-      showRoutineImagePreview();
-
-    }
-  );
-
+  if (!currentRoutineImage) { return; }
+  const img = document.createElement("img");
+  img.src = currentRoutineImage;
+  const remove = document.createElement("button");
+  remove.className = "remove-image";
+  remove.textContent = "🗑 מחק תמונה";
+  remove.addEventListener("click", () => {
+    currentRoutineImage = "";
+    document.getElementById("routineImageInput").value = "";
+    showRoutineImagePreview();
+  });
   preview.appendChild(img);
   preview.appendChild(remove);
-
 }
-
 
 /* COPY LINK */
-
 async function copyRoutineLink(routineId) {
-
-  const url =
-    window.location.origin +
-    window.location.pathname +
-    "?routine=" +
-    encodeURIComponent(routineId);
-
+  const url = window.location.origin + window.location.pathname + "?routine=" + encodeURIComponent(routineId);
   try {
-
     await navigator.clipboard.writeText(url);
-
     alert("הקישור הועתק!");
-
-  } catch (error) {
-
-    prompt(
-      "העתק את הקישור:",
-      url
-    );
-
-  }
-
+  } catch (error) { prompt("העתק את הקישור:", url); }
 }
-
 
 /* DIRECT LINK */
-
 function openRoutineFromLink() {
-
-  const params =
-    new URLSearchParams(
-      window.location.search
-    );
-
-  const routineId =
-    params.get("routine");
-
-  if (!routineId) {
-    return;
-  }
-
-  const routine =
-    routines.find(
-      item => item.id === routineId
-    );
-
-  if (!routine) {
-
-    alert(
-      "ה-Routine לא נמצא בחשבון הזה."
-    );
-
-    return;
-  }
-
+  const params = new URLSearchParams(window.location.search);
+  const routineId = params.get("routine");
+  if (!routineId) { return; }
+  const routine = routines.find(item => item.id === routineId);
+  if (!routine) { alert("ה-Routine לא נמצא בחשבון הזה."); return; }
   showDirectRoutine(routine);
-
 }
-
-
-/* DIRECT ROUTINE */
 
 function showDirectRoutine(routine) {
-
   hideHomeUI();
+  document.getElementById("editorScreen").classList.add("hidden");
+  document.getElementById("activeScreen").style.display = "none";
+  document.getElementById("directRoutineScreen").style.display = "block";
+  document.getElementById("directRoutineName").textContent = routine.name;
 
-  document.getElementById(
-    "editorScreen"
-  ).classList.add("hidden");
-
-  document.getElementById(
-    "activeScreen"
-  ).style.display = "none";
-
-  document.getElementById(
-    "directRoutineScreen"
-  ).style.display = "block";
-
-  document.getElementById(
-    "directRoutineName"
-  ).textContent =
-    routine.name;
-
-  const routineImage =
-    document.getElementById(
-      "directRoutineImage"
-    );
-
+  const routineImage = document.getElementById("directRoutineImage");
   if (routine.image) {
-
-    routineImage.src =
-      routine.image;
-
-    routineImage.classList.remove(
-      "hidden"
-    );
-
+    routineImage.src = routine.image;
+    routineImage.classList.remove("hidden");
   } else {
-
     routineImage.src = "";
-
-    routineImage.classList.add(
-      "hidden"
-    );
-
+    routineImage.classList.add("hidden");
   }
 
-  const stepsContainer =
-    document.getElementById(
-      "directRoutineSteps"
-    );
-
+  const stepsContainer = document.getElementById("directRoutineSteps");
   stepsContainer.innerHTML = "";
-
-  const todaySteps =
-    getTodaySteps(routine);
+  const todaySteps = getTodaySteps(routine);
 
   if (todaySteps.length === 0) {
-
-    stepsContainer.innerHTML = `
-      <div class="empty">
-        אין Steps פעילים להיום.
-      </div>
-    `;
-
+    stepsContainer.innerHTML = `<div class="empty">אין Steps פעילים להיום.</div>`;
   } else {
-
-    todaySteps.forEach(
-      (step, index) => {
-
-        const div =
-          document.createElement(
-            "div"
-          );
-
-        div.className =
-          "direct-step";
-
-        const imageHtml =
-          step.image
-            ? `
-              <img
-                class="direct-step-image"
-                src="${step.image}"
-                alt=""
-              >
-            `
-            : "";
-
-        div.innerHTML = `
-
-          <strong>
-            Step #${step.stepNumber ||
-              (index + 1)}:
-            ${formatTextWithLinks(step.name)}
-          </strong>
-
-          ${imageHtml}
-
-        `;
-
-        stepsContainer.appendChild(div);
-
-      }
-    );
-
+    todaySteps.forEach((step, index) => {
+      const div = document.createElement("div");
+      div.className = "direct-step";
+      const imageHtml = step.image ? `<img class="direct-step-image" src="${step.image}" alt="">` : "";
+      div.innerHTML = `<strong>Step #${step.stepNumber || (index + 1)}: ${formatTextWithLinks(step.name)}</strong>${imageHtml}`;
+      stepsContainer.appendChild(div);
+    });
   }
-
-  document.getElementById(
-    "directStartBtn"
-  ).onclick =
-    () => startRoutine(routine);
-
+  document.getElementById("directStartBtn").onclick = () => startRoutine(routine);
 }
 
+document.getElementById("directBackBtn").addEventListener("click", () => {
+  window.history.replaceState({}, "", window.location.origin + window.location.pathname);
+  document.getElementById("directRoutineScreen").style.display = "none";
+  showHomeUI();
+});
 
-/* BACK */
-
-document
-  .getElementById("directBackBtn")
-  .addEventListener(
-    "click",
-    () => {
-
-      window.history.replaceState(
-        {},
-        "",
-        window.location.origin +
-        window.location.pathname
-      );
-
-      document.getElementById(
-        "directRoutineScreen"
-      ).style.display = "none";
-
-      showHomeUI();
-
-    }
-  );
-
-
-/* NEW ROUTINE */
-
-document
-  .getElementById("newRoutineBtn")
-  .addEventListener(
-    "click",
-    () => openEditor(null)
-  );
-
+document.getElementById("newRoutineBtn").addEventListener("click", () => openEditor(null));
 
 /* STEP LIBRARY */
-
 function getAllStepsList() {
-
   const list = [];
   const map = new Map();
-
   routines.forEach(routine => {
-
     if (routine.steps) {
-
       routine.steps.forEach(step => {
-
-        if (
-          step.id &&
-          !map.has(step.id)
-        ) {
-
-          map.set(
-            step.id,
-            step
-          );
-
+        if (step.id && !map.has(step.id)) {
+          map.set(step.id, step);
           list.push(step);
-
         }
-
       });
-
     }
-
   });
-
   return list;
-
 }
-
-
-/* REUSE LIBRARY */
 
 function populateStepReuseLibrary() {
-
-  const select =
-    document.getElementById(
-      "reuseStepSelect"
-    );
-
-  select.innerHTML =
-    `
-      <option value="">
-        -- בחר Step קיים מתוך הספרייה --
-      </option>
-    `;
-
-  const allSteps =
-    getAllStepsList();
-
+  const select = document.getElementById("reuseStepSelect");
+  select.innerHTML = `<option value="">-- בחר Step קיים מתוך הספרייה --</option>`;
+  const allSteps = getAllStepsList();
   allSteps.forEach(step => {
-
-    const option =
-      document.createElement(
-        "option"
-      );
-
-    option.value =
-      step.id;
-
-    const frequencyText =
-      Number(step.frequency) === 0
-        ? "מופעל על ידי Step אחר"
-        : `כל ${step.frequency} ימים`;
-
-    option.textContent =
-      `[#${step.stepNumber || '?'}] ${step.name} — ${frequencyText}`;
-
+    const option = document.createElement("option");
+    option.value = step.id;
+    const frequencyText = Number(step.frequency) === 0 ? "מופעל על ידי Step אחר" : `כל ${step.frequency} ימים`;
+    option.textContent = `[#${step.stepNumber || '?'}] ${step.name} — ${frequencyText}`;
     select.appendChild(option);
-
   });
-
 }
-
-
-/* DISABLE OPTIONS */
 
 function updateDisableOptionsInEditor() {
-
-  const allSteps =
-    getAllStepsList();
-
-  document
-    .querySelectorAll(
-      ".disable-target-select"
-    )
-    .forEach(select => {
-
-      const currentVal =
-        select.dataset.selectedVal || "";
-
-      select.innerHTML =
-        '<option value="">-- בחר Step --</option>';
-
-      allSteps.forEach(s => {
-
-        const opt =
-          document.createElement(
-            "option"
-          );
-
-        opt.value = s.id;
-
-        opt.textContent =
-          `#${s.stepNumber || '?'} - ${s.name}`;
-
-        if (s.id === currentVal) {
-          opt.selected = true;
-        }
-
-        select.appendChild(opt);
-
-      });
-
+  const allSteps = getAllStepsList();
+  document.querySelectorAll(".disable-target-select").forEach(select => {
+    const currentVal = select.dataset.selectedVal || "";
+    select.innerHTML = '<option value="">-- בחר Step --</option>';
+    allSteps.forEach(s => {
+      const opt = document.createElement("option");
+      opt.value = s.id;
+      opt.textContent = `#${s.stepNumber || '?'} - ${s.name}`;
+      if (s.id === currentVal) { opt.selected = true; }
+      select.appendChild(opt);
     });
-
+  });
 }
-
-
-/* ACTIVATION OPTIONS */
 
 function updateActivationOptionsInEditor() {
-
-  const allSteps =
-    getAllStepsList();
-
-  document
-    .querySelectorAll(
-      ".activation-target-select"
-    )
-    .forEach(select => {
-
-      const currentVal =
-        select.dataset.selectedVal || "";
-
-      select.innerHTML =
-        '<option value="">-- בחר Step --</option>';
-
-      allSteps.forEach(s => {
-
-        const opt =
-          document.createElement(
-            "option"
-          );
-
-        opt.value = s.id;
-
-        opt.textContent =
-          `#${s.stepNumber || '?'} - ${s.name}`;
-
-        if (s.id === currentVal) {
-          opt.selected = true;
-        }
-
-        select.appendChild(opt);
-
-      });
-
+  const allSteps = getAllStepsList();
+  document.querySelectorAll(".activation-target-select").forEach(select => {
+    const currentVal = select.dataset.selectedVal || "";
+    select.innerHTML = '<option value="">-- בחר Step --</option>';
+    allSteps.forEach(s => {
+      const opt = document.createElement("option");
+      opt.value = s.id;
+      opt.textContent = `#${s.stepNumber || '?'} - ${s.name}`;
+      if (s.id === currentVal) { opt.selected = true; }
+      select.appendChild(opt);
     });
-
+  });
 }
-
-
-/* OPEN EDITOR */
 
 function openEditor(routine) {
-
   hideHomeUI();
-
-  document.getElementById(
-    "directRoutineScreen"
-  ).style.display = "none";
-
-  document.getElementById(
-    "editorScreen"
-  ).classList.remove("hidden");
-
-  editingRoutineId =
-    routine
-      ? routine.id
-      : null;
-
-  document.getElementById(
-    "editorTitle"
-  ).textContent =
-    routine
-      ? "עריכת Routine"
-      : "Routine חדש";
-
-  document.getElementById(
-    "routineName"
-  ).value =
-    routine
-      ? routine.name
-      : "";
+  document.getElementById("directRoutineScreen").style.display = "none";
+  document.getElementById("editorScreen").classList.remove("hidden");
+  editingRoutineId = routine ? routine.id : null;
+  document.getElementById("editorTitle").textContent = routine ? "עריכת Routine" : "Routine חדש";
+  document.getElementById("routineName").value = routine ? routine.name : "";
 
   const routineStartTimeInput = document.getElementById("routineStartTime");
-  if (routineStartTimeInput) {
-    routineStartTimeInput.value = routine?.startTime || "";
-  }
+  if (routineStartTimeInput) { routineStartTimeInput.value = routine?.startTime || ""; }
 
-  currentRoutineImage =
-    routine?.image || "";
-
-  document.getElementById(
-    "routineImageInput"
-  ).value = "";
-
+  currentRoutineImage = routine?.image || "";
+  document.getElementById("routineImageInput").value = "";
   showRoutineImagePreview();
 
-  document
-    .querySelectorAll(
-      ".days input"
-    )
-    .forEach(checkbox => {
+  document.querySelectorAll(".days input").forEach(checkbox => {
+    checkbox.checked = routine ? (routine.days || []).includes(Number(checkbox.value)) : false;
+    checkbox.onchange = () => {
+      document.querySelectorAll("#stepsContainer .step").forEach(stepEl => {
+        const freqInput = stepEl.querySelector(".frequency");
+        if (freqInput) { freqInput.dispatchEvent(new Event("input")); }
+      });
+    };
+  });
 
-      checkbox.checked =
-        routine
-          ? (
-              routine.days || []
-            ).includes(
-              Number(
-                checkbox.value
-              )
-            )
-          : false;
-
-      /* When routine days change, refresh "הפעם הבאה" on every step */
-      checkbox.onchange = () => {
-        document
-          .querySelectorAll("#stepsContainer .step")
-          .forEach(stepEl => {
-            const freqInput = stepEl.querySelector(".frequency");
-            if (freqInput) {
-              freqInput.dispatchEvent(new Event("input"));
-            }
-          });
-      };
-
-    });
-
-  stepImages =
-    new Map();
-
-  const container =
-    document.getElementById(
-      "stepsContainer"
-    );
-
+  stepImages = new Map();
+  const container = document.getElementById("stepsContainer");
   container.innerHTML = "";
-
-  if (
-    routine &&
-    routine.steps
-  ) {
-
-    routine.steps.forEach(
-      step => addStep(step)
-    );
-
-  }
-
+  if (routine && routine.steps) { routine.steps.forEach(step => addStep(step)); }
   populateStepReuseLibrary();
-
   updateDisableOptionsInEditor();
-
   updateActivationOptionsInEditor();
-
 }
 
-
-/* ADD STEP */
-
-document
-  .getElementById("addStepBtn")
-  .addEventListener(
-    "click",
-    () => {
-
-      addStep();
-
-      updateDisableOptionsInEditor();
-
-      updateActivationOptionsInEditor();
-
-    }
-  );
-
-
-/* REUSE STEP */
-
-document
-  .getElementById("reuseStepBtn")
-  .addEventListener(
-    "click",
-    () => {
-
-      const select =
-        document.getElementById(
-          "reuseStepSelect"
-        );
-
-      const stepId =
-        select.value;
-
-      if (!stepId) {
-
-        alert(
-          "נא לבחור Step מהרשימה"
-        );
-
-        return;
-      }
-
-      const allSteps =
-        getAllStepsList();
-
-      const foundStep =
-        allSteps.find(
-          s => s.id === stepId
-        );
-
-      if (foundStep) {
-
-        addStep(foundStep);
-
-        updateDisableOptionsInEditor();
-
-        updateActivationOptionsInEditor();
-
-      }
-
-    }
-  );
-
-
-/* DISABLE RULE */
-
-function addDisableRuleRow(
-  rulesContainer,
-  rule = null
-) {
-
-  const row =
-    document.createElement(
-      "div"
-    );
-
-  row.className =
-    "disable-rule-row";
-
-  row.innerHTML = `
-
-    <div>
-
-      <label>
-        Step לביטול
-      </label>
-
-      <select
-        class="disable-target-select"
-        data-selected-val="${rule?.targetId || ''}"
-      >
-
-        <option value="">
-          -- בחר Step --
-        </option>
-
-      </select>
-
-    </div>
-
-    <div>
-
-      <label>
-        משך הביטול (בשעות)
-      </label>
-
-      <input
-        class="disable-hours-input"
-        type="number"
-        min="1"
-        placeholder="24"
-        value="${rule?.hours || 24}"
-      >
-
-    </div>
-
-    <button
-      type="button"
-      class="btn-remove-rule"
-    >
-      ✕
-    </button>
-
-  `;
-
-  row
-    .querySelector(
-      ".btn-remove-rule"
-    )
-    .addEventListener(
-      "click",
-      () => row.remove()
-    );
-
-  const select =
-    row.querySelector(
-      ".disable-target-select"
-    );
-
-  select.addEventListener(
-    "change",
-    e => {
-
-      select.dataset.selectedVal =
-        e.target.value;
-
-    }
-  );
-
-  rulesContainer.appendChild(row);
-
+document.getElementById("addStepBtn").addEventListener("click", () => {
+  addStep();
   updateDisableOptionsInEditor();
-
-}
-
-
-/* ACTIVATION RULE */
-
-function addActivationRuleRow(
-  rulesContainer,
-  rule = null
-) {
-
-  const row =
-    document.createElement(
-      "div"
-    );
-
-  row.className =
-    "activation-rule-row";
-
-  row.innerHTML = `
-
-    <div>
-
-      <label>
-        Step להפעלה
-      </label>
-
-      <select
-        class="activation-target-select"
-        data-selected-val="${rule?.targetId || ''}"
-      >
-
-        <option value="">
-          -- בחר Step --
-        </option>
-
-      </select>
-
-    </div>
-
-    <div>
-
-      <label>
-        משך ההפעלה (בימים)
-      </label>
-
-      <input
-        class="activation-days-input"
-        type="number"
-        min="1"
-        step="1"
-        placeholder="3"
-        value="${rule?.days || 1}"
-      >
-
-    </div>
-
-    <button
-      type="button"
-      class="activation-remove-rule btn-remove-rule"
-    >
-      ✕
-    </button>
-
-  `;
-
-  row
-    .querySelector(
-      ".activation-remove-rule"
-    )
-    .addEventListener(
-      "click",
-      () => row.remove()
-    );
-
-  const select =
-    row.querySelector(
-      ".activation-target-select"
-    );
-
-  select.addEventListener(
-    "change",
-    e => {
-
-      select.dataset.selectedVal =
-        e.target.value;
-
-    }
-  );
-
-  rulesContainer.appendChild(row);
-
   updateActivationOptionsInEditor();
+});
 
+document.getElementById("reuseStepBtn").addEventListener("click", () => {
+  const select = document.getElementById("reuseStepSelect");
+  const stepId = select.value;
+  if (!stepId) { alert("נא לבחור Step מהרשימה"); return; }
+  const allSteps = getAllStepsList();
+  const foundStep = allSteps.find(s => s.id === stepId);
+  if (foundStep) {
+    addStep(foundStep);
+    updateDisableOptionsInEditor();
+    updateActivationOptionsInEditor();
+  }
+});
+
+function addDisableRuleRow(rulesContainer, rule = null) {
+  const row = document.createElement("div");
+  row.className = "disable-rule-row";
+  row.innerHTML = `
+    <div>
+      <label>Step לביטול</label>
+      <select class="disable-target-select" data-selected-val="${rule?.targetId || ''}">
+        <option value="">-- בחר Step --</option>
+      </select>
+    </div>
+    <div>
+      <label>משך הביטול (בשעות)</label>
+      <input class="disable-hours-input" type="number" min="1" placeholder="24" value="${rule?.hours || 24}">
+    </div>
+    <button type="button" class="btn-remove-rule">✕</button>
+  `;
+  row.querySelector(".btn-remove-rule").addEventListener("click", () => row.remove());
+  const select = row.querySelector(".disable-target-select");
+  select.addEventListener("change", e => { select.dataset.selectedVal = e.target.value; });
+  rulesContainer.appendChild(row);
+  updateDisableOptionsInEditor();
 }
 
+function addActivationRuleRow(rulesContainer, rule = null) {
+  const row = document.createElement("div");
+  row.className = "activation-rule-row";
+  row.innerHTML = `
+    <div>
+      <label>Step להפעלה</label>
+      <select class="activation-target-select" data-selected-val="${rule?.targetId || ''}">
+        <option value="">-- בחר Step --</option>
+      </select>
+    </div>
+    <div>
+      <label>משך ההפעלה (בימים)</label>
+      <input class="activation-days-input" type="number" min="1" step="1" placeholder="3" value="${rule?.days || 1}">
+    </div>
+    <button type="button" class="activation-remove-rule btn-remove-rule">✕</button>
+  `;
+  row.querySelector(".activation-remove-rule").addEventListener("click", () => row.remove());
+  const select = row.querySelector(".activation-target-select");
+  select.addEventListener("change", e => { select.dataset.selectedVal = e.target.value; });
+  rulesContainer.appendChild(row);
+  updateActivationOptionsInEditor();
+}
 
-/* DRAG */
-
-function getDragAfterElement(
-  container,
-  y
-) {
-
-  const draggableElements = [
-    ...container.querySelectorAll(
-      ".step:not(.dragging)"
-    )
-  ];
-
-  return draggableElements.reduce(
-    (
-      closest,
-      child
-    ) => {
-
-      const box =
-        child.getBoundingClientRect();
-
-      const offset =
-        y -
-        box.top -
-        box.height / 2;
-
-      if (
-        offset < 0 &&
-        offset > closest.offset
-      ) {
-
-        return {
-          offset,
-          element: child
-        };
-
-      } else {
-
-        return closest;
-
-      }
-
-    },
-    {
-      offset:
-        Number.NEGATIVE_INFINITY
+function getDragAfterElement(container, y) {
+  const draggableElements = [...container.querySelectorAll(".step:not(.dragging)")];
+  return draggableElements.reduce((closest, child) => {
+    const box = child.getBoundingClientRect();
+    const offset = y - box.top - box.height / 2;
+    if (offset < 0 && offset > closest.offset) {
+      return { offset, element: child };
+    } else {
+      return closest;
     }
-  ).element;
-
+  }, { offset: Number.NEGATIVE_INFINITY }).element;
 }
-
-
-/* ADD STEP */
 
 function addStep(step = null) {
-
-  const container =
-    document.getElementById(
-      "stepsContainer"
-    );
-
-  const stepId =
-    step?.id ||
-    crypto.randomUUID();
-
-  const stepNumber =
-    step?.stepNumber ||
-    (
-      Math.floor(
-        Math.random() * 9000
-      ) + 1000
-    );
-
-  const div =
-    document.createElement(
-      "div"
-    );
-
+  const container = document.getElementById("stepsContainer");
+  const stepId = step?.id || crypto.randomUUID();
+  const stepNumber = step?.stepNumber || (Math.floor(Math.random() * 9000) + 1000);
+  const div = document.createElement("div");
   div.className = "step";
+  div.dataset.stepId = stepId;
+  div.dataset.stepNumber = stepNumber;
 
-  div.dataset.stepId =
-    stepId;
+  if (step?.image) { stepImages.set(stepId, step.image); }
 
-  div.dataset.stepNumber =
-    stepNumber;
-
-
-  if (step?.image) {
-
-    stepImages.set(
-      stepId,
-      step.image
-    );
-
-  }
-
-
-  const initialFrequency =
-    step
-      ? (
-          step.frequency !== undefined &&
-          step.frequency !== null
-            ? step.frequency
-            : 1
-        )
-      : 1;
-
+  const initialFrequency = step ? (step.frequency !== undefined && step.frequency !== null ? step.frequency : 1) : 1;
 
   div.innerHTML = `
-
     <div class="step-title">
-
       <strong>
-
-        <span
-          class="step-drag-handle"
-          draggable="true"
-          title="גרור לשינוי סדר"
-        >
-          ⠿
-        </span>
-
+        <span class="step-drag-handle" draggable="true" title="גרור לשינוי סדר">⠿</span>
         Step #${stepNumber}
-
-        <span class="step-id-tag">
-          ID: ${stepId.substring(0, 8)}
-        </span>
-
-        <span
-          class="activation-only-label hidden"
-        >
-          מופעל על ידי Step אחר
-        </span>
-
+        <span class="step-id-tag">ID: ${stepId.substring(0, 8)}</span>
+        <span class="activation-only-label hidden">מופעל על ידי Step אחר</span>
       </strong>
-
-      <button class="danger remove">
-        מחק Step
-      </button>
-
+      <button class="danger remove">מחק Step</button>
     </div>
-
 
     <div class="form-group">
-
-      <label>
-        שם ה-Step
-      </label>
-
-      <input
-        class="step-name"
-        type="text"
-        placeholder="לדוגמה: לשתות מים"
-        value="${step ? escapeAttr(step.name) : ""}"
-      >
-
+      <label>שם ה-Step</label>
+      <input class="step-name" type="text" placeholder="לדוגמה: לשתות מים" value="${step ? escapeAttr(step.name) : ""}">
     </div>
-
 
     <div class="form-group image-upload">
-
-      <label>
-        תמונה ל-Step
-      </label>
-
-      <input
-        class="image-input step-image-input"
-        type="file"
-        accept="image/*"
-      >
-
-      <div
-        class="step-image-preview image-preview"
-      ></div>
-
+      <label>תמונה ל-Step</label>
+      <input class="image-input step-image-input" type="file" accept="image/*">
+      <div class="step-image-preview image-preview"></div>
     </div>
-
 
     <div class="step-grid">
-
       <div>
-
-        <label>
-          משך בשניות
-        </label>
-
-        <input
-          class="step-duration"
-          type="number"
-          min="1"
-          value="${step ? step.duration : 60}"
-        >
-
+        <label>משך בשניות</label>
+        <input class="step-duration" type="number" min="1" value="${step ? step.duration : 60}">
       </div>
-
-
       <div>
-
-        <label>
-          תדירות
-        </label>
-
+        <label>תדירות</label>
         <div class="frequency-wrapper">
-
-          <input
-            class="frequency"
-            type="number"
-            min="0"
-            placeholder="הכנס מספר ימים"
-            value="${initialFrequency}"
-          >
-
-          <span class="frequency-label">
-          </span>
-
+          <input class="frequency" type="number" min="0" placeholder="הכנס מספר ימים" value="${initialFrequency}">
+          <span class="frequency-label"></span>
         </div>
-
       </div>
-
     </div>
 
-
     <div class="form-group step-next-due-group">
-      <label>
-        הפעם הבאה
-      </label>
+      <label>הפעם הבאה</label>
       <div class="next-due-row" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
-        <input
-          type="date"
-          class="step-next-due-input"
-        >
+        <input type="date" class="step-next-due-input">
         <span class="step-next-due-today" style="font-size:14px;font-weight:700;color:#c40000;"></span>
       </div>
       <div style="font-size:12px;color:#888;margin-top:6px;line-height:1.4;">
-        מתי ה-Step אמור להופיע בפעם הקרובה. אפשר לערוך ידנית. אם זה היום — יוצג "היום". בלחיצה על שמור יתעדכן לוח הזמנים של ה-Step.
+        מתי ה-Step אמור להופיע בפעם הקרובה. אפשר לערוך ידנית.
       </div>
     </div>
 
-
     <div class="show-in-calendar-box">
-      <input
-        type="checkbox"
-        class="show-in-calendar"
-        id="showCal_${stepId}"
-        ${step && step.showInCalendar === true ? "checked" : ""}
-      >
+      <input type="checkbox" class="show-in-calendar" id="showCal_${stepId}" ${step && step.showInCalendar === true ? "checked" : ""}>
       <label for="showCal_${stepId}">
         הצג בלוח שנה
-        <span class="hint">ברירת מחדל: כבוי – רק אם מסומן יופיע בלוח</span>
+        <span class="hint">ברירת מחדל: כבוי</span>
       </label>
     </div>
 
-
     <div class="disable-box">
-
       <div class="disable-box-header">
-
-        <strong>
-          ביטול Steps אחרים לאחר ביצוע:
-        </strong>
-
-        <button
-          type="button"
-          class="btn-add-rule"
-        >
-          + הוסף כלל ביטול
-        </button>
-
+        <strong>ביטול Steps אחרים לאחר ביצוע:</strong>
+        <button type="button" class="btn-add-rule">+ הוסף כלל ביטול</button>
       </div>
-
-      <div
-        class="disable-rules-container"
-      ></div>
-
+      <div class="disable-rules-container"></div>
     </div>
-
 
     <div class="activation-box">
-
       <div class="activation-box-header">
-
-        <strong>
-          הפעלת Steps אחרים לאחר ביצוע:
-        </strong>
-
-        <button
-          type="button"
-          class="btn-add-rule activation-add-rule"
-        >
-          + הוסף כלל הפעלה
-        </button>
-
+        <strong>הפעלת Steps אחרים לאחר ביצוע:</strong>
+        <button type="button" class="btn-add-rule activation-add-rule">+ הוסף כלל הפעלה</button>
       </div>
-
-      <div
-        class="activation-rules-container"
-      ></div>
-
+      <div class="activation-rules-container"></div>
     </div>
-
   `;
 
+  div.querySelector(".remove").addEventListener("click", () => {
+    stepImages.delete(stepId);
+    div.remove();
+  });
 
-  /* REMOVE */
-
-  div
-    .querySelector(".remove")
-    .addEventListener(
-      "click",
-      () => {
-
-        stepImages.delete(
-          stepId
-        );
-
-        div.remove();
-
-      }
-    );
-
-
-  /* FREQUENCY DISPLAY */
-
-  const frequencyInput =
-    div.querySelector(
-      ".frequency"
-    );
-
-  const frequencyLabel =
-    div.querySelector(
-      ".frequency-label"
-    );
-
-  const activationLabel =
-    div.querySelector(
-      ".activation-only-label"
-    );
-
+  const frequencyInput = div.querySelector(".frequency");
+  const frequencyLabel = div.querySelector(".frequency-label");
+  const activationLabel = div.querySelector(".activation-only-label");
 
   function updateFrequencyDisplay() {
-
-    const value =
-      Number(
-        frequencyInput.value
-      );
-
+    const value = Number(frequencyInput.value);
     if (value === 0) {
-
-      /*
-        מצב מיוחד
-      */
-
-      div.classList.add(
-        "activation-only"
-      );
-
-      frequencyLabel.textContent =
-        "מופעל על ידי Step אחר";
-
-      frequencyLabel.classList.add(
-        "special"
-      );
-
-      activationLabel.classList.remove(
-        "hidden"
-      );
-
+      div.classList.add("activation-only");
+      frequencyLabel.textContent = "מופעל על ידי Step אחר";
+      frequencyLabel.classList.add("special");
+      activationLabel.classList.remove("hidden");
     } else {
-
-      /*
-        מצב רגיל
-      */
-
-      div.classList.remove(
-        "activation-only"
-      );
-
-      frequencyLabel.classList.remove(
-        "special"
-      );
-
-      activationLabel.classList.add(
-        "hidden"
-      );
-
-      if (
-        Number.isFinite(value) &&
-        value > 0
-      ) {
-
-        frequencyLabel.textContent =
-          value === 1
-            ? "יום"
-            : "ימים";
-
+      div.classList.remove("activation-only");
+      frequencyLabel.classList.remove("special");
+      activationLabel.classList.add("hidden");
+      if (Number.isFinite(value) && value > 0) {
+        frequencyLabel.textContent = value === 1 ? "יום" : "ימים";
       } else {
-
-        frequencyLabel.textContent =
-          "ימים";
-
+        frequencyLabel.textContent = "ימים";
       }
-
     }
-
   }
 
-
-  frequencyInput.addEventListener(
-    "input",
-    updateFrequencyDisplay
-  );
-
+  frequencyInput.addEventListener("input", updateFrequencyDisplay);
   updateFrequencyDisplay();
 
-
-  /* NEXT DUE – editable nearest day; "היום" when selected/computed is today */
-  const nextDueInput =
-    div.querySelector(".step-next-due-input");
-
-  const nextDueTodayEl =
-    div.querySelector(".step-next-due-today");
+  const nextDueInput = div.querySelector(".step-next-due-input");
+  const nextDueTodayEl = div.querySelector(".step-next-due-today");
 
   function toDateInputValue(date) {
     if (!date || isNaN(date.getTime())) return "";
@@ -4597,21 +1658,9 @@ function addStep(step = null) {
   function updateNextDueTodayBadge() {
     if (!nextDueInput || !nextDueTodayEl) return;
     const val = (nextDueInput.value || "").trim();
-    if (!val) {
-      nextDueTodayEl.textContent = "";
-      return;
-    }
-    const selected = startOfDay(
-      new Date(
-        Number(val.slice(0, 4)),
-        Number(val.slice(5, 7)) - 1,
-        Number(val.slice(8, 10))
-      )
-    );
-    if (
-      !isNaN(selected.getTime()) &&
-      isSameDate(selected, getLogicalDate())
-    ) {
+    if (!val) { nextDueTodayEl.textContent = ""; return; }
+    const selected = startOfDay(new Date(Number(val.slice(0, 4)), Number(val.slice(5, 7)) - 1, Number(val.slice(8, 10))));
+    if (!isNaN(selected.getTime()) && isSameDate(selected, getLogicalDate())) {
       nextDueTodayEl.textContent = "היום";
     } else {
       nextDueTodayEl.textContent = "";
@@ -4620,928 +1669,231 @@ function addStep(step = null) {
 
   function refreshThisStepNextDue() {
     if (!nextDueInput) return;
-
-    const freqRaw = Number(
-      div.querySelector(".frequency")?.value
-    );
-    const freqVal =
-      Number.isFinite(freqRaw) && freqRaw >= 0
-        ? freqRaw
-        : 1;
-
-    const mockStep = {
-      id: stepId,
-      frequency: freqVal
-    };
-
-    const selectedDays = Array.from(
-      document.querySelectorAll(".days input:checked")
-    ).map(el => Number(el.value));
-
-    const mockRoutine = {
-      days: selectedDays,
-      steps: []
-    };
-
+    const freqRaw = Number(div.querySelector(".frequency")?.value);
+    const freqVal = Number.isFinite(freqRaw) && freqRaw >= 0 ? freqRaw : 1;
+    const mockStep = { id: stepId, frequency: freqVal };
+    const selectedDays = Array.from(document.querySelectorAll(".days input:checked")).map(el => Number(el.value));
+    const mockRoutine = { days: selectedDays, steps: [] };
     const next = getNextDueDateForStep(mockStep, mockRoutine);
     nextDueInput.value = toDateInputValue(next);
     updateNextDueTodayBadge();
   }
 
-  frequencyInput.addEventListener(
-    "input",
-    refreshThisStepNextDue
-  );
-
-  nextDueInput.addEventListener(
-    "input",
-    updateNextDueTodayBadge
-  );
-
-  nextDueInput.addEventListener(
-    "change",
-    updateNextDueTodayBadge
-  );
-
+  frequencyInput.addEventListener("input", refreshThisStepNextDue);
+  nextDueInput.addEventListener("input", updateNextDueTodayBadge);
+  nextDueInput.addEventListener("change", updateNextDueTodayBadge);
   refreshThisStepNextDue();
 
+  const handle = div.querySelector(".step-drag-handle");
+  handle.addEventListener("dragstart", e => {
+    e.dataTransfer.setData("text/plain", stepId);
+    e.dataTransfer.effectAllowed = "move";
+    div.classList.add("dragging");
+  });
+  handle.addEventListener("dragend", () => { div.classList.remove("dragging"); });
+  div.addEventListener("dragover", e => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+    const dragging = document.querySelector(".step.dragging");
+    if (!dragging || dragging === div) { return; }
+    const afterElement = getDragAfterElement(container, e.clientY);
+    if (afterElement == null) { container.appendChild(dragging); }
+    else { container.insertBefore(dragging, afterElement); }
+  });
 
-  /* DRAG & DROP */
+  const rulesContainer = div.querySelector(".disable-rules-container");
+  const addRuleBtn = div.querySelector(".btn-add-rule");
+  addRuleBtn.addEventListener("click", () => { addDisableRuleRow(rulesContainer); });
 
-  const handle =
-    div.querySelector(
-      ".step-drag-handle"
-    );
-
-  handle.addEventListener(
-    "dragstart",
-    e => {
-
-      e.dataTransfer.setData(
-        "text/plain",
-        stepId
-      );
-
-      e.dataTransfer.effectAllowed =
-        "move";
-
-      div.classList.add(
-        "dragging"
-      );
-
-    }
-  );
-
-
-  handle.addEventListener(
-    "dragend",
-    () => {
-
-      div.classList.remove(
-        "dragging"
-      );
-
-    }
-  );
-
-
-  div.addEventListener(
-    "dragover",
-    e => {
-
-      e.preventDefault();
-
-      e.dataTransfer.dropEffect =
-        "move";
-
-      const dragging =
-        document.querySelector(
-          ".step.dragging"
-        );
-
-      if (
-        !dragging ||
-        dragging === div
-      ) {
-        return;
-      }
-
-      const afterElement =
-        getDragAfterElement(
-          container,
-          e.clientY
-        );
-
-      if (
-        afterElement == null
-      ) {
-
-        container.appendChild(
-          dragging
-        );
-
-      } else {
-
-        container.insertBefore(
-          dragging,
-          afterElement
-        );
-
-      }
-
-    }
-  );
-
-
-  /* DISABLE RULES */
-
-  const rulesContainer =
-    div.querySelector(
-      ".disable-rules-container"
-    );
-
-  const addRuleBtn =
-    div.querySelector(
-      ".btn-add-rule"
-    );
-
-  addRuleBtn.addEventListener(
-    "click",
-    () => {
-
-      addDisableRuleRow(
-        rulesContainer
-      );
-
-    }
-  );
-
-
-  let initialRules =
-    step?.disableRules || [];
-
-
-  if (
-    initialRules.length === 0 &&
-    step?.disableTargetId
-  ) {
-
-    const fallbackHours =
-      step.disableHours !== undefined
-        ? step.disableHours
-        : (
-            (step.disableDays || 1) *
-            24
-          );
-
-    initialRules = [
-      {
-        targetId:
-          step.disableTargetId,
-        hours:
-          fallbackHours
-      }
-    ];
-
+  let initialRules = step?.disableRules || [];
+  if (initialRules.length === 0 && step?.disableTargetId) {
+    const fallbackHours = step.disableHours !== undefined ? step.disableHours : ((step.disableDays || 1) * 24);
+    initialRules = [{ targetId: step.disableTargetId, hours: fallbackHours }];
   }
+  initialRules.forEach(rule => { addDisableRuleRow(rulesContainer, rule); });
 
+  const activationRulesContainer = div.querySelector(".activation-rules-container");
+  const activationAddRuleBtn = div.querySelector(".activation-add-rule");
+  activationAddRuleBtn.addEventListener("click", () => { addActivationRuleRow(activationRulesContainer); });
 
-  initialRules.forEach(
-    rule => {
+  const initialActivationRules = activationRulesMap[stepId] || step?.activationRules || [];
+  initialActivationRules.forEach(rule => { addActivationRuleRow(activationRulesContainer, rule); });
 
-      addDisableRuleRow(
-        rulesContainer,
-        rule
-      );
-
-    }
-  );
-
-
-  /* ACTIVATION RULES */
-
-  const activationRulesContainer =
-    div.querySelector(
-      ".activation-rules-container"
-    );
-
-  const activationAddRuleBtn =
-    div.querySelector(
-      ".activation-add-rule"
-    );
-
-
-  activationAddRuleBtn.addEventListener(
-    "click",
-    () => {
-
-      addActivationRuleRow(
-        activationRulesContainer
-      );
-
-    }
-  );
-
-
-  const initialActivationRules =
-    activationRulesMap[stepId] ||
-    step?.activationRules ||
-    [];
-
-
-  initialActivationRules.forEach(
-    rule => {
-
-      addActivationRuleRow(
-        activationRulesContainer,
-        rule
-      );
-
-    }
-  );
-
-
-  /* STEP IMAGE */
-
-  const imgInput =
-    div.querySelector(
-      ".step-image-input"
-    );
-
-  const imgPreview =
-    div.querySelector(
-      ".step-image-preview"
-    );
-
+  const imgInput = div.querySelector(".step-image-input");
+  const imgPreview = div.querySelector(".step-image-preview");
 
   function renderLocalPreview() {
-
     imgPreview.innerHTML = "";
-
-    const imgData =
-      stepImages.get(
-        stepId
-      );
-
-    if (!imgData) {
-      return;
-    }
-
-    const img =
-      document.createElement(
-        "img"
-      );
-
-    img.src =
-      imgData;
-
-
-    const rmBtn =
-      document.createElement(
-        "button"
-      );
-
-    rmBtn.className =
-      "remove-image";
-
-    rmBtn.textContent =
-      "🗑 מחק תמונה";
-
-
-    rmBtn.addEventListener(
-      "click",
-      () => {
-
-        stepImages.delete(
-          stepId
-        );
-
-        imgInput.value = "";
-
-        renderLocalPreview();
-
-      }
-    );
-
-
+    const imgData = stepImages.get(stepId);
+    if (!imgData) return;
+    const img = document.createElement("img");
+    img.src = imgData;
+    const rmBtn = document.createElement("button");
+    rmBtn.className = "remove-image";
+    rmBtn.textContent = "🗑 מחק תמונה";
+    rmBtn.addEventListener("click", () => {
+      stepImages.delete(stepId);
+      imgInput.value = "";
+      renderLocalPreview();
+    });
     imgPreview.appendChild(img);
     imgPreview.appendChild(rmBtn);
-
   }
 
-
-  imgInput.addEventListener(
-    "change",
-    async e => {
-
-      const file =
-        e.target.files[0];
-
-      if (!file) {
-        return;
-      }
-
-      try {
-
-        const base64 =
-          await compressImage(
-            file
-          );
-
-        stepImages.set(
-          stepId,
-          base64
-        );
-
-        renderLocalPreview();
-
-      } catch (err) {
-
-        alert(
-          "טעינת תמונה נכשלה"
-        );
-
-      }
-
-    }
-  );
-
+  imgInput.addEventListener("change", async e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    try {
+      const base64 = await compressImage(file);
+      stepImages.set(stepId, base64);
+      renderLocalPreview();
+    } catch (err) { alert("טעינת תמונה נכשלה"); }
+  });
 
   renderLocalPreview();
-
   container.appendChild(div);
-
 }
 
-
-/* CANCEL EDITOR */
-
-document
-  .getElementById("cancelEditorBtn")
-  .addEventListener(
-    "click",
-    () => {
-
-      document.getElementById(
-        "editorScreen"
-      ).classList.add("hidden");
-
-      showHomeUI();
-
-    }
-  );
-
+document.getElementById("cancelEditorBtn").addEventListener("click", () => {
+  document.getElementById("editorScreen").classList.add("hidden");
+  showHomeUI();
+});
 
 /* SAVE ROUTINE */
-
-document
-  .getElementById("saveRoutineBtn")
-  .addEventListener(
-    "click",
-    async () => {
-
-      const name =
-        document.getElementById(
-          "routineName"
-        ).value.trim();
-
-
-      if (!name) {
-
-        alert(
-          "נא להזין שם לשגרה"
-        );
-
-        return;
-
-      }
-
-
-      const selectedDays =
-        Array.from(
-          document.querySelectorAll(
-            ".days input:checked"
-          )
-        ).map(
-          el => Number(el.value)
-        );
-
-      const startTime =
-        document.getElementById("routineStartTime")?.value || "";
-
-      const stepElements =
-        document.querySelectorAll(
-          "#stepsContainer .step"
-        );
-
-
-      const steps = [];
-
-
-      stepElements.forEach(el => {
-
-        const sId =
-          el.dataset.stepId;
-
-        const sNum =
-          Number(
-            el.dataset.stepNumber
-          );
-
-
-        const sName =
-          el
-            .querySelector(
-              ".step-name"
-            )
-            .value
-            .trim() ||
-          "Step ללא שם";
-
-
-        const sDuration =
-          Number(
-            el
-              .querySelector(
-                ".step-duration"
-              )
-              .value
-          ) || 60;
-
-
-        /*
-          חשוב:
-          כאן לא משתמשים ב- || 1
-          כי 0 הוא ערך חוקי.
-        */
-
-        const frequencyRaw =
-          el
-            .querySelector(
-              ".frequency"
-            )
-            .value;
-
-
-        const frequencyValue =
-          Number(
-            frequencyRaw
-          );
-
-
-        const sFreq =
-          Number.isFinite(
-            frequencyValue
-          ) &&
-          frequencyValue >= 0
-            ? frequencyValue
-            : 1;
-
-
-        const sImg =
-          stepImages.get(
-            sId
-          ) || "";
-
-
-        /* DISABLE RULES */
-
-        const ruleRows =
-          el.querySelectorAll(
-            ".disable-rule-row"
-          );
-
-        const disableRules = [];
-
-
-        ruleRows.forEach(row => {
-
-          const targetId =
-            row
-              .querySelector(
-                ".disable-target-select"
-              )
-              .value;
-
-
-          const hours =
-            Number(
-              row
-                .querySelector(
-                  ".disable-hours-input"
-                )
-                .value
-            ) || 24;
-
-
-          if (targetId) {
-
-            disableRules.push({
-              targetId,
-              hours
-            });
-
-          }
-
-        });
-
-
-        /* ACTIVATION RULES */
-
-        const activationRuleRows =
-          el.querySelectorAll(
-            ".activation-rule-row"
-          );
-
-        const activationRules = [];
-
-
-        activationRuleRows.forEach(
-          row => {
-
-            const targetId =
-              row
-                .querySelector(
-                  ".activation-target-select"
-                )
-                .value;
-
-
-            const days =
-              Number(
-                row
-                  .querySelector(
-                    ".activation-days-input"
-                  )
-                  .value
-              ) || 1;
-
-
-            if (targetId) {
-
-              activationRules.push({
-                targetId,
-                days
-              });
-
-            }
-
-          }
-        );
-
-
-        if (
-          activationRules.length > 0
-        ) {
-
-          activationRulesMap[sId] =
-            activationRules;
-
-        } else {
-
-          delete activationRulesMap[sId];
-
-        }
-
-
-        const showInCalendar =
-          !!el.querySelector(".show-in-calendar")?.checked;
-
-        /* Optional manual override of next due date (YYYY-MM-DD) */
-        const nextDueRaw =
-          (
-            el.querySelector(".step-next-due-input")?.value ||
-            ""
-          ).trim();
-
-        const nextDueDate =
-          /^\d{4}-\d{2}-\d{2}$/.test(nextDueRaw)
-            ? nextDueRaw
-            : "";
-
-
-        steps.push({
-
-          id: sId,
-
-          stepNumber: sNum,
-
-          name: sName,
-
-          duration: sDuration,
-
-          /*
-            0 = מופעל על ידי Step אחר
-          */
-
-          frequency: sFreq,
-
-          disableRules,
-
-          activationRules,
-
-          image: sImg,
-
-          /* default false – only show in calendar if explicitly enabled */
-          showInCalendar,
-
-          /* temporary, used only while saving to adjust disabledStepsMap */
-          _nextDueDate: nextDueDate
-
-        });
-
-      });
-
-      /* Apply "הפעם הבאה" overrides → disabledStepsMap */
-      let disabledMapChanged = false;
-
-      steps.forEach(s => {
-        const dueStr = s._nextDueDate;
-        delete s._nextDueDate;
-
-        if (!dueStr || Number(s.frequency) === 0) {
-          return;
-        }
-
-        const parts = dueStr.split("-");
-        const dueDay = startOfDay(
-          new Date(
-            Number(parts[0]),
-            Number(parts[1]) - 1,
-            Number(parts[2])
-          )
-        );
-
-        if (isNaN(dueDay.getTime())) {
-          return;
-        }
-
-        const logicalToday = getLogicalDate();
-
-        /*
-          Next due = dueDay:
-          - today or past → clear disable so step is available
-          - future → set disable-until to start of dueDay
-            so isStepDueOnDate first becomes true on that day
-        */
-        if (
-          isSameDate(dueDay, logicalToday) ||
-          dueDay.getTime() < logicalToday.getTime()
-        ) {
-          if (disabledStepsMap[s.id]) {
-            delete disabledStepsMap[s.id];
-            disabledMapChanged = true;
-          }
-        } else {
-          const iso = dueDay.toISOString();
-          if (disabledStepsMap[s.id] !== iso) {
-            disabledStepsMap[s.id] = iso;
-            disabledMapChanged = true;
-          }
-        }
-      });
-
-
-      const routineData = {
-
-        name,
-
-        image:
-          currentRoutineImage,
-
-        days:
-          selectedDays,
-
-        startTime,
-
-        steps
-
-      };
-
-
-      try {
-
-        /* SAVE ACTIVATION RULES */
-
-        const activationRulesRef =
-          doc(
-            db,
-            "users",
-            currentUser.uid,
-            "meta",
-            "stepActivationRules"
-          );
-
-
-       await setDoc(
-  activationRulesRef,
-  activationRulesMap,
-  {
-    merge: true
-  }
-);
-
-        /* SAVE DISABLED STEPS (next-due overrides may have cleared keys) */
-        if (disabledMapChanged) {
-          const disabledRef =
-            doc(
-              db,
-              "users",
-              currentUser.uid,
-              "meta",
-              "disabledSteps"
-            );
-
-          /* full overwrite so deleted keys are removed */
-          await setDoc(disabledRef, disabledStepsMap);
-        }
-
-        /* SAVE ROUTINE */
-
-        if (editingRoutineId) {
-
-          const docRef =
-            doc(
-              db,
-              "users",
-              currentUser.uid,
-              "routines",
-              editingRoutineId
-            );
-
-          await updateDoc(
-            docRef,
-            routineData
-          );
-
-        } else {
-
-          const ref =
-            collection(
-              db,
-              "users",
-              currentUser.uid,
-              "routines"
-            );
-
-          await addDoc(
-            ref,
-            routineData
-          );
-
-        }
-
-
-        document.getElementById(
-          "editorScreen"
-        ).classList.add(
-          "hidden"
-        );
-
-        showHomeUI();
-
-
-        await loadRoutines();
-
-
-      } catch (e) {
-
-        console.error(e);
-
-        alert(
-          "שגיאה בשמירת השגרה: " +
-          e.message
-        );
-
-      }
-
-    }
-  );
-
-
-/* RESET ROUTINE – clear disables for this routine's steps so it can run again today */
-
-async function resetRoutine(routine) {
-
-  if (
-    !confirm(
-      "לאפס את השגרה להיום?\nכל ה-Steps יופיעו שוב ליום הנוכחי (עד 04:00)."
-    )
-  ) {
-    return;
-  }
-
-  const stepIds =
-    (routine.steps || [])
-      .map(s => s.id)
-      .filter(Boolean);
-
-  if (stepIds.length === 0) {
-    alert("אין Steps לאיפוס בשגרה זו.");
-    return;
-  }
-
-  let changed = false;
-
-  /*
-    איפוס ליום הספציפי:
-    מוחק את הביטול של כל ה-Steps של השגרה,
-    כך שהם זמינים שוב להיום הלוגי (עד 04:00 הבא).
-  */
-  stepIds.forEach(id => {
-    if (disabledStepsMap[id]) {
-      delete disabledStepsMap[id];
-      changed = true;
+document.getElementById("saveRoutineBtn").addEventListener("click", async () => {
+  const name = document.getElementById("routineName").value.trim();
+  if (!name) { alert("נא להזין שם לשגרה"); return; }
+
+  const selectedDays = Array.from(document.querySelectorAll(".days input:checked")).map(el => Number(el.value));
+  const startTime = document.getElementById("routineStartTime")?.value || "";
+  const stepElements = document.querySelectorAll("#stepsContainer .step");
+  const steps = [];
+
+  stepElements.forEach(el => {
+    const sId = el.dataset.stepId;
+    const sNum = Number(el.dataset.stepNumber);
+    const sName = el.querySelector(".step-name").value.trim() || "Step ללא שם";
+    const sDuration = Number(el.querySelector(".step-duration").value) || 60;
+    const frequencyRaw = el.querySelector(".frequency").value;
+    const frequencyValue = Number(frequencyRaw);
+    const sFreq = Number.isFinite(frequencyValue) && frequencyValue >= 0 ? frequencyValue : 1;
+    const sImg = stepImages.get(sId) || "";
+
+    const ruleRows = el.querySelectorAll(".disable-rule-row");
+    const disableRules = [];
+    ruleRows.forEach(row => {
+      const targetId = row.querySelector(".disable-target-select").value;
+      const hours = Number(row.querySelector(".disable-hours-input").value) || 24;
+      if (targetId) { disableRules.push({ targetId, hours }); }
+    });
+
+    const activationRuleRows = el.querySelectorAll(".activation-rule-row");
+    const activationRules = [];
+    activationRuleRows.forEach(row => {
+      const targetId = row.querySelector(".activation-target-select").value;
+      const days = Number(row.querySelector(".activation-days-input").value) || 1;
+      if (targetId) { activationRules.push({ targetId, days }); }
+    });
+
+    if (activationRules.length > 0) { activationRulesMap[sId] = activationRules; }
+    else { delete activationRulesMap[sId]; }
+
+    const showInCalendar = !!el.querySelector(".show-in-calendar")?.checked;
+    const nextDueRaw = (el.querySelector(".step-next-due-input")?.value || "").trim();
+    const nextDueDate = /^\d{4}-\d{2}-\d{2}$/.test(nextDueRaw) ? nextDueRaw : "";
+
+    steps.push({
+      id: sId,
+      stepNumber: sNum,
+      name: sName,
+      duration: sDuration,
+      frequency: sFreq,
+      disableRules,
+      activationRules,
+      image: sImg,
+      showInCalendar,
+      _nextDueDate: nextDueDate
+    });
+  });
+
+  let disabledMapChanged = false;
+  steps.forEach(s => {
+    const dueStr = s._nextDueDate;
+    delete s._nextDueDate;
+    if (!dueStr || Number(s.frequency) === 0) return;
+    const parts = dueStr.split("-");
+    const dueDay = startOfDay(new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2])));
+    if (isNaN(dueDay.getTime())) return;
+    const logicalToday = getLogicalDate();
+    if (isSameDate(dueDay, logicalToday) || dueDay.getTime() < logicalToday.getTime()) {
+      if (disabledStepsMap[s.id]) { delete disabledStepsMap[s.id]; disabledMapChanged = true; }
+    } else {
+      const iso = dueDay.toISOString();
+      if (disabledStepsMap[s.id] !== iso) { disabledStepsMap[s.id] = iso; disabledMapChanged = true; }
     }
   });
 
-  if (!changed) {
-    alert("השגרה כבר במצב מאופס להיום — אין מה לאפס.");
-    renderRoutines();
-    return;
-  }
+  const routineData = { name, image: currentRoutineImage, days: selectedDays, startTime, steps };
 
   try {
+    const activationRulesRef = doc(db, "users", currentUser.uid, "meta", "stepActivationRules");
+    await setDoc(activationRulesRef, activationRulesMap, { merge: true });
 
-    const docRef =
-      doc(
-        db,
-        "users",
-        currentUser.uid,
-        "meta",
-        "disabledSteps"
-      );
+    if (disabledMapChanged) {
+      const disabledRef = doc(db, "users", currentUser.uid, "meta", "disabledSteps");
+      await setDoc(disabledRef, disabledStepsMap);
+    }
 
-    /* overwrite full map so deleted keys are removed */
-    await setDoc(docRef, disabledStepsMap);
+    if (editingRoutineId) {
+      const docRef = doc(db, "users", currentUser.uid, "routines", editingRoutineId);
+      await updateDoc(docRef, routineData);
+    } else {
+      const ref = collection(db, "users", currentUser.uid, "routines");
+      await addDoc(ref, routineData);
+    }
 
+    document.getElementById("editorScreen").classList.add("hidden");
+    showHomeUI();
     await loadRoutines();
-
-    alert("השגרה אופסה להיום. כל ה-Steps זמינים שוב.");
-
   } catch (e) {
-
     console.error(e);
-
-    alert(
-      "שגיאה באיפוס: " +
-      e.message
-    );
-
+    alert("שגיאה בשמירת השגרה: " + e.message);
   }
+});
 
+/* RESET ROUTINE */
+async function resetRoutine(routine) {
+  if (!confirm("לאפס את השגרה להיום?\nכל ה-Steps יופיעו שוב ליום הנוכחי (עד 04:00).")) { return; }
+  const stepIds = (routine.steps || []).map(s => s.id).filter(Boolean);
+  if (stepIds.length === 0) { alert("אין Steps לאיפוס בשגרה זו."); return; }
+  let changed = false;
+  stepIds.forEach(id => { if (disabledStepsMap[id]) { delete disabledStepsMap[id]; changed = true; } });
+  if (!changed) { alert("השגרה כבר במצב מאופס להיום — אין מה לאפס."); renderRoutines(); return; }
+  try {
+    const docRef = doc(db, "users", currentUser.uid, "meta", "disabledSteps");
+    await setDoc(docRef, disabledStepsMap);
+    await loadRoutines();
+    alert("השגרה אופסה להיום. כל ה-Steps זמינים שוב.");
+  } catch (e) { console.error(e); alert("שגיאה באיפוס: " + e.message); }
 }
-
 
 /* DELETE ROUTINE */
-
 async function deleteRoutine(id) {
-
-  if (
-    !confirm(
-      "האם למחוק שגרה זו?"
-    )
-  ) {
-    return;
-  }
-
-
+  if (!confirm("האם למחוק שגרה זו?")) { return; }
   try {
-
-    await deleteDoc(
-      doc(
-        db,
-        "users",
-        currentUser.uid,
-        "routines",
-        id
-      )
-    );
-
+    await deleteDoc(doc(db, "users", currentUser.uid, "routines", id));
     await loadRoutines();
-
-  } catch (e) {
-
-    alert(
-      "שגיאה במחיקה: " +
-      e.message
-    );
-
-  }
-
+  } catch (e) { alert("שגיאה במחיקה: " + e.message); }
 }
 
-
 /* =========================
-   ROUTINE SCHEDULE / START NOTIFICATION
+   ROUTINE SCHEDULE
    ========================= */
 const ROUTINE_SCHEDULE_CHECK_MS = 5000;
 const ROUTINE_SCHEDULE_STORAGE_KEY = "routine_schedule_last_run";
 let routineScheduleInterval = null;
 
-function getTodayDayNumber() {
-  return new Date().getDay();
-}
+function getTodayDayNumber() { return new Date().getDay(); }
 
 function isRoutineScheduledToday(routine) {
   return !!(routine && Array.isArray(routine.days) && routine.days.includes(getLogicalDayOfWeek()));
@@ -5555,19 +1907,13 @@ function getRoutineScheduleKey(routine, date = new Date()) {
 }
 
 function getScheduleStore() {
-  try {
-    return JSON.parse(localStorage.getItem(ROUTINE_SCHEDULE_STORAGE_KEY) || "{}");
-  } catch (e) {
-    return {};
-  }
+  try { return JSON.parse(localStorage.getItem(ROUTINE_SCHEDULE_STORAGE_KEY) || "{}"); } catch (e) { return {}; }
 }
 
 function markRoutineScheduled(routine) {
   const store = getScheduleStore();
   store[getRoutineScheduleKey(routine)] = true;
-  try {
-    localStorage.setItem(ROUTINE_SCHEDULE_STORAGE_KEY, JSON.stringify(store));
-  } catch (e) {}
+  try { localStorage.setItem(ROUTINE_SCHEDULE_STORAGE_KEY, JSON.stringify(store)); } catch (e) {}
 }
 
 function wasRoutineScheduledToday(routine) {
@@ -5583,35 +1929,23 @@ function fireRoutineStartNotification(routine) {
       renotify: true,
       requireInteraction: true
     });
-    n.onclick = () => {
-      try { window.focus(); } catch (e) {}
-      try { n.close(); } catch (e) {}
-    };
-  } catch (e) {
-    console.warn("Routine start notification failed:", e);
-  }
+    n.onclick = () => { try { window.focus(); } catch (e) {} try { n.close(); } catch (e) {} };
+  } catch (e) { console.warn("Routine start notification failed:", e); }
 }
 
 async function checkRoutineSchedules() {
   if (!currentUser || !Array.isArray(routines) || routines.length === 0) return;
-
   const now = new Date();
   const currentTime = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
-
   for (const routine of routines) {
     if (!routine.startTime || !isRoutineScheduledToday(routine)) continue;
     if (routine.startTime !== currentTime) continue;
     if (wasRoutineScheduledToday(routine)) continue;
-
     markRoutineScheduled(routine);
     await ensureNotificationPermission();
-    /* Start the routine automatically when there are active steps.
-       If another routine is already running, the start notification still fires. */
     if (!activeRoutine) {
       const todaySteps = getTodaySteps(routine);
-      if (todaySteps.length > 0) {
-        await startRoutine(routine, { scheduled: true });
-      }
+      if (todaySteps.length > 0) { await startRoutine(routine, { scheduled: true }); }
     }
   }
 }
@@ -5623,228 +1957,86 @@ function startRoutineScheduleWatcher() {
 }
 
 /* START ROUTINE */
-
 async function startRoutine(routine, options = {}) {
-
-  /* Ask once for lock-screen / system notifications when a step ends */
   await ensureNotificationPermission();
-
-  if (options.scheduled) {
-    fireRoutineStartNotification(routine);
-  }
-
-  activeRoutine =
-    routine;
-
-  activeSteps =
-    getTodaySteps(routine);
-
-
-  if (
-    activeSteps.length === 0
-  ) {
-
-    alert(
-      "אין Steps פעילים לשגרה זו להיום."
-    );
-
-    return;
-
-  }
-
-
+  if (options.scheduled) { fireRoutineStartNotification(routine); }
+  activeRoutine = routine;
+  activeSteps = getTodaySteps(routine);
+  if (activeSteps.length === 0) { alert("אין Steps פעילים לשגרה זו להיום."); return; }
   activeStepIndex = 0;
-
-
   hideHomeUI();
-
-  document.getElementById(
-    "directRoutineScreen"
-  ).style.display =
-    "none";
-
-  document.getElementById(
-    "editorScreen"
-  ).classList.add(
-    "hidden"
-  );
-
-  document.getElementById(
-    "activeScreen"
-  ).style.display =
-    "block";
-
-  document.getElementById(
-    "activeRoutineName"
-  ).textContent =
-    routine.name;
-
-
+  document.getElementById("directRoutineScreen").style.display = "none";
+  document.getElementById("editorScreen").classList.add("hidden");
+  document.getElementById("activeScreen").style.display = "block";
+  document.getElementById("activeRoutineName").textContent = routine.name;
   runStep();
-
 }
-
 
 /* RUN STEP */
-
 function runStep() {
-
   hideStepFinishedPanel();
-
-  if (timerInterval) {
-
-    clearInterval(
-      timerInterval
-    );
-
-  }
-
-
-  if (
-    activeStepIndex >=
-    activeSteps.length
-  ) {
-
-    alert(
-      "כל הכבוד! סיימת את השגרה!"
-    );
-
+  if (timerInterval) { clearInterval(timerInterval); }
+  if (activeStepIndex >= activeSteps.length) {
+    alert("כל הכבוד! סיימת את השגרה!");
     exitActiveScreen();
-
     return;
-
   }
+  const currentStep = activeSteps[activeStepIndex];
+  document.getElementById("activeStepName").innerHTML = formatTextWithLinks(currentStep.name);
 
-
-  const currentStep =
-    activeSteps[
-      activeStepIndex
-    ];
-
-
-  document.getElementById(
-    "activeStepName"
-  ).innerHTML =
-    formatTextWithLinks(
-      currentStep.name
-    );
-
-
-  const activeImg =
-    document.getElementById(
-      "activeStepImage"
-    );
-
-
+  const activeImg = document.getElementById("activeStepImage");
   if (currentStep.image) {
-
-    activeImg.src =
-      currentStep.image;
-
-    activeImg.classList.remove(
-      "hidden"
-    );
-
+    activeImg.src = currentStep.image;
+    activeImg.classList.remove("hidden");
   } else {
-
     activeImg.src = "";
-
-    activeImg.classList.add(
-      "hidden"
-    );
-
+    activeImg.classList.add("hidden");
   }
 
-
-  remainingSeconds =
-    currentStep.duration ||
-    60;
-
-
+  remainingSeconds = currentStep.duration || 60;
   updateTimerDisplay();
 
-
-  timerInterval =
-    setInterval(
-      () => {
-
-        remainingSeconds--;
-
-        updateTimerDisplay();
-
-
-        if (
-          remainingSeconds <= 0
-        ) {
-
-          /* Stop at 00:00 – notify user, let them choose to continue */
-          remainingSeconds = 0;
-          updateTimerDisplay();
-
-          if (timerInterval) {
-            clearInterval(timerInterval);
-            timerInterval = null;
-          }
-
-          const finishedStep =
-            activeSteps[activeStepIndex];
-          notifyStepFinished(finishedStep);
-
-        }
-
-      },
-      1000
-    );
-
+  timerInterval = setInterval(() => {
+    remainingSeconds--;
+    updateTimerDisplay();
+    if (remainingSeconds <= 0) {
+      remainingSeconds = 0;
+      updateTimerDisplay();
+      if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+      const finishedStep = activeSteps[activeStepIndex];
+      notifyStepFinished(finishedStep);
+    }
+  }, 1000);
 }
 
-
-/* ---- Notifications when step timer ends ---- */
-
+/* Notifications when step timer ends */
 let stepTimerFinished = false;
 let activeNotification = null;
 let stepReminderInterval = null;
-
-/* Repeat reminder every 1.5 minutes until the step is completed */
 const STEP_REMINDER_MS = 90 * 1000;
 
 async function ensureNotificationPermission() {
-  if (!("Notification" in window)) {
-    return false;
-  }
-  if (Notification.permission === "granted") {
-    return true;
-  }
-  if (Notification.permission === "denied") {
-    return false;
-  }
+  if (!("Notification" in window)) { return false; }
+  if (Notification.permission === "granted") { return true; }
+  if (Notification.permission === "denied") { return false; }
   try {
     const result = await Notification.requestPermission();
     return result === "granted";
-  } catch (e) {
-    console.warn("Notification permission error:", e);
-    return false;
-  }
+  } catch (e) { console.warn("Notification permission error:", e); return false; }
 }
 
 function stopStepReminders() {
-  if (stepReminderInterval) {
-    clearInterval(stepReminderInterval);
-    stepReminderInterval = null;
-  }
+  if (stepReminderInterval) { clearInterval(stepReminderInterval); stepReminderInterval = null; }
 }
 
 function hideStepFinishedPanel() {
   stepTimerFinished = false;
   stopStepReminders();
+  stopServerReminder();
   const panel = document.getElementById("stepFinishedPanel");
-  if (panel) {
-    panel.classList.remove("show");
-  }
+  if (panel) { panel.classList.remove("show"); }
   if (activeNotification) {
-    try {
-      activeNotification.close();
-    } catch (e) {}
+    try { activeNotification.close(); } catch (e) {}
     activeNotification = null;
   }
 }
@@ -5852,9 +2044,7 @@ function hideStepFinishedPanel() {
 function showStepFinishedPanel() {
   stepTimerFinished = true;
   const panel = document.getElementById("stepFinishedPanel");
-  if (panel) {
-    panel.classList.add("show");
-  }
+  if (panel) { panel.classList.add("show"); }
 }
 
 function fireStepFinishedNotification(step, isReminder) {
@@ -5864,29 +2054,18 @@ function fireStepFinishedNotification(step, isReminder) {
   const currentName = (step && step.name) ? String(step.name) : "Step";
   const routineName = (activeRoutine && activeRoutine.name) ? String(activeRoutine.name) : "Routine";
 
-  // שם ה-Step הבא
   let nextStepName = null;
   if (activeSteps && activeStepIndex + 1 < activeSteps.length) {
     const next = activeSteps[activeStepIndex + 1];
     if (next && next.name) nextStepName = String(next.name);
   }
 
-  const title = isReminder
-    ? "תזכורת — " + routineName
-    : "הזמן נגמר — " + routineName;
-
-  let body = isReminder
-    ? "עדיין לא ביצעת את ה-Step: " + currentName
-    : "הזמן שהוגדר ל-Step נגמר: " + currentName;
-  if (nextStepName) {
-    body += "\n→ הבא אחרי ביצוע: " + nextStepName;
-  }
+  const title = isReminder ? "תזכורת — " + routineName : "הזמן נגמר — " + routineName;
+  let body = isReminder ? "עדיין לא ביצעת את ה-Step: " + currentName : "הזמן שהוגדר ל-Step נגמר: " + currentName;
+  if (nextStepName) { body += "\n→ הבא אחרי ביצוע: " + nextStepName; }
 
   try {
-    if (activeNotification) {
-      try { activeNotification.close(); } catch (e) {}
-    }
-
+    if (activeNotification) { try { activeNotification.close(); } catch (e) {} }
     const n = new Notification(title, {
       body: body,
       tag: "routine-step-finished",
@@ -5894,21 +2073,9 @@ function fireStepFinishedNotification(step, isReminder) {
       requireInteraction: true,
       silent: false
     });
-
     activeNotification = n;
-
-    // רק פותח את האפליקציה – לא מעביר אוטומטית את ה-Step
-    n.onclick = () => {
-      try {
-        window.focus();
-      } catch (e) {}
-      n.close();
-      activeNotification = null;
-    };
-
-  } catch (e) {
-    console.warn("Notification failed:", e);
-  }
+    n.onclick = () => { try { window.focus(); } catch (e) {} n.close(); activeNotification = null; };
+  } catch (e) { console.warn("Notification failed:", e); }
 }
 
 function notifyStepFinished(step) {
@@ -5916,431 +2083,134 @@ function notifyStepFinished(step) {
   fireStepFinishedNotification(step, false);
   playStepBeep();
 
-  /* Keep reminding every 1.5 minutes until this step is completed
-     (or user exits / skips). Continues for each step until the
-     whole routine is finished. */
+  /* הפעל תזכורות בשרת — יעבוד גם כשהאתר סגור */
+  startServerReminder(step);
+
   stopStepReminders();
   stepReminderInterval = setInterval(() => {
-    if (!stepTimerFinished) {
-      stopStepReminders();
-      return;
-    }
-    /* Still waiting on this step */
-    const current =
-      activeSteps && activeSteps[activeStepIndex]
-        ? activeSteps[activeStepIndex]
-        : step;
+    if (!stepTimerFinished) { stopStepReminders(); return; }
+    const current = activeSteps && activeSteps[activeStepIndex] ? activeSteps[activeStepIndex] : step;
     fireStepFinishedNotification(current, true);
     playStepBeep();
     showStepFinishedPanel();
   }, STEP_REMINDER_MS);
 }
 
-/* Beep when step timer reaches zero – louder double beep */
 function playStepBeep() {
   try {
-    const AudioCtx =
-      window.AudioContext ||
-      window.webkitAudioContext;
-
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
     if (!AudioCtx) return;
-
     const ctx = new AudioCtx();
     const now = ctx.currentTime;
-
     function tone(start, freq, duration, peak) {
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
-
       osc.type = "square";
       osc.frequency.value = freq;
-
       gain.gain.setValueAtTime(0.0001, start);
-      gain.gain.exponentialRampToValueAtTime(
-        peak,
-        start + 0.015
-      );
-      gain.gain.exponentialRampToValueAtTime(
-        0.0001,
-        start + duration
-      );
-
+      gain.gain.exponentialRampToValueAtTime(peak, start + 0.015);
+      gain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
       osc.connect(gain);
       gain.connect(ctx.destination);
-
       osc.start(start);
       osc.stop(start + duration + 0.02);
     }
-
-    /* Two stronger beeps – easier to notice */
     tone(now, 880, 0.22, 0.55);
     tone(now + 0.28, 988, 0.28, 0.6);
-
-    setTimeout(() => {
-      try {
-        ctx.close();
-      } catch (e) {}
-    }, 900);
-
-  } catch (e) {
-    console.warn("Beep failed:", e);
-  }
+    setTimeout(() => { try { ctx.close(); } catch (e) {} }, 900);
+  } catch (e) { console.warn("Beep failed:", e); }
 }
-
-
-/* TIMER */
 
 function updateTimerDisplay() {
-
-  const m =
-    String(
-      Math.floor(
-        remainingSeconds / 60
-      )
-    ).padStart(
-      2,
-      '0'
-    );
-
-
-  const s =
-    String(
-      remainingSeconds % 60
-    ).padStart(
-      2,
-      '0'
-    );
-
-
-  document.getElementById(
-    "timer"
-  ).textContent =
-    `${m}:${s}`;
-
+  const m = String(Math.floor(remainingSeconds / 60)).padStart(2, '0');
+  const s = String(remainingSeconds % 60).padStart(2, '0');
+  document.getElementById("timer").textContent = `${m}:${s}`;
 }
 
-
 /* COMPLETE STEP */
-
 async function completeActiveStep() {
+  if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+  const currentStep = activeSteps[activeStepIndex];
+  if (!currentStep) { return; }
 
-  if (timerInterval) {
-
-    clearInterval(
-      timerInterval
-    );
-
-    timerInterval = null;
-
+  let rulesToApply = [...(currentStep.disableRules || [])];
+  if (rulesToApply.length === 0 && currentStep.disableTargetId) {
+    const fallbackHours = currentStep.disableHours !== undefined ? currentStep.disableHours : ((currentStep.disableDays || 1) * 24);
+    rulesToApply = [{ targetId: currentStep.disableTargetId, hours: fallbackHours }];
   }
 
-
-  const currentStep =
-    activeSteps[
-      activeStepIndex
-    ];
-
-
-  if (!currentStep) {
-    return;
-  }
-
-
-  /* DISABLE RULES */
-
-  let rulesToApply =
-    [
-      ...(currentStep.disableRules || [])
-    ];
-
-
-  if (
-    rulesToApply.length === 0 &&
-    currentStep.disableTargetId
-  ) {
-
-    const fallbackHours =
-      currentStep.disableHours !== undefined
-        ? currentStep.disableHours
-        : (
-            (currentStep.disableDays || 1) *
-            24
-          );
-
-
-    rulesToApply = [
-      {
-        targetId:
-          currentStep.disableTargetId,
-        hours:
-          fallbackHours
-      }
-    ];
-
-  }
-
-
-  /*
-    Step רגיל:
-    מתבטל לפי התדירות שלו.
-
-    Step עם frequency = 0:
-    לא מקבל ביטול עצמי.
-    הוא פשוט נשאר תלוי בהפעלה שלו.
-
-    Routine במצב ממתין להפעלה:
-    הפעלה חד-פעמית — בלי ביטול עצמי לפי תדירות,
-    כדי שאפשר יהיה להפעיל מחדש בכל פעם.
-  */
-
-  const waitingRoutine =
-    activeRoutine &&
-    isRoutineWaitingActivation(activeRoutine);
-
+  const waitingRoutine = activeRoutine && isRoutineWaitingActivation(activeRoutine);
   const now = new Date();
 
-  /* Self-disable by frequency (aligned to 04:00 logical days) */
-  if (
-    Number(currentStep.frequency) > 0 &&
-    !waitingRoutine
-  ) {
-    const untilDate =
-      getDisableUntilForFrequency(
-        currentStep.frequency,
-        now
-      );
-
-    disabledStepsMap[currentStep.id] =
-      untilDate.toISOString();
+  if (Number(currentStep.frequency) > 0 && !waitingRoutine) {
+    const untilDate = getDisableUntilForFrequency(currentStep.frequency, now);
+    disabledStepsMap[currentStep.id] = untilDate.toISOString();
   }
 
-
-  /* Explicit disable rules (hours from now) */
   if (rulesToApply.length > 0) {
     rulesToApply.forEach(rule => {
       if (!rule.targetId) return;
-
-      const untilDate = new Date(
-        now.getTime() +
-        (rule.hours * 60 * 60 * 1000)
-      );
-
-      disabledStepsMap[rule.targetId] =
-        untilDate.toISOString();
+      const untilDate = new Date(now.getTime() + (rule.hours * 60 * 60 * 1000));
+      disabledStepsMap[rule.targetId] = untilDate.toISOString();
     });
   }
 
-
-  /* SAVE DISABLES (self + rules) */
-  const hasDisableUpdates =
-    (Number(currentStep.frequency) > 0 && !waitingRoutine) ||
-    rulesToApply.length > 0;
-
+  const hasDisableUpdates = (Number(currentStep.frequency) > 0 && !waitingRoutine) || rulesToApply.length > 0;
   if (hasDisableUpdates) {
     try {
-      const docRef =
-        doc(
-          db,
-          "users",
-          currentUser.uid,
-          "meta",
-          "disabledSteps"
-        );
-
-      await setDoc(
-        docRef,
-        disabledStepsMap,
-        {
-          merge: true
-        }
-      );
-    } catch (e) {
-      console.error(
-        "שגיאה בעדכון ביטול צעד ב-DB:",
-        e
-      );
-    }
+      const docRef = doc(db, "users", currentUser.uid, "meta", "disabledSteps");
+      await setDoc(docRef, disabledStepsMap, { merge: true });
+    } catch (e) { console.error("שגיאה בעדכון ביטול צעד ב-DB:", e); }
   }
 
-
-  /* ACTIVATION RULES */
-
-  const activationRules =
-    activationRulesMap[
-      currentStep.id
-    ] ||
-    currentStep.activationRules ||
-    [];
-
-
-  if (
-    activationRules.length > 0
-  ) {
-
-    activationRules.forEach(
-      rule => {
-
-        if (!rule.targetId) {
-          return;
-        }
-
-
-        const days =
-          Math.max(
-            1,
-            Number(rule.days) || 1
-          );
-
-
-        const newUntil =
-          getActivationUntilForDays(
-            days
-          );
-
-
-        const existingUntil =
-          activatedStepsMap[
-            rule.targetId
-          ];
-
-
-        if (
-          !existingUntil ||
-          new Date(existingUntil) <
-          new Date(newUntil)
-        ) {
-
-          activatedStepsMap[
-            rule.targetId
-          ] =
-            newUntil;
-
-        }
-
+  const activationRules = activationRulesMap[currentStep.id] || currentStep.activationRules || [];
+  if (activationRules.length > 0) {
+    activationRules.forEach(rule => {
+      if (!rule.targetId) return;
+      const days = Math.max(1, Number(rule.days) || 1);
+      const newUntil = getActivationUntilForDays(days);
+      const existingUntil = activatedStepsMap[rule.targetId];
+      if (!existingUntil || new Date(existingUntil) < new Date(newUntil)) {
+        activatedStepsMap[rule.targetId] = newUntil;
       }
-    );
-
-
+    });
     try {
-
-      const activationDocRef =
-        doc(
-          db,
-          "users",
-          currentUser.uid,
-          "meta",
-          "activatedSteps"
-        );
-
-
-      await setDoc(
-        activationDocRef,
-        activatedStepsMap,
-        {
-          merge: true
-        }
-      );
-
-
-    } catch (e) {
-
-      console.error(
-        "שגיאה בעדכון הפעלת Step ב-DB:",
-        e
-      );
-
-    }
-
+      const activationDocRef = doc(db, "users", currentUser.uid, "meta", "activatedSteps");
+      await setDoc(activationDocRef, activatedStepsMap, { merge: true });
+    } catch (e) { console.error("שגיאה בעדכון הפעלת Step ב-DB:", e); }
   }
-
-
-  /* NEXT STEP */
 
   activeStepIndex++;
-
   runStep();
-
 }
-
-
-/* SKIP */
 
 function skipActiveStep() {
-
-  /*
-    דילוג לא שומר השלמה
-    ולא מפעיל שום כלל.
-  */
-
   activeStepIndex++;
-
   runStep();
-
 }
-
-
-/* EXIT */
 
 function exitActiveScreen() {
-
   hideStepFinishedPanel();
-
-  if (timerInterval) {
-
-    clearInterval(
-      timerInterval
-    );
-
-    timerInterval = null;
-
-  }
-
-
-  document.getElementById(
-    "activeScreen"
-  ).style.display =
-    "none";
-
-
+  if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+  document.getElementById("activeScreen").style.display = "none";
   showHomeUI();
-
-
   renderRoutines();
-
 }
 
+document.getElementById("exitActiveBtn").addEventListener("click", exitActiveScreen);
 
-/* EXIT BUTTON */
+document.getElementById("continueNextStepBtn")?.addEventListener("click", () => {
+  if (stepTimerFinished) { completeActiveStep(); }
+});
 
-document
-  .getElementById("exitActiveBtn")
-  .addEventListener(
-    "click",
-    exitActiveScreen
-  );
-
-document
-  .getElementById("continueNextStepBtn")
-  ?.addEventListener("click", () => {
-    if (stepTimerFinished) {
-      completeActiveStep();
-    }
-  });
-
-document
-  .getElementById("waitOnStepBtn")
-  ?.addEventListener("click", () => {
-    /* Stay on this step – only hide the panel, keep timer at 00:00 */
-    const panel = document.getElementById("stepFinishedPanel");
-    if (panel) {
-      panel.classList.remove("show");
-    }
-    if (activeNotification) {
-      try { activeNotification.close(); } catch (e) {}
-      activeNotification = null;
-    }
-    /* stepTimerFinished stays true so a later tap / notification can still complete */
-  });
+document.getElementById("waitOnStepBtn")?.addEventListener("click", () => {
+  const panel = document.getElementById("stepFinishedPanel");
+  if (panel) { panel.classList.remove("show"); }
+  if (activeNotification) {
+    try { activeNotification.close(); } catch (e) {}
+    activeNotification = null;
+  }
+});
 
 </script>
 
